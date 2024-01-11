@@ -1,0 +1,22 @@
+knight_h.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,17,108,60
+rotate:90
+hand(left)
+bounds:192,55,70,60
+rotate:90
+head
+bounds:2,10,126,115
+leg(left)
+bounds:130,2,9,13
+leg(right)
+bounds:130,2,9,13
+shadow
+bounds:192,23,93,30
+shield
+bounds:287,3,50,50
+sword effect
+bounds:254,55,37,70

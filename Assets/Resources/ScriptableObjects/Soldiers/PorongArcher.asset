@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: PorongArcher
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: PorongArcher
+  UnitName: "\uD3EC\uB871 \uAD81\uC218"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 1
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 2e2bb7ebb8e3bae4a86368c3d2b528e9, type: 3}
+  minimapPicture: {fileID: 0}
+  illustPicture: {fileID: 21300000, guid: 7663d585bf8924643abfb2402ce652e4, type: 3}
+  cardPicture: {fileID: 21300000, guid: b28ac32b81353be4382316f8de77ba7b, type: 3}
+  skillIcon: {fileID: 21300000, guid: 7314cb5df39a9294f85a5f94374f8c44, type: 3}
+  illustName: "\uD3EC\uB871 \uAD81\uC218"
+  skillName: 
+  skillStr: 
+  start3: 
+  start5: 
+  ultra1: 
+  ultra2: 
+  UnitSide: 0
+  UnitType: 1
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 15
+  Hp: 300
+  Mp: 0
+  Stamina: 0
+  MoveSpeed: 0.5
+  Armour: 0
+  AttackDamage: 200
+  AttackOnceBySecondValue: 0.5
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 4
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 10
+  LevelUpAttPoint: 20
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

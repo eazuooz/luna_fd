@@ -1,0 +1,21 @@
+sword_spirit.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,21,214,90
+rotate:90
+hand(left)
+bounds:218,99,136,120
+rotate:90
+head
+bounds:94,83,122,152
+leg(left)
+bounds:211,13,52,68
+leg(right)
+bounds:265,38,56,59
+shield
+bounds:94,2,79,76
+rotate:90
+sword effect
+bounds:172,11,37,70

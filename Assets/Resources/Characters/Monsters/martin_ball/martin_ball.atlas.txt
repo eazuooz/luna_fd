@@ -1,0 +1,6 @@
+martin_ball.png
+size:128,128
+filter:Linear,Linear
+pma:true
+highclass martin ball
+bounds:2,2,85,85

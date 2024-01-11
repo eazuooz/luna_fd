@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Skeleton_ranger
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: 
+  UnitName: "\uC774\uB984"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 1
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: eeb463351a2a67f4d879feeb8c5ebb97, type: 3}
+  minimapPicture: {fileID: 0}
+  illustPicture: {fileID: 0}
+  cardPicture: {fileID: 0}
+  skillIcon: {fileID: 0}
+  illustName: "\uC77C\uB7EC\uC2A4\uD2B8 \uC774\uB984"
+  skillName: 
+  skillStr: 
+  start3: 
+  start5: 
+  ultra1: 
+  ultra2: 
+  UnitSide: 1
+  UnitType: 1
+  UnitAttackType: 0
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 1
+  Hp: 1800
+  Mp: 0
+  Stamina: 0
+  MoveSpeed: 0.75
+  Armour: 0
+  AttackDamage: 200
+  AttackOnceBySecondValue: 0.5
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 1
+  SpawnDelayTime: 2
+  CriticalMultiples: 1
+  CriticalProbability: 10
+  LevelUpHpPoint: 100
+  LevelUpAttPoint: 25
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

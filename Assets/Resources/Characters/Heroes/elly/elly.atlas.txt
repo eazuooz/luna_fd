@@ -1,0 +1,25 @@
+elly.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,16,108,60
+rotate:90
+hand(left)
+bounds:192,54,70,60
+rotate:90
+head
+bounds:2,9,126,115
+leg(left)
+bounds:130,2,9,12
+leg(right)
+bounds:130,2,9,12
+magic circle
+bounds:192,20,102,32
+shadow
+bounds:254,94,93,30
+shield
+bounds:296,3,50,50
+sword effect
+bounds:254,55,37,70
+rotate:90

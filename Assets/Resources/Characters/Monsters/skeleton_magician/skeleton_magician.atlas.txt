@@ -1,0 +1,12 @@
+skeleton_magician.png
+size:1024,256
+filter:Linear,Linear
+pma:true
+body
+bounds:204,14,196,230
+hand(left)
+bounds:402,124,110,120
+hand(right)
+bounds:2,4,200,240
+head
+bounds:402,2,86,120

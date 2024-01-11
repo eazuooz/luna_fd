@@ -1,0 +1,14 @@
+C:\LunaDefense\Luna_Server\Chat_Server\bin\Debug\net48\Chat_Server.exe.config
+C:\LunaDefense\Luna_Server\Chat_Server\bin\Debug\net48\Chat_Server.exe
+C:\LunaDefense\Luna_Server\Chat_Server\bin\Debug\net48\Chat_Server.pdb
+C:\LunaDefense\Luna_Server\Chat_Server\bin\Debug\net48\Luna_Network.dll
+C:\LunaDefense\Luna_Server\Chat_Server\bin\Debug\net48\Luna_Network.pdb
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.csproj.AssemblyReference.cache
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.csproj.SuggestedBindingRedirects.cache
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.GeneratedMSBuildEditorConfig.editorconfig
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.AssemblyInfoInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.AssemblyInfo.cs
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.csproj.CoreCompileInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.csproj.CopyComplete
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.exe
+C:\LunaDefense\Luna_Server\Chat_Server\obj\Debug\net48\Chat_Server.pdb

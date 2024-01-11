@@ -1,0 +1,8 @@
+slime_gold.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+body(gold)
+bounds:645,2,334,276
+shadow
+bounds:2,61,641,217

@@ -1,0 +1,17 @@
+dekoo.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+black ball2
+bounds:542,531,438,438
+body
+bounds:2,364,538,605
+hand(left)
+bounds:2,98,264,477
+rotate:90
+hand(right)
+bounds:481,2,271,360
+head
+bounds:754,65,246,299
+shadow
+bounds:542,366,444,163

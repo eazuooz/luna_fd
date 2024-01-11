@@ -1,0 +1,9 @@
+black_ball.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+black ball2
+bounds:2,2,438,438
+shadow
+bounds:442,64,376,102
+rotate:90

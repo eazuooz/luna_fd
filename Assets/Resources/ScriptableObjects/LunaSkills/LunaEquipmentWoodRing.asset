@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0887383fcb21ea44861be8b32180fce, type: 3}
+  m_Name: LunaEquipmentWoodRing
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 0}
+  skillImage: {fileID: 21300000, guid: 170f32f7957398f4ba3b481c0ef3ec75, type: 3}
+  type: 0
+  isMultiple: 0
+  level: 1
+  mana: 0
+  passiveDelay: 0
+  activeDelay: 0
+  damage: 0
+  range: 0
+  splashRange: 0
+  coolTime: 20
+  stunTime: 0
+  burfTime: 0
+  multipleSkillDamageBuff: 1.2
+  multipleSkillResistanceBuff: 1.2
+  coefficient: 1
+  levelUpPoint: 1
+  maxSummonCount: 1
+  ableSkill: 1
+  skillName: 
+  skillDiscription: 
+  skillLevelDiscription: 

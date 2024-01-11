@@ -1,0 +1,6 @@
+black_stone3.png
+size:128,128
+filter:Linear,Linear
+pma:true
+body03
+bounds:2,2,118,109

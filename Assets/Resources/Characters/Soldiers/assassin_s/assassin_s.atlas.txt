@@ -1,0 +1,15 @@
+assassin_s.png
+size:128,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,156,90,51
+head
+bounds:2,2,100,90
+weapon
+bounds:2,94,60,60
+wing(left)
+bounds:2,210,43,40
+wing(right)
+bounds:47,209,41,45
+rotate:90

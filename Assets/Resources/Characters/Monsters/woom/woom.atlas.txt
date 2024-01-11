@@ -1,0 +1,8 @@
+woom.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+body
+bounds:2,129,553,581
+magic circle
+bounds:2,2,142,125

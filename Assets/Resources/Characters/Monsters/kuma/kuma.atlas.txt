@@ -1,0 +1,11 @@
+kuma.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+body
+bounds:2,77,512,376
+effect
+bounds:516,2,187,191
+rotate:90
+head
+bounds:516,191,243,262

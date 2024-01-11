@@ -1,0 +1,14 @@
+duran.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+body
+bounds:2,320,825,913
+rotate:90
+hand(left)
+bounds:2,1147,1367,656
+hand(right)
+bounds:917,2,1143,590
+rotate:90
+shadow
+bounds:2,216,376,102

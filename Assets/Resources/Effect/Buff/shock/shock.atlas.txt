@@ -1,0 +1,7 @@
+shock.png
+size:512,256
+filter:Linear,Linear
+pma:true
+thunder
+bounds:2,2,250,256
+rotate:90

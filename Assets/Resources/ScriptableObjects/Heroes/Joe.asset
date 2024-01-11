@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Joe
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Joe
+  UnitName: "\uC870"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 044298dbc6d02f64eb820710af8572db, type: 3}
+  minimapPicture: {fileID: 21300000, guid: 502e8acb3ffbc964b84baf9b43de9c9a, type: 3}
+  illustPicture: {fileID: 21300000, guid: ea1eb67c7255a184b9bfdc7c7c642368, type: 3}
+  cardPicture: {fileID: 21300000, guid: 82713bd250e445f4a82f2ec98184bbe9, type: 3}
+  skillIcon: {fileID: 21300000, guid: 6df9fb744ea549c4eb7544e90581e135, type: 3}
+  illustName: "\uCCA0\uAC11 \uB2CC\uC790 '\uC870'"
+  skillName: "<\uCCA0\uD1F4 \uB099\uD558>"
+  skillStr: "27\uCD08\uB9C8\uB2E4 \uD0C0\uAC9F\uC758 \uBC18\uACBD 1.3\uC548\uC5D0
+    \uD558\uB298\uC5D0\uC11C \uAC70\uB300\uD55C \uCCA0\uD1F4\uAC00 \uACF5\uACA9"
+  start3: "\uACF5\uACA9\uB825 5% \uC99D\uAC00"
+  start5: "\uACF5\uC911 \uC801\uAD70\uC5D0 \uACF5\uACA9 \uB370\uBBF8\uC9C0 30% \uC99D\uAC00"
+  ultra1: "\uD0C0\uACA9 \uC801\uAD70 15% \uD655\uB960\uB85C 2\uCD08 \uB3D9\uC548
+    \uC2A4\uD134"
+  ultra2: "20\uCD08\uB9C8\uB2E4 4\uCD08 \uB3D9\uC548 \uAD11\uD3ED\uD654"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 4
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

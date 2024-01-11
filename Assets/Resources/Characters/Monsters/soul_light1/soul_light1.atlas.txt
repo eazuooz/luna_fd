@@ -1,0 +1,6 @@
+soul_light1.png
+size:128,128
+filter:Linear,Linear
+pma:true
+soul light_01
+bounds:2,2,63,70

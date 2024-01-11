@@ -1,0 +1,14 @@
+attack1.png
+size:1024,64
+filter:Linear,Linear
+pma:true
+ani0001
+bounds:2,2,108,57
+ani0002
+bounds:112,2,108,57
+ani0003
+bounds:222,2,108,57
+ani0004
+bounds:332,2,108,57
+ani0005
+bounds:442,2,108,57

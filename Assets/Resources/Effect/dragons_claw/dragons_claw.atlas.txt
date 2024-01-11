@@ -1,0 +1,10 @@
+dragons_claw.png
+size:512,256
+filter:Linear,Linear
+pma:true
+claw
+bounds:2,2,142,253
+rotate:90
+critical
+bounds:257,5,139,145
+rotate:90

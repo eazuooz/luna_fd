@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f022f367fe686e0468233dd569326e27, type: 3}
+  m_Name: UIPlayer_UIReference
+  m_EditorClassIdentifier: 
+  uiTarget: {fileID: 8542744528999431485, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+  dic:
+    keys:
+    - UIPlayer
+    - Button_0
+    - Image
+    - Text
+    - Stars
+    - CoinImage
+    - SlotEffect
+    - Spine
+    - Button_1
+    - Button_2
+    - Button_3
+    - Button_4
+    - Button_5
+    - ButtonLeft
+    - ButtonRight
+    - back ui01_field
+    - GaugeBackImage
+    - GoldGaugeImage
+    - NameBackImage
+    - DungeonText
+    - StageText
+    - ManaGaugeBackImage
+    - ManaGaugeImage
+    - LunaImage
+    - GoldText
+    - GoldMaxText
+    - ManaText
+    - ManaMaxText
+    values:
+    - name: UIPlayer
+      path: /UIPlayer
+      obj: {fileID: 8542744528999431485, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_0
+      path: /UIPlayer/Button_0
+      obj: {fileID: 7606399419810027953, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Image
+      path: /UIPlayer/Button_0/Image
+      obj: {fileID: 7073955023321135036, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Text
+      path: /UIPlayer/Button_0/Text
+      obj: {fileID: 9025514168221670206, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Stars
+      path: /UIPlayer/Button_0/Stars
+      obj: {fileID: 5604573727253693296, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: CoinImage
+      path: /UIPlayer/Button_0/CoinImage
+      obj: {fileID: 4302072843330290997, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: SlotEffect
+      path: /UIPlayer/Button_0/SlotEffect
+      obj: {fileID: 6198248286720445949, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Spine
+      path: /UIPlayer/Button_0/SlotEffect/Spine
+      obj: {fileID: 8459524854898561158, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_1
+      path: /UIPlayer/Button_1
+      obj: {fileID: 7576651713990609949, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_2
+      path: /UIPlayer/Button_2
+      obj: {fileID: 2508133732210515207, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_3
+      path: /UIPlayer/Button_3
+      obj: {fileID: 6329896161688338805, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_4
+      path: /UIPlayer/Button_4
+      obj: {fileID: 5999062994530899453, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: Button_5
+      path: /UIPlayer/Button_5
+      obj: {fileID: 4455583672043671362, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ButtonLeft
+      path: /UIPlayer/ButtonLeft
+      obj: {fileID: 2557236385081147485, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ButtonRight
+      path: /UIPlayer/ButtonRight
+      obj: {fileID: 6798397194368570254, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: back ui01_field
+      path: /UIPlayer/back ui01_field
+      obj: {fileID: 4042252661899665572, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: GaugeBackImage
+      path: /UIPlayer/GaugeBackImage
+      obj: {fileID: 6797847279960292825, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: GoldGaugeImage
+      path: /UIPlayer/GaugeBackImage/GoldGaugeImage
+      obj: {fileID: 3191638561460700970, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: NameBackImage
+      path: /UIPlayer/NameBackImage
+      obj: {fileID: 8082047504678507197, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: DungeonText
+      path: /UIPlayer/NameBackImage/DungeonText
+      obj: {fileID: 4069352025264535396, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: StageText
+      path: /UIPlayer/NameBackImage/StageText
+      obj: {fileID: 5558493720820113371, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ManaGaugeBackImage
+      path: /UIPlayer/ManaGaugeBackImage
+      obj: {fileID: 631648463508198965, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ManaGaugeImage
+      path: /UIPlayer/ManaGaugeBackImage/ManaGaugeImage
+      obj: {fileID: 5257649851452123190, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: LunaImage
+      path: /UIPlayer/LunaImage
+      obj: {fileID: 5589034395977501265, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: GoldText
+      path: /UIPlayer/GoldText
+      obj: {fileID: 5636670483654439707, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: GoldMaxText
+      path: /UIPlayer/GoldMaxText
+      obj: {fileID: 1062143132882093948, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ManaText
+      path: /UIPlayer/ManaText
+      obj: {fileID: 284685576493257654, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+    - name: ManaMaxText
+      path: /UIPlayer/ManaMaxText
+      obj: {fileID: 338698035018120789, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}

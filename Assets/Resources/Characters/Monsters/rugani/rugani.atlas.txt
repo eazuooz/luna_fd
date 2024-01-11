@@ -1,0 +1,14 @@
+rugani.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+body
+bounds:2,563,1348,622
+hand(left)
+bounds:2,2,1227,559
+hand(right)
+bounds:1351,23,1162,529
+rotate:90
+shadow
+bounds:1231,2,376,102
+rotate:90

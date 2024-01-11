@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e5ccf0cd0e040a042ab8aa300ef92f77
+  m_SerializeEntries:
+  - m_GUID: 31bdcd513348ae341a894582b608acb9
+    m_Address: Assets/Resources_moved/Prefabs/UIUpgradeUnit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b429fa79082bcab4da8eab67c21c91db
+    m_Address: Assets/Resources_moved/Prefabs/UIStageText.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: cc361b48a3047f146921a59da439e0f4
+    m_Address: Assets/Resources_moved/Prefabs/UISkill.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 72a6950a69e93604a9f6a571e7b11202
+    m_Address: Assets/Resources_moved/Prefabs/UISelectStage.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 06ba4b203dc79e240bb927575075607f
+    m_Address: Assets/Resources_moved/Prefabs/UIResult.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c2abbf85de28bb24a8959aff6ad698f5
+    m_Address: Assets/Resources_moved/Prefabs/UIProgressBar.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a55862ad5101aaa48a1a264bc25a98d1
+    m_Address: Assets/Resources_moved/Prefabs/UIPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d6931dbcc18dd6b4db3c42a354e8432b
+    m_Address: Assets/Resources_moved/Prefabs/UIPlayer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 357434116061de14fb6883371db5e9c6
+    m_Address: Assets/Resources_moved/Prefabs/UILottery.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ce66bb3eb2201b64c8048832a273e361
+    m_Address: Assets/Resources_moved/Prefabs/UILogo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ebcd36fc4adc9d444807b144a55dc227
+    m_Address: Assets/Resources_moved/Prefabs/UILobby.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5ce61c6b81341a4438b42c5d32921599
+    m_Address: Assets/Resources_moved/Prefabs/UIGoods.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1569356f86da5584a8cac4842a0a48eb
+    m_Address: Assets/Resources_moved/Prefabs/UIGameShop.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5b63149d460f1e54abbb2829744f2b65
+    m_Address: Assets/Resources_moved/Prefabs/UIGameOption.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dda52cb72c1883e488c3fe70632a8901
+    m_Address: Assets/Resources_moved/Prefabs/UIEquipDesign.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b381c751633cd66428c1776a69ea24b6
+    m_Address: Assets/Resources_moved/Prefabs/UICharacterList.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 744f7eed8afe11b4da2a183d383c25c2
+    m_Address: Assets/Resources_moved/Prefabs/UICharacterInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 36ef3daaed4cb2c4787b72620fc98fbd
+    m_Address: Assets/Resources_moved/Prefabs/UISelectPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 806b65e3103382841adf8e41f9f90f94
+    m_Address: Assets/Resources_moved/Prefabs/UIStageInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: db13c73b8ebbdf14a99688d3bce4890b
+    m_Address: Assets/Resources_moved/Prefabs/UIDungeonInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 053453209ed8eeb4b93e63f503a3cd65
+    m_Address: Assets/Resources_moved/Prefabs/UIInventory.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f6a2a5223489404498ce7e2458cccee2
+    m_Address: Assets/Resources_moved/Prefabs/UIQuitPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 958004852460e1240bb78185d84f6123
+    m_Address: Assets/Resources_moved/Prefabs/UIItemInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 42a24763407b10a4d9d2829f26730ffe
+    m_Address: Assets/Resources_moved/Prefabs/UISkillInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2a2c30d8403723d449035b4ef9ceb5b2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 93ef8ec9b32a53845ab5da0b2d932b1d, type: 2}
+    - {fileID: 11400000, guid: 511af8a2f75f02a4d8dba5f5cc5a7539, type: 2}

@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Chat_Server/1.0.0": {
+        "dependencies": {
+          "Luna_Network": "1.0.0"
+        },
+        "runtime": {
+          "Chat_Server.dll": {}
+        }
+      },
+      "Luna_Network/1.0.0": {
+        "runtime": {
+          "Luna_Network.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Chat_Server/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Luna_Network/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

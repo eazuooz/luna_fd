@@ -1,0 +1,8 @@
+touch_guide.png
+size:256,128
+filter:Linear,Linear
+pma:true
+arrow
+bounds:99,31,50,66
+circle
+bounds:2,2,95,95

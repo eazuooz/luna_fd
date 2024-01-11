@@ -1,0 +1,17 @@
+raccoon.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,21,150,131
+hand(left)
+bounds:276,72,70,80
+hand(right)
+bounds:154,5,20,25
+sword effect
+bounds:276,33,37,70
+rotate:90
+tail
+bounds:276,2,31,29
+weapon
+bounds:154,32,120,120

@@ -1,0 +1,15 @@
+gruul.png
+size:2048,512
+filter:Linear,Linear
+pma:true
+body
+bounds:2,2,420,326
+effect
+bounds:1047,137,187,191
+head
+bounds:424,18,399,310
+iron(left)
+bounds:825,105,220,223
+iron(right)
+bounds:1047,11,124,260
+rotate:90

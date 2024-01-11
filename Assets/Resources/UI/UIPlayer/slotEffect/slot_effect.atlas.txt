@@ -1,0 +1,16 @@
+slot_effect.png
+size:512,128
+filter:Linear,Linear
+pma:true
+a1
+bounds:232,2,113,113
+a1_1
+bounds:347,66,15,15
+a2
+bounds:117,2,113,113
+a2_1
+bounds:347,83,15,15
+a3
+bounds:2,2,113,113
+a3_1
+bounds:347,100,15,15

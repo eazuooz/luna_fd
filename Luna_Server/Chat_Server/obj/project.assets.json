@@ -1,0 +1,97 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.8": {
+      "Luna_Network/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.8",
+        "compile": {
+          "bin/placeholder/Luna_Network.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Luna_Network.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win7-x86": {
+      "Luna_Network/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.8",
+        "compile": {
+          "bin/placeholder/Luna_Network.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Luna_Network.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Luna_Network/1.0.0": {
+      "type": "project",
+      "path": "../Luna_Network/Luna_Network.csproj",
+      "msbuildProject": "../Luna_Network/Luna_Network.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.8": [
+      "Luna_Network >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Gram\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\luna_fd_source\\Luna_Server\\Chat_Server\\Chat_Server.csproj",
+      "projectName": "Chat_Server",
+      "projectPath": "C:\\luna_fd_source\\Luna_Server\\Chat_Server\\Chat_Server.csproj",
+      "packagesPath": "C:\\Users\\Gram\\.nuget\\packages\\",
+      "outputPath": "C:\\luna_fd_source\\Luna_Server\\Chat_Server\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Gram\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net48"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "projectReferences": {
+            "C:\\luna_fd_source\\Luna_Server\\Luna_Network\\Luna_Network.csproj": {
+              "projectPath": "C:\\luna_fd_source\\Luna_Server\\Luna_Network\\Luna_Network.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net48": {
+        "targetAlias": "net48",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+      }
+    },
+    "runtimes": {
+      "win7-x86": {
+        "#import": []
+      }
+    }
+  }
+}

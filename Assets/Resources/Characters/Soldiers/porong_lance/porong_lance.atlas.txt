@@ -1,0 +1,36 @@
+porong_lance.png
+size:345,139
+filter:Linear,Linear
+pma:true
+body
+bounds:245,81,56,49
+rotate:90
+hand(right)
+bounds:315,56,28,24
+offsets:0,1,29,25
+rotate:90
+head
+bounds:146,31,106,97
+offsets:0,0,106,98
+rotate:90
+leg(left)
+bounds:330,38,13,16
+offsets:0,0,14,17
+leg(right)
+bounds:315,37,13,17
+magic circle(blue)
+bounds:236,5,92,24
+offsets:1,1,93,26
+shadow
+bounds:146,2,88,27
+offsets:2,2,93,30
+shield
+bounds:296,86,47,51
+sword effect
+bounds:245,43,36,68
+offsets:1,1,37,70
+rotate:90
+weapon
+bounds:2,7,130,142
+offsets:0,1,130,143
+rotate:90

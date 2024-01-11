@@ -1,0 +1,16 @@
+joe.png
+size:128,256
+filter:Linear,Linear
+pma:true
+ball1
+bounds:2,70,70,64
+ball2
+bounds:2,2,66,66
+body
+bounds:70,22,46,29
+rotate:90
+head
+bounds:2,136,107,83
+weapon
+bounds:74,70,41,17
+rotate:90

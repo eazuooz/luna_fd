@@ -1,0 +1,21 @@
+tira.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:84,69,50,51
+rotate:90
+hand(left)
+bounds:69,5,35,30
+hand(right)
+bounds:137,79,44,40
+head
+bounds:2,49,80,70
+magic circle(blue)
+bounds:183,26,93,26
+rotate:90
+shadow
+bounds:84,37,93,30
+weapon
+bounds:2,2,45,65
+rotate:90

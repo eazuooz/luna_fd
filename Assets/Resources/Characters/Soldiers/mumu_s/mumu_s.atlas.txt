@@ -1,0 +1,11 @@
+mumu_s.png
+size:256,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,124,150,100
+head
+bounds:2,2,120,120
+magic circle
+bounds:124,20,102,32
+rotate:90

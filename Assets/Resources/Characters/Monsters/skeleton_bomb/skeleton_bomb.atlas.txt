@@ -1,0 +1,23 @@
+skeleton_bomb.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:188,69,50,51
+drum02
+bounds:94,50,92,70
+hand(left)
+bounds:45,6,39,32
+hand(right)
+bounds:2,2,41,36
+head
+bounds:2,40,90,80
+leg(left)
+bounds:189,33,12,15
+leg(right)
+bounds:189,50,13,15
+magic circle(blue)
+bounds:240,27,93,26
+rotate:90
+shadow
+bounds:94,18,93,30

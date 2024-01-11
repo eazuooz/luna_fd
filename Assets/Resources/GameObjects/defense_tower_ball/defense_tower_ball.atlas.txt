@@ -1,0 +1,8 @@
+defense_tower_ball.png
+size:256,128
+filter:Linear,Linear
+pma:true
+cube
+bounds:2,2,143,123
+defense ball
+bounds:147,34,91,91

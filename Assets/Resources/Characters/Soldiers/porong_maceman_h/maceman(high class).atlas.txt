@@ -1,0 +1,29 @@
+maceman(high class).png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:93,17,106,59
+rotate:90
+hand(left)
+bounds:154,34,89,60
+rotate:90
+hand(right)
+bounds:268,82,41,37
+rotate:90
+head
+bounds:2,24,99,89
+rotate:90
+leg(left)
+bounds:2,7,15,13
+rotate:90
+leg(right)
+bounds:17,8,14,13
+rotate:90
+shadow
+bounds:154,2,93,30
+shield
+bounds:216,66,50,57
+sword effect
+bounds:249,27,37,70
+rotate:90

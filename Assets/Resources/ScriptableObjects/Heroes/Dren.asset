@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Dren
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Dren
+  UnitName: "\uB4DC\uB80C"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 2d49ddcad6693604f9a1f08bec6bc038, type: 3}
+  minimapPicture: {fileID: 21300000, guid: b1f215d8fd6022244881cc4546f62602, type: 3}
+  illustPicture: {fileID: 21300000, guid: 4e06db91803c21d4f9a37899b07dd4f2, type: 3}
+  cardPicture: {fileID: 21300000, guid: 9033ba9a3f832f84387b426d4c971a13, type: 3}
+  skillIcon: {fileID: 21300000, guid: 06aa0f363d7a04c4d8412e340249eaad, type: 3}
+  illustName: "\uACE0\uACF5 \uD3ED\uACA9\uAE30 '\uB4DC\uB80C'"
+  skillName: "<\uB4DC\uB798\uACE4 \uD30C\uC774\uC5B4>"
+  skillStr: "28\uCD08\uB9C8\uB2E4 \uD0C0\uAC9F\uC758 \uBC18\uACBD 1.8\uC548\uC5D0
+    \uD654\uC5FC \uD3ED\uBC1C"
+  start3: "\uACF5\uACA9 \uB370\uBBF8\uC9C0 15% \uC99D\uAC00"
+  start5: "\uD30C\uC774\uC5B4\uBCFC \uC2A4\uD0AC \uB370\uBBF8\uC9C0 20% \uC99D\uAC00"
+  ultra1: "\uC804\uCCB4 \uD30C\uD2F0\uC6D0 \uACF5\uACA9 \uBC1B\uB294 \uB370\uBBF8\uC9C0
+    10% \uAC10\uC18C"
+  ultra2: 
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1.15
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 5
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

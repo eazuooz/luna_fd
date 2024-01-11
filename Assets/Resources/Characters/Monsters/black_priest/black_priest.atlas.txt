@@ -1,0 +1,16 @@
+black_priest.png
+size:256,512
+filter:Linear,Linear
+pma:true
+body
+bounds:2,95,100,160
+rotate:90
+cape
+bounds:2,197,170,70
+hand(left)
+bounds:174,147,65,120
+hand(right)
+bounds:164,25,65,120
+magic ball
+bounds:2,2,91,92
+rotate:90

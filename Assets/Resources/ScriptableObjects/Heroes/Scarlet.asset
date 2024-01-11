@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Scarlet
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Scarlet
+  UnitName: "\uC2A4\uCE7C\uB81B"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 1f6255187c175db41a8b35f67c03d62c, type: 3}
+  minimapPicture: {fileID: 21300000, guid: 469a6486e1efbbe468f5a6498c303f32, type: 3}
+  illustPicture: {fileID: 21300000, guid: 9bfb7fec10e7a3442b77822460a3a66a, type: 3}
+  cardPicture: {fileID: 21300000, guid: 22fea576dd1f8c74daf65a6cfcec9572, type: 3}
+  skillIcon: {fileID: 21300000, guid: db7b41d6b1a5c5145b63fcb8432ed809, type: 3}
+  illustName: "\uB9C8\uBC95\uC0AC '\uC2A4\uCE7C\uB81B'"
+  skillName: "<\uD30C\uC774\uC5B4\uBCFC>"
+  skillStr: "10\uCD08\uB9C8\uB2E4 \uD0C0\uAC9F\uC758 \uBC18\uACBD 3 \uC548\uC5D0
+    \uD654\uC5FC \uD3ED\uBC1C"
+  start3: "\uC2A4\uD0AC \uACF5\uACA9\uB825 5% \uC99D\uAC00"
+  start5: "\uC2A4\uD0AC \uB370\uBBF8\uC9C0 200% \uC99D\uAC00"
+  ultra1: "\uC2A4\uD0AC \uD53C\uD574 \uB370\uBBF8\uC9C0 \uAC10\uC18C 20% \uAC10\uC18C"
+  ultra2: "\uC790\uC2E0\uC774 \uC0AC\uC6A9\uD558\uB294 '\uD30C\uC774\uC5B4\uBCFC'\uC5D0
+    \uB9DE\uC740 \uC801\uAD70 80% \uD655\uB960\uB85C \uC800\uC8FC"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 4
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

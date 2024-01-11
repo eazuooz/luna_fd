@@ -1,0 +1,8 @@
+heal_pring.png
+size:256,256
+filter:Linear,Linear
+pma:true
+bling
+bounds:148,117,9,24
+light
+bounds:2,2,144,139

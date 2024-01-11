@@ -1,0 +1,9 @@
+C:\LunaDefense\Luna_Server\Luna_Network\bin\Debug\net48\Luna_Network.dll
+C:\LunaDefense\Luna_Server\Luna_Network\bin\Debug\net48\Luna_Network.pdb
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.GeneratedMSBuildEditorConfig.editorconfig
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.AssemblyInfoInputs.cache
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.AssemblyInfo.cs
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.csproj.CoreCompileInputs.cache
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.dll
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.pdb
+C:\LunaDefense\Luna_Server\Luna_Network\obj\Debug\net48\Luna_Network.csproj.AssemblyReference.cache

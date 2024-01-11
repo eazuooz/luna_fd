@@ -1,0 +1,18 @@
+lena.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:114,20,50,51
+rotate:90
+head
+bounds:2,2,110,100
+leg(left)
+bounds:167,38,12,15
+leg(right)
+bounds:167,55,13,15
+magic circle(blue)
+bounds:209,9,93,26
+rotate:90
+shadow
+bounds:114,72,93,30

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0887383fcb21ea44861be8b32180fce, type: 3}
+  m_Name: SerenBlessing
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 601659344080798872, guid: 6644889cfad3baf4e879e4649b491566, type: 3}
+  skillImage: {fileID: 21300000, guid: 74bdc9a1b04f7df4ca5c61b9cfd051aa, type: 3}
+  type: 1
+  isMultiple: 0
+  level: 1
+  mana: 30
+  passiveDelay: 0
+  activeDelay: 0
+  damage: 0
+  range: 0
+  splashRange: 0
+  coolTime: 25
+  stunTime: 0
+  burfTime: 0
+  multipleSkillDamageBuff: 1
+  multipleSkillResistanceBuff: 1
+  maxSummonCount: 1
+  ableSkill: 1
+  skillName: "\uC138\uB80C\uC758 \uAC00"
+  skillDiscription: "- \uD30C\uD2F0\uC6D0 \uC804\uCCB4 10\uCD08\uAC04 \uBAA8\uB4E0
+    \uC800\uD56D\uC5D0 25% \uAC10\uC18C\r\n"
+  skillLevelDiscription: "- LV 5 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00\n- LV
+    10 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00\n- LV 15 : \uC800\uD56D 5% \uCD94\uAC00
+    \uC99D\uAC00\n- LV 20 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00"

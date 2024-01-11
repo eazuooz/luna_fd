@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Soldier
+  - Monster
+  - Hero
+  - UnitUI
+  - Mouse
+  - FxTemporaire
+  - Unit
+  - Stage
+  - UICharacterList
+  - UICharacterInfo
+  - Coin
+  - SkillUI
+  - Item
+  - BackGround
+  - UIPlayer
+  - UIProgressBar
+  - ChatManager
+  - UIUpgrade
+  - UILobby
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - UI_Profile
+  - UI_Stage
+  - UI_Particle
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: BackGround
+    uniqueID: 4056462887
+    locked: 0
+  - name: Tree
+    uniqueID: 2292211783
+    locked: 0
+  - name: Tower
+    uniqueID: 359547825
+    locked: 0
+  - name: Item
+    uniqueID: 101870807
+    locked: 0
+  - name: Charcter_Monster
+    uniqueID: 1947901877
+    locked: 0
+  - name: Charcter_Soldier
+    uniqueID: 3532324563
+    locked: 0
+  - name: Charcter_Hero
+    uniqueID: 1699485641
+    locked: 0
+  - name: Character
+    uniqueID: 3279508279
+    locked: 0
+  - name: CharacterUpObject
+    uniqueID: 3139871577
+    locked: 0
+  - name: Floor
+    uniqueID: 4067806785
+    locked: 0
+  - name: Effect
+    uniqueID: 1754451423
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 2520278669
+    locked: 0
+  - name: UI_untouched
+    uniqueID: 275682817
+    locked: 0
+  - name: UI_Top
+    uniqueID: 263412117
+    locked: 0
+  - name: Logo
+    uniqueID: 2332878193
+    locked: 0

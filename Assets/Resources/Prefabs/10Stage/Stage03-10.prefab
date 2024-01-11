@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &661645798056106814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 661645798056106812}
+  - component: {fileID: 661645798056106813}
+  m_Layer: 0
+  m_Name: Stage03-10
+  m_TagString: Stage
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &661645798056106812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661645798056106814}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &661645798056106813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661645798056106814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26634bf59e65294f915118ccd97d5d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageName: "\uC545\uBABD\uC758 \uC131 \uC9C0\uD558 30\uCE35"
+  dungeonTable: {fileID: 0}
+  backgroundImage: {fileID: 8383516895249335979, guid: 42c7c10314721a94b880fac6ab5e91fe, type: 3}
+  rewardGold: 0
+  enemyTower: {fileID: 7439465572325926225, guid: 45146e08c36959c41b7b85f9b3a14544, type: 3}
+  allyTower: {fileID: 7528829204366405261, guid: 07144c725e49c5749985f2b4474fa9ed, type: 3}
+  spawnDelayStartTime: 8
+  spawnDelayEndTime: 10
+  stageWidth: 3.25
+  isBossStage: 0
+  startMonsters:
+    gameObj: {fileID: 3601769417073393332, guid: 9ab7ff8882cd33c40a7a6d910c5e2d17, type: 3}
+    spawnPercentage: 5
+  nonBossMonsters:
+  - gameObj: {fileID: 3039898614407082880, guid: be23961201777204691cbf3fb5738e63, type: 3}
+    spawnPercentage: 40
+  - gameObj: {fileID: 4100995970120910541, guid: 5ff2158a33bcdeb4a94185ea54113da9, type: 3}
+    spawnPercentage: 40
+  - gameObj: {fileID: 6981234479424132648, guid: eac34865d22b4814d8020dde538c17e0, type: 3}
+    spawnPercentage: 40
+  - gameObj: {fileID: 3601769417073393332, guid: 9ab7ff8882cd33c40a7a6d910c5e2d17, type: 3}
+    spawnPercentage: 90
+  - gameObj: {fileID: 6957893479433811638, guid: da24c27e8ccb56e4bb80e199369d4fe0, type: 3}
+    spawnPercentage: 90
+  gamePlayer: {fileID: 0}
+  goldAmount: 20
+  ItemDropTable:
+  - itemData: {fileID: 11400000, guid: 2aa0009da827c0b46b96e8c1386558e6, type: 2}
+    probability: 0
+  - itemData: {fileID: 11400000, guid: 2be70379e59033743810852d2e9bf5ed, type: 2}
+    probability: 0
+  MonterDropTable:
+  - itemData: {fileID: 11400000, guid: 486db92c4442f7242b7d6f56bcf0c11e, type: 2}
+    probability: 0.01

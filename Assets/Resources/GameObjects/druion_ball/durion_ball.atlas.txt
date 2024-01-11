@@ -1,0 +1,9 @@
+durion_ball.png
+size:1024,256
+filter:Linear,Linear
+pma:true
+ball
+bounds:380,2,183,196
+rotate:90
+shadow
+bounds:2,83,376,102

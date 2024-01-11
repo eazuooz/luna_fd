@@ -1,0 +1,17 @@
+skeleton_magician.png
+size:418,198
+filter:Linear,Linear
+pma:true
+body
+bounds:176,4,155,192
+offsets:15,17,196,230
+hand(left)
+bounds:333,98,98,83
+offsets:6,18,110,120
+rotate:90
+hand(right)
+bounds:2,2,172,194
+offsets:14,17,200,240
+head
+bounds:333,7,64,89
+offsets:9,1,86,120

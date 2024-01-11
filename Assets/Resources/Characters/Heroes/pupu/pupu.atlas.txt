@@ -1,0 +1,22 @@
+pupu.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:2,4,100,100
+hand(left)
+bounds:170,9,11,21
+rotate:90
+hand(right)
+bounds:170,22,13,26
+magic circle
+bounds:104,2,102,32
+rotate:90
+magic circle(blue)
+bounds:218,11,93,26
+rotate:90
+shadow
+bounds:138,11,93,30
+rotate:90
+weapon
+bounds:170,50,46,54

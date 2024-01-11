@@ -1,0 +1,6 @@
+shield.png
+size:256,256
+filter:Linear,Linear
+pma:true
+img
+bounds:2,2,231,230

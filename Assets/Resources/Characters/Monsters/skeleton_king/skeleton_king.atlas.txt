@@ -1,0 +1,16 @@
+skeleton_king.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,10,240,210
+rotate:90
+hand(left)
+bounds:341,179,47,71
+hand(right)
+bounds:340,29,47,77
+head
+bounds:214,2,124,104
+magic circle
+bounds:214,108,142,125
+rotate:90

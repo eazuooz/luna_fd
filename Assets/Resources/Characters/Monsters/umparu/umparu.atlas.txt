@@ -1,0 +1,17 @@
+umparu.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+body
+bounds:2,75,409,435
+hand(left)
+bounds:413,181,312,329
+hand(right)
+bounds:727,204,281,306
+leg(left)
+bounds:2,2,71,63
+rotate:90
+leg(right)
+bounds:67,10,62,63
+shadow
+bounds:413,77,376,102

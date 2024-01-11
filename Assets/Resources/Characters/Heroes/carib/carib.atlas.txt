@@ -1,0 +1,30 @@
+carib.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:252,16,108,60
+rotate:90
+hand(left)
+bounds:314,54,70,60
+rotate:90
+head
+bounds:2,9,126,115
+leg(left)
+bounds:252,2,9,12
+leg(right)
+bounds:252,2,9,12
+magic circle(blue)
+bounds:366,3,93,26
+shadow
+bounds:376,31,93,30
+rotate:90
+shield
+bounds:314,2,50,50
+skull
+bounds:447,94,30,28
+rotate:90
+sword effect
+bounds:408,54,37,70
+weapon
+bounds:130,4,120,120

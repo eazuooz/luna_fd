@@ -1,0 +1,22 @@
+martin king.png
+size:659,786
+filter:Linear,Linear
+pma:true
+body
+bounds:2,198,586,449
+offsets:16,0,602,468
+rotate:90
+crown
+bounds:453,354,145,86
+offsets:0,0,148,86
+rotate:90
+hand_right
+bounds:453,287,141,65
+offsets:5,1,146,69
+head
+bounds:453,501,283,204
+offsets:1,1,284,213
+rotate:90
+shadow
+bounds:2,2,627,194
+offsets:14,11,641,217

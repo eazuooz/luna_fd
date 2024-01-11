@@ -1,0 +1,11 @@
+wolf.png
+size:2048,1024
+filter:Linear,Linear
+pma:true
+body
+bounds:2,2,781,674
+head01
+bounds:785,91,598,585
+head02
+bounds:1385,291,385,375
+rotate:90

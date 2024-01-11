@@ -1,0 +1,18 @@
+dren.png
+size:256,256
+filter:Linear,Linear
+pma:true
+body
+bounds:146,43,81,59
+body(hero)
+bounds:142,2,42,39
+head
+bounds:146,104,66,83
+hero
+bounds:2,9,69,51
+magic circle
+bounds:2,62,142,125
+wing(left)
+bounds:73,12,45,18
+wing(right)
+bounds:73,32,67,28

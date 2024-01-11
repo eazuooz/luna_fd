@@ -1,0 +1,26 @@
+clare.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:252,17,108,60
+rotate:90
+hand(left)
+bounds:314,45,70,80
+head
+bounds:124,10,126,115
+leg(left)
+bounds:252,3,9,12
+leg(right)
+bounds:263,3,9,12
+shield
+bounds:406,3,50,50
+sword effect
+bounds:386,55,37,70
+weapon
+bounds:2,5,120,120
+wing(left)
+bounds:361,3,43,40
+wing(right)
+bounds:314,2,41,45
+rotate:90

@@ -1,0 +1,25 @@
+dark_knight.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:252,16,108,60
+rotate:90
+hand(left)
+bounds:314,44,70,80
+hand(right)
+bounds:386,27,45,38
+rotate:90
+head
+bounds:2,9,126,115
+leg(left)
+bounds:252,2,9,12
+leg(right)
+bounds:263,2,9,12
+shield
+bounds:386,74,50,50
+sword effect
+bounds:314,5,37,70
+rotate:90
+weapon
+bounds:130,4,120,120

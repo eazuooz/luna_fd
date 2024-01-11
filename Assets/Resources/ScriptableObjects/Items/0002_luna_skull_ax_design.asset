@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7bbe5e84b973ea44b706330567e5260, type: 3}
+  m_Name: 0002_luna_skull_ax_design
+  m_EditorClassIdentifier: 
+  cunnectPrefab: {fileID: 3986165932232600216, guid: 5d644023fdc876148a9fa564b58efff3, type: 3}
+  itemImage: {fileID: 2800000, guid: 587e0b249869d914a9333642872b17e9, type: 3}
+  IconImage: {fileID: 2800000, guid: b754c2fc823f6a6409ac690937e82cd1, type: 3}
+  type: 2
+  isActive: 0
+  itemName: "<\uD574\uACE8 \uB3C4\uB07C\uBCD1\uC758 \uAC11\uC637>"
+  itemDiscription: "- \uD574\uACE8 \uB3C4\uB07C\uBCD1\uC758 \uAC11\uC637 \uB3C4\uC548"
+  itemNumber: 2
+  level: 4
+  itemCount: 1
+  price: 0
+  dropStageLevel: 10
+  uiPrefab: {fileID: 7733810067098803186, guid: 283946248ec58914f8fa9ef704246414, type: 3}
+  skinType: 2
+  equipIcon: {fileID: 2800000, guid: afd555a28ccbb1749a60915e655eae5c, type: 3}
+  weapon: {fileID: 2800000, guid: 20ff4a8fe284e4546b3b9d128b25561d, type: 3}
+  shield: {fileID: 2800000, guid: f4ff1b8a1b389c045ad791aaf7843cfb, type: 3}
+  ring: {fileID: 2800000, guid: b23b929e17033c84a95f8c69535ec372, type: 3}
+  basicDis: "\uC2A4\uD50C\uB798\uC2DC \uB370\uBBF8\uC9C0 \uBC1C\uB3D9"
+  weaponeStr: "\uD54F\uBE5B \uAE30\uC0AC\uC758 \uAC80"
+  weaponeDis: "\uC804\uCCB4 \uD30C\uD2F0\uC6D0 \uACF5\uACA9\uB825 10% \uC99D\uAC00"
+  shieldStr: "\uD54F\uBE5B \uAE30\uC0AC\uC758 \uBC29\uD328"
+  shieldDis: "20\uCD08\uB9C8\uB2E4 \uC804\uCCB4 \uBAAC\uC2A4\uD130 5\uCD08\uB3D9\uC548
+    \uCD9C\uD608"
+  ringStr: "\uD54F\uBE5B \uAE30\uC0AC\uC758 \uBC18\uC9C0"
+  ringDis: "28\uCD08\uB9C8\uB2E4 50% \uD655\uB960\uB85C 7\uCD08\uB3D9\uC548 \uAD11\uD3ED\uD654"
+  equipSkills:
+  - {fileID: 11400000, guid: 13781eab4e320414e8905de294f1fda7, type: 2}
+  - {fileID: 11400000, guid: 3f4069b48c0c00746a70ea6ad2a7e736, type: 2}
+  - {fileID: 11400000, guid: 588322c9ef8da6e4e8c5a0d181d7b8d7, type: 2}

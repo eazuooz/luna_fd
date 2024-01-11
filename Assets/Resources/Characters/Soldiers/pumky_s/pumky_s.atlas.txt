@@ -1,0 +1,16 @@
+pumky_s.png
+size:128,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,84,70,60
+head
+bounds:2,2,90,80
+magic circle
+bounds:2,180,102,32
+magic circle(blue)
+bounds:2,214,93,26
+weapon01
+bounds:2,146,34,32
+weapon02
+bounds:38,146,34,32

@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f022f367fe686e0468233dd569326e27, type: 3}
+  m_Name: UICharacterList
+  m_EditorClassIdentifier: 
+  uiTarget: {fileID: 5101918769205690582, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+  dic:
+    keys:
+    - UICharacterList
+    - HeroScroll View
+    - HeroViewport
+    - HeroContent
+    - HeroTab
+    - HeroText
+    - SoldierTab
+    - SoldierText
+    - DeckBackGround
+    - HeroCardButton01
+    - HeroCardButton02
+    - HeroCardButton03
+    - HeroCardButton04
+    - SoldierCardButton01
+    - SoldierCardButton02
+    - SoldierScroll View
+    - SoldierViewport
+    - SoldierContent
+    - ReleaseButton
+    - AllTab
+    - AllText
+    - Text
+    - AllScroll View
+    - AllViewport
+    - AllContent
+    - LineTab
+    values:
+    - name: UICharacterList
+      path: /UICharacterList
+      obj: {fileID: 5101918769205690582, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroScroll View
+      path: /UICharacterList/HeroScroll View
+      obj: {fileID: 6934932232694707840, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroViewport
+      path: /UICharacterList/HeroScroll View/HeroViewport
+      obj: {fileID: 6533209524247843544, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroContent
+      path: /UICharacterList/HeroScroll View/HeroViewport/HeroContent
+      obj: {fileID: 5074051826031843187, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroTab
+      path: /UICharacterList/HeroTab
+      obj: {fileID: 1682960364352370020, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroText
+      path: /UICharacterList/HeroTab/HeroText
+      obj: {fileID: 8495720860819682792, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierTab
+      path: /UICharacterList/SoldierTab
+      obj: {fileID: 1604435089775897362, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierText
+      path: /UICharacterList/SoldierTab/SoldierText
+      obj: {fileID: 619687114315864006, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: DeckBackGround
+      path: /UICharacterList/DeckBackGround
+      obj: {fileID: 9218526264455922886, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroCardButton01
+      path: /UICharacterList/DeckBackGround/HeroCardButton01
+      obj: {fileID: 6032047015417862777, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroCardButton02
+      path: /UICharacterList/DeckBackGround/HeroCardButton02
+      obj: {fileID: 2857915037676509729, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroCardButton03
+      path: /UICharacterList/DeckBackGround/HeroCardButton03
+      obj: {fileID: 3712996865754677999, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: HeroCardButton04
+      path: /UICharacterList/DeckBackGround/HeroCardButton04
+      obj: {fileID: 7794038519770313888, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierCardButton01
+      path: /UICharacterList/DeckBackGround/SoldierCardButton01
+      obj: {fileID: 5002508208756445570, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierCardButton02
+      path: /UICharacterList/DeckBackGround/SoldierCardButton02
+      obj: {fileID: 5949863815736366174, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierScroll View
+      path: /UICharacterList/SoldierScroll View
+      obj: {fileID: 3340664841549283434, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierViewport
+      path: /UICharacterList/SoldierScroll View/SoldierViewport
+      obj: {fileID: 2234131369634689784, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: SoldierContent
+      path: /UICharacterList/SoldierScroll View/SoldierViewport/SoldierContent
+      obj: {fileID: 2821044063245980757, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: ReleaseButton
+      path: /UICharacterList/ReleaseButton
+      obj: {fileID: 8485078509187897412, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: AllTab
+      path: /UICharacterList/AllTab
+      obj: {fileID: 2988944851196990543, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: AllText
+      path: /UICharacterList/AllTab/AllText
+      obj: {fileID: 1498825219891663355, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: Text
+      path: /UICharacterList/Text
+      obj: {fileID: 7536963692605155843, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: AllScroll View
+      path: /UICharacterList/AllScroll View
+      obj: {fileID: 3093001012044790984, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: AllViewport
+      path: /UICharacterList/AllScroll View/AllViewport
+      obj: {fileID: 6242805927994316285, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: AllContent
+      path: /UICharacterList/AllScroll View/AllViewport/AllContent
+      obj: {fileID: 1709021197586515005, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+    - name: LineTab
+      path: /UICharacterList/LineTab
+      obj: {fileID: 2633247362197072840, guid: b381c751633cd66428c1776a69ea24b6, type: 3}

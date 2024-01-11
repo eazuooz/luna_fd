@@ -1,0 +1,11 @@
+slime_s.png
+size:256,64
+filter:Linear,Linear
+pma:true
+slime_01
+bounds:2,2,80,60
+wing(left)
+bounds:127,19,43,40
+rotate:90
+wing(right)
+bounds:84,17,41,45

@@ -1,0 +1,6 @@
+iron_ball.png
+size:256,256
+filter:Linear,Linear
+pma:true
+iron monster
+bounds:2,2,136,131

@@ -1,0 +1,21 @@
+matilda.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:116,61,65,51
+rotate:90
+head
+bounds:34,36,90,80
+rotate:90
+leg(left)
+bounds:97,2,12,15
+leg(right)
+bounds:97,19,13,15
+magic circle(blue)
+bounds:2,5,93,26
+shadow
+bounds:2,33,93,30
+rotate:90
+weapon
+bounds:116,7,52,52

@@ -1,0 +1,21 @@
+goldy.png
+size:256,128
+filter:Linear,Linear
+pma:true
+bag
+bounds:116,63,63,61
+rotate:90
+body
+bounds:116,10,50,51
+head
+bounds:34,36,90,80
+rotate:90
+leg(left)
+bounds:97,2,12,15
+leg(right)
+bounds:97,19,13,15
+magic circle(blue)
+bounds:2,5,93,26
+shadow
+bounds:2,33,93,30
+rotate:90

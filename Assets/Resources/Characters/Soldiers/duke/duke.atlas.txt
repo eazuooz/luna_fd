@@ -1,0 +1,28 @@
+duke.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,16,108,60
+rotate:90
+hand(left)
+bounds:192,54,70,60
+rotate:90
+head
+bounds:2,9,126,115
+leg(left)
+bounds:141,2,9,12
+leg(right)
+bounds:130,2,9,12
+magic circle
+bounds:254,22,102,32
+rotate:90
+magic circle(blue)
+bounds:288,3,93,26
+shadow
+bounds:288,31,93,30
+rotate:90
+shield
+bounds:192,2,50,50
+sword effect
+bounds:320,54,37,70

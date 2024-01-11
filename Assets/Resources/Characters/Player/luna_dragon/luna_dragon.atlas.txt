@@ -1,0 +1,33 @@
+luna_dragon.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body_dragon
+bounds:130,16,108,60
+rotate:90
+cape_dragon
+bounds:224,40,84,37
+rotate:90
+hand(left)
+bounds:263,54,70,60
+rotate:90
+head_dragon
+bounds:2,9,126,115
+leg(left)
+bounds:130,2,9,12
+leg(right)
+bounds:141,2,9,12
+magic circle(blue)
+bounds:192,3,93,26
+shadow
+bounds:192,31,93,30
+rotate:90
+shield_dragon
+bounds:287,2,50,50
+sword effect
+bounds:325,54,37,70
+sword_dragon
+bounds:339,16,34,36
+tail_dragon
+bounds:364,57,67,30
+rotate:90

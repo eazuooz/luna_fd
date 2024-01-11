@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f022f367fe686e0468233dd569326e27, type: 3}
+  m_Name: UICharacterInfo
+  m_EditorClassIdentifier: 
+  uiTarget: {fileID: 5101918769205690582, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+  dic:
+    keys:
+    - UICharacterInfo
+    - bgLevelUp
+    - Illustration
+    - Image
+    - NameText
+    - InfoText
+    - star0
+    - star1
+    - star2
+    - star3
+    - star4
+    - Socket
+    - keyStone
+    - LevelupButton
+    - Text
+    - CostText
+    - LevelUpStat
+    - SpecialStat
+    - JoinPartyButton
+    - line
+    - bgWakeUp
+    - WakeUpButton
+    - SourceImage
+    - WakeUpStat
+    - levelupTab
+    - wakeUpTab
+    - ReleaseButton
+    values:
+    - name: UICharacterInfo
+      path: /UICharacterInfo
+      obj: {fileID: 5101918769205690582, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: bgLevelUp
+      path: /UICharacterInfo/bgLevelUp
+      obj: {fileID: 6011944537819596198, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: Illustration
+      path: /UICharacterInfo/bgLevelUp/Illustration
+      obj: {fileID: 161257434261976676, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: Image
+      path: /UICharacterInfo/bgLevelUp/Illustration/Image
+      obj: {fileID: 3758831712243914198, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: NameText
+      path: /UICharacterInfo/bgLevelUp/Illustration/NameText
+      obj: {fileID: 4799059758404165182, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: InfoText
+      path: /UICharacterInfo/bgLevelUp/Illustration/InfoText
+      obj: {fileID: 1778740452399392159, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: star0
+      path: /UICharacterInfo/bgLevelUp/Illustration/star0
+      obj: {fileID: 4913848379801211829, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: star1
+      path: /UICharacterInfo/bgLevelUp/Illustration/star1
+      obj: {fileID: 8523385669793335984, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: star2
+      path: /UICharacterInfo/bgLevelUp/Illustration/star2
+      obj: {fileID: 618630385121533305, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: star3
+      path: /UICharacterInfo/bgLevelUp/Illustration/star3
+      obj: {fileID: 8202266273416056008, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: star4
+      path: /UICharacterInfo/bgLevelUp/Illustration/star4
+      obj: {fileID: 5378560026105138171, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: Socket
+      path: /UICharacterInfo/bgLevelUp/Illustration/Socket
+      obj: {fileID: 4430321922334096511, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: keyStone
+      path: /UICharacterInfo/bgLevelUp/Illustration/Socket/keyStone
+      obj: {fileID: 1663240315192638333, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: LevelupButton
+      path: /UICharacterInfo/bgLevelUp/Illustration/LevelupButton
+      obj: {fileID: 3678724175713690385, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: Text
+      path: /UICharacterInfo/bgLevelUp/Illustration/LevelupButton/Text
+      obj: {fileID: 6691680105282081990, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: CostText
+      path: /UICharacterInfo/bgLevelUp/Illustration/LevelupButton/CostText
+      obj: {fileID: 5555049849471101511, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: LevelUpStat
+      path: /UICharacterInfo/bgLevelUp/Illustration/LevelUpStat
+      obj: {fileID: 8125135412243322756, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: SpecialStat
+      path: /UICharacterInfo/bgLevelUp/Illustration/SpecialStat
+      obj: {fileID: 7146303222054497171, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: JoinPartyButton
+      path: /UICharacterInfo/bgLevelUp/Illustration/JoinPartyButton
+      obj: {fileID: 1854817675224582616, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: line
+      path: /UICharacterInfo/line
+      obj: {fileID: 1843482535526373630, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: bgWakeUp
+      path: /UICharacterInfo/bgWakeUp
+      obj: {fileID: 5790993338882282523, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: WakeUpButton
+      path: /UICharacterInfo/bgWakeUp/Illustration/WakeUpButton
+      obj: {fileID: 456705888850464656, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: SourceImage
+      path: /UICharacterInfo/bgWakeUp/Illustration/WakeUpButton/SourceImage
+      obj: {fileID: 2160124145201288466, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: WakeUpStat
+      path: /UICharacterInfo/bgWakeUp/Illustration/WakeUpStat
+      obj: {fileID: 1206148533364241817, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: levelupTab
+      path: /UICharacterInfo/levelupTab
+      obj: {fileID: 8618788803855822116, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: wakeUpTab
+      path: /UICharacterInfo/wakeUpTab
+      obj: {fileID: 7666852484466324144, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+    - name: ReleaseButton
+      path: /UICharacterInfo/ReleaseButton
+      obj: {fileID: 6034602865574360583, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}

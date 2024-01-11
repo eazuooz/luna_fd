@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7bbe5e84b973ea44b706330567e5260, type: 3}
+  m_Name: 0000_luna_basic_design
+  m_EditorClassIdentifier: 
+  cunnectPrefab: {fileID: 3986165932232600216, guid: 5d644023fdc876148a9fa564b58efff3, type: 3}
+  itemImage: {fileID: 2800000, guid: 587e0b249869d914a9333642872b17e9, type: 3}
+  IconImage: {fileID: 2800000, guid: b754c2fc823f6a6409ac690937e82cd1, type: 3}
+  type: 2
+  isActive: 0
+  itemName: "<\uBAA8\uD5D8\uAC00 \uC14B>"
+  itemDiscription: "- \uBAA8\uD5D8\uAC00 \uAC11\uC637 \uB3C4\uC548"
+  itemNumber: 0
+  level: 4
+  itemCount: 1
+  price: 0
+  dropStageLevel: 0
+  uiPrefab: {fileID: 5789894980126748385, guid: e29c93ff0cce4c74b9892ea38fc329f6, type: 3}
+  skinType: 0
+  equipIcon: {fileID: 2800000, guid: 309c27daf0b67dc41b8287af86bd55c8, type: 3}
+  weapon: {fileID: 2800000, guid: 11ddb67f77cb66d4e90ef082251a5740, type: 3}
+  shield: {fileID: 2800000, guid: 8847587b944907640b334533fb7943e8, type: 3}
+  ring: {fileID: 2800000, guid: e34d2e5469ca34d4797fab964ee8e53d, type: 3}
+  basicDis: "\uD2B9\uC218\uB2A5\uB825 \uC5C6\uC74C"
+  weaponeStr: "\uD3C9\uBC94\uD55C \uAC80"
+  weaponeDis: "\uD2B9\uC218\uB2A5\uB825 \uC5C6\uC74C"
+  shieldStr: "\uC19C\uD138 \uBC29\uD328"
+  shieldDis: "\uD2B9\uC218\uB2A5\uB825 \uC5C6\uC74C"
+  ringStr: "\uBCFC\uD488\uC5C6\uB294 \uBC18\uC9C0"
+  ringDis: "\uD2B9\uC218\uB2A5\uB825 \uC5C6\uC74C"

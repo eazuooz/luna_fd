@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Miu
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Miu
+  UnitName: "\uBBF8\uC6B0"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 79200cc73e36bf54fbe3ea0555ab71dd, type: 3}
+  minimapPicture: {fileID: 21300000, guid: f79fa4bded1abc343af53bc23a8693bf, type: 3}
+  illustPicture: {fileID: 21300000, guid: ebd90ea28e8784746998d6e851b4f798, type: 3}
+  cardPicture: {fileID: 21300000, guid: 0185cf179b25931458a46559bfcf4f10, type: 3}
+  skillIcon: {fileID: 21300000, guid: 51ccecd0514397e4ba64aeef8d81ace6, type: 3}
+  illustName: "\uC232\uC18D\uC758 \uBA85\uC758 '\uBBF8\uC6B0'"
+  skillName: "<\uC5C4\uB9C8 \uC190>"
+  skillStr: "22\uCD08\uB9C8\uB2E4 \uC0AC\uC815\uAC70\uB9AC 5\uC774\uB0B4\uC758 \uC544\uAD70
+    \uC804\uCCB4 \uCCB4\uB825 \uD68C\uBCF5"
+  start3: "\uCCB4\uB825 5% \uC99D\uAC00"
+  start5: "\uC790\uC2E0\uC774 \uC0AC\uC6A9\uD558\uB294 '\uC5C4\uB9C8 \uC190' \uC800\uC8FC
+    10\uAC10\uC18C"
+  ultra1: "\uC790\uC2E0\uC774 \uC0AC\uC6A9\uD558\uB294 '\uC5C4\uB9C8 \uC190' \uD68C\uBCF5\uB7C9
+    150% \uC99D\uAC00"
+  ultra2: "\uACF5\uACA9\uC2A4\uD0AC\uC5D0 \uBA74\uC5ED"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 2.5
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

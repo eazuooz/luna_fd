@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: PorongLance
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: PorongLance
+  UnitName: "\uD3EC\uB871 \uCC3D\uBCD1"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 1
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: c80fc77ed234a414497fe334defdf120, type: 3}
+  minimapPicture: {fileID: 0}
+  illustPicture: {fileID: 21300000, guid: 5ba1df67d1b40dd48a0fc6644e5e3a6b, type: 3}
+  cardPicture: {fileID: 21300000, guid: 2f570ab0ec225b94a8397d70d2bc403c, type: 3}
+  skillIcon: {fileID: 21300000, guid: 7314cb5df39a9294f85a5f94374f8c44, type: 3}
+  illustName: "\uD638\uB871 \uCC3D\uBCD1"
+  skillName: 
+  skillStr: 
+  start3: 
+  start5: 
+  ultra1: 
+  ultra2: 
+  UnitSide: 0
+  UnitType: 1
+  UnitAttackType: 0
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 10
+  Hp: 600
+  Mp: 0
+  Stamina: 0
+  MoveSpeed: 0.75
+  Armour: 0
+  AttackDamage: 200
+  AttackOnceBySecondValue: 0.5
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 1.5
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 50
+  LevelUpAttPoint: 20
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

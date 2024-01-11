@@ -1,0 +1,6 @@
+pumpkin_blood.png
+size:64,64
+filter:Linear,Linear
+pma:true
+pumpkin blood
+bounds:2,2,50,53

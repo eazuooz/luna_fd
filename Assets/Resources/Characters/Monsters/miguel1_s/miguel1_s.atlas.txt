@@ -1,0 +1,12 @@
+miguel1_s.png
+size:256,128
+filter:Linear,Linear
+pma:true
+miguel01
+bounds:2,2,114,137
+rotate:90
+wing(left)
+bounds:141,49,55,67
+wing(right)
+bounds:141,9,38,48
+rotate:90

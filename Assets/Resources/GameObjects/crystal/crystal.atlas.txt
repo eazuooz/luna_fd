@@ -1,0 +1,6 @@
+crystal.png
+size:128,256
+filter:Linear,Linear
+pma:true
+crystal
+bounds:2,2,123,170

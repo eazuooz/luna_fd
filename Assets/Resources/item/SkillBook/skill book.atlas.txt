@@ -1,0 +1,6 @@
+skill book.png
+size:128,128
+filter:Linear,Linear
+pma:true
+skill book
+bounds:2,2,103,103

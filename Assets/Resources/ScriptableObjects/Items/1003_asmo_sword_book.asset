@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0098d546d0bb4c941b6ea6c442248cc2, type: 3}
+  m_Name: 1003_asmo_sword_book
+  m_EditorClassIdentifier: 
+  cunnectPrefab: {fileID: 3986165932232600216, guid: e3cdd3ed4c189254b88f10cc3035ed8a, type: 3}
+  itemImage: {fileID: 2800000, guid: 4fdda6bf5b1676d469682a78feee208c, type: 3}
+  IconImage: {fileID: 2800000, guid: 4b704e07bf236be419147d6b63366334, type: 3}
+  type: 0
+  isActive: 0
+  itemName: "<\uC544\uC2A4\uBAA8\uC758 \uAC80\uC220 \uAD50\uBCF8>"
+  itemDiscription: "- \uC544\uC2A4\uBAA8\uC758 \uAC80\uC220 \uAD50\uBCF8\uC740 '\uC232\uC18D\uC758
+    \uAE30\uC0AC' \uB3C4\uC548 \uB808\uBCA8\uC5C5\uC744 \uD560\uB54C \n   '\uC7A5\uBE44
+    \uAC15\uD654\uC11D'\uACFC \uD568\uAED8 \uD544\uC694\uD55C '\uD2B9\uC815 \uAC15\uD654\uC11D'\uC785\uB2C8\uB2E4.\r\n"
+  itemNumber: 1003
+  level: 0
+  itemCount: 1
+  price: 0
+  dropStageLevel: 0

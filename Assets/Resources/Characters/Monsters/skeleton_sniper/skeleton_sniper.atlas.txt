@@ -1,0 +1,25 @@
+skeleton_sniper.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:201,3,95,51
+bow
+bounds:134,56,60,90
+rotate:90
+hand(left)
+bounds:278,58,35,30
+head
+bounds:2,36,130,80
+leg(left)
+bounds:149,39,12,15
+leg(right)
+bounds:134,39,13,15
+magic circle
+bounds:2,2,102,32
+magic circle(blue)
+bounds:278,90,93,26
+shadow
+bounds:106,4,93,30
+weapon02
+bounds:226,66,50,50

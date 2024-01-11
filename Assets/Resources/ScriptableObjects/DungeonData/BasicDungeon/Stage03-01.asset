@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc1dc7089ddb58844b9bf66a11ab75b6, type: 3}
+  m_Name: Stage03-01
+  m_EditorClassIdentifier: 
+  spawnTerm: 5
+  startMonsters:
+    monster: {fileID: 0}
+    spawnOrder: 0
+    monsterLevel: 0
+  nonBossMonsters:
+  - monster: {fileID: 3039898614407082880, guid: be23961201777204691cbf3fb5738e63, type: 3}
+    spawnOrder: 1
+    monsterLevel: 1
+  ItemDropTable:
+  - itemData: {fileID: 11400000, guid: 2aa0009da827c0b46b96e8c1386558e6, type: 2}
+    probability: 0.1
+  - itemData: {fileID: 11400000, guid: 2be70379e59033743810852d2e9bf5ed, type: 2}
+    probability: 0.1
+  MonterDropTable:
+  - itemData: {fileID: 11400000, guid: 486db92c4442f7242b7d6f56bcf0c11e, type: 2}
+    probability: 0.01
+  goldAmount: 20

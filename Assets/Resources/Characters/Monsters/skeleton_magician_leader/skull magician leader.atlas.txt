@@ -1,0 +1,31 @@
+skull magician leader.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,46,208,168
+rotate:90
+body(skull magician)l
+bounds:97,13,61,31
+crown(skull magician)
+bounds:217,54,44,25
+hand_left
+bounds:172,81,46,83
+rotate:90
+hand_right
+bounds:204,4,45,73
+rotate:90
+head
+bounds:172,129,123,125
+head(skull magician)
+bounds:257,84,47,43
+leg_left
+bounds:263,58,24,39
+rotate:90
+leg_right
+bounds:172,51,28,43
+rotate:90
+magic ball
+bounds:160,2,42,42
+shadow
+bounds:2,14,93,30

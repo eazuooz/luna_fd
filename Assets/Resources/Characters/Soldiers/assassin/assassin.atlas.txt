@@ -1,0 +1,17 @@
+assassin.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:104,36,90,51
+rotate:90
+head
+bounds:2,36,100,90
+magic circle
+bounds:2,2,102,32
+magic circle(blue)
+bounds:157,68,93,26
+shadow
+bounds:157,96,93,30
+weapon
+bounds:157,6,60,60

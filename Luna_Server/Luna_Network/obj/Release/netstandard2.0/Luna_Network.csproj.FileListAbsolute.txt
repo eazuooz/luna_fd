@@ -1,0 +1,9 @@
+C:\Luna_Defend\Luna_Server\Luna_Network\bin\Release\netstandard2.0\Luna_Network.deps.json
+C:\Luna_Defend\Luna_Server\Luna_Network\bin\Release\netstandard2.0\Luna_Network.dll
+C:\Luna_Defend\Luna_Server\Luna_Network\bin\Release\netstandard2.0\Luna_Network.pdb
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.GeneratedMSBuildEditorConfig.editorconfig
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.AssemblyInfoInputs.cache
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.AssemblyInfo.cs
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.csproj.CoreCompileInputs.cache
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.dll
+C:\Luna_Defend\Luna_Server\Luna_Network\obj\Release\netstandard2.0\Luna_Network.pdb

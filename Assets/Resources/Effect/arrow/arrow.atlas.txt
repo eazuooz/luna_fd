@@ -1,0 +1,7 @@
+arrow.png
+size:128,32
+filter:Linear,Linear
+pma:true
+arrow
+bounds:2,2,20,80
+rotate:90

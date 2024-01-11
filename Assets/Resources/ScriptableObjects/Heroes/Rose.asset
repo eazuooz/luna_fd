@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Rose
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Rose
+  UnitName: "\uB85C\uC988"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: d13a809336134c241a4b39a209706b3e, type: 3}
+  minimapPicture: {fileID: 21300000, guid: d6a5eb2a3e8c6004a97b81b682964001, type: 3}
+  illustPicture: {fileID: 21300000, guid: 5b429b27e687420468e38e94a0ac0128, type: 3}
+  cardPicture: {fileID: 21300000, guid: c65bfa85437fe8c4da8494fa3c361ba0, type: 3}
+  skillIcon: {fileID: 21300000, guid: 91646e800a5f8ab44b687d7eb360575b, type: 3}
+  illustName: "\uD54F\uBE5B \uB9C8\uB3C4\uC0AC '\uB85C\uC988'"
+  skillName: "<\uD53C\uBC14\uB78C \uAD70\uB2E8>"
+  skillStr: "25\uCD08\uB9C8\uB2E4 \uC544\uAD70 \uADFC\uAC70\uB9AC \uC804\uCCB4 80%
+    \uD655\uB960\uB85C 5\uCD08 \uB3D9\uC548 \uAD11\uD3ED\uD654 \uBC0F 50% \uD655\uB960\uB85C
+    \uC0AC\uC815\uAC70\uB9AC 5\uC774\uB0B4\uC758 \uC801\uAD70 \uC804\uCCB4 \uCD9C\uD608"
+  start3: "\uCCB4\uB825 5% \uC99D\uAC00"
+  start5: "\uC544\uAD70 \uC804\uCCB4 \uAD11\uD3ED\uD654 \uC9C0\uC18D\uC2DC\uAC04
+    2\uCD08 \uC99D\uAC00"
+  ultra1: "\uC790\uC2E0\uC774 \uC0AC\uC6A9\uD558\uB294 '\uD53C\uBC14\uB78C \uAD70\uB2E8'
+    \uCD9C\uD608 \uC9C0\uC18D\uC2DC\uAC04 2\uCD08 \uC99D\uAC00"
+  ultra2: "\uC801\uAD70 \uACF5\uC911 \uC804\uCCB4 \uACF5\uACA9\uB825 10% \uAC10\uC18C"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 4
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

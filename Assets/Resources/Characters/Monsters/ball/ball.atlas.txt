@@ -1,0 +1,14 @@
+ball.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:128,9,110,93
+hand(left)
+bounds:240,27,75,70
+rotate:90
+hand(right)
+bounds:2,2,124,100
+shadow
+bounds:312,9,93,30
+rotate:90

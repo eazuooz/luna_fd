@@ -1,0 +1,14 @@
+judge_sword.png
+size:2048,256
+filter:Linear,Linear
+pma:true
+shadow
+bounds:1045,149,98,70
+sword01
+bounds:2,2,217,409
+rotate:90
+sword02
+bounds:413,2,217,301
+rotate:90
+thunder03
+bounds:716,49,327,170

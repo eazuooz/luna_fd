@@ -1,0 +1,16 @@
+mogle.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:114,42,60,51
+rotate:90
+head
+bounds:2,2,110,100
+leg(left)
+bounds:114,27,7,13
+leg(right)
+bounds:114,12,6,13
+shadow
+bounds:167,9,93,30
+rotate:90

@@ -1,0 +1,11 @@
+slime_dark_s.png
+size:256,128
+filter:Linear,Linear
+pma:true
+dark slime01
+bounds:2,2,124,124
+wing(left)
+bounds:128,36,43,40
+rotate:90
+wing(right)
+bounds:128,81,41,45

@@ -1,0 +1,10 @@
+sonata.png
+size:256,128
+filter:Linear,Linear
+pma:true
+01
+bounds:112,8,27,67
+02
+bounds:70,8,40,67
+03
+bounds:2,2,66,73

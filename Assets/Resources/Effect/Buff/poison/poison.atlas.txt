@@ -1,0 +1,6 @@
+poison.png
+size:64,64
+filter:Linear,Linear
+pma:true
+img
+bounds:2,2,55,55

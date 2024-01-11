@@ -1,0 +1,22 @@
+scarlet.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:201,56,50,51
+rotate:90
+fire
+bounds:201,4,50,50
+hand(left)
+bounds:74,37,35,30
+rotate:90
+hand(right)
+bounds:106,6,44,40
+head
+bounds:2,2,70,70
+magic circle
+bounds:2,74,102,32
+magic circle(blue)
+bounds:106,48,93,26
+shadow
+bounds:106,76,93,30

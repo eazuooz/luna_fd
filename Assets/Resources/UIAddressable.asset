@@ -1,0 +1,249 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470a551490b0ecd4681ae513999b7e42, type: 3}
+  m_Name: UIAddressable
+  m_EditorClassIdentifier: 
+  uiList:
+  - type: 1
+    isCaching: 0
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: ce66bb3eb2201b64c8048832a273e361
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: ce66bb3eb2201b64c8048832a273e361, type: 3}
+  - type: 2
+    isCaching: 0
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: ebcd36fc4adc9d444807b144a55dc227
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+  - type: 3
+    isCaching: 1
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: b381c751633cd66428c1776a69ea24b6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: b381c751633cd66428c1776a69ea24b6, type: 3}
+  - type: 4
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 31bdcd513348ae341a894582b608acb9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 0}
+  - type: 5
+    isCaching: 1
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: 72a6950a69e93604a9f6a571e7b11202
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: 72a6950a69e93604a9f6a571e7b11202, type: 3}
+  - type: 6
+    isCaching: 1
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: d6931dbcc18dd6b4db3c42a354e8432b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: d6931dbcc18dd6b4db3c42a354e8432b, type: 3}
+  - type: 7
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 06ba4b203dc79e240bb927575075607f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+  - type: 8
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: c2abbf85de28bb24a8959aff6ad698f5
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: c2abbf85de28bb24a8959aff6ad698f5, type: 3}
+  - type: 9
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: b429fa79082bcab4da8eab67c21c91db
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: b429fa79082bcab4da8eab67c21c91db, type: 3}
+  - type: 10
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 5b63149d460f1e54abbb2829744f2b65
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 5b63149d460f1e54abbb2829744f2b65, type: 3}
+  - type: 11
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: a55862ad5101aaa48a1a264bc25a98d1
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: a55862ad5101aaa48a1a264bc25a98d1, type: 3}
+  - type: 12
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 744f7eed8afe11b4da2a183d383c25c2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: 744f7eed8afe11b4da2a183d383c25c2, type: 3}
+  - type: 13
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 5ce61c6b81341a4438b42c5d32921599
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+  - type: 14
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 1569356f86da5584a8cac4842a0a48eb
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+  - type: 15
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: a55862ad5101aaa48a1a264bc25a98d1
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: a55862ad5101aaa48a1a264bc25a98d1, type: 3}
+  - type: 18
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: a55862ad5101aaa48a1a264bc25a98d1
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: a55862ad5101aaa48a1a264bc25a98d1, type: 3}
+  - type: 19
+    isCaching: 1
+    isFullScreen: 1
+    reference:
+      m_AssetGUID: 357434116061de14fb6883371db5e9c6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 5101918769205690582, guid: 357434116061de14fb6883371db5e9c6, type: 3}
+  - type: 20
+    isCaching: 0
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: cc361b48a3047f146921a59da439e0f4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+  - type: 21
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: dda52cb72c1883e488c3fe70632a8901
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 7489636612972795738, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+  - type: 22
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 36ef3daaed4cb2c4787b72620fc98fbd
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 36ef3daaed4cb2c4787b72620fc98fbd, type: 3}
+  - type: 23
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 806b65e3103382841adf8e41f9f90f94
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 806b65e3103382841adf8e41f9f90f94, type: 3}
+  - type: 24
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: db13c73b8ebbdf14a99688d3bce4890b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: db13c73b8ebbdf14a99688d3bce4890b, type: 3}
+  - type: 25
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 053453209ed8eeb4b93e63f503a3cd65
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 053453209ed8eeb4b93e63f503a3cd65, type: 3}
+  - type: 26
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: f6a2a5223489404498ce7e2458cccee2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+  - type: 27
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 958004852460e1240bb78185d84f6123
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 8542744528999431485, guid: 958004852460e1240bb78185d84f6123, type: 3}
+  - type: 28
+    isCaching: 1
+    isFullScreen: 0
+    reference:
+      m_AssetGUID: 42a24763407b10a4d9d2829f26730ffe
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    prefab: {fileID: 7489636612972795738, guid: 42a24763407b10a4d9d2829f26730ffe, type: 3}

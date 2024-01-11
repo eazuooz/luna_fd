@@ -1,0 +1,26 @@
+door keeper.png
+size:155,129
+filter:Linear,Linear
+pma:true
+body
+bounds:90,33,50,47
+offsets:2,0,53,50
+rotate:90
+hand(left)
+bounds:90,3,34,28
+offsets:0,0,35,28
+hand(right)
+bounds:126,6,25,20
+rotate:90
+head
+bounds:2,2,86,81
+offsets:0,1,86,82
+lance
+bounds:2,85,42,135
+offsets:0,0,42,137
+rotate:90
+leg(left)
+bounds:139,110,14,17
+offsets:0,1,15,18
+leg(right)
+bounds:139,91,14,17

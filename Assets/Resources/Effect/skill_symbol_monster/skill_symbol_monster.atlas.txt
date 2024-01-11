@@ -1,0 +1,6 @@
+skill_symbol_monster.png
+size:128,128
+filter:Linear,Linear
+pma:true
+skill action_monster
+bounds:2,2,71,94

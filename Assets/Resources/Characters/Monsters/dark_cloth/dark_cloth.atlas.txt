@@ -1,0 +1,14 @@
+dark_cloth.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,15,180,200
+rotate:90
+hand(left)
+bounds:298,65,90,130
+hand(right)
+bounds:204,2,80,100
+magic ball
+bounds:204,104,91,92
+rotate:90

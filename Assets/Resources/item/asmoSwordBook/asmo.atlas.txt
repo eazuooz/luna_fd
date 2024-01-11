@@ -1,0 +1,6 @@
+asmo.png
+size:128,128
+filter:Linear,Linear
+pma:true
+asmo
+bounds:2,2,103,103

@@ -1,0 +1,9 @@
+dark_eye.png
+size:2048,1024
+filter:Linear,Linear
+pma:true
+dark eye
+bounds:1324,2,1014,576
+rotate:90
+shadow
+bounds:2,7,1320,1009

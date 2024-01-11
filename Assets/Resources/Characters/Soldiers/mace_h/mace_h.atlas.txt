@@ -1,0 +1,27 @@
+mace_h.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:202,11,108,60
+rotate:90
+hand(left)
+bounds:130,19,100,70
+rotate:90
+hand(right)
+bounds:347,86,33,32
+rotate:90
+head
+bounds:2,4,126,115
+leg(left)
+bounds:130,2,15,15
+leg(right)
+bounds:147,2,15,15
+shadow
+bounds:264,26,93,30
+rotate:90
+shield
+bounds:296,64,49,55
+sword effect
+bounds:296,25,37,70
+rotate:90

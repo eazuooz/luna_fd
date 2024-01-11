@@ -1,0 +1,23 @@
+tobi.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:94,36,90,51
+rotate:90
+hand(left)
+bounds:179,50,35,30
+hand(right)
+bounds:179,82,44,40
+rotate:90
+head
+bounds:2,41,90,85
+magic circle
+bounds:2,2,102,32
+magic circle(blue)
+bounds:106,5,93,26
+shadow
+bounds:147,33,93,30
+rotate:90
+weapon
+bounds:201,19,25,29

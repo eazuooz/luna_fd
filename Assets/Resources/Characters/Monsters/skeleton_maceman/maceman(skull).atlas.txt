@@ -1,0 +1,24 @@
+maceman(skull).png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,11,108,75
+rotate:90
+hand(left)
+bounds:207,19,100,70
+rotate:90
+hand(right)
+bounds:311,8,39,38
+rotate:90
+head
+bounds:2,4,126,115
+leg(left)
+bounds:207,2,15,15
+leg(right)
+bounds:224,2,15,15
+shadow
+bounds:279,26,93,30
+rotate:90
+sword effect
+bounds:311,49,37,70

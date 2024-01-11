@@ -1,0 +1,477 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 312292c7c9c1c6349b87915d95e16204, type: 3}
+  m_Name: LunaDataTable
+  m_EditorClassIdentifier: 
+  heroTable:
+  - Alice
+  - Clare
+  - Dren
+  - Elena
+  - Goldy
+  - Joe
+  - Lena
+  - Lene
+  - Lennon
+  - Matilda
+  - Mei
+  - Miu
+  - Pobi
+  - Pochi
+  - Pring
+  - Raccon
+  - Ria
+  - Roen
+  - Roni
+  - Rose
+  - Scarlet
+  - Tira
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  soliderTable:
+  - PorongSword
+  - PorongLance
+  - PorongArcher
+  - PorongMace
+  - PorongMaceHigh
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  UnitTable:
+    keys:
+    - Alice
+    - Clare
+    - Dren
+    - Elena
+    - Goldy
+    - Joe
+    - Lena
+    - Lene
+    - Lennon
+    - Matilda
+    - Mei
+    - Miu
+    - Pobi
+    - Pochi
+    - Pring
+    - Raccon
+    - Ria
+    - Roen
+    - Roni
+    - Rose
+    - Scarlet
+    - Tira
+    - PorongArcher
+    - PorongLance
+    - PorongMace
+    - PorongMaceHigh
+    - PorongSword
+    values:
+    - {fileID: 11400000, guid: 9d33bd5e892f6fd4e9b578bc943f7afe, type: 2}
+    - {fileID: 11400000, guid: 47ca1fd66bb76284dbde2df16bc8794e, type: 2}
+    - {fileID: 11400000, guid: 7be3ff5e740bad24fb69cc0654900432, type: 2}
+    - {fileID: 11400000, guid: 0f83f7428edc5c14e8e78a9285da436b, type: 2}
+    - {fileID: 11400000, guid: ff8a755667cf4c24e912fdec1c9016c9, type: 2}
+    - {fileID: 11400000, guid: 4e46c76578f960f438a21d9656870cdf, type: 2}
+    - {fileID: 11400000, guid: 9834c9a90cf2d76449fba264c45b14b7, type: 2}
+    - {fileID: 11400000, guid: dbc451905c7f4c840afbb25789e77302, type: 2}
+    - {fileID: 11400000, guid: f5ccf863058540a449b4f82236fc5751, type: 2}
+    - {fileID: 11400000, guid: e4ad694b06882bf41b5d1fe873c410d6, type: 2}
+    - {fileID: 11400000, guid: 0c937750801196b41a94cfba44db4543, type: 2}
+    - {fileID: 11400000, guid: bc86af6a10a921248890dc6e66093f19, type: 2}
+    - {fileID: 11400000, guid: cdc74cd7449362a4db5fae726ce700d4, type: 2}
+    - {fileID: 11400000, guid: 50fe7c8db2c410242bc1d33ec2485fd7, type: 2}
+    - {fileID: 11400000, guid: daa2a20dc2e3e484792dd5591b3a6530, type: 2}
+    - {fileID: 11400000, guid: cb8c0b23dbed3154cb2e8f1864332806, type: 2}
+    - {fileID: 11400000, guid: 85e98df01d6e9674fb3330b5b2d29d32, type: 2}
+    - {fileID: 11400000, guid: 1e0d070cc792c3448b4bad33c66b12d4, type: 2}
+    - {fileID: 11400000, guid: 3419864706af2e140840ed9af41d7d1e, type: 2}
+    - {fileID: 11400000, guid: e88a5707e0f19144792a13af9a798c1e, type: 2}
+    - {fileID: 11400000, guid: 181879092088c4f4b851da5b6ac8c773, type: 2}
+    - {fileID: 11400000, guid: aeb5a6aa82118c149a19ba06a615cdf2, type: 2}
+    - {fileID: 11400000, guid: a613d75498e35744aa7b4220f607247c, type: 2}
+    - {fileID: 11400000, guid: 9ee1cbf1ddecc21488e6b16749ffaa43, type: 2}
+    - {fileID: 11400000, guid: 35222d41b08596945b81a04ad36cf78a, type: 2}
+    - {fileID: 11400000, guid: 443c643cbb9f0a247be3bcfacd020e6f, type: 2}
+    - {fileID: 11400000, guid: 190a120d4e1bc054588b387e4cad8109, type: 2}
+  playerData: {fileID: 11400000, guid: 4d670fddb41851e4098d0178797a8aaf, type: 2}
+  lunaTable:
+    keys:
+    - Basic
+    - Dragon
+    - Lene
+    - Rich
+    - Skull
+    - Slime
+    - Wood
+    values:
+    - {fileID: 11400000, guid: 67e2a90a7916c2b4aa6d9678e93a68da, type: 2}
+    - {fileID: 11400000, guid: 294aeda62e1038f4d828d0df12fcda66, type: 2}
+    - {fileID: 11400000, guid: 2fa9ba11034947c4aad63c6c048dfc63, type: 2}
+    - {fileID: 11400000, guid: 705626b47bbb9a94cb9b0e855e31336b, type: 2}
+    - {fileID: 11400000, guid: 410db90a394d152498df908e5c7ce53b, type: 2}
+    - {fileID: 11400000, guid: 47f6b591a868edf468f36f7635c41517, type: 2}
+    - {fileID: 11400000, guid: 037197b6054b8ed4bb67bae4b8d25417, type: 2}
+  itemTable:
+    keys: 00000000010000000200000003000000040000000500000006000000e8030000e9030000ea030000eb030000ec030000d0070000d1070000d2070000
+    values:
+    - {fileID: 11400000, guid: 93ab3abbb9f33774abba693ddd2c4b10, type: 2}
+    - {fileID: 11400000, guid: 9e9e62d93ede9b249a92e12b835a269b, type: 2}
+    - {fileID: 11400000, guid: 9e70224e250ec96428a28fab3262c7ed, type: 2}
+    - {fileID: 11400000, guid: 811fd762b1587194ea7ab9fb2b2a0715, type: 2}
+    - {fileID: 11400000, guid: 173af4b59873fd34a82921338eea365d, type: 2}
+    - {fileID: 11400000, guid: 7692fc3bd5c8a764a9a6adb623e7f4d8, type: 2}
+    - {fileID: 11400000, guid: 0edc20819fe83e548a47590c2d501e32, type: 2}
+    - {fileID: 11400000, guid: 2aa0009da827c0b46b96e8c1386558e6, type: 2}
+    - {fileID: 11400000, guid: 2be70379e59033743810852d2e9bf5ed, type: 2}
+    - {fileID: 11400000, guid: 565400ee832164d4487d046eede9fe54, type: 2}
+    - {fileID: 11400000, guid: a451f98bbf57e4f42bbf97bfd960eac0, type: 2}
+    - {fileID: 11400000, guid: 486db92c4442f7242b7d6f56bcf0c11e, type: 2}
+    - {fileID: 11400000, guid: 68b924ac97e68264cbafaab4db6258ce, type: 2}
+    - {fileID: 11400000, guid: dea4c5513937a7543a97eb4483111f47, type: 2}
+    - {fileID: 11400000, guid: 9619191bc5548f14ca9fa6c645c2349f, type: 2}
+  currentItemData: {fileID: 0}
+  skiiTable:
+    keys:
+    - AngerArmy
+    - BeleifWave
+    - Blizzard
+    - DemiGod
+    - Dwarf
+    - FireBall
+    - GoldyBlessing
+    - Healing
+    - KingSlime
+    - LoneBleesing
+    - LunaEquipmentDragonRing
+    - LunaEquipmentDragonShield
+    - LunaEquipmentDragonSword
+    - LunaEquipmentLeneRing
+    - LunaEquipmentLeneShield
+    - LunaEquipmentLeneSword
+    - LunaEquipmentRichRing
+    - LunaEquipmentRichShield
+    - LunaEquipmentRichSword
+    - LunaEquipmentSkullRing
+    - LunaEquipmentSkullShield
+    - LunaEquipmentSkullSword
+    - LunaEquipmentSlimeRing
+    - LunaEquipmentSlimeShield
+    - LunaEquipmentSlimeSword
+    - LunaEquipmentWoodRing
+    - LunaEquipmentWoodShield
+    - LunaEquipmentWoodSword
+    - SerenBlessing
+    - SkeletonArcher
+    - Thunder
+    - WaterDropBarrier
+    values:
+    - {fileID: 11400000, guid: dbbab00cf55ac7f4e88efcf4bf7902be, type: 2}
+    - {fileID: 11400000, guid: 7e482aca1387c4347a50dabd683fef8b, type: 2}
+    - {fileID: 11400000, guid: 365aae8f2fa49734c8e86e640adaa485, type: 2}
+    - {fileID: 11400000, guid: 690feb757e67c3f4390c4d515c0f70f4, type: 2}
+    - {fileID: 11400000, guid: 7b46ace30a83f994c8270200a10bc945, type: 2}
+    - {fileID: 11400000, guid: 4284aa98d6cfeaf4e9b327f665430a51, type: 2}
+    - {fileID: 11400000, guid: d415be0c64bdc7e46b4a289e534de94b, type: 2}
+    - {fileID: 11400000, guid: 602691b8a107d5c468b5d34ff56f6792, type: 2}
+    - {fileID: 11400000, guid: 87ebd027b57840f4aaa23f126a5575b2, type: 2}
+    - {fileID: 11400000, guid: 9468d1203bae72f4b8b1016f60345359, type: 2}
+    - {fileID: 11400000, guid: d579616af95f2934db86af5b63a8f5f8, type: 2}
+    - {fileID: 11400000, guid: df5905437eaf68a41856c23cc8e618e4, type: 2}
+    - {fileID: 11400000, guid: 0e5abb4aa42bc644a8dc026ac1da2418, type: 2}
+    - {fileID: 11400000, guid: 26638cdc60901ac4ea0a0941bac01708, type: 2}
+    - {fileID: 11400000, guid: 08ceacbb17f102f418e5bc1b003a7d3f, type: 2}
+    - {fileID: 11400000, guid: 5a145339ca032c04db9efc25f52cb047, type: 2}
+    - {fileID: 11400000, guid: 5ddc78cfae29c53428ab32f81ad6bf71, type: 2}
+    - {fileID: 11400000, guid: ebab93fc976a8a84aa08b5c461f38e26, type: 2}
+    - {fileID: 11400000, guid: 82492287859827a41a35a275e2c82b9e, type: 2}
+    - {fileID: 11400000, guid: 588322c9ef8da6e4e8c5a0d181d7b8d7, type: 2}
+    - {fileID: 11400000, guid: 3f4069b48c0c00746a70ea6ad2a7e736, type: 2}
+    - {fileID: 11400000, guid: 13781eab4e320414e8905de294f1fda7, type: 2}
+    - {fileID: 11400000, guid: 9223100f35dcdee459eb5c134d83a194, type: 2}
+    - {fileID: 11400000, guid: 7b08abec7a38af8449b7c50dd74712f1, type: 2}
+    - {fileID: 11400000, guid: 8ffb483ad40586f4183589deb3ce5311, type: 2}
+    - {fileID: 11400000, guid: 32e5e3f00654dd7408fa965f95853c8b, type: 2}
+    - {fileID: 11400000, guid: ec9ba279af827d2429928eb58639f8a1, type: 2}
+    - {fileID: 11400000, guid: d2b64b13fcb79b14eaca69a188b483b8, type: 2}
+    - {fileID: 11400000, guid: ceca285b0a31727409edf7efb6f39c1b, type: 2}
+    - {fileID: 11400000, guid: 2a237d3189394eb4d9cb582d3dff9291, type: 2}
+    - {fileID: 11400000, guid: 672a6b3087d85634bb01daba238c0844, type: 2}
+    - {fileID: 11400000, guid: 58fc26bcf6c6a424682400e47200369c, type: 2}
+  StageTable:
+    keys:
+    - Stage01-01
+    - Stage01-02
+    - Stage01-03
+    - Stage01-04
+    - Stage01-05
+    - Stage01-06
+    - Stage01-07
+    - Stage01-08
+    - Stage01-09
+    - Stage01-10
+    - Stage02-01
+    - Stage02-02
+    - Stage02-03
+    - Stage02-04
+    - Stage02-05
+    - Stage02-06
+    - Stage02-07
+    - Stage02-08
+    - Stage02-09
+    - Stage02-10
+    values:
+    - {fileID: 11400000, guid: a0cb346128cb8704cadda738a1265416, type: 2}
+    - {fileID: 11400000, guid: 2f6c7bb8481735740835b0373d47625e, type: 2}
+    - {fileID: 11400000, guid: 5bfd9d47f59b2784fa489297671a6a88, type: 2}
+    - {fileID: 11400000, guid: 080bdd2b7aa173a4c8fd6444bc9d94c5, type: 2}
+    - {fileID: 11400000, guid: db8c6ce4819abcb4f8264286e1c6686a, type: 2}
+    - {fileID: 11400000, guid: 2990090de14f3bf46887de134f4ff6ba, type: 2}
+    - {fileID: 11400000, guid: 0e46ce75c504529488dcbe3389a7a568, type: 2}
+    - {fileID: 11400000, guid: 5c2d03e1638636d4691a1964ce423a6f, type: 2}
+    - {fileID: 11400000, guid: 16697417dbdf38845b65dff43aacbc63, type: 2}
+    - {fileID: 11400000, guid: ba7b8b983b9d9054ab708646dee7158c, type: 2}
+    - {fileID: 11400000, guid: 9ed0e1713fe894a469a5bb1c599c0c91, type: 2}
+    - {fileID: 11400000, guid: eb1355ab040f0844f9a1dea55b17189a, type: 2}
+    - {fileID: 11400000, guid: 1c28bc2ccde696d4ea195694283f78ca, type: 2}
+    - {fileID: 11400000, guid: f66652864219ca140b2a0671210bbf36, type: 2}
+    - {fileID: 11400000, guid: 3260d2789067d7842abda74b194a814d, type: 2}
+    - {fileID: 11400000, guid: 18c19d855ebd2044bb54f32ed743a01a, type: 2}
+    - {fileID: 11400000, guid: c0bbccc566a831545a0b0cc82f6a8b50, type: 2}
+    - {fileID: 11400000, guid: 0d2add79273424046827507b4ecfaf43, type: 2}
+    - {fileID: 11400000, guid: f0ec118f7ae7d93409f0c22b2f47d3a8, type: 2}
+    - {fileID: 11400000, guid: 21e767cb5b2642f4ba7a73f8be732358, type: 2}
+  LotteryResult: []

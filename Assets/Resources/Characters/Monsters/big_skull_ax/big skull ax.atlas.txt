@@ -1,0 +1,24 @@
+big skull ax.png
+size:512,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,43,208,168
+rotate:90
+hand_left
+bounds:172,31,46,83
+rotate:90
+hand_right
+bounds:257,4,45,73
+head
+bounds:338,126,123,125
+leg_left
+bounds:142,2,24,39
+leg_right
+bounds:97,13,28,43
+rotate:90
+shadow
+bounds:2,11,93,30
+weapon
+bounds:172,79,172,164
+rotate:90

@@ -1,0 +1,23 @@
+devi.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:180,19,51,60
+hand(left)
+bounds:2,2,23,37
+rotate:90
+hand(right)
+bounds:272,2,41,33
+head
+bounds:2,27,93,97
+sword effect
+bounds:233,9,37,70
+weapon
+bounds:97,81,43,174
+rotate:90
+wing(left)
+bounds:273,37,58,87
+wing(right)
+bounds:97,18,61,81
+rotate:90

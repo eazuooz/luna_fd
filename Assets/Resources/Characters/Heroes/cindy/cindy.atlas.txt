@@ -1,0 +1,25 @@
+cindy.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,16,108,60
+rotate:90
+hand(left)
+bounds:224,44,70,80
+head
+bounds:2,9,126,115
+leg(left)
+bounds:130,2,9,12
+leg(right)
+bounds:141,2,9,12
+magic circle(blue)
+bounds:192,3,93,26
+shadow
+bounds:192,31,93,30
+rotate:90
+shield
+bounds:296,74,50,50
+sword effect
+bounds:287,5,37,70
+rotate:90

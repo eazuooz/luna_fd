@@ -1,0 +1,6 @@
+miss.png
+size:128,64
+filter:Linear,Linear
+pma:true
+img
+bounds:2,2,81,40

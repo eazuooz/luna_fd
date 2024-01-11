@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0887383fcb21ea44861be8b32180fce, type: 3}
+  m_Name: LoneBleesing
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 3392590279206567995, guid: 2eb45b8bcb2bfb94f845cadebc9d3c74, type: 3}
+  skillImage: {fileID: 21300000, guid: f6f4176b09502114f8b8765859a0ac76, type: 3}
+  type: 1
+  isMultiple: 0
+  level: 1
+  mana: 30
+  passiveDelay: 0
+  activeDelay: 0
+  damage: 0
+  range: 0
+  splashRange: 0
+  coolTime: 25
+  stunTime: 0
+  burfTime: 0
+  multipleSkillDamageBuff: 1
+  multipleSkillResistanceBuff: 1
+  maxSummonCount: 1
+  ableSkill: 1
+  skillName: "\uB860\uC758 \uAC00"
+  skillDiscription: "- \uBC84\uD2BC\uC744 \uB204\uB974\uBA74 10\uCD08\uAC04 \uD30C\uD2F0
+    \uC804\uCCB4\uC758 \uBC29\uC5B4\uB825\uC774 \uC0C1\uC2B9\uD55C\uB2E4.\r\n\n"
+  skillLevelDiscription: "- LV 5 : \uBC29\uC5B4\uB825 5% \uCD94\uAC00 \uC99D\uAC00\n-
+    LV 10 : \uBC29\uC5B4\uB825 5% \uCD94\uAC00 \uC99D\uAC00\n- LV 15 : \uBC29\uC5B4\uB825
+    5% \uCD94\uAC00 \uC99D\uAC00\n- LV 20 : \uBC29\uC5B4\uB825 5% \uCD94\uAC00 \uC99D\uAC00"

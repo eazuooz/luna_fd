@@ -1,0 +1,29 @@
+dark_aaron.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:150,59,65,51
+rotate:90
+hand(left)
+bounds:131,2,35,30
+hand(right)
+bounds:220,27,44,40
+rotate:90
+head
+bounds:68,34,90,80
+rotate:90
+magic circle
+bounds:2,22,102,32
+rotate:90
+magic circle(blue)
+bounds:36,3,93,26
+shadow
+bounds:36,31,93,30
+rotate:90
+weapon01
+bounds:168,6,51,50
+rotate:90
+weapon02
+bounds:203,73,51,50
+rotate:90

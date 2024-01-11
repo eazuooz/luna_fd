@@ -1,0 +1,18 @@
+momo.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:79,61,90,60
+book
+bounds:171,84,37,31
+rotate:90
+head
+bounds:2,36,85,75
+rotate:90
+light
+bounds:79,39,13,20
+magic circle
+bounds:2,2,102,32
+shadow
+bounds:106,29,93,30

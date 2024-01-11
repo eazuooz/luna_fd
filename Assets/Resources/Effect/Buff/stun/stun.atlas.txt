@@ -1,0 +1,7 @@
+stun.png
+size:128,64
+filter:Linear,Linear
+pma:true
+img
+bounds:2,2,58,61
+rotate:90

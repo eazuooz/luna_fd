@@ -1,0 +1,20 @@
+dark_momo.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:160,44,90,60
+book
+bounds:160,5,37,31
+rotate:90
+head
+bounds:36,4,100,90
+rotate:90
+light
+bounds:193,7,35,35
+magic circle
+bounds:2,2,102,32
+rotate:90
+shadow
+bounds:128,11,93,30
+rotate:90

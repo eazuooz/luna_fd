@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7bbe5e84b973ea44b706330567e5260, type: 3}
+  m_Name: 0006_luna_lene_design
+  m_EditorClassIdentifier: 
+  cunnectPrefab: {fileID: 3986165932232600216, guid: 5d644023fdc876148a9fa564b58efff3, type: 3}
+  itemImage: {fileID: 2800000, guid: 587e0b249869d914a9333642872b17e9, type: 3}
+  IconImage: {fileID: 2800000, guid: b754c2fc823f6a6409ac690937e82cd1, type: 3}
+  type: 2
+  isActive: 0
+  itemName: "<\uB80C\uB290 \uC5D0\uBC00\uB9AC\uC758 \uAC11\uC637>"
+  itemDiscription: "- \uB80C\uB290 \uC5D0\uBC00\uB9AC\uC758 \uAC11\uC637 \uB3C4\uC548"
+  itemNumber: 6
+  level: 4
+  itemCount: 1
+  price: 0
+  dropStageLevel: 0
+  uiPrefab: {fileID: 3115407973332731663, guid: 932ad7d7333ccbd48af266aeba1054a0, type: 3}
+  skinType: 6
+  equipIcon: {fileID: 2800000, guid: 8bdb2601c5842104c80ff4b1dbf45a86, type: 3}
+  weapon: {fileID: 2800000, guid: d137e2e6984c83b4abe6f0a330c9b469, type: 3}
+  shield: {fileID: 2800000, guid: 1aaa007bda0c8424090806618880eea7, type: 3}
+  ring: {fileID: 2800000, guid: 5846bf6cf6ce4b94aa9ab58f3c786e1b, type: 3}
+  basicDis: "5~20% \uD655\uB960\uB85C \uBCF4\uC2A4 / \uAC70\uB300 \uBAAC\uC2A4\uD130\uC5D0\uAC8C
+    \uBC1B\uC740 \uB370\uBBF8\uC9C0\uC758 50~200% \uBC18\uC0AC"
+  weaponeStr: "\uB80C\uB290 \uC5D0\uBC00\uB9AC\uC758 \uAC80"
+  weaponeDis: "15\uCD08\uB9C8\uB2E4 \uB8E8\uB098 \uCCB4\uB825 10% \uD68C\uBCF5"
+  shieldStr: "\uB80C\uB290 \uC5D0\uBC00\uB9AC\uC758 \uBC29\uD328"
+  shieldDis: "\uC804\uCCB4 \uD30C\uD2F0\uC6D0 \uBCF4\uC2A4/\uAC70\uB300 \uBAAC\uC2A4\uD130\uC5D0\uAC8C
+    \uBC1B\uB294 \uB370\uBBF8\uC9C0 15% \uAC10\uC18C"
+  ringStr: "\uB80C\uB290 \uC5D0\uBC00\uB9AC\uC758 \uBC18\uC9C0"
+  ringDis: "\uC804\uCCB4 \uD30C\uD2F0\uC6D0 \uBCF4\uC2A4/\uAC70\uB300 \uBAAC\uC2A4\uD130\uC5D0\uAC8C
+    \uACF5\uACA9 \uB370\uBBF8\uC9C0 15% \uC99D\uAC00"
+  equipSkills:
+  - {fileID: 11400000, guid: 5a145339ca032c04db9efc25f52cb047, type: 2}
+  - {fileID: 11400000, guid: 08ceacbb17f102f418e5bc1b003a7d3f, type: 2}
+  - {fileID: 11400000, guid: 26638cdc60901ac4ea0a0941bac01708, type: 2}

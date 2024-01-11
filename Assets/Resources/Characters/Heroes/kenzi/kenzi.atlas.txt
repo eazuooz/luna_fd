@@ -1,0 +1,13 @@
+kenzi.png
+size:512,128
+filter:Linear,Linear
+pma:true
+accessary
+bounds:213,2,105,95
+body
+bounds:402,27,70,70
+head
+bounds:320,7,90,80
+rotate:90
+weapon
+bounds:2,19,209,78

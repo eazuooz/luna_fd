@@ -1,0 +1,6 @@
+bleeding.png
+size:128,128
+filter:Linear,Linear
+pma:true
+img
+bounds:2,2,80,74

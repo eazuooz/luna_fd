@@ -1,0 +1,27 @@
+roni.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:130,15,108,60
+rotate:90
+hand(left)
+bounds:192,53,70,60
+rotate:90
+head
+bounds:2,8,126,115
+leg(left)
+bounds:145,4,9,13
+rotate:90
+leg(right)
+bounds:130,4,9,13
+rotate:90
+magic circle(blue)
+bounds:192,2,93,26
+shadow
+bounds:254,30,93,30
+rotate:90
+shield
+bounds:287,20,31,31
+sword effect
+bounds:286,53,37,70

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Roen
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Roen
+  UnitName: "\uB85C\uC5D4"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: fcaff31b6b120ee4e9343ac471716cc1, type: 3}
+  minimapPicture: {fileID: 21300000, guid: b9c6c0be1d9f1d342842d99ebc9041ff, type: 3}
+  illustPicture: {fileID: 21300000, guid: cea97cc5328550340b25c0d26ec0f3df, type: 3}
+  cardPicture: {fileID: 21300000, guid: ac6343e621c05f141831a46a0dc24616, type: 3}
+  skillIcon: {fileID: 21300000, guid: 50bb539576ececb4e8032dbd88e8dd06, type: 3}
+  illustName: "\uBC14\uB78C\uC758 \uAE30\uC0AC '\uB85C\uC5D4'"
+  skillName: "<\uBC14\uB78C\uC758 \uAC00\uD638>"
+  skillStr: "18\uCD08 \uB9C8\uB2E4 \uC0AC\uC815\uAC70\uB9AC 4\uC774\uB0B4\uC758 \uC544\uAD70
+    \uC804\uCCB4 3\uCD08 \uB3D9\uC548 \uACF5\uACA9\uC18D\uB3C4 40% \uC99D\uAC00"
+  start3: "\uACF5\uACA9\uB825 5% \uC99D\uAC00"
+  start5: "\uC544\uAD70 \uC804\uCCB4 \uACF5\uACA9\uD615 \uC601\uC6C5 \uACF5\uACA9
+    \uC18D\uB3C4 15% \uC99D\uAC00"
+  ultra1: "\uC544\uAD70 \uADFC\uAC70\uB9AC \uC804\uCCB4 \uD68C\uD53C\uC728 5% \uC99D\uAC00"
+  ultra2: "\uC544\uAD70 \uADFC\uAC70\uB9AC \uC804\uCCB4 \uC0AC\uC815\uAC70\uB9AC
+    4\uC774\uB0B4\uC758 \uD0C0\uAC9F\uC5D0 \uC21C\uAC04\uC774\uB3D9"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 0
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 4000
+  Mp: 0
+  Stamina: 20
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 150
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 1
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

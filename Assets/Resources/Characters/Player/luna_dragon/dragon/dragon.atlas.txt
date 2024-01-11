@@ -1,0 +1,16 @@
+dragon.png
+size:256,256
+filter:Linear,Linear
+pma:true
+body(dragon)
+bounds:146,8,81,59
+rotate:90
+head(dragon)
+bounds:146,91,75,83
+magic circle
+bounds:2,49,142,125
+wing(left)
+bounds:71,2,45,18
+rotate:90
+wing(right)
+bounds:2,19,67,28

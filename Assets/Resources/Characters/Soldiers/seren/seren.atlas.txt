@@ -1,0 +1,16 @@
+seren.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:114,70,90,51
+head
+bounds:2,36,110,85
+magic circle
+bounds:2,2,102,32
+magic circle(blue)
+bounds:114,10,93,26
+shadow
+bounds:114,38,93,30
+weapon
+bounds:206,92,25,29

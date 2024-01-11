@@ -1,0 +1,15 @@
+noah.png
+size:256,128
+filter:Linear,Linear
+pma:true
+ball
+bounds:84,16,38,37
+body
+bounds:157,40,83,63
+rotate:90
+head
+bounds:2,50,74,73
+wing(left)
+bounds:2,2,80,46
+wing(right)
+bounds:78,55,77,68

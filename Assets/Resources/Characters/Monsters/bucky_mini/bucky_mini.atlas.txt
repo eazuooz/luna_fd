@@ -1,0 +1,11 @@
+bucky_mini.png
+size:256,512
+filter:Linear,Linear
+pma:true
+hand(left)
+bounds:2,324,135,163
+rotate:90
+hand(right)
+bounds:2,179,149,143
+head
+bounds:2,2,178,175

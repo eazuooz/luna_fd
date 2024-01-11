@@ -1,0 +1,6 @@
+rebirth stone.png
+size:128,128
+filter:Linear,Linear
+pma:true
+rebirth stone
+bounds:2,2,103,103

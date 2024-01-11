@@ -1,0 +1,34 @@
+porong_sword.png
+size:300,102
+filter:Linear,Linear
+pma:true
+body
+bounds:110,51,56,49
+hand(left)
+bounds:163,3,60,42
+offsets:6,7,70,60
+hand(right)
+bounds:225,17,28,24
+offsets:0,1,29,25
+rotate:90
+head
+bounds:2,3,106,97
+offsets:0,0,106,98
+leg(left)
+bounds:270,14,13,16
+offsets:0,0,14,17
+leg(right)
+bounds:251,17,13,17
+rotate:90
+magic circle(blue)
+bounds:168,76,92,24
+offsets:1,1,93,26
+shadow
+bounds:168,47,88,27
+offsets:2,2,93,30
+shield
+bounds:110,2,47,51
+rotate:90
+sword effect
+bounds:262,32,36,68
+offsets:1,1,37,70

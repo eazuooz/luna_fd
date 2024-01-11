@@ -1,0 +1,14 @@
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\net48\Chat_Console_Client.exe.config
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\net48\Chat_Console_Client.exe
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\net48\Chat_Console_Client.pdb
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\net48\Luna_Network.dll
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\net48\Luna_Network.pdb
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.csproj.AssemblyReference.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.csproj.SuggestedBindingRedirects.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.AssemblyInfoInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.AssemblyInfo.cs
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.csproj.CoreCompileInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.csproj.CopyComplete
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.exe
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\net48\Chat_Console_Client.pdb

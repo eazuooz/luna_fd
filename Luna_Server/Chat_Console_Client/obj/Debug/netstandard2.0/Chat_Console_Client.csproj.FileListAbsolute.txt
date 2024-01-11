@@ -1,0 +1,13 @@
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\netstandard2.0\Chat_Console_Client.deps.json
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\netstandard2.0\Chat_Console_Client.dll
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\netstandard2.0\Chat_Console_Client.pdb
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\netstandard2.0\Luna_Network.dll
+C:\LunaDefense\Luna_Server\Chat_Console_Client\bin\Debug\netstandard2.0\Luna_Network.pdb
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.csproj.AssemblyReference.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.AssemblyInfoInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.AssemblyInfo.cs
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.csproj.CoreCompileInputs.cache
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.csproj.CopyComplete
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.dll
+C:\LunaDefense\Luna_Server\Chat_Console_Client\obj\Debug\netstandard2.0\Chat_Console_Client.pdb

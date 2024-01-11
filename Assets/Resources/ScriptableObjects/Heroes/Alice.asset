@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Alice
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Alice
+  UnitName: "\uC568\uB9AC\uC2A4"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: d471855e6818b7b4bac2ac4e0a5167ef, type: 3}
+  minimapPicture: {fileID: 21300000, guid: eead11b309c19454f8402f7473f55bdf, type: 3}
+  illustPicture: {fileID: 21300000, guid: c27beea36ceb91f49b1e8aefe0ff24c0, type: 3}
+  cardPicture: {fileID: 21300000, guid: f332647b26e9a8c44b59b2287fb55976, type: 3}
+  skillIcon: {fileID: 21300000, guid: 10933d2474606a0439cb94ac696e7466, type: 3}
+  illustName: "\uB9C8\uB140 '\uC568\uB9AC\uC2A4'"
+  skillName: "<\uD551\uD06C \uD50C\uB808\uC5B4>"
+  skillStr: "\uC801\uAD70 \uD55C \uBA85 \uD551\uD06C \uBE5B \uD654\uC5FC \uD3ED\uBC1C"
+  start3: "\uC2A4\uD0AC \uACF5\uACA9\uB825 5% \uC99D\uAC00"
+  start5: "'\uD551\uD06C \uD50C\uB808\uC5B4' 70% \uD655\uB960\uB85C 3\uBC1C \uC5F0\uC18D
+    \uACF5\uACA9"
+  ultra1: "\uC2A4\uD0AC\uB370\uBBF8\uC9C0 200% \uC99D\uAC00"
+  ultra2: "'\uD551\uD06C \uD50C\uB808\uC5B4' 25% \uD655\uB960\uB85C \uD0C0\uAC9F
+    \uBC18\uACBD \uBCC0\uACBD"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 1
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 3000
+  Mp: 0
+  Stamina: 10
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 100
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 5
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 0
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

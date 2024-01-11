@@ -1,0 +1,9 @@
+ironball.png
+size:256,256
+filter:Linear,Linear
+pma:true
+ball
+bounds:2,49,158,166
+ball_s
+bounds:2,2,45,47
+rotate:90

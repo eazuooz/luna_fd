@@ -1,0 +1,33 @@
+luna.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:252,17,108,60
+rotate:90
+cape
+bounds:376,41,84,37
+rotate:90
+hand(left)
+bounds:314,55,70,60
+rotate:90
+head
+bounds:2,10,126,115
+leg(left)
+bounds:461,64,9,12
+rotate:90
+leg(right)
+bounds:447,64,9,12
+rotate:90
+magic circle(blue)
+bounds:386,4,93,26
+shadow
+bounds:415,32,93,30
+rotate:90
+shield
+bounds:447,75,50,50
+sword effect
+bounds:314,2,37,70
+rotate:90
+weapon
+bounds:130,5,120,120

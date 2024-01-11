@@ -1,0 +1,6 @@
+martin_ball_big.png
+size:256,256
+filter:Linear,Linear
+pma:true
+martin ball(big)
+bounds:2,2,168,162

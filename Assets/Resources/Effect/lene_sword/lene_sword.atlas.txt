@@ -1,0 +1,7 @@
+lene_sword.png
+size:64,32
+filter:Linear,Linear
+pma:true
+object
+bounds:2,2,27,56
+rotate:90

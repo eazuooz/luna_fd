@@ -1,0 +1,8 @@
+drooby.png
+size:128,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,34,100,120
+shadow
+bounds:2,2,93,30

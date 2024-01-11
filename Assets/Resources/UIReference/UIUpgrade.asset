@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f022f367fe686e0468233dd569326e27, type: 3}
+  m_Name: UIUpgrade
+  m_EditorClassIdentifier: 
+  uiTarget: {fileID: 5101918769205690582, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+  dic:
+    keys:
+    - UIGameShop
+    - Board
+    - Summon_Tab
+    - TabButton
+    - Text
+    - Summon_ScrollView
+    - Summon_Scroll View_Viewport
+    - Summon_Content
+    - BuyOnce
+    - SkeletonGraphic
+    - SlimeOnceButton
+    - Image
+    - KeyCount
+    - BuyTens
+    - ViewAD
+    - Gold_Tab
+    - StarStone_Tab
+    - Ruby_Tab
+    - ReleaseButton
+    - RainbowStone_Tab
+    - LineImage
+    values:
+    - name: UIGameShop
+      path: /UIGameShop
+      obj: {fileID: 5101918769205690582, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Board
+      path: /UIGameShop/Board
+      obj: {fileID: 1133811384493942435, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Summon_Tab
+      path: /UIGameShop/Board/Summon_Tab
+      obj: {fileID: 3580003115064530180, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: TabButton
+      path: /UIGameShop/Board/Summon_Tab/TabButton
+      obj: {fileID: 8391026172307065201, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Text
+      path: /UIGameShop/Board/Summon_Tab/TabButton/Text
+      obj: {fileID: 2190200270964970615, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Summon_ScrollView
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView
+      obj: {fileID: 6644034688035935847, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Summon_Scroll View_Viewport
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport
+      obj: {fileID: 7925867395680514097, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Summon_Content
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content
+      obj: {fileID: 5089899299172616688, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: BuyOnce
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce
+      obj: {fileID: 3125594490273136338, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: SkeletonGraphic
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce/SkeletonGraphic
+      obj: {fileID: 8905973466794671209, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: SlimeOnceButton
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce/SlimeOnceButton
+      obj: {fileID: 3376106611492893987, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Image
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce/SlimeOnceButton/Image
+      obj: {fileID: 5727574088227250008, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: KeyCount
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce/SlimeOnceButton/KeyCount
+      obj: {fileID: 1729606115439459667, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: BuyTens
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyTens
+      obj: {fileID: 6384191977401647023, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: ViewAD
+      path: /UIGameShop/Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/ViewAD
+      obj: {fileID: 9202102762875003527, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Gold_Tab
+      path: /UIGameShop/Board/Gold_Tab
+      obj: {fileID: 267460860132523501, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: StarStone_Tab
+      path: /UIGameShop/Board/StarStone_Tab
+      obj: {fileID: 6708045185622742331, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: Ruby_Tab
+      path: /UIGameShop/Board/Ruby_Tab
+      obj: {fileID: 884285093864635394, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: ReleaseButton
+      path: /UIGameShop/Board/ReleaseButton
+      obj: {fileID: 3214119781633140447, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: RainbowStone_Tab
+      path: /UIGameShop/Board/RainbowStone_Tab
+      obj: {fileID: 1941753457296932345, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}
+    - name: LineImage
+      path: /UIGameShop/Board/LineImage
+      obj: {fileID: 3490406595414640146, guid: 1569356f86da5584a8cac4842a0a48eb, type: 3}

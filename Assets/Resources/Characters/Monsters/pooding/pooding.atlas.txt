@@ -1,0 +1,8 @@
+pooding.png
+size:128,128
+filter:Linear,Linear
+pma:true
+pooding_01
+bounds:2,27,76,80
+shadow
+bounds:2,2,72,23

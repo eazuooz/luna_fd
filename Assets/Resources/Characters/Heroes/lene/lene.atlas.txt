@@ -1,0 +1,27 @@
+lene.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:252,16,108,60
+rotate:90
+hand(left)
+bounds:346,54,70,60
+rotate:90
+head
+bounds:124,9,126,115
+leg(left)
+bounds:252,2,9,12
+leg(right)
+bounds:252,2,9,12
+magic circle(blue)
+bounds:314,3,93,26
+shadow
+bounds:314,31,93,30
+rotate:90
+shield
+bounds:409,2,50,50
+sword effect
+bounds:408,54,37,70
+weapon
+bounds:2,4,120,120

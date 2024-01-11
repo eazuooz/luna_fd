@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6278201069245947505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5157939005800000284}
+  - component: {fileID: 7010616294942091320}
+  m_Layer: 0
+  m_Name: LunaAssetBundle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5157939005800000284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278201069245947505}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7010616294942091320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278201069245947505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf7bc230d87e8d4bb66d347419b2a7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NormalHit: {fileID: 3551066041865095410, guid: 03f09b612d6799843862ec035a2bcc34, type: 3}
+  NormalDeath: {fileID: 3587292115095982589, guid: a65d45f546e196543907102de0ef91e4, type: 3}
+  TowerDeath: {fileID: 1672615557190831086, guid: 9ee7b8466c98f3a4a8c058624fec6cbe, type: 3}
+  AllyAttacked: {fileID: 7586507727869278445, guid: a6886557d8a43474a8dade74b2148f1e, type: 3}
+  Coin: {fileID: 5218639031159730317, guid: 9005b357f61445e4a965d3b2c5b7e881, type: 3}
+  HealthBarAlly: {fileID: 8035962919921087473, guid: 7fa0d6e05a1bdb34192b103ee200885d, type: 3}
+  HealthBarEnemy: {fileID: 3287167813285269568, guid: e6db43aac7bb75046bf217d2e6b3211b, type: 3}
+  DamageText: {fileID: 8593944687315218535, guid: d32e1f3fd33611c49ad293faa1a4cd6d, type: 3}
+  pochiBarrierEffect: {fileID: 2167839889477522151, guid: 6860b1121e06ebd4b8b68308496785f4, type: 3}
+  BleedEffect: {fileID: 7736010241663286828, guid: 1dd29d4578d89ae43882328eae51c865, type: 3}
+  BerserkEffect: {fileID: 6106962902648410061, guid: 9b1626e082055d44896e3022589276f6, type: 3}
+  StunEffect: {fileID: 7475035389137886811, guid: 4df5a23993355814c9afbed3efa96932, type: 3}
+  JumpEffect: {fileID: 8834625100829242434, guid: a903a565b7e47864ab4e68fe0a24ce9d, type: 3}
+  beleifWaveEffect: {fileID: 5363235405458485068, guid: 75dd543d8402cbd48abedec5bbd24cfa, type: 3}
+  serenBlessing: {fileID: 601659344080798872, guid: 6644889cfad3baf4e879e4649b491566, type: 3}
+  loneBlessing: {fileID: 3392590279206567995, guid: 2eb45b8bcb2bfb94f845cadebc9d3c74, type: 3}
+  BuffIcons:
+  - {fileID: 7098447513246903068, guid: e3e486e197975974f8427a6e40534c89, type: 3}
+  - {fileID: 3111958209849865329, guid: cc5e56f27ffce7946bdad78baa307e7d, type: 3}
+  - {fileID: 1971975174292155815, guid: 0899a7bc2b2d0844cbdb4ca181ff2203, type: 3}
+  - {fileID: 1833841118825356454, guid: 6d0edcc9f900c5a40b17c2f7c289cb57, type: 3}
+  - {fileID: 1311759105865643839, guid: 35e6e6b30d47f084687a26823b8c8cae, type: 3}
+  MiniPlayerEffectForUnit: {fileID: 6586253991894491037, guid: 84a64b860d317504db3140cbbcb6d875, type: 3}
+  sound_slash: {fileID: 8300000, guid: e77a09fc355a21945bbf28ab8f1bfa61, type: 3}
+  sound_hit: {fileID: 8300000, guid: a06d57d231890b64a9248b34cc55326c, type: 3}
+  sound_bleed: {fileID: 8300000, guid: 5680a36a09715bf46900017ff807ba80, type: 3}
+  ArrowSounds:
+  - {fileID: 8300000, guid: ca6ec83bfb83b7e44a2aac82e94da314, type: 3}
+  - {fileID: 8300000, guid: 9d8c365095977fc4b8435ed847c4b8f4, type: 3}
+  - {fileID: 8300000, guid: cb28c719a787a6640acc6ffd1918ecfd, type: 3}
+  - {fileID: 8300000, guid: 9e31e3238738d384883039c164868007, type: 3}
+  - {fileID: 8300000, guid: f8196ec9db2154045b8c962feb239037, type: 3}
+  ThrowSounds:
+  - {fileID: 8300000, guid: e9f8995f20f601345999711edf18825b, type: 3}
+  - {fileID: 8300000, guid: 837ce8c6ae5b1ff428e8339f35ee099d, type: 3}
+  - {fileID: 8300000, guid: c54e38ede8cdcf647a3d0c905293ae4b, type: 3}
+  - {fileID: 8300000, guid: a2b5e02d14b2d214184b9146fe8840d4, type: 3}
+  - {fileID: 8300000, guid: 8059a92a769afb44994fd3e24efa4398, type: 3}
+  - {fileID: 8300000, guid: 0ea6d9f4e5cf1d343ab83484e4eed0ef, type: 3}
+  - {fileID: 8300000, guid: 13045beeed3118c459e1f0ab1e2e7838, type: 3}
+  - {fileID: 8300000, guid: dd5c74a4809aee9409c2df7c21ba87e3, type: 3}
+  - {fileID: 8300000, guid: 8a39e3a02da838642b0dfe45124fd646, type: 3}
+  - {fileID: 8300000, guid: 9862ff87cf82f684bb81c201442621f7, type: 3}
+  - {fileID: 8300000, guid: 47ae4aafb5a276f4db9d847d69960d18, type: 3}
+  - {fileID: 8300000, guid: 0be63e37b42aef54f9f181cc0999617b, type: 3}
+  SwordSounds:
+  - {fileID: 8300000, guid: 8aa74c82aa1127143bf18d9222a59618, type: 3}
+  - {fileID: 8300000, guid: 472639949cb61564b9b03204c0e3c36d, type: 3}
+  - {fileID: 8300000, guid: 64f37463f1ad46e4f802732022cf7571, type: 3}
+  - {fileID: 8300000, guid: 74f2c2cf7c43df5418a5d00113567cf2, type: 3}
+  - {fileID: 8300000, guid: 2cf5837b90691da469dad61260a20446, type: 3}

@@ -1,0 +1,24 @@
+dniss.png
+size:128,256
+filter:Linear,Linear
+pma:true
+body
+bounds:2,2,50,51
+hand(left)
+bounds:54,14,35,30
+hand(right)
+bounds:62,46,44,40
+head
+bounds:2,150,70,85
+magic circle(blue)
+bounds:34,55,93,26
+rotate:90
+shadow
+bounds:2,55,93,30
+rotate:90
+shadow(small)
+bounds:74,154,81,26
+rotate:90
+tomb
+bounds:62,88,60,35
+rotate:90

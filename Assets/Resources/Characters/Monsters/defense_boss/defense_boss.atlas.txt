@@ -1,0 +1,14 @@
+defense_boss.png
+size:2048,1024
+filter:Linear,Linear
+pma:true
+defense_body(boss)
+bounds:637,286,682,693
+defense_head(boss)
+bounds:637,18,266,351
+rotate:90
+defense_shadow(boss)
+bounds:2,2,977,633
+rotate:90
+magic ball
+bounds:990,192,91,92

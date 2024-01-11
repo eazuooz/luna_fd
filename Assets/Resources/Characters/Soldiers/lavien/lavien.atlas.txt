@@ -1,0 +1,22 @@
+lavien.png
+size:512,128
+filter:Linear,Linear
+pma:true
+body
+bounds:216,57,65,51
+rotate:90
+hand(left)
+bounds:188,2,25,25
+hand(right)
+bounds:215,2,25,25
+head
+bounds:2,2,150,120
+magic circle
+bounds:154,20,102,32
+rotate:90
+magic circle(blue)
+bounds:188,29,93,26
+rotate:90
+weapon
+bounds:242,4,51,50
+rotate:90

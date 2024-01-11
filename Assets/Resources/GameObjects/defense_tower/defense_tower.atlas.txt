@@ -1,0 +1,8 @@
+defense_tower.png
+size:256,128
+filter:Linear,Linear
+pma:true
+crystal
+bounds:147,43,60,82
+cube
+bounds:2,2,143,123

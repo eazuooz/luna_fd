@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1be256935198cd4fb2576605f0a8b98, type: 3}
+  m_Name: Raccon
+  m_EditorClassIdentifier: 
+  ID: -1
+  engName: Raccon
+  UnitName: "\uB77C\uCFE4"
+  Level: 1
+  moveSpeedLevel: 1
+  cardCount: 99
+  ultState: 7
+  cardLevel: 68
+  hitPriority: 2
+  profilePicture: {fileID: 21300000, guid: 63fb1d11f965b4a428fd2a2ef15ab491, type: 3}
+  minimapPicture: {fileID: 21300000, guid: 1c002b74ff9749b4eaf648332190e4a2, type: 3}
+  illustPicture: {fileID: 21300000, guid: 3f76ad2abf2185045a41781c7b881dcf, type: 3}
+  cardPicture: {fileID: 21300000, guid: 4b1a029e2c990f843b4ac36e3a48e925, type: 3}
+  skillIcon: {fileID: 21300000, guid: fe3e36a2cd5b5c049b166da625857d3d, type: 3}
+  illustName: "\uC9C8\uD48D \uAC80\uC0AC '\uB77C\uCFE4'"
+  skillName: "<\uD68C\uC624\uB9AC \uCE58\uAE30>"
+  skillStr: "17\uCD08\uB9C8\uB2E4 \uC0AC\uC815\uAC70\uB9AC 2.3\uC774\uB0B4\uC758
+    \uC801\uAD70 \uACF5\uC911 \uC804\uCCB4 \uD68C\uC624\uB9AC \uCE58\uAE30 \uACF5\uACA9"
+  start3: "\uACF5\uACA9\uB825 5% \uC99D\uAC00"
+  start5: "\uACF5\uC911 \uC801\uAD70\uC5D0 \uACF5\uACA9 \uB370\uBBF8\uC9C0 20% \uC99D\uAC00"
+  ultra1: "\uC2A4\uD0AC \uB370\uBBF8\uC9C0 15% \uC99D\uAC00"
+  ultra2: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 10% \uAC10\uC18C"
+  UnitSide: 0
+  UnitType: 0
+  UnitAttackType: 0
+  TypeLunaPlayer: 0
+  TypeSuperArmour: 0
+  Price: 25
+  Hp: 4000
+  Mp: 0
+  Stamina: 5
+  MoveSpeed: 1
+  Armour: 0
+  AttackDamage: 150
+  AttackOnceBySecondValue: 0.7
+  SkillResistance: 0
+  SkillDamage: 0
+  AttackRange: 2
+  SpawnDelayTime: 2
+  CriticalMultiples: 1.2
+  CriticalProbability: 15
+  LevelUpHpPoint: 500
+  LevelUpAttPoint: 50
+  LevelUpArmourPoint: 0
+  LevelUpSkillDamage: 0
+  LevelUpMoveSpeed: 0
+  EffectScale: 1

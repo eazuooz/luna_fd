@@ -1,0 +1,6 @@
+defense_ball.png
+size:128,128
+filter:Linear,Linear
+pma:true
+defense ball
+bounds:2,2,91,91

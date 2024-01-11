@@ -1,0 +1,9 @@
+dust.png
+size:256,128
+filter:Linear,Linear
+pma:true
+body
+bounds:2,2,108,105
+shadow
+bounds:112,14,93,30
+rotate:90

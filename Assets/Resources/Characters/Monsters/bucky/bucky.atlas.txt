@@ -1,0 +1,17 @@
+bucky.png
+size:512,256
+filter:Linear,Linear
+pma:true
+hand(left)
+bounds:179,83,135,163
+hand(right)
+bounds:316,103,149,143
+head
+bounds:2,68,178,175
+rotate:90
+leg(left)
+bounds:2,25,41,102
+rotate:90
+leg(right)
+bounds:316,2,99,110
+rotate:90

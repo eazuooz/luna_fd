@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0887383fcb21ea44861be8b32180fce, type: 3}
+  m_Name: KingSlime
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 7783413216280583934, guid: 12122b711cddad842b9a62e3e322ab0e, type: 3}
+  skillImage: {fileID: 21300000, guid: b4e41087e4f71e04b8e6d5cbe756b385, type: 3}
+  type: 1
+  isMultiple: 1
+  level: 1
+  mana: 60
+  passiveDelay: 0
+  activeDelay: 0
+  damage: 0
+  range: 0
+  splashRange: 0
+  coolTime: 60
+  stunTime: 0
+  burfTime: 0
+  multipleSkillDamageBuff: 1
+  multipleSkillResistanceBuff: 1
+  maxSummonCount: 1
+  ableSkill: 1
+  skillName: "\uD0B9 \uC2AC\uB77C\uC784 \uC18C\uD658"
+  skillDiscription: "- \uD0B9 \uC2AC\uB77C\uC784 \uC18C\uD658\r\n"
+  skillLevelDiscription: "- LV 5 : \uD0B9 \uC2AC\uB77C\uC784 \uC2A4\uD0EF 10% \uC99D\uAC00\n-
+    LV 10 : \uD0B9 \uC2AC\uB77C\uC784 \uC2A4\uD0EF 10% \uC99D\uAC00\n- LV 15 : \uD0B9
+    \uC2AC\uB77C\uC784 \uC2A4\uD0EF 10% \uC99D\uAC00\n- LV 20 : \uD0B9 \uC2AC\uB77C\uC784
+    \uC2A4\uD0EF 10% \uC99D\uAC00"
