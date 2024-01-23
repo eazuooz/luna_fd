@@ -79,6 +79,9 @@ Unity3D, C#
 
 
 ### 스킬
+기본적으로 영웅들이 사용할 수 있는 모든 스킬을 장착하여 사용이 가능하며 업그레이드가 가능합니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/4a473faa-d3d8-4a7b-995a-8a727289919e" width="40%"/>
 
 
 ## 2. 영웅 캐릭터
@@ -108,6 +111,16 @@ Unity3D, C#
 철퇴를 내려찍어 주위 적군들에게 데미지를 입힙니다.
 
 <img src="https://github.com/eazuooz/luna_fd/assets/46310910/8aad6695-1bbc-4e68-9b27-7f59827466aa" width="40%"/>
+
+###클레어
+적군 쪽으로 순간이동 하여 빠르게 전투에 합류합니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/2d3bc3a0-838e-4d83-acb7-9af4752fd297" width="40%"/>
+
+###로즈
+아군 유닛들에게 공격력 증가 및 이동 속도 증가 버프를 줍니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/9ca32a16-dc71-4331-838d-b688ffdd89a6" width="40%"/>
 
 ### 리아
 해골 병사들과 해골 왕을 소환합니다.
@@ -165,5 +178,34 @@ Unity3D, C#
 분신을 소환 하여 공격합니다.
 
 <img src="https://github.com/eazuooz/luna_fd/assets/46310910/0acf0a3c-45ca-49ee-bb1d-82e3e1d74427" width="40%"/>
+
+### 엘라나 
+방어력이 뛰어나고 공격기능이 없는 임프 전사를 소환합니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/94b1232d-c838-45d9-90b7-25b8aee9f8f5" width="40%"/>
+
+
+## 3. 상점
+아이템과 영웅을 뽑아 능력치를 업그레이드 시킬수 있습니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/2f8651ef-8dc5-4afb-9e92-7aae62e7f54c" width="40%"/>
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/c75174a7-50be-49c1-bb36-8eb0c0a8d899" width="40%"/>
+
+## 4. 던전
+
+### 무한의 던전
+몬스터가 끊임없이 리젠되며 최대한 많은 횟수를 클리어하면 됩니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/2505c075-5025-40e7-b0ff-5161d9dc8ee2" width="40%"/>
+
+### 드래곤 레이드
+강력한 용이 출현하며 클리어 할시 특별한 아이템들을 떨굽니다.
+
+<img src="https://github.com/eazuooz/luna_fd/assets/46310910/f6b321c2-25de-4e92-a5cb-46fab8962ff5" width="40%"/>
+
+# *기술적 요소*
+자세한 소스코드 설명은 깃허브를 통해서 확인이 가능합니다.
+URP (라이팅은 유니버셜 렌더 파이프라인을 활용 하였습니다.)
+ui (everyday frame work를 사용 하였습니다.)
 
 
