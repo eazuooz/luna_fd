@@ -13,7 +13,7 @@
 Unity3D, C#
 
 # *동영상*
-[![Video](https://youtu.be/8lP2S5Z1PkA?feature=shared) 
+[동영상](https://youtu.be/8lP2S5Z1PkA?feature=shared) 
 
 # *게임 주요 사진*
 <img src="https://github.com/eazuooz/luna_fd/assets/46310910/32fc3eba-6c7a-4b34-9dcf-528155f266bc" width="40%"/>
