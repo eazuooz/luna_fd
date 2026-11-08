@@ -14,24 +14,27 @@
 - [승인된 플레이어 스킬 LV5·10·15·20 복구 규칙](Docs/Player-Skill-Level-Rules.md)
 - [현재 검수 상태와 재실행 방법](Docs/Revival-QA.md)
 - [역사적 경고 수정 내역과 현재 엔진 종료 진단](Docs/Warning-Review.md)
+- [메모리 종료 수정·엔진 비교·빌드 우회책의 실제 근거](Docs/Memory-Investigation.md)
 - [원본 설명과 구현의 남은 게임 규칙 검토](Docs/Gameplay-Open-Issues.md)
 
-**계획한 PC 검수는 최종 r04에서3/3회 통과했습니다.** 매 회차 Audit15·Smoke8·전체 Matrix442를 같은 소스 지문으로 실행했고, 마지막에는 새 Windows 빌드와 별도 저장 프로세스·DSP 오디오·입력 처리·3개 해상도 캡처·302초11회 순환을 확인했습니다. 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`입니다.
+**native 재작성 단계의 PC 검수는 r04에서3/3회 통과했고, 이후 메모리·초기 종료 수정도 추가 재검수를 마쳤습니다.** 최신 v2는 gated clean 빌드·Start 전 종료·Windows seed3/verify9·302.383초11회 순환·전체 Matrix442를 통과했고 전후 소스 지문도 일치했습니다. 직전 Audit15·Smoke8와 검사기 한 조건의 보정 경위는 QA 문서에 구분해 기록했습니다. 이번 추가 회귀를 이전3회와 합쳐 새 변경의3회 검수라고 표시하지 않습니다. 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`입니다.
 
-**native 메모리 문제는 아직 전부 해결되지 않았습니다.** Editor 종료의 shader 할당5개/1,366바이트와 최종 Player 종료의 귀속 미확인 native 집계41,463/45,302바이트가 남습니다. Player의 실행 중 오류·경고는0이었지만 모든 native 할당이 해제됐다는 뜻은 아닙니다. Android/iOS·IL2CPP 실행과 모든 확률/조합의 완전 검증도 포함하지 않았습니다. 이전 r01~r03 실패·중단 기록과 실제 검사 범위는 위 QA/인수 문서에서 확인합니다.
+**게임이 소유한 런타임 SO/Sprite·native Entity/FSM·리소스 handle과 대기 요청은 종료 시 실제0으로 정리됩니다.** Editor의 warm shader-cache 경로는5개/1,366바이트가 재발하며6000.6.3f1/6000.6.8f1에서도 같아 엔진을 바꾸지 않았습니다. 명시적 캐시 백업·재생성 빌드 우회책과 완전 종료 로그 게이트는 실제 거부/통과 사례로 검증했습니다. 최신 Player의 귀속 미확인 UTP 집계40,122/43,962바이트는 보존하며 모든 엔진 할당이 해제됐다고 주장하지 않습니다. 중간 R02의 짧은 검사와 최종 v2의 새302초 검사는 QA 문서에서 별도로 구분합니다. Android/iOS·IL2CPP와 모든 확률/조합의 완전 검증은 포함하지 않습니다.
 
 ```powershell
 # 화면 없는 Editor: 임포트/참조 감사 + Smoke + 전체 콘텐츠 + clean Windows 빌드
-& .\Tools\validation\Validate-Luna.ps1 -Mode All -NoGraphics -CleanBuildCache -JobLeakDiagnostics
+& .\Tools\validation\Validate-Luna.ps1 -Mode All -NoGraphics -CleanBuildCache -JobLeakDiagnostics -RebuildShaderCache -CheckNativeMemory
 # 특정 전체 콘텐츠 검사만 다시 실행
 & .\Tools\validation\Validate-Luna.ps1 -Mode ContentMatrix -MatrixSection all -NoGraphics
+# 초기화 시작 전 종료·저장 보존·반복 종료 검사
+& .\Tools\validation\Validate-Player.ps1 -Mode Early -CheckNativeMemory
 # 실제 그래픽/오디오를 켠 숨김 Windows 프로세스: 별도 저장/입력/DSP/3해상도/300초
-& .\Tools\validation\Validate-Player.ps1 -Mode All -Section all -RenderMode offscreen -SoakSeconds 300
+& .\Tools\validation\Validate-Player.ps1 -Mode All -Section all -RenderMode offscreen -SoakSeconds 300 -CheckNativeMemory
 # 소스가 고정된 뒤 새 RunId로 독립 Editor 검수3회; 3회차에 새 빌드와 Player 검사 포함
-& .\Tools\validation\Final-Review.ps1 -NoGraphics -CleanBuildCache -JobLeakDiagnostics
+& .\Tools\validation\Final-Review.ps1 -NoGraphics -CleanBuildCache -JobLeakDiagnostics -RebuildShaderCache -CheckNativeMemory
 ```
 
-`-NoGraphics`는 Editor에만 적용하며 실제 Player의 그래픽·오디오는 켭니다. BuildReport의 경고0과 프로세스 종료 로그는 별도로 확인해야 합니다. Windows 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`, 격리 검사 보고서는 `Logs/Revival/`, 최종 회차별 원본은 `Logs/Revival/FinalReview/`에 생성됩니다. 최종 검사 도구는 소스 지문과 알고리즘 버전을 비교하며, 중간 소스 변경 시 새 RunId로 다시 시작합니다. 검사는 실제 사용자 저장 대신 격리 저장을 사용합니다. Android/IL2CPP·모바일 기기와 상용 배포 밸런스는 검증 완료 범위가 아닙니다.
+`-NoGraphics`는 Editor에만 적용하며 실제 Player의 그래픽·오디오는 켭니다. `-RebuildShaderCache`는 정확한 생성 캐시만 복구 가능한 고유 백업으로 옮기는 opt-in 우회책이고, `-CheckNativeMemory`는 완전 종료 로그의 명시적 native 오류를 거부하면서 UTP 원문은 별도 보존합니다. BuildReport의 경고0만으로 종료 검사를 대체하지 않습니다. Windows 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`, 격리 검사 보고서는 `Logs/Revival/`, 최종 회차별 원본은 `Logs/Revival/FinalReview/`에 생성됩니다. 최종 검사 도구는 소스 지문과 알고리즘 버전을 비교하며, 중간 소스 변경 시 새 RunId로 다시 시작합니다. 검사는 실제 사용자 저장 대신 격리 저장을 사용합니다. Android/IL2CPP·모바일 기기와 상용 배포 밸런스는 검증 완료 범위가 아닙니다.
 
 
 🖥️ 프로젝트 소개

@@ -34,6 +34,7 @@ namespace Luna.Gameplay
         private static bool initialized;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset() { initialized = false; values.Clear(); }
+        internal static void ReleaseRuntimeTable() => Reset();
         public static void Initialize()
         {
             if (initialized) return;

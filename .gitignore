@@ -50,6 +50,7 @@ spine-unity-examples-editor.csproj
 /UpgradeLog.htm
 /Tools/__pycache__/
 /Tools/validation/drafts/
+/Tools/validation/Memory/.check/
 
 # Addressables deletes and regenerates these exact preservation outputs.
 # The authored Assets/link.xml is tracked separately.

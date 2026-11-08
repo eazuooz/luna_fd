@@ -23,6 +23,7 @@ namespace Luna.Gameplay
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset() => Current = null;
+        internal static void Shutdown() => Current = null;
 
         public event Action<string> CurrentStageChanged;
         private string currentStageName = "Stage01-01";

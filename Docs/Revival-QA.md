@@ -1,14 +1,29 @@
 # 루나 복구 검수 — 현재 native 재작성
 
-2026-11-08, Unity `6000.6.0f1`, 브랜치 `codex/native-framework-hero-repair`.
+2026-11-09 KST 현재, Unity `6000.6.0f1`, 브랜치 `codex/native-framework-hero-repair`. 아래 로그 시각/RunId는2026-11-08 UTC다.
 
-**계획한 PC 복구 검수는 r04에서3/3회 완료했다. native 메모리 경고 해결은 미완료다.** 2026-11-08 12:48:03 UTC에 마지막 summary와 실행 프로세스가 성공으로 종료됐고, 아래 완료 항목과 남은 제한을 함께 판정한다. 승인 전 체크포인트 `c1e6d6bd`는 원격 저장소에 보존돼 있다.
+**native 재작성의 PC 복구 검수는 r04에서3/3회 완료했고, 이후 메모리·초기 종료 수정의 최종 추가 회귀도 완료했다.** 최종 v2의 Build/Early/Player302초를 통과하고 Matrix442는2026-11-08 16:19:56 UTC에 종료했다. 이후 전후 소스 지문 일치도 확인했다. 아래 r04 표는12:48:03 UTC까지의 이전 소스/실행 파일 이력이며 새 변경의3회 검수로 옮기지 않는다. 현재 상태는 다음 추가 검수 항목과 남은 제한을 함께 판정한다. 승인 전 체크포인트 `c1e6d6bd`는 원격 저장소에 보존돼 있다.
+
+## 메모리 조사 이후의 최신 상태
+
+- 종료 소유권 수정 source `1fd7d1d68ebfb4cd7dddd347f75724a999314a569a59534ba0a12d20fb6d766c`/22,370개에서 Audit15·Smoke8·Matrix442와 실제 Windows seed3/verify9를 통과했다. R01은302.208649초11순환이며 SO/Sprite 원본 참조의 실제 파괴, native Entity/FSM/handle/pending0, 두 번 종료의 불변성을 확인했다.
+- 실제 warm build는 `-CheckNativeMemory`에서5개/1,366바이트로 거부됐다. `-RebuildShaderCache -CheckNativeMemory`의 cold05는 BuildReport0/0 및 완전 종료의 명시적 native 오류0으로 통과했다. 이는 가역적 캐시 백업을 쓰는 명시적 빌드 우회책이며 warm 재발 자체를 고친 것은 아니다.
+- cold05 실행 파일의 gated R02도 seed3/verify9·native gate0과 새3해상도 캡처를 통과했다. 이 실행의 soak는설정10초/실제12.5649986초1회이며 R01의302초를 최신 빌드의 새 장시간 실행으로 표시하지 않는다. 담당자가 PNG3개에서 정상 배경/액터/HUD와 주요 잘림·분홍 재질·빈 화면 없음을 확인했다.
+- Player의 귀속 미확인 UTP는40,123/43,962바이트로 남는다. 빈 Unity Player에도22,891바이트가 발생했지만 Luna 차액의 귀속이나 무해함은 증명하지 않았다.6000.6.3f1/6000.6.8f1 복제본도 같은 Editor5개/1,366바이트를 재현해 본 프로젝트 엔진은 바꾸지 않았다.
+- **최종 v2의 Build07·Early R04·Full Player302초·전체 Matrix442·마지막 지문 대조를 모두 통과했다.** 전후 고정 소스는 `46a2a137e47d135cebe7515dbd5651bc077930f65e24b8e706c8cb61524c02fe`/22,372개다. Build07은0오류/0경고·native gate0/JobTemp0, Early는Start 전 FSM0→Procedure 동기 disable·3정상 프레임·반복 종료·native 사용량0·저장 파일 byte-identical을 실제 확인했다. Full seed3/verify9는오류/경고0,302.38324초11순환과 종료 직전SO116/Sprite4/Entity17/FSM8/handle41/pending load·spawn각1→모두0을 통과했다. 전후 Unity 총 할당 샘플249,630,323→222,722,001바이트, 종료 전 로비 Entity17개다. 두 번 종료의 Id0/취소 콜백0도 확인했다.
+- 최종 v2의 새로운3해상도 PNG도 담당자가 정상으로 검토했다. 경계·배경·액터·HUD 관찰과 PNG SHA는 `Logs/NativeRewrite/memory-player-r04-visual-review.json`에 있다. native gate는Early/seed/verify 모두0이지만 UTP는각각40,123/40,122/43,962바이트로 남는다. 실행 파일·실제 Assembly-CSharp·제공 Core DLL의 해시는 `memory-final-artifacts-v2.json`, 독립 Player 대조는 `memory-final-v2-player-independent.json`에 있다.
+- `memory-final-all-02{,-runtime}.json`은442개 고유 사례/검사 전부 성공, 오류0·정확히 검증한 고의 NotExist 경고1회다. 완전 종료 native gate0이며 Editor16:05:32→16:19:56 UTC에 종료했다. `memory-final-source-v2-{before,after}.json`의 알고리즘·SHA·22,372개가 정확히 같다. 패키지 생성물인 정확한 Addressables link.xml/meta2개는 실행 전 존재/후 부재를 이유·SHA와 함께 별도 기록했으며 authored `Assets/link.xml`은 지문 대상에서 빠지지 않았다.
+- 독립 감사 `Logs/NativeRewrite/memory-final-v2-independent-audit.json`에서도442개 이름의 누락·추가·중복0, 영웅 관찰66건/같은 물리 객체 재사용44건, 고의 진단4개와 경고1회, 실제 프로세스 exit0을 확인했다.22,372개 파일의 경로·크기·SHA 항목도 모두 같았다. Matrix의 UTP34,274,687바이트는 별도 원문으로 보존했다.
+- 마지막 Audit15·Smoke8는 게임 종료 코드가 같은 source7a837e…에서 실제 통과했다(`memory-final-audit-02.json`, `memory-final-smoke-02.json`). 다음 변경은 Early 검사기의 파괴 객체 판정 한 조건뿐이다. 최종46a의 offline 컴파일과 Build/Early/Player/Matrix를 새로 실행했고, Audit/Smoke를46a에서 다시 실행했다고 주장하지 않는다.
+- source7a837e…의 Early R03은 종료 뒤 파괴된 Procedure의 enabled를 읽은 검사기 오류로 실패했으며 통과로 세지 않는다. 게임 코드는 그대로 두고 검사 조건만 보정한 새Early R04에서 위 전체 사례를 실제 확인했다. 이전1fd의442개 결과, R02짧은 Player 검사, 추출 메서드12개 probe와 최신 실제 실행은 서로 다른 근거로 보존한다.
+
+상세 원문·캐시/엔진 통제 비교·후보 설치 경위는 [Memory-Investigation.md](Memory-Investigation.md)에 있다. 이번 추가 검수는 변경 후1회 전체 회귀와 대상별 build/early/player 검사이며, 이전442개/3회 결과와 합쳐 새 변경의3회 완료로 표시하지 않는다.
 
 이전 어댑터 구조의 완료 문서는 [Archive/Revival-QA-before-native-rewrite.md](Archive/Revival-QA-before-native-rewrite.md)에 원문 그대로 보관했다. 그 문서의 기존 3회 검수, Windows 실행, 경고 수치는 현재 Toybox 방식 재작성의 통과 증거가 아니다. [Warning-Review.md](Warning-Review.md)도 이전 단계의 원인 조사 기록이다.
 
 
 
-## 현재 완료 항목과 남은 제한
+## r04 당시 완료 항목과 남았던 제한
 
 - [x] Toybox 방식 native EntityLogic/typed EntityData/FSM·Procedure 판·UI 재작성, Everyday 런타임 제거와 참조/CSV/linker 감사.
 - [x] 같은 RunId·동일 소스에서3회: 각각 Audit15 + Smoke8 + 이름이 고유한 Matrix442. 오류0, 예상 밖 runtime/Editor-captured 경고0. Smoke의4개·Matrix의1개 경고는 검증한 고의 실패 fixture와 정확한 메시지/횟수가 일치했다.
@@ -25,7 +40,7 @@
 | r04 2 | 12:25:16 | Audit15·Smoke8·Matrix442 | `Logs/Revival/FinalReview/native-final3-20261108-r04/pass-02/20261108-120833-513/` |
 | r04 3 | 12:48:03 | Audit15·Smoke8·Matrix442·clean Build·Player | `Logs/Revival/FinalReview/native-final3-20261108-r04/pass-03/20261108-122516-306/` |
 
-아래 개별 실행과 중간 실패 기록은 원인과 수정 근거를 보존한 이력이다. 현재 판정은 위 r04 표를 기준으로 하며 이전 단계의 대기·실패를 현재 상태와 혼용하지 않는다.
+아래 개별 실행과 중간 실패 기록은 원인과 수정 근거를 보존한 이력이다. r04 뒤 바뀐 소스/실행 파일의 판정은 이 문서 맨 위의 추가 검수 범위를 기준으로 하며, 이전 단계의 대기·실패·완료를 현재 상태와 혼용하지 않는다.
 
 ## 현재 구현과 범위
 
@@ -110,18 +125,18 @@ A의 추가6개 제목은 Spine/SkeletonGraphic 계열4개, Spine/Skeleton, URP/
 프로젝트의 Unity 에디터를 닫고 루트 PowerShell에서 실행한다. 실제 사용자 저장은 사용하지 않는다. 새 절대 경로·격리 표식·보고서 시각·프로세스 종료 코드를 검사하며 로그/JSON/PNG를 보존한다.
 
 ```powershell
-& .\Tools\validation\Validate-Luna.ps1 -Mode Audit -NoGraphics
-& .\Tools\validation\Validate-Luna.ps1 -Mode ContentMatrix -MatrixSection all -NoGraphics
-& .\Tools\validation\Validate-Luna.ps1 -Mode BuildWindows -CleanBuildCache -JobLeakDiagnostics
-& .\Tools\validation\Validate-Player.ps1 -Mode All -Section all -RenderMode offscreen -SoakSeconds 300 -RunId 'native-pc-review'
-& .\Tools\validation\Final-Review.ps1 -RunId 'native-final-review' -CleanBuildCache -JobLeakDiagnostics
+& .\Tools\validation\Validate-Luna.ps1 -Mode Audit -NoGraphics -CheckNativeMemory
+& .\Tools\validation\Validate-Luna.ps1 -Mode ContentMatrix -MatrixSection all -NoGraphics -CheckNativeMemory
+& .\Tools\validation\Validate-Luna.ps1 -Mode BuildWindows -NoGraphics -CleanBuildCache -JobLeakDiagnostics -RebuildShaderCache -CheckNativeMemory
+& .\Tools\validation\Validate-Player.ps1 -Mode All -Section all -RenderMode offscreen -SoakSeconds 300 -RunId 'native-pc-review' -CheckNativeMemory
+& .\Tools\validation\Final-Review.ps1 -RunId 'native-final-review' -NoGraphics -CleanBuildCache -JobLeakDiagnostics -RebuildShaderCache -CheckNativeMemory
 ```
 
 `Validate-Luna -Mode All`은 Audit+Smoke+ContentMatrix+BuildWindows를 실행한다. `Final-Review`는 Audit+Smoke+전체 ContentMatrix를 매 회차 새 Editor 프로세스로 실행하고, 3회차에는 빌드한 실행 파일의 실제 seed/verify·전체 진단·300초 Soak를 추가한다. `-NoGraphics`는 Editor에만 전달되고 Player의 그래픽/오디오는 켜진다.
 
 최종 1회차 지문을 잡기 전에 Addressables 설정/생성물 경로를 안정화한다. 새 content state는 `Builds/Revival/AddressablesState/<BuildTarget>`에 쓰고 기존 추적 파일을 덮어쓰지 않는다. A 전후의10개 프리팹·설정 변경은 원래 SHA-256으로 정확히 복원해 직렬화/경로 변경임을 확인했다(`build-headless-A-source-audit.json/.diff`). 8개 프리팹은 같은 한국어 설명의 YAML 표기만 바뀌었고, 배경2개는 줄바꿈·블록 위치·빈 필드 직렬화였다. Addressables가 생성한 별도 `Assets/AddressableAssetsData/link.xml`과 meta는 패키지가 Editor 시작 때 삭제하고 빌드 때 다시 생성하므로 운영 소스와 생성물을 구별해야 한다. 직접 작성한 `Assets/link.xml`의 보존 규칙은 계속 소스 검증 대상이다. B의 raw 전후 지문은92beee9410f92eab76a73b1de10f959ba5365a03447cbb84a76b7465744207ba/22,369개로 같았다. 게시된 `unity-authoring-sha256-v2`는 정확한 생성물2개만 해시에서 제외하고 존재 여부·크기·SHA-256·이유를 따로 기록한다. 작성 소스 기준선은b2a3a48a82c2c186f04d1abc182a9ed3850e347360d3d3beb372b154d59a92ae/22,367개다. FinalReview는 알고리즘 버전과 해시를 함께 비교하며 이 기준선으로 시작한 `native-final3-20261108-r01`은 실패했으며 최종 통과에 포함하지 않는다.
 
-중간 소스 변경은 새 RunId로 전체 3회를 다시 검수해야 한다. 오프스크린 PNG는 실제 OS 창 레이아웃 전체를 증명하지 않으며, DSP RMS는 사람의 청감, 프로그램 이동 검사는 물리 키보드 입력을 증명하지 않는다. Android/IL2CPP·모바일 기기는 아직 검증하지 않았다.
+`Final-Review`3회 시리즈 도중 소스를 바꾸면 새 RunId로 그 시리즈를 다시 시작해야 한다. 이번 메모리 후속 작업의 별도1회 전체 회귀를 새3회 시리즈로 표시하지 않는다. 오프스크린 PNG는 실제 OS 창 레이아웃 전체를 증명하지 않으며, DSP RMS는 사람의 청감, 프로그램 이동 검사는 물리 키보드 입력을 증명하지 않는다. Android/IL2CPP·모바일 기기는 아직 검증하지 않았다.
 
 의도적으로 중단한 r02의 기준선은 검사기의 두 coroutine 진행 수정 후 `928069a2002d7e4e8ed5d388a8db142851f6f8272f961bfbfcbfddeb73677dee`/22,367개다. 위 b2a3a48…는 실패한 r01과 A/B 당시 기록이다. 템플릿 정리/Audit 추가 후 r03 기준선은 `d62dce4bfb39d2b6c3e0708fd1187b11aca5a31e12f005b8a3034e460205b30f`/22,366개다. 앞선 지문을 현재 소스로 혼용하지 않는다.
 

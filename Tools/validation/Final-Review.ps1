@@ -9,7 +9,9 @@ param(
     [int] $TimeoutMinutes = 30,
     [switch] $NoGraphics,
     [switch] $CleanBuildCache,
-    [switch] $JobLeakDiagnostics
+    [switch] $JobLeakDiagnostics,
+    [switch] $RebuildShaderCache,
+    [switch] $CheckNativeMemory
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,6 +35,7 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
         finishedUtc = $null
         success = $false
         source = $null
+        validationOptions = [ordered]@{ rebuildShaderCache=[bool]$RebuildShaderCache; checkNativeMemory=[bool]$CheckNativeMemory }
         steps = @()
     }
     $fingerprintTool = Join-Path $PSScriptRoot 'source_fingerprint.py'
@@ -45,6 +48,9 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
         $prior = Get-Content -LiteralPath $priorFile.FullName -Raw | ConvertFrom-Json
         if ($prior.success -and ($prior.source.sha256 -ne $before.sha256 -or $prior.source.algorithmVersion -ne $before.algorithmVersion)) {
             throw "Source differs from a completed pass in '$RunId'. Start a new RunId and run all three passes."
+        }
+        if ($prior.success -and ([bool]$prior.validationOptions.rebuildShaderCache -ne [bool]$RebuildShaderCache -or [bool]$prior.validationOptions.checkNativeMemory -ne [bool]$CheckNativeMemory)) {
+            throw "Native memory/cache validation options differ from a completed pass in '$RunId'. Start a new RunId and run all three passes with the same options."
         }
     }
     $summary.source = $before
@@ -62,6 +68,8 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
             if ($NoGraphics) { $arguments.NoGraphics = $true }
             if ($CleanBuildCache -and $step -eq 'BuildWindows') { $arguments.CleanBuildCache = $true }
             if ($JobLeakDiagnostics -and $step -eq 'BuildWindows') { $arguments.JobLeakDiagnostics = $true }
+            if ($RebuildShaderCache -and $step -eq 'BuildWindows') { $arguments.RebuildShaderCache = $true }
+            if ($CheckNativeMemory -and $step -ne 'Player') { $arguments.CheckNativeMemory = $true }
             Write-Host "Final review pass $round / $step"
             $playerEvidence = $null
             try {
@@ -70,7 +78,7 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
                     $playerEvidence = Join-Path $sourceDirectory "PlayerValidation/$playerRun"
                     # Exercise the exact executable just built, with hidden graphics/audio
                     # and offscreen capture. No desktop input or foreground window is used.
-                    & (Join-Path $PSScriptRoot 'Validate-Player.ps1') -Mode All -Section all -RenderMode offscreen -RunId $playerRun -SoakSeconds 300 -TimeoutMinutes $TimeoutMinutes
+                    & (Join-Path $PSScriptRoot 'Validate-Player.ps1') -Mode All -Section all -RenderMode offscreen -RunId $playerRun -SoakSeconds 300 -TimeoutMinutes $TimeoutMinutes -CheckNativeMemory:$CheckNativeMemory
                     foreach ($probe in @('seed', 'verify')) {
                         $probeReport = Get-Content -LiteralPath (Join-Path $playerEvidence "player-$probe.json") -Raw | ConvertFrom-Json
                         $entry.warningAudits += Assert-LunaExpectedWarnings -Report $probeReport -Context "Final pass $round / Player $probe"
@@ -93,7 +101,9 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
                     Copy-Item -LiteralPath $playerEvidence -Destination (Join-Path $roundDirectory 'PlayerValidation') -Recurse
                     $entry.files += 'PlayerValidation'
                 }
-                foreach ($extension in @('json', 'log')) {
+                $extensions = @('json', 'log')
+                if ($CheckNativeMemory) { $extensions += 'memory.json' }
+                foreach ($extension in $extensions) {
                     $source = Join-Path $sourceDirectory "$operation.$extension"
                     if (Test-Path -LiteralPath $source -PathType Leaf) {
                         $file = Get-Item -LiteralPath $source

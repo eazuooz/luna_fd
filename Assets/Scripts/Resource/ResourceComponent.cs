@@ -32,6 +32,16 @@ namespace UnityGameFramework.Runtime
         /// 다른 컴포넌트들이 IResourceManager를 주입받을 때 사용합니다.
         /// </summary>
         public IResourceManager ResourceManager => mResourceManager;
+        public bool IsShuttingDown => (mResourceManager as ResourceManager)?.IsShuttingDown ?? false;
+        public bool IsShutdown => (mResourceManager as ResourceManager)?.IsShutdown ?? false;
+        public int LoadedHandleCount => (mResourceManager as ResourceManager)?.LoadedHandleCount ?? 0;
+        public int PendingLoadCount => (mResourceManager as ResourceManager)?.PendingLoadCount ?? 0;
+        public int PendingUnloadCount => (mResourceManager as ResourceManager)?.PendingUnloadCount ?? 0;
+
+        public void BeginShutdown() => (mResourceManager as ResourceManager)?.BeginShutdown();
+
+        // Native pools must release Entity/UI/Sound assets before this adapter is stopped.
+        public void Shutdown() => (mResourceManager as ResourceManager)?.Shutdown();
 
         // Debugger 호환용 (Addressables 모드에서는 의미 없음)
         public string ApplicableGameVersion => string.Empty;
@@ -50,6 +60,7 @@ namespace UnityGameFramework.Runtime
 
         private void Update()
         {
+            if (IsShuttingDown) return;
             mLastUnloadUnusedAssetsOperationElapseSeconds += Time.unscaledDeltaTime;
             if (mAsyncOperation == null &&
                 (mForceUnloadUnusedAssets ||
@@ -73,6 +84,14 @@ namespace UnityGameFramework.Runtime
                     GC.Collect();
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            // Fallback for forced Editor stop / destruction without the application's
+            // staged shutdown. The Addressables adapter is not a registered Core module.
+            GameFramework.GameFrameworkEntry.Shutdown();
+            Shutdown();
         }
 
         private void OnInitResourcesComplete()

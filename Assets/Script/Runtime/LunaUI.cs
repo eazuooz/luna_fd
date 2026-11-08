@@ -29,6 +29,7 @@ namespace Luna.Gameplay
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset() { definitions.Clear(); requestedSerials.Clear(); }
+        internal static void Shutdown() => Reset();
         public static void Register(UI_TYPE type, string assetName, string groupName, bool pauseCovered)
         {
             definitions[type] = new LunaUIFormData { Type = type, AssetName = assetName, GroupName = groupName, PauseCovered = pauseCovered };

@@ -49,7 +49,6 @@ public class UIQuitPopup : UILuna
 
     public void OnClickEscape()
     {
-        LunaRuntimeData.SaveNow();
-        Application.Quit();
+        LunaBootstrap.Quit();
     }
 }

@@ -100,6 +100,7 @@ namespace Luna.Gameplay
         private static readonly Dictionary<string, LunaStageRow> byKey = new Dictionary<string, LunaStageRow>(StringComparer.Ordinal);
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset() { Stages = null; Waves = null; Rewards = null; byKey.Clear(); }
+        internal static void ReleaseRuntimeTables() => Reset();
         public static void Initialize()
         {
             if (Stages != null) return;

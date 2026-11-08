@@ -6,10 +6,23 @@ namespace Luna.Gameplay
     public static class LunaUIViews
     {
         private static readonly Dictionary<Texture2D, Sprite> sprites = new Dictionary<Texture2D, Sprite>();
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void Reset()
+        public static int RuntimeSpriteCount => sprites.Count;
+        public static Sprite[] GetRuntimeSprites()
         {
-            foreach (var sprite in sprites.Values) if (sprite != null) Object.Destroy(sprite);
+            var result = new Sprite[sprites.Count];
+            sprites.Values.CopyTo(result, 0);
+            return result;
+        }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Reset() => ReleaseRuntimeSprites(!Application.isPlaying);
+        internal static void ReleaseRuntimeSprites(bool immediate = false)
+        {
+            foreach (var sprite in sprites.Values)
+            {
+                if (sprite == null) continue;
+                if (immediate) Object.DestroyImmediate(sprite);
+                else Object.Destroy(sprite);
+            }
             sprites.Clear();
         }
         public static GameObject FindChildObject(GameObject root, string name)

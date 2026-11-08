@@ -67,5 +67,15 @@ namespace Luna.Gameplay
             if (!providerExists) Addressables.ResourceManager.ResourceProviders.Add(new LunaResourcesProvider());
             Addressables.AddResourceLocator(CreateLocations(catalog));
         }
+        internal static void Unregister()
+        {
+            var old = new List<IResourceLocator>();
+            foreach (var locator in Addressables.ResourceLocators)
+                if (locator.LocatorId == LocatorName) old.Add(locator);
+            foreach (var locator in old) Addressables.RemoveResourceLocator(locator);
+            var providers = Addressables.ResourceManager.ResourceProviders;
+            for (int i = providers.Count - 1; i >= 0; i--)
+                if (providers[i] is LunaResourcesProvider) providers.RemoveAt(i);
+        }
     }
 }

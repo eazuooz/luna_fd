@@ -25,18 +25,78 @@ namespace UnityGameFramework.Runtime
     /// </summary>
     public sealed class ResourceManager : IResourceManager
     {
-        // 로드된 에셋 핸들 추적 (UnloadAsset 시 Release하기 위해)
-        //
-        // 주소(assetName) 하나당 핸들 목록을 들고 취득 1회 : 해제 1회로 맞춘다.
-        // Addressables 는 같은 주소를 N번 로드하면 내부 참조 카운트를 N으로 올리고
-        // 매번 동등한 핸들을 돌려주므로, 로드 결과 오브젝트를 키로 삼으면
-        // 2회차 이후 핸들이 추적되지 않아 그만큼 영구 누수된다.
-        // (같은 주소 중복 로드는 캐릭터 선택 → 플레이어 스폰에서 실제로 발생한다.)
-        private readonly Dictionary<string, List<AsyncOperationHandle>> mAssetHandles = new Dictionary<string, List<AsyncOperationHandle>>();
-        // 로드 결과 오브젝트 → 주소 역참조. UnloadAsset 이 에셋만 받기 때문에 필요하다.
-        private readonly Dictionary<object, string> mAssetNames = new Dictionary<object, string>();
-        // 로드된 씬 핸들 추적
-        private readonly Dictionary<string, AsyncOperationHandle<SceneInstance>> mSceneHandles = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
+        // One lease per acquisition: equal Addressables handles still own separate references.
+        // Index by the returned object, not just its address (aliases can return the same object).
+        private sealed class AssetLease
+        {
+            internal AsyncOperationHandle<object> Handle;
+            internal object Asset;
+            internal bool Released;
+        }
+
+        private sealed class SceneLease
+        {
+            internal string Name;
+            internal AsyncOperationHandle<SceneInstance> Handle;
+            internal bool Loading = true;
+            internal bool Unloading;
+        }
+
+        private readonly HashSet<AssetLease> mPendingAssets = new HashSet<AssetLease>();
+        private readonly Dictionary<object, List<AssetLease>> mAssetHandles = new Dictionary<object, List<AssetLease>>();
+        private readonly List<SceneLease> mSceneHandles = new List<SceneLease>();
+        private bool mIsShuttingDown;
+        private bool mIsShutdown;
+
+        public bool IsShuttingDown => mIsShuttingDown;
+        public bool IsShutdown => mIsShutdown;
+        public int LoadedHandleCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (List<AssetLease> leases in mAssetHandles.Values) count += leases.Count;
+                foreach (SceneLease lease in mSceneHandles) if (!lease.Loading && !lease.Unloading) count++;
+                return count;
+            }
+        }
+        public int PendingLoadCount
+        {
+            get
+            {
+                int count = mPendingAssets.Count;
+                foreach (SceneLease lease in mSceneHandles) if (lease.Loading) count++;
+                return count;
+            }
+        }
+        public int PendingUnloadCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (SceneLease lease in mSceneHandles) if (lease.Unloading) count++;
+                return count;
+            }
+        }
+
+        /// <summary>Reject new work while accepted loads still notify their native owners.</summary>
+        public void BeginShutdown() => mIsShuttingDown = true;
+
+        /// <summary>
+        /// Call after native modules and their pools have released their objects. Late loads
+        /// cannot notify consumers; scene loads are allowed to finish only to unload them.
+        /// </summary>
+        public void Shutdown()
+        {
+            if (mIsShutdown) return;
+            mIsShuttingDown = mIsShutdown = true;
+            foreach (AssetLease lease in new List<AssetLease>(mPendingAssets)) ReleaseAsset(lease);
+            var loaded = new List<AssetLease>();
+            foreach (List<AssetLease> leases in mAssetHandles.Values) loaded.AddRange(leases);
+            foreach (AssetLease lease in loaded) ReleaseAsset(lease);
+            foreach (SceneLease lease in mSceneHandles.ToArray())
+                if (!lease.Loading && !lease.Unloading) StartUnloadScene(lease, null, null);
+        }
 
         // ─── Addressables에서 사용 안 하는 프로퍼티들 (기본값 반환) ───
 
@@ -159,6 +219,11 @@ namespace UnityGameFramework.Runtime
 
         public void LoadAsset(string assetName, Type assetType, int priority, LoadAssetCallbacks loadAssetCallbacks, object userData)
         {
+            if (mIsShuttingDown)
+            {
+                loadAssetCallbacks?.LoadAssetFailureCallback?.Invoke(assetName, LoadResourceStatus.NotExist, "Resource manager is shutting down.", userData);
+                return;
+            }
             if (string.IsNullOrEmpty(assetName))
             {
                 loadAssetCallbacks?.LoadAssetFailureCallback?.Invoke(assetName, LoadResourceStatus.NotExist, "Asset name is invalid.", userData);
@@ -166,21 +231,28 @@ namespace UnityGameFramework.Runtime
             }
 
             float startTime = Time.time;
-            AsyncOperationHandle<object> handle = Addressables.LoadAssetAsync<object>(assetName);
-
-            handle.Completed += op =>
+            var lease = new AssetLease { Handle = Addressables.LoadAssetAsync<object>(assetName) };
+            mPendingAssets.Add(lease);
+            lease.Handle.Completed += op =>
             {
+                // Releasing an in-flight Addressables operation is supported. Its internal
+                // completion may still arrive, but this request no longer owns a reference.
+                mPendingAssets.Remove(lease);
+                if (lease.Released) return;
+                if (mIsShutdown)
+                {
+                    ReleaseAsset(lease);
+                    return;
+                }
                 if (op.Status == AsyncOperationStatus.Succeeded && op.Result != null)
                 {
-                    if (!mAssetHandles.TryGetValue(assetName, out List<AsyncOperationHandle> handles))
+                    lease.Asset = op.Result;
+                    if (!mAssetHandles.TryGetValue(lease.Asset, out List<AssetLease> handles))
                     {
-                        handles = new List<AsyncOperationHandle>();
-                        mAssetHandles.Add(assetName, handles);
+                        handles = new List<AssetLease>();
+                        mAssetHandles.Add(lease.Asset, handles);
                     }
-
-                    handles.Add(op);
-                    mAssetNames[op.Result] = assetName;
-
+                    handles.Add(lease);
                     loadAssetCallbacks?.LoadAssetSuccessCallback?.Invoke(assetName, op.Result, Time.time - startTime, userData);
                 }
                 else
@@ -188,7 +260,7 @@ namespace UnityGameFramework.Runtime
                     // 실패한 오퍼레이션도 반납해야 한다. 없으면 잘못된 주소를 반복 요청할 때마다 샌다.
                     // Releasing invalidates the handle, so read its exception first.
                     string errorMsg = op.OperationException != null ? op.OperationException.Message : $"Addressables failed to load '{assetName}'.";
-                    Addressables.Release(op);
+                    ReleaseAsset(lease);
                     loadAssetCallbacks?.LoadAssetFailureCallback?.Invoke(assetName, LoadResourceStatus.NotExist, errorMsg, userData);
                 }
             };
@@ -196,29 +268,23 @@ namespace UnityGameFramework.Runtime
 
         public void UnloadAsset(object asset)
         {
-            if (asset == null)
-                return;
+            if (asset != null && mAssetHandles.TryGetValue(asset, out List<AssetLease> handles) && handles.Count > 0)
+                ReleaseAsset(handles[handles.Count - 1]);
+        }
 
-            if (!mAssetNames.TryGetValue(asset, out string assetName))
-                return;
-
-            if (!mAssetHandles.TryGetValue(assetName, out List<AsyncOperationHandle> handles) || handles.Count == 0)
+        private void ReleaseAsset(AssetLease lease)
+        {
+            if (lease.Released) return;
+            lease.Released = true;
+            // A released in-flight operation still finishes internally. Keep it in the
+            // pending set until its completion callback so shutdown can genuinely drain it.
+            if (lease.Asset != null && mAssetHandles.TryGetValue(lease.Asset, out List<AssetLease> handles))
             {
-                mAssetHandles.Remove(assetName);
-                mAssetNames.Remove(asset);
-                return;
+                handles.Remove(lease);
+                if (handles.Count == 0) mAssetHandles.Remove(lease.Asset);
             }
-
-            // 로드 1회당 정확히 1개씩 반납한다. 남은 참조가 있으면 에셋은 살아 있다.
-            int last = handles.Count - 1;
-            Addressables.Release(handles[last]);
-            handles.RemoveAt(last);
-
-            if (handles.Count == 0)
-            {
-                mAssetHandles.Remove(assetName);
-                mAssetNames.Remove(asset);
-            }
+            lease.Asset = null;
+            if (lease.Handle.IsValid()) Addressables.Release(lease.Handle);
         }
 
         // ─── LoadScene ───
@@ -234,6 +300,11 @@ namespace UnityGameFramework.Runtime
 
         public void LoadScene(string sceneAssetName, int priority, LoadSceneCallbacks loadSceneCallbacks, object userData)
         {
+            if (mIsShuttingDown)
+            {
+                loadSceneCallbacks?.LoadSceneFailureCallback?.Invoke(sceneAssetName, LoadResourceStatus.NotExist, "Resource manager is shutting down.", userData);
+                return;
+            }
             if (string.IsNullOrEmpty(sceneAssetName))
             {
                 loadSceneCallbacks?.LoadSceneFailureCallback?.Invoke(sceneAssetName, LoadResourceStatus.NotExist, "Scene asset name is invalid.", userData);
@@ -241,20 +312,22 @@ namespace UnityGameFramework.Runtime
             }
 
             float startTime = Time.time;
-            AsyncOperationHandle<SceneInstance> handle = Addressables.LoadSceneAsync(sceneAssetName, LoadSceneMode.Additive);
-
-            handle.Completed += op =>
+            var lease = new SceneLease { Name = sceneAssetName, Handle = Addressables.LoadSceneAsync(sceneAssetName, LoadSceneMode.Additive) };
+            mSceneHandles.Add(lease);
+            lease.Handle.Completed += op =>
             {
+                lease.Loading = false;
                 if (op.Status == AsyncOperationStatus.Succeeded)
                 {
-                    mSceneHandles[sceneAssetName] = op;
-                    loadSceneCallbacks?.LoadSceneSuccessCallback?.Invoke(sceneAssetName, Time.time - startTime, userData);
+                    if (mIsShutdown) StartUnloadScene(lease, null, null);
+                    else loadSceneCallbacks?.LoadSceneSuccessCallback?.Invoke(sceneAssetName, Time.time - startTime, userData);
                 }
                 else
                 {
                     string errorMsg = op.OperationException != null ? op.OperationException.Message : $"Addressables failed to load scene '{sceneAssetName}'.";
+                    mSceneHandles.Remove(lease);
                     Addressables.Release(op);
-                    loadSceneCallbacks?.LoadSceneFailureCallback?.Invoke(sceneAssetName, LoadResourceStatus.NotExist, errorMsg, userData);
+                    if (!mIsShutdown) loadSceneCallbacks?.LoadSceneFailureCallback?.Invoke(sceneAssetName, LoadResourceStatus.NotExist, errorMsg, userData);
                 }
             };
         }
@@ -264,20 +337,44 @@ namespace UnityGameFramework.Runtime
 
         public void UnloadScene(string sceneAssetName, UnloadSceneCallbacks unloadSceneCallbacks, object userData)
         {
-            if (!mSceneHandles.TryGetValue(sceneAssetName, out AsyncOperationHandle<SceneInstance> handle))
+            SceneLease lease = mSceneHandles.Find(candidate => candidate.Name == sceneAssetName && !candidate.Loading && !candidate.Unloading);
+            if (lease == null)
             {
-                unloadSceneCallbacks?.UnloadSceneFailureCallback?.Invoke(sceneAssetName, userData);
+                if (!mIsShutdown) unloadSceneCallbacks?.UnloadSceneFailureCallback?.Invoke(sceneAssetName, userData);
                 return;
             }
+            StartUnloadScene(lease, unloadSceneCallbacks, userData);
+        }
 
-            AsyncOperationHandle<SceneInstance> unloadHandle = Addressables.UnloadSceneAsync(handle);
+        private void StartUnloadScene(SceneLease lease, UnloadSceneCallbacks callbacks, object userData)
+        {
+            if (lease.Unloading) return;
+            if (!lease.Handle.IsValid())
+            {
+                // Addressables may already have released a scene unloaded externally.
+                mSceneHandles.Remove(lease);
+                if (!mIsShutdown) callbacks?.UnloadSceneSuccessCallback?.Invoke(lease.Name, userData);
+                return;
+            }
+            lease.Unloading = true;
+            // SceneProvider owns the load-handle release during unload. Only release the
+            // returned unload operation here; releasing the load handle too would double it.
+            AsyncOperationHandle<SceneInstance> unloadHandle = Addressables.UnloadSceneAsync(lease.Handle, autoReleaseHandle: false);
             unloadHandle.Completed += op =>
             {
-                mSceneHandles.Remove(sceneAssetName);
-                if (op.Status == AsyncOperationStatus.Succeeded)
-                    unloadSceneCallbacks?.UnloadSceneSuccessCallback?.Invoke(sceneAssetName, userData);
-                else
-                    unloadSceneCallbacks?.UnloadSceneFailureCallback?.Invoke(sceneAssetName, userData);
+                mSceneHandles.Remove(lease);
+                try
+                {
+                    if (!mIsShutdown)
+                    {
+                        if (op.Status == AsyncOperationStatus.Succeeded) callbacks?.UnloadSceneSuccessCallback?.Invoke(lease.Name, userData);
+                        else callbacks?.UnloadSceneFailureCallback?.Invoke(lease.Name, userData);
+                    }
+                }
+                finally
+                {
+                    if (op.IsValid()) Addressables.Release(op);
+                }
             };
         }
 

@@ -26,6 +26,7 @@ public class LunaDataTable : ScriptableObject
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetRuntimeTable() { runtimeTable = null; }
+    internal static void ReleaseRuntimeTable() { runtimeTable = null; }
 
     LunaDataTable()
     {

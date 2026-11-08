@@ -22,6 +22,7 @@ namespace Luna.Gameplay
         private static readonly Dictionary<GameObject, LunaEntityCatalog.Entry> catalog = new Dictionary<GameObject, LunaEntityCatalog.Entry>();
         private static EntityComponent entities;
         private static EventComponent events;
+        private static bool shuttingDown;
         public static int PendingCount => pending.Count;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -34,6 +35,31 @@ namespace Luna.Gameplay
             catalog.Clear();
             entities = null;
             events = null;
+            shuttingDown = false;
+        }
+        internal static void BeginShutdown()
+        {
+            if (shuttingDown) return;
+            shuttingDown = true;
+            foreach (var request in pending.Values) request.Cancelled = true;
+            if (events != null)
+            {
+                if (events.Check(ShowEntitySuccessEventArgs.EventId, OnShown)) events.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShown);
+                if (events.Check(ShowEntityFailureEventArgs.EventId, OnFailed)) events.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnFailed);
+            }
+            if (entities != null)
+            {
+                entities.HideAllLoadingEntities();
+                entities.HideAllLoadedEntities();
+            }
+        }
+        // Loading requests were cancelled before this call. Return only unclaimed
+        // payloads before Core clears ReferencePool; native OnHide retains responsibility
+        // for claimed payloads. Queued completion events no longer dispatch gameplay.
+        internal static void FinishShutdown()
+        {
+            foreach (var pair in pending) ReleaseUnclaimed(pair.Key, pair.Value);
+            pending.Clear(); catalog.Clear(); entities = null; events = null;
         }
         internal static void NotifyHidden(int id)
         {
@@ -50,6 +76,7 @@ namespace Luna.Gameplay
         public static void Initialize()
         {
             if (entities != null) return;
+            shuttingDown = false;
             entities = GameEntry.GetComponent<EntityComponent>();
             events = GameEntry.GetComponent<EventComponent>();
             if (entities == null || events == null) throw new InvalidOperationException("Native Entity/Event components are missing.");
@@ -72,6 +99,7 @@ namespace Luna.Gameplay
         {
             if (data == null || data.Id <= 0 || data.OwnedByEntity) throw new ArgumentException("Spawn needs newly acquired, fully configured EntityData.");
             int id = data.Id;
+            if (shuttingDown) { ReferencePool.Release(data); return id; }
             if (entities == null || prefab == null || !catalog.TryGetValue(prefab, out var entry))
             {
                 ReferencePool.Release(data);

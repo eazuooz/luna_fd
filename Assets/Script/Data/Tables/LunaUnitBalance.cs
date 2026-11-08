@@ -17,6 +17,7 @@ public static class LunaUnitBalance
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Reset() { rowsBySource.Clear(); Table = null; }
+    internal static void ReleaseRuntimeTable() => Reset();
 
     public static void Initialize()
     {

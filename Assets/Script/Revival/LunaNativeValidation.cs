@@ -80,7 +80,14 @@ public sealed partial class LunaNativeValidation : MonoBehaviour
         IsRunning = true;
         Application.logMessageReceived += CaptureLog;
         SaveReport();
-        StartCoroutine(Guard(mode == "native-player" ? PlayerProbe(Environment.GetEnvironmentVariable("LUNA_PLAYER_MODE") ?? "diagnostics") : mode == "native-smoke" ? Smoke() : Matrix()));
+        if (mode == "native-player" && Environment.GetEnvironmentVariable("LUNA_PLAYER_MODE") == "early")
+        {
+            // Configure runs BeforeSceneLoad; this callback observes all Awake calls
+            // while the native Procedure's Start coroutine has not run yet.
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += StartEarlyPlayerShutdown;
+            return;
+        }
+        StartCoroutine(Guard(mode == "native-player" ? PlayerProbeWithShutdown(Environment.GetEnvironmentVariable("LUNA_PLAYER_MODE") ?? "diagnostics") : mode == "native-smoke" ? Smoke() : Matrix()));
     }
 
     private IEnumerator Guard(IEnumerator routine)
@@ -120,7 +127,12 @@ public sealed partial class LunaNativeValidation : MonoBehaviour
         report.finishedUtc = DateTime.UtcNow.ToString("O");
         IsRunning = false; Completed = true;
         SaveReport();
-        if (!Application.isEditor) Application.Quit(report.success ? 0 : 1);
+        if (!Application.isEditor)
+        {
+            LunaBootstrap.Quit(report.success ? 0 : 1);
+            if (Environment.GetEnvironmentVariable("LUNA_PLAYER_MODE") == "early")
+                LunaBootstrap.Quit(report.success ? 0 : 1);
+        }
     }
 
     private void CaptureLog(string message, string stack, LogType type)
@@ -139,7 +151,11 @@ public sealed partial class LunaNativeValidation : MonoBehaviour
             if (Completed) SaveReport();
         }
     }
-    private void OnDestroy() { Application.logMessageReceived -= CaptureLog; }
+    private void OnDestroy()
+    {
+        Application.logMessageReceived -= CaptureLog;
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= StartEarlyPlayerShutdown;
+    }
     private void SaveReport() => File.WriteAllText(reportPath, JsonUtility.ToJson(report, true));
     private static void Require(bool condition, string message) { if (!condition) throw new InvalidOperationException(message); }
     private static T Active<T>() where T : UnityEngine.Object => FindAnyObjectByType<T>();

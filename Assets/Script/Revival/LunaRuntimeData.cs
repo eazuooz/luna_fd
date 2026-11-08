@@ -17,8 +17,16 @@ public static class LunaRuntimeData
     private static ISettingManager settings;
     private static int tutorialIndex;
     private static bool allowSave;
+    private static GameObject progressHost;
     public static bool IsInitialized { get; private set; }
     public static string SaveDirectory { get; private set; }
+    public static int RuntimeAssetCount => runtimeObjects.Count;
+    public static UnityEngine.Object[] GetRuntimeAssets()
+    {
+        var result = new UnityEngine.Object[runtimeObjects.Count];
+        runtimeObjects.CopyTo(result);
+        return result;
+    }
     internal static void TrackRuntimeAsset(ScriptableObject instance)
     {
         if (instance != null) runtimeObjects.Add(instance);
@@ -32,9 +40,10 @@ public static class LunaRuntimeData
         tutorialIndex = 0;
         allowSave = false;
         ReleaseRuntimeAssets();
+        progressHost = null;
     }
 
-    internal static void ReleaseRuntimeAssets()
+    internal static void ReleaseRuntimeAssets(bool immediate = false)
     {
         // DontSave clones are not authoring assets and need an explicit owner on teardown,
         // including play sessions with domain reload disabled. During play, defer native
@@ -42,11 +51,33 @@ public static class LunaRuntimeData
         foreach (var instance in runtimeObjects)
         {
             if (instance == null) continue;
-            if (Application.isPlaying) UnityEngine.Object.Destroy(instance);
-            else UnityEngine.Object.DestroyImmediate(instance);
+            if (immediate || !Application.isPlaying) UnityEngine.Object.DestroyImmediate(instance);
+            else UnityEngine.Object.Destroy(instance);
         }
         runtimeObjects.Clear();
         clones.Clear();
+    }
+
+    // Called only after the round has settled/saved and native consumers have stopped.
+    internal static void Shutdown(bool immediate = false)
+    {
+        IsInitialized = false;
+        allowSave = false;
+        settings = null;
+        if (progressHost != null)
+        {
+            var autosave = progressHost.GetComponent<LunaProgressAutosave>();
+            if (autosave != null) autosave.enabled = false;
+            if (immediate) UnityEngine.Object.DestroyImmediate(progressHost);
+            else UnityEngine.Object.Destroy(progressHost);
+            progressHost = null;
+        }
+        ReleaseRuntimeAssets(immediate);
+        LunaDataTable.ReleaseRuntimeTable();
+        LunaUnitBalance.ReleaseRuntimeTable();
+        LunaSkillBalance.ReleaseRuntimeTable();
+        LunaStageTables.ReleaseRuntimeTables();
+        LunaEntityParameters.ReleaseRuntimeTable();
     }
 
 public static T CloneAsset<T>(T source) where T : ScriptableObject
@@ -91,6 +122,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         if (string.IsNullOrWhiteSpace(SaveDirectory)) SaveDirectory = Path.Combine(Application.persistentDataPath, "Luna");
         SaveDirectory = Path.GetFullPath(SaveDirectory);
         var host = new GameObject("Luna Progress");
+        progressHost = host;
         UnityEngine.Object.DontDestroyOnLoad(host);
         var helper = host.AddComponent<LunaSaveSettingsHelper>();
         helper.Configure(SaveDirectory);
@@ -262,5 +294,6 @@ public sealed class LunaProgressAutosave : GameFrameworkComponent
     }
     private void OnApplicationPause(bool paused) { if (paused) LunaRuntimeData.SaveNow(); }
     private void OnApplicationQuit() { LunaRuntimeData.SaveNow(); }
-    private void OnDestroy() { LunaRuntimeData.ReleaseRuntimeAssets(); }
+    // The bootstrap owns teardown order; this host must not destroy data while a
+    // Procedure is still settling rewards or saving its final progress.
 }
