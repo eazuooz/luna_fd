@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 657705908760711365}
   - component: {fileID: 3337743464809784971}
-  - component: {fileID: 5715800332894860937}
-  - component: {fileID: 4607772502463630310}
   - component: {fileID: 7178437054586575825}
   m_Layer: 0
   m_Name: Lennon
@@ -47,62 +45,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2743612314126954935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: f5ccf863058540a449b4f82236fc5751, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: f5ccf863058540a449b4f82236fc5751, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &5715800332894860937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743612314126954935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &4607772502463630310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743612314126954935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bce635d2336ceb43a513b16f5422a74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
-  minion1: {fileID: 5666776957943127363, guid: a76682e9aed119440bd046e7a3a066dd, type: 3}
+  ParameterKey: bb71e3fde07a18245a78d0bc83f141e6:2743612314126954935
+  Prefabs:
+  - Name: Lennon.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Lennon.minion1
+    Value: {fileID: 5666776957943127363, guid: a76682e9aed119440bd046e7a3a066dd, type: 3}
+  - Name: minion1
+    Value: {fileID: 5666776957943127363, guid: a76682e9aed119440bd046e7a3a066dd, type: 3}
+  Sounds:
+  - Name: Lennon.skillSound
+    Value: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &7178437054586575825
 BoxCollider2D:
   m_ObjectHideFlags: 0

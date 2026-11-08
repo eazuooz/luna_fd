@@ -40,9 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7352654958159038750}
-  - component: {fileID: 5722423209330950705}
   - component: {fileID: 4592119560105254904}
-  - component: {fileID: -5108478701836780719}
   m_Layer: 0
   m_Name: AllyTower
   m_TagString: Unit
@@ -68,21 +66,6 @@ Transform:
   - {fileID: 2138106492431822165}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5722423209330950705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7528829204366405261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
 --- !u!114 &4592119560105254904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,60 +75,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 7528829204366405261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 0ba178f8d87422145afc43105d556645, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 0ba178f8d87422145afc43105d556645, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &-5108478701836780719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7528829204366405261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8375422e47fd4a448bb1c1f09e8d8241, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TowerTurret: 1
-  TurretArrow: {fileID: 8450033590197087485, guid: 9b83a8907e81bf24788056f1f66afafa, type: 3}
-  TurretFire: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
-  TurretIce: {fileID: 321090315161646400, guid: b33f4634829ca774cb0ac5577706ae9e, type: 3}
-  ArrowDistance: 4
-  FireDistance: 5
-  IceDistance: 6
-  ArrowTerm: 2
-  FireTerm: 3
-  IceTerm: 5
-  ArrowPower: 100
-  FirePower: 300
-  IcePower: 300
-  ArrowSound: {fileID: 8300000, guid: 9e31e3238738d384883039c164868007, type: 3}
-  FireSound: {fileID: 8300000, guid: 31d4354cef3a92a4481b8c1464e22afd, type: 3}
-  IceSound: {fileID: 8300000, guid: 84fa5860f80c8cc4d99676627e9eb4b1, type: 3}
+  ParameterKey: 07144c725e49c5749985f2b4474fa9ed:7528829204366405261
+  Prefabs:
+  - Name: TurretCtrl.TurretArrow
+    Value: {fileID: 8450033590197087485, guid: 9b83a8907e81bf24788056f1f66afafa, type: 3}
+  - Name: TurretArrow
+    Value: {fileID: 8450033590197087485, guid: 9b83a8907e81bf24788056f1f66afafa, type: 3}
+  - Name: TurretCtrl.TurretFire
+    Value: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
+  - Name: TurretFire
+    Value: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
+  - Name: TurretCtrl.TurretIce
+    Value: {fileID: 321090315161646400, guid: b33f4634829ca774cb0ac5577706ae9e, type: 3}
+  - Name: TurretIce
+    Value: {fileID: 321090315161646400, guid: b33f4634829ca774cb0ac5577706ae9e, type: 3}
+  Sounds:
+  - Name: TurretCtrl.ArrowSound
+    Value: {fileID: 8300000, guid: 9e31e3238738d384883039c164868007, type: 3}
+  - Name: ArrowSound
+    Value: {fileID: 8300000, guid: 9e31e3238738d384883039c164868007, type: 3}
+  - Name: TurretCtrl.FireSound
+    Value: {fileID: 8300000, guid: 31d4354cef3a92a4481b8c1464e22afd, type: 3}
+  - Name: FireSound
+    Value: {fileID: 8300000, guid: 31d4354cef3a92a4481b8c1464e22afd, type: 3}
+  - Name: TurretCtrl.IceSound
+    Value: {fileID: 8300000, guid: 84fa5860f80c8cc4d99676627e9eb4b1, type: 3}
+  - Name: IceSound
+    Value: {fileID: 8300000, guid: 84fa5860f80c8cc4d99676627e9eb4b1, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!1 &7968527898493917161
 GameObject:
   m_ObjectHideFlags: 0

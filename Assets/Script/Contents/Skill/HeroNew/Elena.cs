@@ -1,45 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
-public class Elena : HeroSkillControl
+public class Elena : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
-    public GameObject minion;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
+    public GameObject minion => View.GetPrefab("minion");
 
-    private float skillDamage;
     private bool triggerSkill_1;
     private bool triggerSkill_2;
 
-    private GameObject curMinion;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 3.0f;
 
-        if(skill_In_Action == true && (curMinion == null || curMinion.activeSelf == false))
+        if(skill_In_Action == true && (CountSummons(minion) == 0))
         {
             status.unitState.IsSkillActivaion = false;
             skill_In_Action = false;
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
+        triggerSkill_1 = triggerSkill_2 = false;
     }
 
     public override void STAR3()
@@ -61,7 +58,6 @@ public class Elena : HeroSkillControl
     {
         STAR5();
 
-        Defined.SkillTrigger_Elena = true;
     }
 
     public override void ULT2()
@@ -73,31 +69,15 @@ public class Elena : HeroSkillControl
 
     public override void Skill()
     {
-        status.PlayOneSound(skillSound);
-
-        GameObject Dwarf = PoolManager.Instance.spawnObject(minion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), minion.transform.rotation);
-        InitializeSummonedUnit(Dwarf);
-
-        Defined.EffectCreate(skillEffect, Dwarf, Defined.eEffectPosition.UNDERFEET, true);
-
-        if (triggerSkill_1 == true)
+        if (CountSummons(minion) > 0) return;
+        PlayOneSound(skillSound);
+        SpawnSummon(minion, transform.position + Vector3.left * 0.5f, data =>
         {
-            Dwarf.GetComponent<DwarfAI>().SkillTrigger = true;
-        }
-
-        if (triggerSkill_2 == true && Defined.CanProbability(80))
-        {
-            Dwarf.GetComponent<Status>().Invincible(5.0f);
-        }
-
-        curMinion = Dwarf;
+            data.TauntRadius = triggerSkill_1 ? 1.5f : 0f;
+            data.InvincibleSeconds = triggerSkill_2 && Defined.CanProbability(80f) ? 5f : 0f;
+        }, skillEffect);
         skill_In_Action = true;
     }
 
-    public override void AfterDeath()
-    {
-        Defined.SkillTrigger_Elena = false;
 
-        curMinion = null;
-    }
 }

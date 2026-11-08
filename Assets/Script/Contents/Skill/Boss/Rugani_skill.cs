@@ -2,48 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 
-public class Rugani_skill : EverydayDevup.Framework.LunaEntityBehaviour
+public class Rugani_skill : EnemySkillLogic
 {
     [SerializeField] private string skillMatter = "¸ÊÀüÃ¼ °ø°Ý";
     public string SkillDescription => skillMatter;
-    [HideInInspector] public Status status;
-    public GameObject effect;
-    public float skillDamage;
+    public GameObject effect => View.GetPrefab("effect");
+    public float skillDamage => View.GetFloat("skillDamage");
 
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
     }
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            StartCoroutine("InstantSkill");
-        }
-    }
+    
+
+    protected override void ExecuteSkill() { StartCoroutine(InstantSkill()); }
 
     IEnumerator InstantSkill()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Unit");
-
-        foreach (GameObject enemy in enemies)
+        IdentifyFunc.PickingUnits(unit =>
         {
-            if (enemy != null && enemy.GetComponent<Status>().UnitSide == eUnitSide.Allied && enemy.GetComponent<Status>().hitPriority != eHitPriority.TOWER)
-            {
-                GameObject bullet
-                    = EverydayDevup.Framework.LunaEntities.Spawn(effect, enemy.GetComponent<Status>().ProjecttileArrivalLocation.transform.position + new Vector3(0, 3.0f, 0), effect.transform.rotation);
-                bullet.GetComponent<Projectile>().Target = enemy;
-                bullet.GetComponent<Projectile>().ProjectilePower = skillDamage;
-                bullet.GetComponent<Projectile>().criticalShot = true;
-            }
-        }
-
+            var target = UnitLogic.From(unit);
+            var data = ProjectileData.Create(effect, ID, target.ID,
+                target.ProjecttileArrivalLocation.transform.position + Vector3.up * 3f, skillDamage, true, true, 0f, Data.RoundId);
+            LunaSpawn.Show<ProjectileLogic>(effect, data);
+        }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
         yield return null;
     }
 }

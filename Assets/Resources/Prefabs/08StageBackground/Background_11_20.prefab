@@ -455,6 +455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826099739272283067}
+  - component: {fileID: 9000000000000000000}
   m_Layer: 0
   m_Name: Background_11_20
   m_TagString: BackGround
@@ -556,3 +557,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4005808538926482, guid: 0e1276eeee6de6a4eb0173e713ab2a4d, type: 3}
   m_PrefabInstance: {fileID: 8990612542430679970}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9000000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383516895249335979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a759829bbf54749a63b9a45019b35bb, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ScrollingPlates: []
+  WanderingDemons: []
+  Emitters: []

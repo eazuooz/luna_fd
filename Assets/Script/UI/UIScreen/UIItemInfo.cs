@@ -2,32 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UIItemInfo : UILuna
 {
-    public UIReference refData;
 
-
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
 
         GameObject profile = gameObject.transform
                                         .Find("BackGround")
                                         .Find("Profile").gameObject;
 
-        int itemNumber = Game.Instance.dataManager.pickItemNumber;
+        int itemNumber = LunaSession.Current.pickItemNumber;
         ItemData itemData;
         LunaDataTable.Instance.itemTable.TryGetValue(itemNumber, out itemData);
         Texture texture = itemData.IconImage;
         if (texture)
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
             Sprite itemSprite
-                    = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
+                    = LunaUIViews.CreateSprite(texture);
 
             profile.GetComponent<Image>().sprite = itemSprite;
         }
@@ -36,15 +34,23 @@ public class UIItemInfo : UILuna
         profile.transform.Find("NameText").GetComponent<Text>().text = itemData.itemName;
         profile.transform.Find("MainText").GetComponent<Text>().text = itemData.itemDiscription;
     }
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void OnClickStartGame()
     {
@@ -53,11 +59,11 @@ public class UIItemInfo : UILuna
     
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 }

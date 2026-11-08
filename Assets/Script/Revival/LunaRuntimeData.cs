@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
+using UnityGameFramework.Runtime;
 using GameFramework;
 using GameFramework.Setting;
 using UnityEngine;
@@ -14,30 +15,41 @@ public static class LunaRuntimeData
     private static readonly Dictionary<UnityEngine.Object, UnityEngine.Object> clones = new Dictionary<UnityEngine.Object, UnityEngine.Object>();
     private static readonly HashSet<UnityEngine.Object> runtimeObjects = new HashSet<UnityEngine.Object>();
     private static ISettingManager settings;
-    private static TutorialData tutorial;
+    private static int tutorialIndex;
     private static bool allowSave;
     public static bool IsInitialized { get; private set; }
     public static string SaveDirectory { get; private set; }
+    internal static void TrackRuntimeAsset(ScriptableObject instance)
+    {
+        if (instance != null) runtimeObjects.Add(instance);
+    }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Reset()
     {
         IsInitialized = false;
         settings = null;
-        tutorial = null;
+        tutorialIndex = 0;
         allowSave = false;
-        clones.Clear();
-        runtimeObjects.Clear();
+        ReleaseRuntimeAssets();
     }
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void Register()
+    internal static void ReleaseRuntimeAssets()
     {
-        Game.BeforeInitialize -= Initialize;
-        Game.BeforeInitialize += Initialize;
+        // DontSave clones are not authoring assets and need an explicit owner on teardown,
+        // including play sessions with domain reload disabled. During play, defer native
+        // destruction until the frame ends so Procedure shutdown can settle and save loot.
+        foreach (var instance in runtimeObjects)
+        {
+            if (instance == null) continue;
+            if (Application.isPlaying) UnityEngine.Object.Destroy(instance);
+            else UnityEngine.Object.DestroyImmediate(instance);
+        }
+        runtimeObjects.Clear();
+        clones.Clear();
     }
 
-    public static T CloneAsset<T>(T source) where T : ScriptableObject
+public static T CloneAsset<T>(T source) where T : ScriptableObject
     {
         if (source == null || !Application.isPlaying || runtimeObjects.Contains(source)) return source;
         if (clones.TryGetValue(source, out var clone)) return (T)clone;
@@ -46,6 +58,8 @@ public static class LunaRuntimeData
         instance.hideFlags = HideFlags.DontSave;
         if (source is ObjectData sourceUnit && instance is ObjectData runtimeUnit)
             LunaUnitBalance.Apply(sourceUnit, runtimeUnit);
+        if (source is SkillData sourceSkill && instance is SkillData runtimeSkill)
+            LunaSkillBalance.Apply(sourceSkill, runtimeSkill);
         clones.Add(source, instance);
         runtimeObjects.Add(instance);
         return instance;
@@ -57,6 +71,7 @@ public static class LunaRuntimeData
     {
         if (IsInitialized) return;
         LunaUnitBalance.Initialize();
+        LunaSkillBalance.Initialize();
         var table = LunaDataTable.Instance;
         var template = Resources.Load<PlayerData>("ScriptableObjects/PlayerData");
         if (template == null) throw new InvalidOperationException("PlayerData resource is missing.");
@@ -72,11 +87,6 @@ public static class LunaRuntimeData
         table.InitializeItemDatas();
         table.InitializeSKillDatas();
         table.InitializeStageDatas();
-        if (Game.Instance.tutorialManager != null)
-        {
-            tutorial = CloneAsset(Game.Instance.tutorialManager.tutorialData);
-            Game.Instance.tutorialManager.tutorialData = tutorial;
-        }
         SaveDirectory = Environment.GetEnvironmentVariable("LUNA_SAVE_DIRECTORY");
         if (string.IsNullOrWhiteSpace(SaveDirectory)) SaveDirectory = Path.Combine(Application.persistentDataPath, "Luna");
         SaveDirectory = Path.GetFullPath(SaveDirectory);
@@ -89,20 +99,22 @@ public static class LunaRuntimeData
         allowSave = settings.Load();
         IsInitialized = true;
         if (allowSave) RestoreSnapshot();
-        if (tutorial != null) tutorial.TutorialIndex = Math.Max(0, settings.GetInt("Luna.Tutorial.Index", tutorial.TutorialIndex));
+        tutorialIndex = Math.Max(0, settings.GetInt("Luna.Tutorial.Index", tutorialIndex));
         AudioListener.volume = settings.GetBool("Luna.Sound.Enabled", true) ? 1f : 0f;
         table.playerData.ValidateDefaults();
         table.SetLunaDatasLevel(table.playerData.LunaLevel);
         foreach (var pair in table.lunaTable) pair.Value.moveSpeedLevel = table.playerData.LunaMoveSpeedLevel;
-        MyUnits.SetMyDeckUnitPrafab();
+        LunaSession.Current.RefreshDeckPrefabs();
         host.AddComponent<LunaProgressAutosave>();
     }
 
     public static bool SaveNow()
     {
-        if (!IsInitialized || !allowSave || settings == null) return false;
+        // Editor teardown may outlive play mode. At that point table access resolves
+        // authoring assets, which must never overwrite the captured runtime progress.
+        if (!Application.isPlaying || !IsInitialized || !allowSave || settings == null) return false;
         settings.SetString(SaveKey, JsonUtility.ToJson(Capture()));
-        if (tutorial != null) settings.SetInt("Luna.Tutorial.Index", tutorial.TutorialIndex);
+        settings.SetInt("Luna.Tutorial.Index", tutorialIndex);
         return settings.Save();
     }
 
@@ -111,13 +123,13 @@ public static class LunaRuntimeData
         if (!IsInitialized || settings == null || !settings.Load()) return false;
         if (!RestoreSnapshot()) return false;
         allowSave = true;
-        if (tutorial != null) tutorial.TutorialIndex = Math.Max(0, settings.GetInt("Luna.Tutorial.Index", tutorial.TutorialIndex));
+        tutorialIndex = Math.Max(0, settings.GetInt("Luna.Tutorial.Index", tutorialIndex));
         AudioListener.volume = settings.GetBool("Luna.Sound.Enabled", true) ? 1f : 0f;
         var table = LunaDataTable.Instance;
         table.SetLunaDatasLevel(table.playerData.LunaLevel);
         foreach (var pair in table.lunaTable) pair.Value.moveSpeedLevel = table.playerData.LunaMoveSpeedLevel;
         table.playerData.SetCurPlayer();
-        MyUnits.SetMyDeckUnitPrafab();
+        LunaSession.Current.RefreshDeckPrefabs();
         return true;
     }
 
@@ -169,7 +181,7 @@ public static class LunaRuntimeData
             if (state == null || string.IsNullOrEmpty(state.name)) throw new InvalidDataException("Invalid stage save entry.");
     }
 
-    private static void ApplyObjects(List<ObjectState> states, SerializeDictionary<string, ObjectData> table)
+    private static void ApplyObjects(List<ObjectState> states, Dictionary<string, ObjectData> table)
     {
         if (states == null) return;
         foreach (var state in states)
@@ -236,7 +248,7 @@ public static class LunaRuntimeData
     }
 }
 
-public sealed class LunaProgressAutosave : MonoBehaviour
+public sealed class LunaProgressAutosave : GameFrameworkComponent
 {
     private float nextSave;
     private void OnEnable() { SceneManager.activeSceneChanged += OnSceneChanged; nextSave = Time.unscaledTime + 15f; }
@@ -250,4 +262,5 @@ public sealed class LunaProgressAutosave : MonoBehaviour
     }
     private void OnApplicationPause(bool paused) { if (paused) LunaRuntimeData.SaveNow(); }
     private void OnApplicationQuit() { LunaRuntimeData.SaveNow(); }
+    private void OnDestroy() { LunaRuntimeData.ReleaseRuntimeAssets(); }
 }

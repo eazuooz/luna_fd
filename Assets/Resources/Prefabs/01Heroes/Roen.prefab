@@ -41,8 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7291525920813702270}
   - component: {fileID: 2444805791673864672}
-  - component: {fileID: 8500683232744474673}
-  - component: {fileID: 9125513137435109224}
   - component: {fileID: -5168541680640167425}
   m_Layer: 0
   m_Name: Roen
@@ -78,60 +76,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1404517601080786067}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 1e0d070cc792c3448b4bad33c66b12d4, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 1e0d070cc792c3448b4bad33c66b12d4, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &8500683232744474673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1404517601080786067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &9125513137435109224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1404517601080786067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 887a7dd59625f204cb6f3c720eca9c5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillSound: {fileID: 8300000, guid: 863a4aefa06f6354394638fe929c64fb, type: 3}
+  ParameterKey: 34aa3ba15da8ffc4b9dceb1684d82141:1404517601080786067
+  Prefabs: []
+  Sounds:
+  - Name: Roen.skillSound
+    Value: {fileID: 8300000, guid: 863a4aefa06f6354394638fe929c64fb, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 863a4aefa06f6354394638fe929c64fb, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-5168541680640167425
 BoxCollider2D:
   m_ObjectHideFlags: 0

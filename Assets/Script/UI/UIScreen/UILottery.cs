@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Spine.Unity;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 public class UILottery : UILuna
 {
-    public UIReference refData;
 
     private GameObject lotteryCardPrefab;
     private bool isLotteryEnd = false;
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
 
         GameObject lotteryContent 
-            = LunaUtility.FindChildObject(this.gameObject, "LotteryContent");
+            = LunaUIViews.FindChildObject(this.gameObject, "LotteryContent");
 
         GameObject lotteryScrollView
-            = LunaUtility.FindChildObject(this.gameObject, "LotteryScroll View");
+            = LunaUIViews.FindChildObject(this.gameObject, "LotteryScroll View");
 
         if (LunaDataTable.Instance.LotteryResult.Count <= 5)
         {
@@ -41,7 +41,7 @@ public class UILottery : UILuna
 
             GameObject chracterUIPrefab = Resources.Load<GameObject>(dir);
             //GameObject chracterSkeletonGraphic = Resources.Load<GameObject>(dir);
-            GameObject instObject = LunaEntities.Spawn(chracterUIPrefab, card.transform.position, Quaternion.identity, card.transform);
+            GameObject instObject = Instantiate(chracterUIPrefab, card.transform.position, Quaternion.identity, card.transform);
 
             instObject.GetComponent<RectTransform>().SetParent(card.transform);
             instObject.GetComponent<RectTransform>().localScale = chracterUIPrefab.transform.localScale;
@@ -68,29 +68,35 @@ public class UILottery : UILuna
                 continue;
             }
 
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            card.GetComponent<Image>().sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
+            card.GetComponent<Image>().sprite = LunaUIViews.CreateSprite(texture);
         }
 
         StartCoroutine(EndLottery());
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate()
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed);
         if (isLotteryEnd && Input.GetMouseButtonDown(0))
         {
-            Game.Instance.uiManager.Pop(type);
+            LunaUI.Close(type);
             isLotteryEnd = false;
         }
     }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     IEnumerator EndLottery()
     {

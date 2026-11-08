@@ -1,48 +1,33 @@
-using System.Collections;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UILoading : UILuna
 {
-    public UIReference refData;
     private Image tapToStartImage;
-    private AsyncOperation loadingOperation;
     private bool continueRequested;
-
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        LunaRuntimeData.Initialize();
+        base.OnOpen(userData);
+        continueRequested = false;
         var tapToStart = transform.Find("TabToStart");
         if (tapToStart != null) tapToStartImage = tapToStart.GetComponent<Image>();
-        StartCoroutine(LoadLobby());
     }
-
-    private IEnumerator LoadLobby()
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        loadingOperation = SceneManager.LoadSceneAsync("Lobby");
-        if (loadingOperation == null) yield break;
-        loadingOperation.allowSceneActivation = false;
-        while (!loadingOperation.isDone)
+        base.OnUpdate(elapsed, realElapsed);
+        if (tapToStartImage != null)
         {
-            if (tapToStartImage != null)
-            {
-                var color = tapToStartImage.color;
-                color.a = Mathf.Clamp01(Mathf.Abs(Mathf.Sin(Time.unscaledTime) * 2f));
-                tapToStartImage.color = color;
-            }
-            if (Input.GetMouseButtonDown(0)) ContinueToLobby();
-            yield return null;
+            var color = tapToStartImage.color;
+            color.a = Mathf.Clamp01(Mathf.Abs(Mathf.Sin(Time.unscaledTime) * 2f));
+            tapToStartImage.color = color;
         }
+        if (Input.GetMouseButtonDown(0)) ContinueToLobby();
     }
-
-    // Input and the play-mode smoke test use the same guarded entry point.
     public void ContinueToLobby()
     {
-        if (continueRequested || loadingOperation == null || loadingOperation.progress < 0.9f) return;
+        if (continueRequested || !LunaBootstrap.IsReady || LunaScenes.IsTransitioning) return;
         continueRequested = true;
-        Game.Instance.lunaSceneManager.FadeIn(1f, () => loadingOperation.allowSceneActivation = true);
+        LunaScenes.FadeIn(1f, () => LunaScenes.Load("Lobby"));
     }
 }

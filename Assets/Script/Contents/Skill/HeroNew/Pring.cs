@@ -1,37 +1,37 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pring : HeroSkillControl
+public class Pring : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
 
     private float skillDamage;
     private float coefSkill_1;
     private bool triggerSkill_1;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 2;
+        skillDamage = 1380f;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamage = status.stat.AttackDamage * 3;
+        skillDamage = 1380f;
         coefSkill_1 = 1.0f;
         triggerSkill_1 = false;
     }
@@ -74,10 +74,10 @@ public class Pring : HeroSkillControl
         {
             IdentifyFunc.PickingUnits((unit) =>
             {
-                if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, healingRange))
+                if (IdentifyFunc.IsInDistance(gameObject, unit, healingRange))
                 {
                     Defined.EffectCreate(skillEffect, unit, Defined.eEffectPosition.TARGET, true);
-                    unit.GetComponent<Status>().Heal(skillDamage * coefSkill_1);
+                    UnitLogic.From(unit).Heal(skillDamage * coefSkill_1);
                 }
             }, IdentifyFunc.IsAlly, IdentifyFunc.IsHero);
         }
@@ -85,12 +85,12 @@ public class Pring : HeroSkillControl
         {
             IdentifyFunc.PickingUnit((unit) =>
             {
-                if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, healingRange))
+                if (IdentifyFunc.IsInDistance(gameObject, unit, healingRange))
                 {
                     Defined.EffectCreate(skillEffect, unit,Defined.eEffectPosition.TARGET, true);
-                    unit.GetComponent<Status>().Heal(skillDamage * coefSkill_1);
+                    UnitLogic.From(unit).Heal(skillDamage * coefSkill_1);
                 }
-            }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
+            }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower, unit => IdentifyFunc.IsInDistance(gameObject, unit, healingRange) && UnitLogic.From(unit).stat.Hp < UnitLogic.From(unit).HealthBarHpPoint);
         }
     }
 }

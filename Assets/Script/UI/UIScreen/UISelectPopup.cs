@@ -2,57 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UISelectPopup : UILuna
 {
-    public UIReference refData;
 
     private GameObject mainTextObj;
     private string mainText;
-    public override void OnInit() 
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     public void OnClickEscape()
     {
-        Game.Instance.uiManager.Pop(type);
-        Game.Instance.uiManager.Pop(UI_TYPE.SKILL);
-        Game.Instance.uiManager.Pop(UI_TYPE.PLAYER);
-        Game.Instance.uiManager.Pop(UI_TYPE.PROGRESSBAR);
+        LunaUI.Close(type);
+        LunaUI.Close(UI_TYPE.SKILL);
+        LunaUI.Close(UI_TYPE.PLAYER);
+        LunaUI.Close(UI_TYPE.PROGRESSBAR);
 
         IdentifyFunc.PickingUnits((unit) =>
         {
-            unit.GetComponent<Status>().unitState.IsLobbyMove = true;
-            unit.GetComponent<Status>().unitState.IsLobbyBackMove = true;
+            unit.GetComponent<UnitLogic>().unitState.IsLobbyMove = true;
+            unit.GetComponent<UnitLogic>().unitState.IsLobbyBackMove = true;
         }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
 
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
+        LunaScenes.FadeIn(1.5f, () =>
         {
-            Game.Instance.lunaSceneManager.LoadScene("Lobby");
+            LunaScenes.Load("Lobby");
         });
     }
 }

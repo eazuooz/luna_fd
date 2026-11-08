@@ -112,8 +112,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4234121730393428355}
   - component: {fileID: 6836046990450408844}
-  - component: {fileID: 8915500920595791588}
-  - component: {fileID: 2631901205915662048}
   - component: {fileID: 8764568606833116263}
   m_Layer: 0
   m_Name: Raccon
@@ -149,60 +147,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7353924261295496072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: cb8c0b23dbed3154cb2e8f1864332806, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: cb8c0b23dbed3154cb2e8f1864332806, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &8915500920595791588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7353924261295496072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &2631901205915662048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7353924261295496072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6b9d8383ad136b4ca0fff3daa5672ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillSound: {fileID: 8300000, guid: e77a09fc355a21945bbf28ab8f1bfa61, type: 3}
+  ParameterKey: 6fcc8e6c2631cbf428cce54dc88a2869:7353924261295496072
+  Prefabs: []
+  Sounds:
+  - Name: Raccon.skillSound
+    Value: {fileID: 8300000, guid: e77a09fc355a21945bbf28ab8f1bfa61, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: e77a09fc355a21945bbf28ab8f1bfa61, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &8764568606833116263
 BoxCollider2D:
   m_ObjectHideFlags: 0

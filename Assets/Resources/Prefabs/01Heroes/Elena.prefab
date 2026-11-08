@@ -169,9 +169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7967686062852840313}
-  - component: {fileID: 493297028864284861}
   - component: {fileID: 5124858612228721416}
-  - component: {fileID: -758598195858005531}
   - component: {fileID: -2260737868914668077}
   m_Layer: 0
   m_Name: Elena
@@ -198,21 +196,6 @@ Transform:
   - {fileID: 4630613816136359489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &493297028864284861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554372063937404331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 1
-  status: {fileID: 0}
-  projectile: {fileID: 0}
 --- !u!114 &5124858612228721416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,47 +205,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 6554372063937404331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 0f83f7428edc5c14e8e78a9285da436b, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 0f83f7428edc5c14e8e78a9285da436b, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &-758598195858005531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554372063937404331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b680ca1529c2f9d4eb222065134051a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
-  minion: {fileID: 6485393535228168260, guid: 122e20fcab5d8b9478440edca6277637, type: 3}
+  ParameterKey: 4932b598bf928a348ba827aa2b4cb133:6554372063937404331
+  Prefabs:
+  - Name: Elena.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Elena.minion
+    Value: {fileID: 6485393535228168260, guid: 122e20fcab5d8b9478440edca6277637, type: 3}
+  - Name: minion
+    Value: {fileID: 6485393535228168260, guid: 122e20fcab5d8b9478440edca6277637, type: 3}
+  Sounds:
+  - Name: Elena.skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-2260737868914668077
 BoxCollider2D:
   m_ObjectHideFlags: 0

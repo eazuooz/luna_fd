@@ -1,160 +1,83 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
+using Luna.Gameplay;
 
-public class Raccon : HeroSkillControl
+public class Raccon : HeroUnitLogic
 {
-    public AudioClip skillSound;
-
-    private float skillDamage;
-    private bool triggerSkill_1;
-    private bool triggerSkill_2;
-    private bool triggerSkill_3;
-
+    public AudioClip skillSound => View.GetSound("skillSound");
+    private bool airborneBonusApplied;
+    private float skillMultiplier;
     private SkeletonAnimation ani;
-    protected override void OnEntityInitialize()
+    public bool IsSpinning => skill_In_Action;
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityInitialize();
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
+        if (!LunaCombat.IsInCombat(status)) return;
+        bool bonus = status.ultState >= eUltState.STAR5 && IdentifyFunc.IsAlive(status.AttackTarget)
+            && IdentifyFunc.IsAirborne(status.AttackTarget);
+        if (bonus != airborneBonusApplied)
+        {
+            status.coefficient.AttackDamage += bonus ? 0.2f : -0.2f;
+            airborneBonusApplied = bonus;
+            status.StatusAfterReady();
+        }
+        base.OnUpdate(elapsed, realElapsed);
     }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        base.OnEntityUpdate(elapsed, realElapsed);
-
-        if (status.unitState.IsLobbyMove == true)
-        {
-            return;
-        }
-
-        skillDamage = status.stat.AttackDamage;
-
-        if (triggerSkill_1 == true)
-        {
-            if (triggerSkill_2 == false)
-            {
-                if (status.AttackTarget != null/* && 공중 적군*/)
-                {
-                    triggerSkill_2 = true;
-
-                    status.coefficient.AttackDamage += 0.3f;
-                    status.StatusAfterReady();
-                }
-            }
-            else
-            {
-                if (status.AttackTarget == null/* || 공중 적군X*/)
-                {
-                    triggerSkill_2 = false;
-
-                    status.coefficient.AttackDamage -= 0.3f;
-                    status.StatusAfterReady();
-                }
-            }
-        }
-
-        if (triggerSkill_3 == true)
-        {
-            if (status.AttackTarget == null)
-            {
-                transform.Translate(Vector3.right * status.stat.MoveSpeed * Time.deltaTime * 3.0f);
-            }
-        }
-    }
-
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 1.8f;
-        triggerSkill_1 = false;
-        triggerSkill_2 = false;
-        triggerSkill_3 = false;
-
-        ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
+        airborneBonusApplied = false;
+        skillMultiplier = 1f;
+        ani = transform.Find("Sprite").GetComponent<SkeletonAnimation>();
     }
-
-    public override void STAR3()
-    {
-        STAR1();
-
-        status.coefficient.AttackDamage += 0.05f;
-        status.StatusAfterReady();
-    }
-
-    public override void STAR5()
-    {
-        STAR3();
-
-        triggerSkill_1 = true;
-    }
-
-    public override void ULT1()
-    {
-        STAR5();
-
-        //status.stat.CoefficientSkillPoint += 0.15f;
-        status.StatusAfterReady();
-    }
-
-    public override void ULT2()
-    {
-        ULT1();
-
-        status.stat.Stamina *= 0.9f;
-    }
-
+    public override void STAR3() { STAR1(); status.coefficient.AttackDamage += 0.05f; status.StatusAfterReady(); }
+    public override void STAR5() { STAR3(); }
+    public override void ULT1() { STAR5(); skillMultiplier = 1.15f; }
+    public override void ULT2() { ULT1(); status.coefficient.Stamina *= 0.9f; status.StatusAfterReady(); }
     public override void Skill()
     {
+        if (skill_In_Action || !LunaCombat.IsInCombat(status)) return;
+        skill_In_Action = skill_In_Move = true;
         StartCoroutine(DuringSkill());
     }
-
     public override void SkillMove()
     {
-        RacconSkillMove();
+        float speed = Mathf.Abs(status.stat.MoveSpeed) * (IdentifyFunc.IsAlive(status.AttackTarget) ? 1f : 3f);
+        float stop = Mathf.Max(Defined.AllyTowerPosition.x, Defined.EnemyTowerPosition.x - status.stat.AttackRange);
+        Vector3 desired = transform.position + Vector3.right * speed * Time.deltaTime;
+        desired.x = Mathf.Min(desired.x, stop);
+        transform.position = LunaCombat.ClampPosition(status, desired);
     }
-    private void RacconSkillMove()
+    private IEnumerator DuringSkill()
     {
-        if (gameObject.transform.position.x >= (Defined.EnemyTowerPosition.x - status.stat.AttackRange))
-        {
-            return;
-        }
-
-        float moveSpeed = gameObject.GetComponent<Status>().stat.MoveSpeed;
-        gameObject.GetComponent<Transform>().Translate(Vector3.right * moveSpeed * Time.deltaTime);
-    }
-    IEnumerator DuringSkill()
-    {
-        float skillRange = 2.0f;
-
-        status.unitState.IsSuperArmour = true;
+        status.SetSkillSuperArmour(true);
         status.unitState.IsActionDelay = true;
-        status.stat.AttackDelayTime = -100.0f;
-        triggerSkill_3 = true;
-        skill_In_Move = true;
-
+        status.stat.AttackDelayTime = -100f;
         ani.AnimationState.SetAnimation(0, "skill_loop", true);
-
         for (int i = 0; i < 10; i++)
         {
+            if (!LunaCombat.IsInCombat(status)) break;
             status.PlayOneSound(skillSound);
-
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                if (IdentifyFunc.IsInDistanceRight(gameObject, unit, skillRange))
-                {
-                    unit.GetComponent<Status>().Attack(gameObject, skillDamage, Defined.CanProbability(status.stat.CriticalActuationProbability), true);
-                }
-            }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
-
+            IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).Attack(gameObject,
+                status.stat.AttackDamage * skillMultiplier, Defined.CanProbability(status.stat.CriticalActuationProbability), true),
+                IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower,
+                unit => IdentifyFunc.IsInDistance(gameObject, unit, 2.3f));
             yield return new WaitForSeconds(0.25f);
         }
-
-        status.unitState.IsSuperArmour = false;
-        status.stat.AttackDelayTime = -status.stat.AttackSpeed;
-        status.unitState.IsActionDelay = false;
-        triggerSkill_3 = false;
-        skill_In_Move = false;
-
-        ani.AnimationState.SetAnimation(0, "idle", true);
+        EndSpin();
+        if (ani != null && gameObject.activeInHierarchy) ani.AnimationState.SetAnimation(0, "idle", true);
     }
+    private void EndSpin()
+    {
+        FinishSkillExecution();
+        status.SetSkillSuperArmour(false);
+        status.unitState.IsActionDelay = false;
+        status.unitState.IsSkillActivaion = false;
+        status.stat.AttackDelayTime = -status.stat.AttackSpeed;
+        skill_In_Action = skill_In_Move = false;
+    }
+    public override void AfterDeath() { EndSpin(); }
 }

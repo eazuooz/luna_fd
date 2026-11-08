@@ -138,9 +138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 524913559582004941}
-  - component: {fileID: 524913559582004942}
   - component: {fileID: 524913559582004943}
-  - component: {fileID: 1051770544}
   m_Layer: 0
   m_Name: SkeletonBigAx
   m_TagString: Unit
@@ -166,21 +164,6 @@ Transform:
   - {fileID: 413739036560637054}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &524913559582004942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 524913559582004976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
 --- !u!114 &524913559582004943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,49 +173,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 524913559582004976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: c839de921913190418c7ce7fa9b90b3b, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: c839de921913190418c7ce7fa9b90b3b, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &1051770544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 524913559582004976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960adb98bf4a8d34db394841a0eee9ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillMatter: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
-  status: {fileID: 0}
-  effect: {fileID: 100008, guid: aec5caeeda2c9544d90a72e3c4dd809d, type: 3}
-  attackDamage: 100
-  splashRange: 2
+  ParameterKey: 5852d947dceddf44689e92c0f95f2365:524913559582004976
+  Prefabs:
+  - Name: Skeleton_ax_skill.effect
+    Value: {fileID: 100008, guid: aec5caeeda2c9544d90a72e3c4dd809d, type: 3}
+  - Name: effect
+    Value: {fileID: 100008, guid: aec5caeeda2c9544d90a72e3c4dd809d, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts:
+  - Name: Skeleton_ax_skill.skillMatter
+    Value: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
+  - Name: skillMatter
+    Value: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
 --- !u!1 &1590984627613616375
 GameObject:
   m_ObjectHideFlags: 0

@@ -42,3 +42,16 @@ spine-unity-examples-editor.csproj
 # Revival validation outputs and local build artifacts
 /Logs/
 /Builds/
+
+# Local Unity IDE state and validation scratch files
+*.csproj
+*.slnx
+/UserSettings/
+/UpgradeLog.htm
+/Tools/__pycache__/
+/Tools/validation/drafts/
+
+# Addressables deletes and regenerates these exact preservation outputs.
+# The authored Assets/link.xml is tracked separately.
+/Assets/AddressableAssetsData/link.xml
+/Assets/AddressableAssetsData/link.xml.meta

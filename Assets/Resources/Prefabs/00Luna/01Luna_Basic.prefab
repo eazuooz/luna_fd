@@ -40,9 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5811659828842603963}
-  - component: {fileID: 5811659828842603962}
   - component: {fileID: 5811659828842603965}
-  - component: {fileID: 5608777666370361901}
   - component: {fileID: -291346053687346638}
   m_Layer: 0
   m_Name: 01Luna_Basic
@@ -69,23 +67,6 @@ Transform:
   - {fileID: 651512078371848974}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5811659828842603962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811659828842603964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aee8ac206ba70df449b523d939a40a2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myTower: {fileID: 0}
-  buffPrefab: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
-  curStateString: none
-  status: {fileID: 0}
-  moving: 0
 --- !u!114 &5811659828842603965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,47 +76,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5811659828842603964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 67e2a90a7916c2b4aa6d9678e93a68da, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 67e2a90a7916c2b4aa6d9678e93a68da, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &5608777666370361901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811659828842603964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6baa2ed15a4d58f4e87aaf082e0ce322, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
+  ParameterKey: b84f4f503dc4ea241b41b6b46ca01b4c:5811659828842603964
+  Prefabs:
+  - Name: LunaStateMachine.buffPrefab
+    Value: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
+  - Name: buffPrefab
+    Value: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!61 &-291346053687346638
 BoxCollider2D:
   m_ObjectHideFlags: 0

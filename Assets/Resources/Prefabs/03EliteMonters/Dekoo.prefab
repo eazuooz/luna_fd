@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2480341837762259280}
   - component: {fileID: 5661793538051823575}
-  - component: {fileID: 5671797271955055742}
-  - component: {fileID: 6627341697332832366}
   m_Layer: 0
   m_Name: Dekoo
   m_TagString: Unit
@@ -45,64 +43,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5486077676104021000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 179a57a6a714be04fa7104354b057bc0, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 179a57a6a714be04fa7104354b057bc0, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &5671797271955055742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5486077676104021000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &6627341697332832366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5486077676104021000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43ab1d08ea6f551498a1434333ecaf41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillMatter: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
-  status: {fileID: 0}
-  effect: {fileID: 0}
-  skillDamage: 500
-  splashRange: 2
+  ParameterKey: 3972782244aafc44fa2bcececac20ea5:5486077676104021000
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts:
+  - Name: Dekoo_skill.skillMatter
+    Value: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
+  - Name: skillMatter
+    Value: "\uD0C0\uAC9F \uC8FC\uC704 \uBC94\uC704 \uACF5\uACA9"
 --- !u!1 &7371896056072449540
 GameObject:
   m_ObjectHideFlags: 0

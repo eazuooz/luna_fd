@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,15 +16,15 @@ public class DungeonInfo : MonoBehaviour
         string dungeonString = "Dungeon0";
         dungeonString += idx.ToString();
 
-        Game.Instance.dataManager.SelectDungeonString = dungeonString;
+        LunaSession.Current.SelectDungeonString = dungeonString;
 
         string stageDir = "Prefabs/11Dungeons/"
-                + Game.Instance.dataManager.SelectDungeonString;
+                + LunaSession.Current.SelectDungeonString;
 
-        Game.Instance.dataManager.selectDungeon
+        LunaSession.Current.selectDungeon
             = Resources.Load<GameObject>(stageDir);
 
-        Game.Instance.uiManager.Push(UI_TYPE.DUNGEONINFO);
+        LunaUI.Open(UI_TYPE.DUNGEONINFO);
 
     }
     // Start is called before the first frame update

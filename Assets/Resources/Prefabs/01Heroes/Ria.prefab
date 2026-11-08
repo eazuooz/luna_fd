@@ -272,8 +272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6578199434224044096}
   - component: {fileID: 2402713572589852659}
-  - component: {fileID: 1681135315187254923}
-  - component: {fileID: 4986788515700430826}
   - component: {fileID: -1935340860437247887}
   m_Layer: 0
   m_Name: Ria
@@ -309,64 +307,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 4091641544218325043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 85e98df01d6e9674fb3330b5b2d29d32, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 85e98df01d6e9674fb3330b5b2d29d32, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &1681135315187254923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4091641544218325043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &4986788515700430826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4091641544218325043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54907b81454657b41b8d97f9622f28f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
-  NormalMinion: {fileID: 3039898614407082880, guid: 65166657c1376d446a3bca87d6a90459, type: 3}
-  SkillMinion: {fileID: 4100995970120910541, guid: f10f4b1896e31cd42be4f82d5bbf16c8, type: 3}
-  UltMinion: {fileID: 4154425776239870616, guid: add714557f4605e4c9ec8b4f78f1437b, type: 3}
+  ParameterKey: 824aab15b9cfe75409dd10a6828b3746:4091641544218325043
+  Prefabs:
+  - Name: Ria.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Ria.NormalMinion
+    Value: {fileID: 3039898614407082880, guid: 65166657c1376d446a3bca87d6a90459, type: 3}
+  - Name: NormalMinion
+    Value: {fileID: 3039898614407082880, guid: 65166657c1376d446a3bca87d6a90459, type: 3}
+  - Name: Ria.SkillMinion
+    Value: {fileID: 4100995970120910541, guid: f10f4b1896e31cd42be4f82d5bbf16c8, type: 3}
+  - Name: SkillMinion
+    Value: {fileID: 4100995970120910541, guid: f10f4b1896e31cd42be4f82d5bbf16c8, type: 3}
+  - Name: Ria.UltMinion
+    Value: {fileID: 4154425776239870616, guid: add714557f4605e4c9ec8b4f78f1437b, type: 3}
+  - Name: UltMinion
+    Value: {fileID: 4154425776239870616, guid: add714557f4605e4c9ec8b4f78f1437b, type: 3}
+  Sounds:
+  - Name: Ria.skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-1935340860437247887
 BoxCollider2D:
   m_ObjectHideFlags: 0

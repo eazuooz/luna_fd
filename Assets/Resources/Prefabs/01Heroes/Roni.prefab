@@ -241,8 +241,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3665888437084369072}
   - component: {fileID: 1142840301250577957}
-  - component: {fileID: 2578784549424283547}
-  - component: {fileID: 7869050791323747358}
   - component: {fileID: 5834019615469455666}
   m_Layer: 0
   m_Name: Roni
@@ -278,61 +276,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 5161901356910452450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 3419864706af2e140840ed9af41d7d1e, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 3419864706af2e140840ed9af41d7d1e, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &2578784549424283547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5161901356910452450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &7869050791323747358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5161901356910452450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2a05e64b057727498665fb332bca7f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 3950034234864978867, guid: 680468f9744688a439e2eadcfb06d91c, type: 3}
-  skillSound: {fileID: 8300000, guid: 8252431b2a81b8745821add0f4ab1961, type: 3}
+  ParameterKey: 0c5f2ac537b5ebc43a8258e804ebd717:5161901356910452450
+  Prefabs:
+  - Name: Roni.skillEffect
+    Value: {fileID: 3950034234864978867, guid: 680468f9744688a439e2eadcfb06d91c, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 3950034234864978867, guid: 680468f9744688a439e2eadcfb06d91c, type: 3}
+  Sounds:
+  - Name: Roni.skillSound
+    Value: {fileID: 8300000, guid: 8252431b2a81b8745821add0f4ab1961, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 8252431b2a81b8745821add0f4ab1961, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &5834019615469455666
 BoxCollider2D:
   m_ObjectHideFlags: 0

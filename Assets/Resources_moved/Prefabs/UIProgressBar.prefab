@@ -634,7 +634,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f1ad8de9a5e1349bad3763eed052a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refData: {fileID: 11400000, guid: 4289e350eadea444fb32e0df806377b3, type: 2}
   heroesMinimap: []
   herose: []
 --- !u!1 &9195905254570263741

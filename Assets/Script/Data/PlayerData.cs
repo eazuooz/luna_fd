@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
 [CreateAssetMenu(fileName = "PlayerVar", menuName = "Scriptable Object Asset/PlayerVar")]
 public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
@@ -211,12 +211,12 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
 
     public void SetCurPlayer()
     {
-        PlayerPrefab = Game.Instance.dataManager.Players[(int)SkinType];
+        PlayerPrefab = LunaSession.Current.Players[(int)SkinType];
     }
     public GameObject CurPlayer()
     {
         if (PlayerPrefab == null)
-            return Game.Instance.dataManager.Players[0];
+            return LunaSession.Current.Players[0];
         else
             return PlayerPrefab;
     }

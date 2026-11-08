@@ -31,8 +31,7 @@ MonoBehaviour:
   maxSummonCount: 1
   ableSkill: 1
   skillName: "\uC138\uB80C\uC758 \uAC00"
-  skillDiscription: "- \uD30C\uD2F0\uC6D0 \uC804\uCCB4 10\uCD08\uAC04 \uBAA8\uB4E0
-    \uC800\uD56D\uC5D0 25% \uAC10\uC18C\r\n"
+  skillDiscription: "- \ud30c\ud2f0\uc6d0 \uc804\uccb4\uc758 \uacf5\uaca9\u00b7\uc2a4\ud0ac\u00b7\uc0c1\ud0dc \uc774\uc0c1 \ud68c\ud53c \ud655\ub960\uc744 10\ucd08\uac04 25% \uc99d\uac00"
   skillLevelDiscription: "- LV 5 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00\n- LV
     10 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00\n- LV 15 : \uC800\uD56D 5% \uCD94\uAC00
     \uC99D\uAC00\n- LV 20 : \uC800\uD56D 5% \uCD94\uAC00 \uC99D\uAC00"

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -42,10 +42,10 @@ public class StageButton : MonoBehaviour
 
     private void SetStage(string stageName)
     {
-        Game.Instance.dataManager.SelectStagePrefab
-            = Game.Instance.dataManager.AllStagePrefab.Find(obj => obj.name == stageName);
+        LunaSession.Current.SelectStagePrefab
+            = LunaSession.Current.AllStagePrefab.Find(obj => obj.name == stageName);
 
-        Game.Instance.dataManager.CurrentStageName = stageName;
+        LunaSession.Current.CurrentStageName = stageName;
         LunaDataTable.Instance.playerData.SaveStageName = stageName;
     }
 
@@ -64,7 +64,7 @@ public class StageButton : MonoBehaviour
 
     private void OnClickStageButton(string name)
     {
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.STAGEINFO))
+        if (LunaUI.IsTop(UI_TYPE.STAGEINFO))
         {
             StartCoroutine(PushStageInfo());
         }
@@ -73,17 +73,17 @@ public class StageButton : MonoBehaviour
         TurnCheckImage(true);
         SetStage(name);
 
-        Game.Instance.uiManager.Push(UI_TYPE.STAGEINFO);
+        LunaUI.Open(UI_TYPE.STAGEINFO);
     }
 
     IEnumerator PushStageInfo()
     {
-        Game.Instance.uiManager.Pop(UI_TYPE.STAGEINFO);
+        LunaUI.Close(UI_TYPE.STAGEINFO);
         bool isPop = true;
         while (isPop)
         {
             //InfiniteLoopDetector.Run();
-            if (!Game.Instance.uiManager.CompareTop(UI_TYPE.STAGEINFO))
+            if (!LunaUI.IsTop(UI_TYPE.STAGEINFO))
             {
                 isPop = false;
             }
@@ -110,13 +110,13 @@ public class StageButton : MonoBehaviour
 
         stagePrefab = Resources.Load("Prefabs/10Stage/" + StageName) as GameObject;
 
-        if (stagePrefab.GetComponent<BasicDungeon>().isBossStage)
+        if (stagePrefab.GetComponent<LunaStageDefinition>().isBossStage)
         {
             TurnBossImage(true);
         }
 
         dungeonInfos
-            = LunaUtility.FindChildObjects
+            = LunaUIViews.FindChildObjects
             (this.gameObject.transform.Find("DungeonInfos").gameObject,
             "DungeonInfo01", "DungeonInfo02", "DungeonInfo03", "DungeonInfo04");
 
@@ -124,7 +124,7 @@ public class StageButton : MonoBehaviour
 
 
 
-        DungeonTable dungeonTable = stagePrefab.GetComponent<BasicDungeon>().dungeonTable;
+        DungeonTable dungeonTable = stagePrefab.GetComponent<LunaStageDefinition>().dungeonTable;
 
 
         for (int i = 0; i < 4; i++)

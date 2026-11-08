@@ -1,39 +1,37 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Joe : HeroSkillControl
+public class Joe : HeroUnitLogic
 {
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 3f;
     private bool triggerSkill_1;
     private bool triggerSkill_2;
 
     private SkeletonAnimation ani;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 3.0f;
 
         if (triggerSkill_1 == true)
         {
             if (triggerSkill_2 == false)
             { 
-                if (status.AttackTarget != null/* && 공중 적군*/)
+                if (IdentifyFunc.IsAlive(status.AttackTarget) && IdentifyFunc.IsAirborne(status.AttackTarget))
                 {
                     triggerSkill_2 = true;
 
@@ -43,7 +41,7 @@ public class Joe : HeroSkillControl
             }
             else
             {
-                if (status.AttackTarget == null/* || 공중 적군X*/)
+                if (!IdentifyFunc.IsAlive(status.AttackTarget) || !IdentifyFunc.IsAirborne(status.AttackTarget))
                 {
                     triggerSkill_2 = false;
 
@@ -52,12 +50,13 @@ public class Joe : HeroSkillControl
                 }
             }
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 5.0f * 1.2f;
+
         triggerSkill_1 = false;
         triggerSkill_2 = false;
 
@@ -111,10 +110,10 @@ public class Joe : HeroSkillControl
 
     public override void Skill()
     {
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
-            GameObject tmpEffect = Defined.EffectCreate(skillEffect, status.AttackTarget);
-            tmpEffect.GetComponent<SkillBomb>().Damage = skillDamage;
+            var data = SkillBombData.Create(this, status.AttackTarget.transform.position, skillDamage);
+            LunaSpawn.Show<SkillBomb>(skillEffect, data);
         }
     }
 

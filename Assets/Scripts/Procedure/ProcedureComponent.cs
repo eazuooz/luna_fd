@@ -90,7 +90,7 @@ namespace UnityGameFramework.Runtime
 
             mProcedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
 
-            yield return new WaitForEndOfFrame();
+            yield return null; // Also advances in Unity batch mode without a rendered end-of-frame.
 
             mProcedureManager.StartProcedure(mEntranceProcedure.GetType());
         }

@@ -1,0 +1,15 @@
+{
+  "sourceCheckpoint": "c1e6d6bd4103b8cc24c8d527f6efb9f6c2c45bcf",
+  "normalizations": [
+    {
+      "stage": "Dungeon01",
+      "rowId": 83,
+      "source": "Assets/Resources/Prefabs/11Dungeons/Dungeon01.prefab",
+      "field": "ItemDropTable[0].probability",
+      "item": "ScriptableObjects/Items/0005_luna_dragon_design",
+      "authoredValue": 100,
+      "csvFraction": 1,
+      "reason": "Legacy BossDungeon.DropItem passes probability * 100 to CanProbability. Authored 100 therefore meant a guaranteed reward. Fraction 1 preserves that outcome while satisfying the CSV 0..1 schema."
+    }
+  ]
+}

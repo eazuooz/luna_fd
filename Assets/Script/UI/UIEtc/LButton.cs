@@ -1,31 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using Luna.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
 
-public class LButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public sealed class LButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private GameObject stage;
-
-    void Awake()
-    {
-        stage = GameObject.FindGameObjectWithTag("Stage");
-    }
-
+    private int pressedPlayerId;
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (Game.Instance.dataManager.LunaPlayer != null)
-        {
-            Game.Instance.dataManager.LunaPlayer.GetComponent<LunaStateMachine>().LMove();
-        }
+        var player = LunaSession.Current != null ? UnitLogic.From(LunaSession.Current.LunaPlayer) as PlayerLogic : null;
+        if (player == null || player.IsHiding || player.stat.Hp <= 0f) return;
+        pressedPlayerId = player.ID;
+        player.SetMovement(-1);
     }
-
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData) => Release();
+    private void OnDisable() => Release();
+    private void Release()
     {
-        if (Game.Instance.dataManager.LunaPlayer != null)
-        {
-            Game.Instance.dataManager.LunaPlayer.GetComponent<LunaStateMachine>().NMove();
-        }
+        var player = LunaSpawn.Find<PlayerLogic>(pressedPlayerId);
+        pressedPlayerId = 0;
+        if (player != null && player.Moving == -1) player.SetMovement(0);
     }
 }

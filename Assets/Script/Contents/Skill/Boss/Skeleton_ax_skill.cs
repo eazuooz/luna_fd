@@ -1,51 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity;
-
-public class Skeleton_ax_skill : EverydayDevup.Framework.LunaEntityBehaviour
+using Luna.Gameplay;
+public class Skeleton_ax_skill : UnitLogic
 {
-    [SerializeField] private string skillMatter = "타겟 주위 범위 공격";
-    public string SkillDescription => skillMatter;
-    [HideInInspector] public Status status;
-    public GameObject effect;
-    private GameObject tmpEffect;
-    public float attackDamage = 40.0f;
-    public float splashRange = 2.0f;
-    private SkeletonAnimation skeletonAnimation;
-    private GameObject attackPos;
-
-    protected override void OnEntityInitialize()
+    protected override void OnAttackAnimationEvent()
     {
-        status = GetComponent<Status>();
-        skeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
-
-        attackPos = new GameObject();
-
-        skeletonAnimation.state.Event += delegate (Spine.TrackEntry trackEntry, Spine.Event e)
-        {
-            if (e.Data.Name == "attack")
-            {
-                if (status.AttackTarget != null)
-                {
-                    attackPos.transform.position = transform.position - new Vector3(status.stat.AttackRange, 0, 0);
-
-                    Defined.EffectCreate(effect, attackPos, Defined.eEffectPosition.UNDERFEET);
-
-                    IdentifyFunc.PickingUnits((unit) =>
-                    {
-                        if (IdentifyFunc.IsInDistance(attackPos, unit, splashRange))
-                        {
-                            unit.GetComponent<Status>().Attack(gameObject, attackDamage, true, true);
-                        }
-                    }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
-                }
-            }
-        };
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-
+        base.OnAttackAnimationEvent();
+        if (Target == null) return;
+        Vector3 point = transform.position - Vector3.right * stat.AttackRange;
+        var effect = View.GetPrefab("effect");
+        if (effect != null) LunaEffects.Show(effect, point, roundId: Data.RoundId);
+        IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).Attack(gameObject, View.GetFloat("attackDamage", 40f), true, true),
+            IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
+            unit => IdentifyFunc.IsInDistance(point, unit, View.GetFloat("splashRange", 2f)));
     }
 }

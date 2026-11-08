@@ -1,58 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
-public class Deus_skill : EverydayDevup.Framework.LunaEntityBehaviour
+public class Deus_skill : EnemySkillLogic
 {
-    [SerializeField] private string skillMatter = "타겟 범위 공격";
-    public string SkillDescription => skillMatter;
-    [HideInInspector] public Status status;
-    public GameObject effect;
-    private GameObject tmpEffect;
-    public float skillDamage = 200.0f;
-    public float splashRange = 4.0f;
-    private Vector3 attackPos;
+    public string SkillDescription => View.GetText("skillMatter");
+    public GameObject effect => View.GetPrefab("effect");
+    public float skillDamage => View.GetFloat("skillDamage", 200f);
+    public float splashRange => View.GetFloat("splashRange", 4f);
 
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn() { unitState.IsTargetingSkill = true; }
+    protected override void ExecuteSkill() { StartCoroutine(InstantSkill()); }
+    private IEnumerator InstantSkill()
     {
-        status = GetComponent<Status>();
-        status.unitState.IsTargetingSkill = true;
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            StartCoroutine("InstantSkill");
-        }
-    }
-
-    IEnumerator InstantSkill()
-    {
-        attackPos = transform.position - new Vector3(status.stat.AttackRange, 0, 0);
-
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Unit");
-
+        Vector3 center = transform.position + Vector3.right * stat.AttackRange * (UnitSide == eUnitSide.Enemy ? -1f : 1f);
         for (int i = 0; i < 3; i++)
         {
-            //Game.Instance.lunaSceneManager.CurrentStage.GetComponent<StageControl>().ShakeCameraOn();
-
-            foreach (GameObject enemy in enemies)
-            {
-                if (enemy != null && enemy.GetComponent<Status>().UnitSide == eUnitSide.Allied)
-                {
-                    float distance = enemy.GetComponent<Transform>().position.x - attackPos.x;
-
-                    if (enemy != null && distance >= -splashRange && splashRange >= distance)
-                    {
-                        enemy.GetComponent<Status>().Attack(gameObject, skillDamage, true);
-                    }
-                }
-            }
+            if (effect != null) Defined.EffectCreate(effect, center, Data.RoundId);
+            IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).Attack(gameObject, skillDamage, true, true),
+                unit => UnitLogic.From(unit).UnitSide != UnitSide,
+                unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
+                unit => Mathf.Abs(unit.transform.position.x - center.x) <= splashRange);
             yield return new WaitForSeconds(0.25f);
         }
-
     }
 }

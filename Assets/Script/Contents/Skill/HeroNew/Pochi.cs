@@ -1,37 +1,35 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pochi : HeroSkillControl
+public class Pochi : HeroUnitLogic
 {
-    public AudioClip skillSound;
+    public AudioClip skillSound => View.GetSound("skillSound");
 
     private float duration;
 
     private float coefSkill_1;
-    private bool triggerSkill_1;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        duration = 5.0f;
+        duration = 3.0f;
         coefSkill_1 = 0.0f;
-        triggerSkill_1 = false;
     }
 
     public override void STAR3()
@@ -45,14 +43,12 @@ public class Pochi : HeroSkillControl
     {
         STAR3();
 
-        Defined.SkillTrigger_Pochi = true;
     }
 
     public override void ULT1() 
     {
         STAR5();
 
-        triggerSkill_1 = true;
     }
 
     public override void ULT2()
@@ -65,23 +61,10 @@ public class Pochi : HeroSkillControl
     public override void Skill()
     {
         status.PlayOneSound(skillSound);
-
-        bool AllSkill = (triggerSkill_1 && Defined.CanProbability(20));
-        bool OnceSkill = true;
-
-        IdentifyFunc.PickingUnits((unit) =>
-        {
-            if (OnceSkill == true)
-            {
-                unit.GetComponent<Status>().TakePochiBarrier(duration + coefSkill_1);
-
-                OnceSkill = AllSkill;
-            }
-        }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
+        float reflect = status.ultState >= eUltState.STAR5 ? 0.3f : 0f;
+        IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).TakePochiBarrier(duration + coefSkill_1, reflect),
+            IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
     }
 
-    public override void AfterDeath()
-    {
-        Defined.SkillTrigger_Pochi = false;
-    }
+
 }

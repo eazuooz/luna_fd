@@ -1,144 +1,49 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
-using UnityEngine.SceneManagement;
-using Spine.Unity;
+using Luna.Gameplay;
 
-public class MartinKing : EverydayDevup.Framework.LunaEntityBehaviour
+public class MartinKing : EnemySkillLogic
 {
-    public Status status { get; set; }
-
-    public GameObject skillEffect_1;
-
-    private SkeletonAnimation animation;
-    private bool isCharge = false;
-
-    // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
+    private bool isCharge;
+    public bool IsCharging => isCharge;
+    public override bool HasAutomaticSkill => !isCharge && base.HasAutomaticSkill;
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
-        status.unitState.IsTargetingSkill = false;
-
-        animation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
-
-        animation.AnimationState.Complete -= OnAnimationComplete;
-        animation.AnimationState.Complete += OnAnimationComplete;
-    }
-
-    protected override void OnEntityShow()
-    {
+        base.ConfigureUnitForSpawn();
         isCharge = false;
-        if (status != null) status.unitState.IsTargetingSkill = false;
-        // Boom hides this child; a pooled enemy starts with its authored visible sprite.
+        unitState.IsTargetingSkill = false;
         transform.Find("Sprite").gameObject.SetActive(true);
-        if (animation != null)
-        {
-            animation.AnimationState.Complete -= OnAnimationComplete;
-            animation.AnimationState.Complete += OnAnimationComplete;
-        }
     }
-
-    protected override void OnEntityHide()
+    protected override void ExecuteSkill()
     {
-        if (animation != null) animation.AnimationState.Complete -= OnAnimationComplete;
+        if (isCharge) return;
+        isCharge = true;
+        if (UnitSide == eUnitSide.Enemy) StartCoroutine(Charge());
     }
-
-    private void OnAnimationComplete(Spine.TrackEntry trackEntry)
+    private IEnumerator Charge()
     {
-        if (trackEntry.Animation.Name == "boom") StartCoroutine(Boom());
+        SetAnimation("skill", true);
+        yield return new WaitForSeconds(40f);
+        SetAnimation("boom ready", true);
+        yield return new WaitForSeconds(20f);
+        SetAnimation("boom");
     }
-
-    // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnAnimationComplete(Spine.TrackEntry track)
     {
-        if (status.unitState.IsSkillActivaion == true
-            && isCharge == false)
-        {
-            //status.skillOn = false;
-            isCharge = true;
-            Skill();
-        }
+        if (track.Animation.Name == "boom") StartCoroutine(Boom());
+        else base.OnAnimationComplete(track);
     }
-
-    void Skill()
-    {
-        if (status.UnitSide == eUnitSide.Enemy)
-            StartCoroutine(Skill_1());
-        //else
-        //    StartCoroutine(Skill_2());
-    }
-
-    IEnumerator Boom()
+    private IEnumerator Boom()
     {
         transform.Find("Sprite").gameObject.SetActive(false);
-
         for (int i = 0; i < 50; i++)
         {
-            float randX = Random.Range(-20.0f, 0.0f);
-            float randY = Random.Range(-0.5f, 2.0f);
-
-            Vector3 createPos = gameObject.transform.position;
-            createPos.x += randX;
-            createPos.y += randY;
-
-            Vector3 size = new Vector3(2.0f, 2.0f, 1.0f);
-            Defined.EffectCreate(skillEffect_1, createPos, size);
-
+            LunaEffects.Show(skillEffect_1, transform.position + new Vector3(Random.Range(-20f, 0f), Random.Range(-0.5f, 2f), 0f), roundId: Data.RoundId);
             yield return new WaitForSeconds(0.1f);
         }
-
-        GameObject stage = Game.Instance.lunaSceneManager.CurrentStage;
-        stage.GetComponent<BasicDungeon>().gameAllyTower.GetComponent<Status>().unitState.IsDeath = true;
-
-        yield return null;
-    }
-
-    IEnumerator Skill_1()
-    {
-
-        if (animation.AnimationName == "skill")
-        {
-            animation.AnimationState.SetAnimation(0, "skill", true);
-        }
-
-        yield return new WaitForSeconds(40.0f);
-
-        animation.AnimationState.SetAnimation(0, "boom ready", true);
-
-
-        yield return new WaitForSeconds(20.0f);
-
-        animation.AnimationState.SetAnimation(0, "boom", false);
-
-
-        yield return null;
-    }
-
-    IEnumerator Skill_2()
-    {
-        float bleedDamage = 100.0f;
-
-        GameObject tmp;
-
-        for (int i = 0; i < 8; i++)
-        {
-            yield return new WaitForSeconds(0.3f);
-
-            tmp = Defined.EffectCreate(skillEffect_1, gameObject.transform.position + new Vector3(i * 2.0f + 2.0f, 0, 0));
-
-            Vector3 tmpScale = tmp.transform.Find("Sprite").transform.localScale;
-            tmpScale.x *= -1;
-            tmp.transform.Find("Sprite").transform.localScale = tmpScale;
-
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                if ((IdentifyFunc.IsInDistance(tmp, unit, 2.0f)))
-                {
-                    unit.GetComponent<Status>().TakeBleeding(bleedDamage, 5.0f);
-                }
-            }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
-        }
+        foreach (var unit in UnitLogic.ActiveUnits)
+            if (unit.Data != null && unit.Data.RoundId == Data.RoundId && unit.UnitSide == eUnitSide.Allied && unit.UnitType == eUnitType.Tower)
+                unit.stat.Hp = 0f;
     }
 }

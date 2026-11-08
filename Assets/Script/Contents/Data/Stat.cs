@@ -23,6 +23,8 @@ public class Stat
     public float AttackAvoidance;
     public float SkillAvoidance;
     public float DebuffAvoidance;
+    public float StunResistance;
+    public float SkillResistance;
 
     /// <summary>
     /// Criticla stat

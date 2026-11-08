@@ -2,36 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 
-public class RedDragonAlt : EverydayDevup.Framework.LunaEntityBehaviour
+public class RedDragonAlt : EnemySkillLogic
 {
-    public Status status { get; set; }
     private int skillControlCounter;
 
-    public GameObject skillEffect_1;
-    public GameObject skillEffect_2;
+    public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
+    public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
 
     // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
     }
 
     // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            Skill();
-        }
-    }
+    
 
-    void Skill()
+    protected override void ExecuteSkill()
     {
         skillControlCounter++;
 
@@ -57,7 +48,7 @@ public class RedDragonAlt : EverydayDevup.Framework.LunaEntityBehaviour
             {
                 if (IdentifyFunc.IsInDistance(unit, unit2, 2.0f))
                 {
-                    unit2.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                    UnitLogic.From(unit2).Attack(gameObject, skillDamage, false, true);
                 }
             }, IdentifyFunc.IsAlly);
 
@@ -81,7 +72,7 @@ public class RedDragonAlt : EverydayDevup.Framework.LunaEntityBehaviour
             {
                 Defined.EffectCreate(skillEffect_2, unit, Defined.eEffectPosition.TARGET);
 
-                unit.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                UnitLogic.From(unit).Attack(gameObject, skillDamage, false, true);
 
             }, IdentifyFunc.IsAlly);
         }

@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UIInventory : UILuna
 {
-    public UIReference refData;
-
 
     private GameObject materialTab;
     private GameObject relicsTab;
@@ -23,10 +21,11 @@ public class UIInventory : UILuna
     private GameObject chestScorollView;
     private GameObject keyScorollView;
 
-    public override void OnInit() 
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        
+        
 
         materialTab = transform.Find("BackGround").Find("MaterialTab").gameObject;
         relicsTab = transform.Find("BackGround").Find("RelicsTab").gameObject;
@@ -60,9 +59,8 @@ public class UIInventory : UILuna
                 Texture texture = item.Value.IconImage;
                 if (texture)
                 {
-                    Rect rect = new Rect(0, 0, texture.width, texture.height);
                     Sprite itemSprite
-                        = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
+                        = LunaUIViews.CreateSprite(texture);
 
                     allchild[itemIndex].GetComponent<Image>().sprite
                         = itemSprite;
@@ -89,9 +87,8 @@ public class UIInventory : UILuna
                 Texture texture = item.Value.IconImage;
                 if (texture)
                 {
-                    Rect rect = new Rect(0, 0, texture.width, texture.height);
                     Sprite itemSprite
-                        = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
+                        = LunaUIViews.CreateSprite(texture);
 
                     allchild[itemIndex].GetComponent<Image>().sprite
                         = itemSprite;
@@ -111,15 +108,23 @@ public class UIInventory : UILuna
         keyScorollView.SetActive(false);
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     private void AllTabOff()
     {
@@ -175,28 +180,28 @@ public class UIInventory : UILuna
 
     private void OnClickItem(int itemNumber)
     {
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.ITEMINFO))
+        if (LunaUI.IsTop(UI_TYPE.ITEMINFO))
         {
-            Game.Instance.uiManager.Pop(UI_TYPE.ITEMINFO);
+            LunaUI.Close(UI_TYPE.ITEMINFO);
         }
 
-        Game.Instance.dataManager.pickItemNumber = itemNumber;
-        Game.Instance.uiManager.Push(UI_TYPE.ITEMINFO);
+        LunaSession.Current.pickItemNumber = itemNumber;
+        LunaUI.Open(UI_TYPE.ITEMINFO);
     }
 
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.ITEMINFO))
+        if (LunaUI.IsTop(UI_TYPE.ITEMINFO))
         {
-            Game.Instance.uiManager.Pop(UI_TYPE.ITEMINFO);
+            LunaUI.Close(UI_TYPE.ITEMINFO);
         }
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
 
-        MyUnits.SetColliderEnabled(true);
+        
     }
 }

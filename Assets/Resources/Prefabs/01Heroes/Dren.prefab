@@ -272,8 +272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6997045966374885089}
   - component: {fileID: 2802961066401605260}
-  - component: {fileID: 1094474300608342090}
-  - component: {fileID: 7996456696652655696}
   - component: {fileID: -485429166471109239}
   m_Layer: 0
   m_Name: Dren
@@ -310,60 +308,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 6268672391277535269}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 7be3ff5e740bad24fb69cc0654900432, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 7be3ff5e740bad24fb69cc0654900432, type: 2}
+  Projectile: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &1094474300608342090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6268672391277535269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
---- !u!114 &7996456696652655696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6268672391277535269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48bff22e2705f1041bc4a41662cfe628, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 3877392664317604070, guid: 7a51f7a05a5ccb447b8521773ce61836, type: 3}
+  ParameterKey: 0cd197b8df19e8d4bba9061befb80893:6268672391277535269
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
+  - Name: projectile
+    Value: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
+  - Name: Dren.skillEffect
+    Value: {fileID: 3877392664317604070, guid: 7a51f7a05a5ccb447b8521773ce61836, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 3877392664317604070, guid: 7a51f7a05a5ccb447b8521773ce61836, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!61 &-485429166471109239
 BoxCollider2D:
   m_ObjectHideFlags: 0

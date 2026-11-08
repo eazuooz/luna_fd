@@ -112,8 +112,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2789590583142493129}
   - component: {fileID: 197957488461225540}
-  - component: {fileID: 7392110480924235689}
-  - component: {fileID: -6416538448563675311}
   m_Layer: 0
   m_Name: SkeletonKing
   m_TagString: Unit
@@ -147,60 +145,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 4154425776239870616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 47242744f3b5e7042a12b36339be9f0e, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 47242744f3b5e7042a12b36339be9f0e, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &7392110480924235689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4154425776239870616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &-6416538448563675311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4154425776239870616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d512391319525e34ca1298410118bb6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect_1: {fileID: 4072659708080731603, guid: 058fc1f3c67029249a05e7896b2f8579, type: 3}
+  ParameterKey: add714557f4605e4c9ec8b4f78f1437b:4154425776239870616
+  Prefabs:
+  - Name: Bellerin.skillEffect_1
+    Value: {fileID: 4072659708080731603, guid: 058fc1f3c67029249a05e7896b2f8579, type: 3}
+  - Name: skillEffect_1
+    Value: {fileID: 4072659708080731603, guid: 058fc1f3c67029249a05e7896b2f8579, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &4891934611650194586
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,181 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UIStageInfo : UILuna
 {
-    public UIReference refData;
 
     private GameObject monsterContents;
     private GameObject itemContents;
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
-        gameObject.transform.Find("BackGround")
-            .Find("Title")
-            .Find("Text").GetComponent<Text>()
-            .text = Game.Instance.dataManager.CurrentStageLevelString("æ«∏˘¿« º∫ ¡ˆ«œ ");
-
-        gameObject.transform.Find("BackGround")
-            .Find("SelectButton")
-            .Find("LevelText").GetComponent<Text>()
-            .text = Game.Instance.dataManager.CurrentStageLevelString("¡ˆ«œ ");
-
-        monsterContents = gameObject.transform.Find("Monster_ScrollView")
-            .Find("Monster_Scroll View_Viewport")
-            .Find("Monster_Content").gameObject;
-
-        itemContents = gameObject.transform.Find("Item_ScrollView")
-            .Find("Item_Scroll View_Viewport")
-            .Find("Item_Content").gameObject;
-
-        //ProfileInformation
-
-        GameObject stagePrefab
-            = Game.Instance.dataManager.SelectStagePrefab;
-
-        if (stagePrefab.GetComponent<BasicDungeon>().isBossStage == false)
-        {
-            gameObject.transform.Find("BackGround")
-                .Find("Title")
-                .Find("Skull").gameObject.SetActive(false);
-        }
-
-        //List<BasicDungeon.MonsterData> monsterList 
-        //    = stagePrefab.GetComponent<BasicDungeon>().nonBossMonsters;
-
-        string dungeonDataPath = "ScriptableObjects/DungeonData/BasicDungeon/" + stagePrefab.name.Replace("(Clone)", "");
-        BasicDungeonData thisDungeonData = Resources.Load<BasicDungeonData>(dungeonDataPath);
-
-
-        GameObject prefab
-            = Resources.Load<GameObject>("Prefabs/09UI/ProfileInformation");
-        foreach (var item in thisDungeonData.nonBossMonsters)
-        {
-            Status status = item.monster.GetComponent<Status>();
-            if (status == null)
-                continue;
-
-            Sprite monsterSprite
-                = item.monster.GetComponent<Status>().objectData.profilePicture;
-
-            if (monsterSprite == null)
-                continue;
-
-            GameObject instant 
-                = Game.Instantiate(prefab);
-
-            instant.transform.SetParent(monsterContents.transform);
-
-
-            instant.GetComponent<RectTransform>().localScale = Vector3.one;
-            instant.GetComponent<RectTransform>().position = gameObject.transform.position;
-            instant.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            instant.GetComponent<RectTransform>().localRotation = Quaternion.identity;
-            instant.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
-            
-            instant.GetComponent<ProfileInformation>().DisableCountText();
-
-            if(monsterSprite != null)
-                instant.GetComponent<ProfileInformation>().SetProfilePicture(monsterSprite);
-        }
-
-        List<BasicDungeonData.ItemInformation> itemList
-            = new List<BasicDungeonData.ItemInformation>();
-
-        foreach (var item in thisDungeonData.MonterDropTable)
-        {
-            itemList.Add(item);
-        }
-        foreach (var item in thisDungeonData.ItemDropTable)
-        {
-            itemList.Add(item);
-        }
-
-
-        foreach (var item in itemList)
-        {
-            GameObject instant
-                = Game.Instantiate(prefab);
-
-            instant.transform.SetParent(itemContents.transform);
-
-            instant.GetComponent<RectTransform>().localScale = Vector3.one;
-            instant.GetComponent<RectTransform>().position = gameObject.transform.position;
-            instant.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            instant.GetComponent<RectTransform>().localRotation = Quaternion.identity;
-            instant.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
-            instant.GetComponent<ProfileInformation>().DisableCountText();
-
-            Texture texture = item.itemData.IconImage;
-            if (texture)
-            {
-                Rect rect = new Rect(0, 0, texture.width, texture.height);
-                Sprite itemSprite
-                        = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
-                
-                instant.GetComponent<ProfileInformation>().SetProfilePicture(itemSprite);
-            }
-        }
+        base.OnOpen(userData);
+        
+        var stage = LunaSession.Current.SelectStagePrefab.GetComponent<LunaStageDefinition>();
+        transform.Find("BackGround/Title/Text").GetComponent<Text>().text = LunaSession.Current.CurrentStageLevelString("ÏïÖÎßàÏùò ÌÉë ÏßÄÌïò ");
+        transform.Find("BackGround/SelectButton/LevelText").GetComponent<Text>().text = LunaSession.Current.CurrentStageLevelString("ÏûÖÏû• ");
+        transform.Find("BackGround/Title/Skull").gameObject.SetActive(stage.isBossStage);
+        LunaStagePreview.Fill(transform, stage);
     }
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void OnClickStartGame()
     {
-        Game.Instance.uiManager.Pop(UI_TYPE.STAGEINFO);
-        Game.Instance.uiManager.Pop(UI_TYPE.SELECTSTAGE);
+        LunaUI.Close(UI_TYPE.STAGEINFO);
+        LunaUI.Close(UI_TYPE.SELECTSTAGE);
 
-        GameObject.FindWithTag("BackGround")
-            .transform.Find("Entrance").Find("Door").GetComponent<LobbyDoor>().DoorOpenAction();
-        foreach (GameObject unit in Game.Instance.dataManager.lobbyUnits)
+        LunaScenes.CurrentLobbyGame?.OpenDoor();
+        foreach (GameObject unit in LunaSession.Current.lobbyUnits)
         {
             if (unit != null)
-                unit.GetComponent<Status>().unitState.IsLobbyStartMove = true;
+                unit.GetComponent<UnitLogic>().unitState.IsLobbyStartMove = true;
         }
 
 
-        //∞‘¿” Ω√¿€ √÷√  º±≈√µ» Ω∫≈◊¿Ã¡ˆ∞° æ¯¿ª ∞ÊøÏ
-        if (Game.Instance.dataManager.CurrentStageName == "")
+        //Í≤åÏûÑ ÏãúÏûë ÏµúÏ¥à ÏÑ†ÌÉùÎêú Ïä§ÌÖåÏù¥ÏßÄÍ∞Ä ÏóÜÏùÑ Í≤ΩÏö∞
+        if (LunaSession.Current.CurrentStageName == "")
         {
-            //Game.Instance.dataManager.stageNum = 0;
-            Game.Instance.dataManager.SelectStagePrefab =
+            //LunaSession.Current.stageNum = 0;
+            LunaSession.Current.SelectStagePrefab =
                 Resources.Load<GameObject>("Prefabs/10Stage/Stage01-01");
         }
         else
         {
             string stageDir = "Prefabs/10Stage/"
-                    + Game.Instance.dataManager.CurrentStageName;
+                    + LunaSession.Current.CurrentStageName;
 
-            Game.Instance.dataManager.SelectStagePrefab
+            LunaSession.Current.SelectStagePrefab
                 = Resources.Load<GameObject>(stageDir);
         }
 
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
+        LunaScenes.FadeIn(1.5f, () =>
         {
-            Game.Instance.lunaSceneManager.LoadScene("Game");
+            LunaScenes.Load("Game");
         });
     }
     
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 }

@@ -40,19 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 661645798056106814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c1439320ad79fd4085f0bd256683ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageName: 
+  m_Script: {fileID: 11500000, guid: 09f8a05808794181b3581913cff5906f, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  TableKey: Dungeon01
   dungeonTable: {fileID: 0}
-  backgroundImage: {fileID: 8383516895249335979, guid: 4ab3ed2c93590494bafb07411d9fc2c7, type: 3}
-  rewardGold: 0
-  bossMonster: {fileID: 5256493874984466458, guid: ce392f5114a2c7b4491efe725de3a833, type: 3}
-  DungeonName: "\uBD89\uC740 \uC6A9\uC758 \uBC29"
-  ItemDropTable:
-  - itemData: {fileID: 11400000, guid: 7692fc3bd5c8a764a9a6adb623e7f4d8, type: 2}
-    probability: 100
-  BossDropTable: []
-  MonterDropTable: []
-  todayDungeon: 0
-  dungeonCount: 90

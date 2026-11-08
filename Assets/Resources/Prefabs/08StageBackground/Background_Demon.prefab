@@ -264,9 +264,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1557996927181083512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 658abfe9508af684096302a615375627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 4ab3ed2c93590494bafb07411d9fc2c7:1557996927181083512
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &1660057055989321326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,9 +1550,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7775816893684340411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c68c0e0d9b9608e4eafc1641e2084c0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 4ab3ed2c93590494bafb07411d9fc2c7:7775816893684340411
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &7775816894549896864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,6 +1793,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826099739272283067}
+  - component: {fileID: 9000000000000000000}
   m_Layer: 0
   m_Name: Background_Demon
   m_TagString: BackGround
@@ -1801,6 +1822,27 @@ Transform:
   - {fileID: 7775816893684340405}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9000000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383516895249335979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a759829bbf54749a63b9a45019b35bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Door: {fileID: 0}
+  DoorSound: {fileID: 0}
+  LobbySparkles: {fileID: 0}
+  ScrollingPlates:
+  - {fileID: 7609267322186355306}
+  WanderingDemons:
+  - Root: {fileID: 7775816893684340405}
+    Animation: {fileID: 7775816894549896866}
+  Emitters: []
 --- !u!1 &8465359713810725361
 GameObject:
   m_ObjectHideFlags: 0

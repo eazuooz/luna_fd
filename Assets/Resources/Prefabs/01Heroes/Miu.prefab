@@ -170,8 +170,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8536363756013880179}
   - component: {fileID: 686809161650094288}
-  - component: {fileID: 6923342450402754988}
-  - component: {fileID: 5359365908279138175}
   - component: {fileID: 8065236719207756089}
   m_Layer: 0
   m_Name: Miu
@@ -209,61 +207,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 6955227986785806060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: bc86af6a10a921248890dc6e66093f19, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: bc86af6a10a921248890dc6e66093f19, type: 2}
+  Projectile: {fileID: 5962168376686784431, guid: c4ed6e0ab0ee0b646ac8b7b306bc2a6a, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 12
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &6923342450402754988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6955227986785806060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 5962168376686784431, guid: c4ed6e0ab0ee0b646ac8b7b306bc2a6a, type: 3}
---- !u!114 &5359365908279138175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6955227986785806060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 668cd3ba1b831014c8892f4452915fa6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2889557771794906839, guid: 7be7566501fe4d54d8789ce471e75fb4, type: 3}
-  skillSound: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
+  ParameterKey: 65d185d730994894fb25d08bc1d3a781:6955227986785806060
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 5962168376686784431, guid: c4ed6e0ab0ee0b646ac8b7b306bc2a6a, type: 3}
+  - Name: projectile
+    Value: {fileID: 5962168376686784431, guid: c4ed6e0ab0ee0b646ac8b7b306bc2a6a, type: 3}
+  - Name: Miu.skillEffect
+    Value: {fileID: 2889557771794906839, guid: 7be7566501fe4d54d8789ce471e75fb4, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2889557771794906839, guid: 7be7566501fe4d54d8789ce471e75fb4, type: 3}
+  Sounds:
+  - Name: Miu.skillSound
+    Value: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 1afc6d7583aeff943a17ae9c37195287, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &8065236719207756089
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -7,12 +7,13 @@ param(
     [switch] $NoGraphics,
     [switch] $CleanBuildCache,
     [switch] $JobLeakDiagnostics,
-    [ValidateSet('all', 'stages', 'skins', 'actors', 'projectiles', 'skills', 'rewards', 'combos', 'ranks', 'lifecycle')][string] $MatrixSection = 'all',
+    [ValidateSet('all', 'stages', 'dungeons', 'skins', 'actors', 'projectiles', 'skills', 'rewards', 'combos', 'ranks', 'lifecycle', 'heroes', 'motion', 'buffs', 'ownership', 'ui', 'skill-levels')][string] $MatrixSection = 'all',
     [string] $MatrixFilter = ''
 )
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'Report-Time.ps1')
+. (Join-Path $PSScriptRoot 'Warning-Policy.ps1')
 $projectPath = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $versionLine = Get-Content -LiteralPath (Join-Path $projectPath 'ProjectSettings/ProjectVersion.txt') | Where-Object { $_ -like 'm_EditorVersion: *' } | Select-Object -First 1
 $version = $versionLine.Split(':')[1].Trim()
@@ -28,7 +29,7 @@ $existing = Get-CimInstance Win32_Process -Filter "name = 'Unity.exe'" | Where-O
 if ($existing) { throw "Close the Unity editor for $projectPath before running validation." }
 $logDirectory = Join-Path $projectPath 'Logs/Revival'
 New-Item -ItemType Directory -Path $logDirectory -Force | Out-Null
-$modes = if ($Mode -eq 'All') { @('Audit', 'Smoke', 'BuildWindows') } else { @($Mode) }
+$modes = if ($Mode -eq 'All') { @('Audit', 'Smoke', 'ContentMatrix', 'BuildWindows') } else { @($Mode) }
 foreach ($step in $modes) {
     $operation = switch ($step) { 'Audit' { 'audit' }; 'Smoke' { 'smoke' }; 'ContentMatrix' { 'content-matrix' }; 'BuildWindows' { 'build-windows' } }
     $logPath = Join-Path $logDirectory "$operation.log"
@@ -64,5 +65,6 @@ foreach ($step in $modes) {
     if (-not (Test-LunaFreshReport -Report $report -ProcessStartedUtc $started)) {
         throw "$step did not produce a fresh passing report. See $reportPath"
     }
+    $warningAudit = Assert-LunaExpectedWarnings -Report $report -Context "$step report $reportPath"
     Write-Host "$step passed: $($report.checks.Count) checks, $($report.warnings.Count) warnings. Report: $reportPath"
 }

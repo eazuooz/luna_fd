@@ -41,15 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 321090315161646400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0be3fc6fe570d479bb2d612896afee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Attacker: {fileID: 0}
-  bulletType: 0
-  projectileSpeed: 10
-  hitEffect: {fileID: 0}
-  criticalShot: 0
-  skillShot: 0
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: b33f4634829ca774cb0ac5577706ae9e:321090315161646400
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &2056439481185620909
 GameObject:
   m_ObjectHideFlags: 0

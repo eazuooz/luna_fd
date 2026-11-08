@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -9,7 +9,7 @@ using Spine;
 
 //Collections.Generic.Dictionary<UnitName, UICharacterList.Unit>
 //using UnitCard = System.Collections.Generic.Dictionary<string, UICharacterList.Unit>;
-public class UICharacterList : UILuna, IObserver
+public class UICharacterList : UILuna
 {
     public enum eState
     {
@@ -18,13 +18,12 @@ public class UICharacterList : UILuna, IObserver
     }
     private eState state;
     // Observer Interface
-    public int Priority { get; set; }
-    public int ID { get; set; }
+
+
     public void OnResponse(object obj)
     {
         UpdateStatusData();
     }
-    public UIReference refData;
 
     public class Tab
     {
@@ -93,14 +92,16 @@ public class UICharacterList : UILuna, IObserver
     private List<GameObject> arrows = new List<GameObject>();
     #endregion
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        myDecks.Clear();
+        
+        
 
         state = eState.Basic;
 
-        arrows = LunaUtility.FindChildObjects(gameObject, "Arrow");
+        arrows = LunaUIViews.FindChildObjects(gameObject, "Arrow");
         SetActiveArrows(false);
 
         ScrollViewInit();
@@ -113,29 +114,22 @@ public class UICharacterList : UILuna, IObserver
         ScrollViewInitialize();
     }
 
-    public override void OnActive()
+    
+
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-
-    }
-
-    public override void OnInActive()
-    {
-
-    }
-
-    public override void OnUpdate()
-    {
+        base.OnUpdate(elapsed, realElapsed);
         
     }
 
-    public override void OnLoop()
+    
+
+    protected override void OnClose(bool isShutdown, object userData)
     {
-
-    }
-
-    public override void OnClear()
-    {
-
+        foreach (var card in LunaDataTable.Instance.UnitTable) card.Value.Changed -= OnResponse;
+        base.OnClose(isShutdown, userData);
     }
 
     private void SetActiveArrow(int idx, bool value)
@@ -176,7 +170,8 @@ public class UICharacterList : UILuna, IObserver
     {
         foreach (var card in LunaDataTable.Instance.UnitTable)
         {
-            card.Value.subject.AddObserver(this);
+            card.Value.Changed -= OnResponse;
+            card.Value.Changed += OnResponse;
         }
     }
     private UnitButton SetUnitButton(int index, string unitName)
@@ -254,9 +249,9 @@ public class UICharacterList : UILuna, IObserver
         soldierTab.GetComponent<Button>().onClick.AddListener(() => OnTabClick(soldierScrollView.name));
         allTab.GetComponent<Button>().onClick.AddListener(() => OnTabClick(allScrollView.name));
 
-        allContents = LunaUtility.FindChildObject(gameObject, "AllContent");
-        heroContents = LunaUtility.FindChildObject(gameObject, "HeroContent"); ;
-        soldierContents = LunaUtility.FindChildObject(gameObject, "SoldierContent"); ;
+        allContents = LunaUIViews.FindChildObject(gameObject, "AllContent");
+        heroContents = LunaUIViews.FindChildObject(gameObject, "HeroContent"); ;
+        soldierContents = LunaUIViews.FindChildObject(gameObject, "SoldierContent"); ;
     }
     private void CreateCharacterCard(ref GameObject contents, ref List<GameObject> addList, ObjectData data)
     {
@@ -388,7 +383,7 @@ public class UICharacterList : UILuna, IObserver
         unitButton.name = null;
         //unitButton.unit.button.onClick.RemoveAllListeners();
         //unitButton.unit.button = null;
-        LunaEntities.Hide(unitButton.unit.unitObject);
+        Destroy(unitButton.unit.unitObject);
         unitButton.unit.unitObject = null;
         unitButton.unit.unitStatus = null;
     }
@@ -488,24 +483,24 @@ public class UICharacterList : UILuna, IObserver
     public void OnClickReleaseButton()
     {
         SaveUnitsData();
-        MyUnits.SetMyDeckUnitPrafab();
+        LunaSession.Current.RefreshDeckPrefabs();
 
         foreach (var card in LunaDataTable.Instance.UnitTable)
         {
-            card.Value.subject.OnClear();
+            card.Value.Changed -= OnResponse;
         }
 
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.CHARACTERINFO))
+        if (LunaUI.IsTop(UI_TYPE.CHARACTERINFO))
         {
-            Game.Instance.uiManager.Pop(UI_TYPE.CHARACTERINFO);
+            LunaUI.Close(UI_TYPE.CHARACTERINFO);
         }
 
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
 
         if (SceneManager.GetActiveScene().name == "Lobby")
-            MyUnits.InstantiateLobby();
+            LunaScenes.CurrentLobbyGame?.RefreshRoster();
 
-        MyUnits.SetColliderEnabled(true);
+        
     }
     public enum eCardUiType
     {
@@ -551,7 +546,7 @@ public class UICharacterList : UILuna, IObserver
         if (unitPrefab == null)
             return null;
 
-        unitUIObject = type == eCardUiType.UnitUI ? LunaEntities.Spawn(unitPrefab) : Instantiate(unitPrefab);
+        unitUIObject = Instantiate(unitPrefab);
 
         if (type == eCardUiType.Status)
         {
@@ -573,7 +568,7 @@ public class UICharacterList : UILuna, IObserver
         charText.text += objectData.Level;
 
         Text cardCountText
-            = LunaUtility.FindComponentByChildObject<Text>(statusObject, "CardText");
+            = LunaUIViews.FindComponentByChildObject<Text>(statusObject, "CardText");
 
         cardCountText.text = "+" + objectData.cardCount.ToString();
 
@@ -583,7 +578,7 @@ public class UICharacterList : UILuna, IObserver
         {
             GameObject starObj
                 = statusObject.transform.Find("StarImage" + i.ToString()).gameObject;
-                //= LunaUtility.FindChildObject(statusObject, "StarImage" + i.ToString());
+                //= LunaUIViews.FindChildObject(statusObject, "StarImage" + i.ToString());
 
             starts[i] = starObj;
             if(starts[i] != null)
@@ -617,20 +612,21 @@ public class UICharacterList : UILuna, IObserver
     }
     private bool ShowCharacterInfo()
     {
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.CHARACTERINFO))
+        if (LunaUI.IsTop(UI_TYPE.CHARACTERINFO))
         {
             GameObject uiInfo = GameObject.FindWithTag("UICharacterInfo");
-            uiInfo.GetComponent<UICharacterInfo>().OnInit();
+            LunaUI.Close(UI_TYPE.CHARACTERINFO);
+            LunaUI.Open(UI_TYPE.CHARACTERINFO);
         }
         else
         {
-            Game.Instance.uiManager.Push(UI_TYPE.CHARACTERINFO);
+            LunaUI.Open(UI_TYPE.CHARACTERINFO);
         }
 
         return true;
     }
     public void OnClickPopup()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.POPUP);
+        LunaUI.Open(UI_TYPE.POPUP);
     }
 }

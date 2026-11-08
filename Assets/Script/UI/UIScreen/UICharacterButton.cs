@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using Spine;
 using Spine.Unity;
 using UnityEngine.UI;
 
 
 
-public class UICharacterButton : MonoBehaviour, IObserver
+public class UICharacterButton : MonoBehaviour
 {
+    private ObjectData observed;
+    private void OnDestroy() { if (observed != null) observed.Changed -= OnResponse; }
     public GameObject characterObj;
     private GameObject characterUI;
     private GameObject characterBg;
@@ -27,8 +29,7 @@ public class UICharacterButton : MonoBehaviour, IObserver
         get { return characterBg; }
     }
 
-    public int Priority { get; set; }
-    public int ID { get; set; }
+
     public void OnResponse(object obj)
     {
         UpdateStarImgae();
@@ -82,7 +83,7 @@ public class UICharacterButton : MonoBehaviour, IObserver
             return;
         }
 
-        instCharacterUI = LunaEntities.Spawn(characterUI, transform.position, Quaternion.identity, transform);
+        instCharacterUI = Instantiate(characterUI, transform.position, Quaternion.identity, transform);
 
         if (instCharacterUI == null)
         {
@@ -98,8 +99,10 @@ public class UICharacterButton : MonoBehaviour, IObserver
 
     public void SetBGImageInfo(int fontSize = 20)
     {
-        ObjectData objData = instCharacterUI.GetComponent<Status>().objectData;
-        LunaDataTable.Instance.UnitTable[objData.engName].subject.AddObserver(this);
+        ObjectData objData = instCharacterUI.GetComponent<UnitView>().Data;
+        if (observed != null) observed.Changed -= OnResponse;
+        observed = LunaDataTable.Instance.UnitTable[objData.engName];
+        observed.Changed += OnResponse;
 
         prefabDir = "Prefabs/09UI/";
         prefabDir += "CharacterUIBackground";
@@ -117,7 +120,7 @@ public class UICharacterButton : MonoBehaviour, IObserver
         for (int i = 0; i < 5; i++)
         {
             GameObject starObj
-                = LunaUtility.FindChildObject(instCharBg, "StarImage" + i.ToString());
+                = LunaUIViews.FindChildObject(instCharBg, "StarImage" + i.ToString());
 
             starts[i] = starObj;
             starts[i].SetActive(false);
@@ -133,17 +136,17 @@ public class UICharacterButton : MonoBehaviour, IObserver
         Transform charTr = instCharBg.transform.Find("NameText");
         Text charText = charTr.GetComponent<Text>();
         charText.fontSize = fontSize;
-        charText.text = instCharacterUI.GetComponent<Status>().objectData.UnitName;
-        int characterLevel = characterUI.GetComponent<Status>().objectData.Level;
+        charText.text = instCharacterUI.GetComponent<UnitView>().Data.UnitName;
+        int characterLevel = characterUI.GetComponent<UnitView>().Data.Level;
         charText.text += " LV";
         charText.text += characterLevel.ToString();
 
         Text cardCountText
-            = LunaUtility.FindComponentByChildObject<Text>(instCharBg, "CardText");
+            = LunaUIViews.FindComponentByChildObject<Text>(instCharBg, "CardText");
 
         cardCountText.text = "+" + objData.cardCount.ToString();
 
-        int starLength = (int)instCharacterUI.GetComponent<Status>().objectData.ultState;
+        int starLength = (int)instCharacterUI.GetComponent<UnitView>().Data.ultState;
         for (int i = 0; i < starLength; i++)
         {
             if (i > 4)
@@ -158,15 +161,15 @@ public class UICharacterButton : MonoBehaviour, IObserver
 
         Text charText = charTr.GetComponent<Text>();
 
-        charText.text = instCharacterUI.GetComponent<Status>().objectData.UnitName;
+        charText.text = instCharacterUI.GetComponent<UnitView>().Data.UnitName;
         //charText.text = charText.text.Remove(charText.text.Length-2, 2);
         charText.text += " LV";
-        charText.text += characterUI.GetComponent<Status>().objectData.Level;
+        charText.text += characterUI.GetComponent<UnitView>().Data.Level;
     }
 
     void UpdateStarImgae()
     {
-        int starLength = (int)instCharacterUI.GetComponent<Status>().objectData.ultState;
+        int starLength = (int)instCharacterUI.GetComponent<UnitView>().Data.ultState;
         for (int i = 0; i < starLength; i++)
         {
             if (i > 4)
@@ -179,9 +182,9 @@ public class UICharacterButton : MonoBehaviour, IObserver
     void UpdateCardCount()
     {
         Text cardText 
-            = LunaUtility.FindComponentByChildObject<Text>(gameObject, "CardText");
+            = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "CardText");
 
         cardText.text 
-            = "+" + characterUI.GetComponent<Status>().objectData.cardCount.ToString();
+            = "+" + characterUI.GetComponent<UnitView>().Data.cardCount.ToString();
     }
 }

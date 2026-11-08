@@ -240,9 +240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6485393535228168263}
-  - component: {fileID: 6485393535228168262}
   - component: {fileID: 6485393535228168261}
-  - component: {fileID: 6485393535228168256}
   m_Layer: 0
   m_Name: Dwarf
   m_TagString: Unit
@@ -268,21 +266,6 @@ Transform:
   - {fileID: 7254183657457063006}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6485393535228168262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6485393535228168260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420a9b7908d0abe40af638bf55f48fd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
 --- !u!114 &6485393535228168261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,46 +275,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 6485393535228168260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 566afeadf935fcb44bacc8f19f4e6e32, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 566afeadf935fcb44bacc8f19f4e6e32, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &6485393535228168256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6485393535228168260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe68167c3009f954ebd58646952b734a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillMatter: "\uBC29\uC5B4\uD0DC\uC138"
-  status: {fileID: 0}
+  ParameterKey: 122e20fcab5d8b9478440edca6277637:6485393535228168260
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts:
+  - Name: Dwarf_skill.skillMatter
+    Value: "\uBC29\uC5B4\uD0DC\uC138"
+  - Name: skillMatter
+    Value: "\uBC29\uC5B4\uD0DC\uC138"
 --- !u!1 &7255231040061390678
 GameObject:
   m_ObjectHideFlags: 0

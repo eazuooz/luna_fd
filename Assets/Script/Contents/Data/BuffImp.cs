@@ -1,143 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
-public class BuffImp //: MonoBehaviour
+/// <summary>Timed icon presentation owned by one native unit; combat effects retain their own exact deltas.</summary>
+public class BuffImp
 {
-    private System.Action onEventBuffIcons;
-    private GameObject unitGameObject;
-    private List<Buff> buffs;
-    private float iconHeight;
-
-    public void AddBuff(eBuffType info, float during)
-    {
-        foreach (Buff buff in buffs)
-        {
-            if (buff.BuffType == info)
-            {
-                buff.BuffLeftTime += during;
-                return;
-            }
-        }
-
-        buffs.Add(new Buff(info, during));
-
-        if (onEventBuffIcons != null)
-            onEventBuffIcons();
-    }
-
-    public void AllBuffSpendTime(List<Buff> buffs)
-    {
-        foreach (Buff buff in buffs)
-        {
-            SpendTime(buff);
-        }
-    }
-    public void SpendTime(Buff buff)
-    {
-        if (buff.BuffLeftTime >= 0)
-        {
-            buff.BuffLeftTime -= (Time.deltaTime * 0.69f);
-        }
-    }
-    public IEnumerator UpdateBuffs()
-    {
-        while (true)
-        {
-            if (buffs != null
-                && buffs.Count > 0)
-            {
-
-                AllBuffSpendTime(buffs);
-
-                foreach (Buff buff in buffs)
-                {
-                    if (buff.IsBlinking == false && buff.BuffLeftTime <= 5.0f)
-                    {
-                        if (onEventBuffIcons != null)
-                            onEventBuffIcons();
-                    }
-                    else if (buff.IsBlinking == true && buff.BuffLeftTime > 5.0f)
-                    {
-                        if (onEventBuffIcons != null)
-                            onEventBuffIcons();
-                    }
-                }
-
-                for (int i = buffs.Count - 1; i >= 0; i--)
-                {
-                    if (buffs[i].BuffLeftTime <= 0)
-                    {
-                        if (buffs[i].IconObject != null)
-                            LunaEntities.Hide(buffs[i].IconObject);
-                        //Destroy(buffs[i].IconObject);
-
-                        buffs.RemoveAt(i);
-
-                        Debug.Log("버프삭제");
-
-                        if (onEventBuffIcons != null)
-                            onEventBuffIcons();
-                    }
-                }
-            }
-            yield return null;
-        }
-    }
-    public void BuffIconOff()
-    {
-        if (buffs != null)
-        {
-            foreach (var buffData in buffs)
-            {
-                if (buffData.IconObject == null)
-                {
-                    continue;
-                }
-
-                LunaEntities.Hide(buffData.IconObject);
-                buffData.IconObject = null;
-            }
-
-            buffs.Clear();
-            buffs = null;
-        }
-    }
-
+    private readonly Dictionary<eBuffType, int> icons = new Dictionary<eBuffType, int>();
+    public GameObject UnitGameObject { get; set; }
+    public System.Action OnEventBuffIcons { get; set; }
+    public List<Buff> Buffs { get; set; } = new List<Buff>();
+    public float IconHeight { get; set; }
     public void BuffIconInit()
     {
-        buffs = new List<Buff>();
-        Transform buffCanvas = unitGameObject.transform.Find("Canvas");
-
-        iconHeight = buffCanvas.transform.position.y
-            + buffCanvas.GetComponent<RectTransform>().rect.height * 0.5f;
-
-        //Game.StartCoroutine(BuffDataUpdate());
+        BuffIconOff(); Buffs = new List<Buff>();
+        IconHeight = 1.5f;
+        var canvas = UnitGameObject != null ? UnitGameObject.transform.Find("Canvas") as RectTransform : null;
+        if (canvas != null)
+        {
+            var corners = new Vector3[4]; canvas.GetWorldCorners(corners);
+            IconHeight = Mathf.Max(corners[1].y, corners[2].y) - UnitGameObject.transform.position.y;
+        }
     }
-
-    public GameObject UnitGameObject
+    public void AddBuff(eBuffType type, float duration)
     {
-        get { return unitGameObject; }
-        set { unitGameObject = value; }
+        var owner = UnitLogic.From(UnitGameObject);
+        if (owner == null || duration <= 0f) return;
+        foreach (var existing in Buffs)
+            if (existing.BuffType == type) { existing.BuffLeftTime = Mathf.Max(existing.BuffLeftTime, duration); return; }
+        var buff = new Buff(type, duration); Buffs.Add(buff);
+        var prefabs = owner.GetLunaAssetBundle().BuffIcons;
+        if ((int)type < prefabs.Count && prefabs[(int)type] != null)
+        {
+            var data = BuffIconData.Create(owner.ID, type, owner.Data.RoundId);
+            icons[type] = LunaSpawn.Show<BuffIconLogic>(prefabs[(int)type], data);
+        }
+        OnEventBuffIcons?.Invoke();
     }
-
-    public System.Action OnEventBuffIcons
+    public void Tick(float elapsed)
     {
-        get { return onEventBuffIcons; }
-        set { onEventBuffIcons = value; }
+        for (int i = Buffs.Count - 1; i >= 0; i--)
+        {
+            Buffs[i].BuffLeftTime -= elapsed;
+            if (Buffs[i].BuffLeftTime > 0f) continue;
+            if (icons.TryGetValue(Buffs[i].BuffType, out int id)) { LunaSpawn.Cancel(id); icons.Remove(Buffs[i].BuffType); }
+            Buffs.RemoveAt(i); OnEventBuffIcons?.Invoke();
+        }
     }
-
-    public List<Buff> Buffs
+    public IEnumerator UpdateBuffs() { while (true) { Tick(Time.deltaTime); yield return null; } }
+    public void BuffIconOff()
     {
-        get { return buffs; }
-        set { buffs = value; }
-    }
-
-    public float IconHeight
-    {
-        get { return iconHeight; }
-        set { iconHeight = value; }
+        foreach (int id in icons.Values) LunaSpawn.Cancel(id);
+        icons.Clear(); Buffs.Clear();
     }
 }

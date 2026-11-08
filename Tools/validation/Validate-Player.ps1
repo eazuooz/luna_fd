@@ -11,6 +11,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'Report-Time.ps1')
+. (Join-Path $PSScriptRoot 'Warning-Policy.ps1')
 $projectPath = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 if (-not $PlayerPath) { $PlayerPath = Join-Path $projectPath 'Builds/Revival/Windows/LunaDefense.exe' }
 if (-not (Test-Path -LiteralPath $PlayerPath -PathType Leaf)) { throw "Build the development player first: $PlayerPath" }
@@ -29,7 +30,9 @@ foreach ($probe in $modes) {
     $reportPath = Join-Path $runDirectory "player-$probe.json"
     $arguments = @('-batchmode', '-screen-fullscreen', '0', '-screen-width', '1280', '-screen-height', '720', '-logFile', ('"' + $logPath + '"'))
     $environment = @{
-        LUNA_VALIDATION_MODE = $probe
+        LUNA_VALIDATION_MODE = 'native-player'
+        LUNA_PLAYER_MODE = $probe
+        LUNA_NATIVE_REPORT_PATH = $reportPath
         LUNA_VALIDATION_DIRECTORY = $runDirectory
         LUNA_SAVE_DIRECTORY = $saveDirectory
         LUNA_PLAYER_SECTION = $Section
@@ -52,6 +55,7 @@ foreach ($probe in $modes) {
         if (-not (Test-Path -LiteralPath $reportPath)) { throw "Player produced no $probe report; verify this is a development build with the diagnostic driver." }
         $report = Get-Content -Raw -LiteralPath $reportPath | ConvertFrom-Json
         if ($process.ExitCode -ne 0 -or -not (Test-LunaFreshReport $report $started)) { throw "$probe failed or was unavailable; independent case results remain in $reportPath and $logPath" }
+        $summary.warningAudit = Assert-LunaExpectedWarnings -Report $report -Context "Player $probe report $reportPath"
         $summary.success = $true
     }
     catch { $summary.error = $_.Exception.Message; throw }

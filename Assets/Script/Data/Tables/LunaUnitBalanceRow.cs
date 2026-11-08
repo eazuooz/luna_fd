@@ -16,7 +16,7 @@ public sealed class LunaUnitBalanceRow : DataRowBase
         "Hp", "Mp", "Stamina", "MoveSpeed", "Armour", "AttackDamage", "AttackOnceBySecondValue",
         "SkillResistance", "SkillDamage", "AttackRange", "SpawnDelayTime", "CriticalMultiples",
         "CriticalProbability", "LevelUpHpPoint", "LevelUpAttPoint", "LevelUpArmourPoint",
-        "LevelUpSkillDamage", "LevelUpMoveSpeed", "EffectScale"
+        "LevelUpSkillDamage", "LevelUpMoveSpeed", "EffectScale", "IsAirborne", "IsOffensiveHero"
     };
     public static readonly string[] Header = BuildHeader();
     private static readonly FieldInfo[] Fields = BuildFields();

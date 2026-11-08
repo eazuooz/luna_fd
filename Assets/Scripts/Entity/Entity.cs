@@ -23,6 +23,9 @@ namespace UnityGameFramework.Runtime
         private string mEntityAssetName;
         private IEntityGroup mEntityGroup;
         private EntityLogic mEntityLogic;
+        // Expose initialization failures to the game's native spawn completion handler.
+        // The framework catches callbacks below, so a success event alone is insufficient.
+        public string InitializationError { get; private set; }
 
         public int Id
         {
@@ -66,6 +69,7 @@ namespace UnityGameFramework.Runtime
 
         public void OnInit(int entityId, string entityAssetName, IEntityGroup entityGroup, bool isNewInstance, object userData)
         {
+            InitializationError = null;
             mId = entityId;
             mHandle = gameObject;
             mEntityAssetName = entityAssetName;
@@ -112,6 +116,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
+                InitializationError = exception.ToString();
                 Log.Error("Entity '[{0}]{1}' OnInit with exception '{2}'.", mId, mEntityAssetName, exception);
             }
         }
@@ -138,6 +143,7 @@ namespace UnityGameFramework.Runtime
 
         public void OnShow(object userData)
         {
+            if (!string.IsNullOrEmpty(InitializationError)) return;
             ShowEntityInfo showEntityInfo = (ShowEntityInfo)userData;
             try
             {
@@ -145,6 +151,7 @@ namespace UnityGameFramework.Runtime
             }
             catch (Exception exception)
             {
+                InitializationError = exception.ToString();
                 Log.Error("Entity '[{0}]{1}' OnShow with exception '{2}'.", mId, mEntityAssetName, exception);
             }
         }

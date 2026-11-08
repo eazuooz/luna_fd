@@ -1,35 +1,36 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mei : HeroSkillControl
+public class Mei : HeroUnitLogic
 {
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 5f * skillMultiplier;
+    private float skillMultiplier;
     private bool triggerSkill_1;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 5;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 5;//18;
+        skillMultiplier = 1f;
+
         triggerSkill_1 = false;
     }
 
@@ -37,26 +38,24 @@ public class Mei : HeroSkillControl
     {
         STAR1();
 
-        //status.stat.CoefficientSkillPoint += 0.05f;
+        skillMultiplier = 1.05f;
         status.StatusAfterReady();
-        skillDamage = status.stat.AttackDamage * 5;
+
     }
 
     public override void STAR5() 
     {
         STAR3();
 
-        skillDamage += status.stat.AttackDamage * 8;
+        skillMultiplier *= 4f;
+
     }
 
     public override void ULT1() 
     {
         STAR5();
 
-        /*
-        status.stunResist += 0.2f;
-        status.StatusAfterReady();
-        */
+        status.stat.StunResistance += 20f;
     }
 
     public override void ULT2()
@@ -70,7 +69,7 @@ public class Mei : HeroSkillControl
     {
         float splashRange;
 
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
             splashRange = 4.0f;
 
@@ -78,13 +77,13 @@ public class Mei : HeroSkillControl
 
             IdentifyFunc.PickingUnits((unit) =>
             {
-                if (IdentifyFunc.IsInDistanceRight(status.AttackTarget, unit, splashRange))
+                if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, splashRange))
                 {
-                    unit.GetComponent<Status>().Attack(gameObject, skillDamage, true, true);
+                    UnitLogic.From(unit).Attack(gameObject, skillDamage, true, true);
 
                     if (triggerSkill_1 == true && Defined.CanProbability(40))
                     {
-                        unit.GetComponent<Status>().TakeStun(3.5f);
+                        UnitLogic.From(unit).TakeStun(3.5f);
                     }
                 }
             }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);

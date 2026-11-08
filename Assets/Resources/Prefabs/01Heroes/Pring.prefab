@@ -71,9 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3793999366603015420}
-  - component: {fileID: 3793999366603015421}
   - component: {fileID: 3793999366603015410}
-  - component: {fileID: 7483191105965124602}
   - component: {fileID: -9082476523973852771}
   m_Layer: 0
   m_Name: Pring
@@ -101,21 +99,6 @@ Transform:
   - {fileID: 4591924963992605571}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3793999366603015421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3793999366603015411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 5024750572790278361, guid: 2d78af749e4a0a94098863c929a4d7da, type: 3}
 --- !u!114 &3793999366603015410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,46 +108,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 3793999366603015411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: daa2a20dc2e3e484792dd5591b3a6530, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: daa2a20dc2e3e484792dd5591b3a6530, type: 2}
+  Projectile: {fileID: 5024750572790278361, guid: 2d78af749e4a0a94098863c929a4d7da, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &7483191105965124602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3793999366603015411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91bba8c721cdcfc41baae910e9eef04d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 6983557244905663391, guid: dee1fd899846e724bbba5e18621dc30f, type: 3}
-  skillSound: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  ParameterKey: e835418fec177184cb62bec0b800d6d2:3793999366603015411
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 5024750572790278361, guid: 2d78af749e4a0a94098863c929a4d7da, type: 3}
+  - Name: projectile
+    Value: {fileID: 5024750572790278361, guid: 2d78af749e4a0a94098863c929a4d7da, type: 3}
+  - Name: Pring.skillEffect
+    Value: {fileID: 6983557244905663391, guid: dee1fd899846e724bbba5e18621dc30f, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 6983557244905663391, guid: dee1fd899846e724bbba5e18621dc30f, type: 3}
+  Sounds:
+  - Name: Pring.skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-9082476523973852771
 BoxCollider2D:
   m_ObjectHideFlags: 0

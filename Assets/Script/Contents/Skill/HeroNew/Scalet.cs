@@ -1,37 +1,36 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scalet : HeroSkillControl
+public class Scalet : HeroUnitLogic
 {
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 5f;
     private float coefSkill_1;
     private float coefSkill_2;
     private bool triggerSkill_1;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 5;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 5;
+
         coefSkill_1 = 1.0f;
         coefSkill_2 = 8.0f;
         triggerSkill_1 = false;
@@ -41,21 +40,21 @@ public class Scalet : HeroSkillControl
     {
         STAR1();
 
-        coefSkill_1 = 2.0f;
+        coefSkill_1 = 1.05f;
     }
 
     public override void STAR5()
     {
         STAR3();
 
-        coefSkill_2 = 10.0f;
+        coefSkill_2 = 24.0f;
     }
 
     public override void ULT1()
     {
         STAR5();
 
-        //status.SkillResistance += 0.2f;
+        status.stat.SkillResistance += 0.2f;
         status.StatusAfterReady();
     }
 
@@ -71,7 +70,7 @@ public class Scalet : HeroSkillControl
         Vector3 attackPos;
         float splashRange;
 
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
             attackPos = status.AttackTarget.transform.position;
             splashRange = 3.0f;
@@ -80,26 +79,27 @@ public class Scalet : HeroSkillControl
             {
                 if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, splashRange))
                 {
-                    StartCoroutine(SequanceSkill(unit));
+                    StartCoroutine(SequanceSkill(UnitLogic.From(unit).ID));
                 }
             }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
         }
     }
 
-    IEnumerator SequanceSkill(GameObject target)
+    IEnumerator SequanceSkill(int targetId)
     {
         yield return new WaitForSeconds(Random.Range(0,0.5f));
 
-        if (target != null)
+        var targetActor = UnitLogic.Find(targetId);
+        if (targetActor != null && targetActor.stat.Hp > 0f)
         {
-            Defined.EffectCreate(skillEffect, target);
-            target.GetComponent<Status>().Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, true, true);
+            Defined.EffectCreate(skillEffect, targetActor.gameObject);
+            targetActor.Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, true, true);
 
             if (triggerSkill_1 == true && Defined.CanProbability(80))
             {
-                if (target != null)
+                if (targetActor != null && targetActor.stat.Hp > 0f)
                 { // юЗаж
-                    target.GetComponent<Status>().Curse();
+                    targetActor.Curse();
                 }
             }
         }

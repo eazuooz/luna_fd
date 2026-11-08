@@ -1,39 +1,38 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Roni : HeroSkillControl
+public class Roni : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
 
-    private float healPoint;
+    private float healPoint => status.stat.AttackDamage * 2f;
     private float coefSkill_1;
 
     private SkeletonAnimation SkeletonAnimation;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        healPoint = status.stat.AttackDamage * 2;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        healPoint = status.stat.AttackDamage * 3;
+
         coefSkill_1 = 1.0f;
     }
 
@@ -64,7 +63,6 @@ public class Roni : HeroSkillControl
     {
         ULT1();
 
-        Defined.SkillTrigger_Roni = true;
     }
 
     public override void Skill()
@@ -79,13 +77,10 @@ public class Roni : HeroSkillControl
             {
                 Defined.EffectCreate(skillEffect, unit, Defined.eEffectPosition.TARGET, true);
 
-                unit.GetComponent<Status>().Heal(healPoint * coefSkill_1);
+                UnitLogic.From(unit).Heal(healPoint * coefSkill_1);
             }
         }, IdentifyFunc.IsAlly, IdentifyFunc.IsHero);
     }
 
-    public override void AfterDeath()
-    {
-        Defined.SkillTrigger_Roni = false;
-    }
+
 }

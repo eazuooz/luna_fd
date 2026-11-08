@@ -200,7 +200,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5041405813721289659}
-  - component: {fileID: 8230790038227921490}
   - component: {fileID: 1278780629320024626}
   m_Layer: 0
   m_Name: SkeletonHighArher
@@ -228,21 +227,6 @@ Transform:
   - {fileID: 7074115981301810516}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8230790038227921490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4470234834166696752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 8450033590197087485, guid: 5dbccb0c3894b72489d1452294688040, type: 3}
 --- !u!114 &1278780629320024626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,32 +236,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 4470234834166696752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: f8cc85ad49296cf46982c1b344ef68f4, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: f8cc85ad49296cf46982c1b344ef68f4, type: 2}
+  Projectile: {fileID: 8450033590197087485, guid: 5dbccb0c3894b72489d1452294688040, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 10
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
+  ParameterKey: 38bd98e069548da49a8156a14d033a52:4470234834166696752
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 8450033590197087485, guid: 5dbccb0c3894b72489d1452294688040, type: 3}
+  - Name: projectile
+    Value: {fileID: 8450033590197087485, guid: 5dbccb0c3894b72489d1452294688040, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &8673601162065360886
 GameObject:
   m_ObjectHideFlags: 0

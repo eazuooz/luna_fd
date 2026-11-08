@@ -1,5 +1,9 @@
 # 빌드 경고 원인 검토
 
+> **역사 기록 — Toybox native 재작성 이전 단계.** 아래의 경고 77/52개, 예전 `Status`·`UnitAI`·`LunaEntityBehaviour` 수정, 빌드/Windows 실행 및 “최종 3회”는 당시 구현의 근거다. 현재 코드에서 해당 중계 구조는 제거됐으며 이 기록을 새 재작성의 완료·무경고·메모리 문제 해결 증거로 사용하지 않는다. 현재 소스의 실제 결과와 남은 검수는 [Revival-QA.md](Revival-QA.md), 이전 QA 원문은 [Archive/Revival-QA-before-native-rewrite.md](Archive/Revival-QA-before-native-rewrite.md)에 있다. 새 A/B/C 비교에서도 Shader CompileVariantJob 종료 경고가 남았으며 현재 판정은 아래와 QA 문서에 기록한다.
+
+현재 native 재작성은 r04의 동일 소스3회 기능 검수와 최종 Windows C/Player 검사를 완료했다. 그러나 A/B/C의 Editor shader-cache JobTemp5개/1,366바이트는 재현됐고, 최종 Player의 runtime 오류·경고0과 별개로 종료 UTP native 집계 seed41,463/verify45,302바이트도 남는다. 이 문서의 역사적 경고 수정과 BuildReport0/0을 모든 native 메모리 문제 해결로 해석하지 않는다. r01~r03 실패·중단, 저장 안전성 수정과 정확한 경고 대조, 현재 실행 증거는 [Revival-QA.md](Revival-QA.md)에 보존한다.
+
 2026-11-08. 최초 전체 빌드는 경고 77개(게임 및 프레임워크 C# 57개, Spine URP 셰이더 20개), 이후 증분 빌드는 경고 52개를 기록했다. 증분 빌드는 다시 컴파일하지 않은 어셈블리의 경고를 생략할 수 있으므로 두 수치를 서로 다른 문제 개수로 해석하지 않는다. 아래는 원인별 소스 수정 기록이며, 최종 통과 판정은 변경 후 Unity 빌드 보고서를 기준으로 한다.
 
 ## 게임 코드: 경고 32개
@@ -112,3 +116,20 @@ Unity의 공개 문서는 TempJob 메모리를 소유자가 해제해야 한다�
 최종 3회 검수 RunId는 `warning-review-final3-20261108`이다. 세 회차의 Audit/Smoke가 모두 통과했고, 3회차 CleanBuildCache 빌드는 05:58:22 UTC에 정상 종료했다. 빌드 오류 0·경고 0 및 로그의 C#/셰이더 경고 0을 다시 확인했다. 종료 후 동일한 네이티브 셰이더 JobTemp 할당 5개/1,366바이트가 두 번 보고되어 미해결 상태로 남겼다. Smoke의 경고 4개는 의도적으로 손상시킨 격리 저장 파일 검사이며 실제 Windows 실행 경고와 구분한다.
 
 3회차의 최종 실행 파일 자체도 `warning-review-final3-exe-20261108`에서 새 seed/verify 프로세스로 다시 실행해 7개 사례가 오류 0·경고 0으로 통과했다. 이 마지막 확인은 짧은 반복(실제 약12.36초/1회)이며 앞선5분/11회 부하 기록과 구분한다. 최종 플레이어 종료 로그에도 ComputeBuffer/JobTemp/예외가 없다.
+
+
+## 최종 r04의 Windows 빌드 C — 종료 로그 판정
+
+r04 3회차의 새 clean headless Windows 빌드 C는2026-11-08 12:42:18 UTC에 BuildReport 오류0·경고0으로 성공했다. 근거는 `Logs/Revival/FinalReview/native-final3-20261108-r04/pass-03/20261108-122516-306/build-windows.json/.log`이며, 닫힌 전체 로그의 주소별 집계는 `Logs/NativeRewrite/final-r04-build-audit.json`에 보존한다. 이 빌드는 앞선 A/B와 다른 현재 최종 소스의 실행이다.
+
+그러나 C에서도 Editor 종료 시 `ShaderCompilation::CompileVariantJob`의 **서로 다른5개 할당·총1,366바이트**가 남았다. 주소/크기는 `703d7370`/504, `703d79f0`/582, `703d7d00`/152, `703d7e60`/64, `703d7f70`/64이며, 같은5개를 age3/4에서 각각 출력했다(lifetime15). 두 덤프를10개 또는2,732바이트로 중복 계산하지 않는다.4개 스택에는 shader cache의 subprogram/parameter 읽기가 포함된다.16회 정상 Editor 유휴 갱신(0.656초) 및 `-nographics` 후에도 재현됐으므로 native 경고를 해결했다고 판정할 수 없다. 마지막 UTP `MemoryLeaks`의36,158,078바이트는 여러 Editor/엔진 레이블의 별도 집계이며 이1,366바이트나 프로젝트 게임 객체의 누수량으로 해석하지 않는다.
+
+C 전체 로그에서 C#/UAC·셰이더 경고, ComputeBuffer, 게임 코드의 NullReference/MissingReference/InvalidOperation/IO 예외는 관측되지 않았다. 다만 초기 라이선스 서명/토큰 진단 뒤 entitlement/갱신 성공, primary listening socket 실패 뒤 PlayerConnection endpoint/multicast 등록, Bee cache-client `move_path failed` 뒤 같은 Csc 노드 CacheWrite/빌드 성공, 종료 Curl42와 worker session 메시지는 원문에 남는다. 따라서 BuildReport0/0을 전체 프로세스의 모든 진단0으로 표현하지 않는다.
+
+C 빌드 종료 당시에는 Player와 최종 지문이 대기였으므로 완료를2/3회로 유지했다. 이후 Player300초·완전 종료 로그·최종 지문을 확인해 r04는3/3회 완료했다. native 종료 집계는 완료된 기능 검수와 별도로 남는다.
+
+
+최종 C Player의 runtime JSON은 seed2/verify8·302.3273초11회 순환을 오류·경고0으로 기록했다. 완전 종료 로그에는 JobTemp/ComputeBuffer/관리 예외가 없었지만 `PlayerConnection::Cleanup##utp:`의 native `MemoryLeaks.allocatedMemory`가 seed41,463/verify45,302바이트로 남았다. 프로젝트 객체에 귀속하거나 Editor1,366바이트와 동일 원인으로 단정할 근거는 없다. 이 종료 집계는 미해결·귀속 미확인으로 보존한다.
+
+
+A의 닫힌 Player 로그도 같은 UTP native 집계(seed41,463/verify45,302바이트)를 갖는다. 따라서 C에서 새로 증가했다고 주장하지 않으며, 같은 값이라는 이유로 무해하거나 해결됐다고 판정하지도 않는다. 주소/소유권 스택이 없어 정확한 귀속은 미확인이다. 비교 근거: `Logs/NativeRewrite/final-r04-player-exit-audit.json`.

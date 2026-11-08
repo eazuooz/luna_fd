@@ -40,14 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 661645798056106814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c26634bf59e65294f915118ccd97d5d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageName: "\uC545\uBABD\uC758 \uC131 \uC9C0\uD558 19\uCE35"
+  m_Script: {fileID: 11500000, guid: 09f8a05808794181b3581913cff5906f, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  TableKey: Stage02-09
   dungeonTable: {fileID: 0}
-  backgroundImage: {fileID: 8383516895249335979, guid: 52ee3fd7103f84a42944f2637e254b05, type: 3}
-  rewardGold: 0
-  enemyTower: {fileID: 7528829204366405261, guid: 31e469611d403d1498aa54c4c7eba692, type: 3}
-  allyTower: {fileID: 7528829204366405261, guid: 07144c725e49c5749985f2b4474fa9ed, type: 3}
-  stageWidth: 3.25
-  isBossStage: 0

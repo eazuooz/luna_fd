@@ -1,35 +1,32 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Roen : HeroSkillControl
+public class Roen : HeroUnitLogic
 {
-    //public GameObject skillEffect;
-    public AudioClip skillSound;
+    //public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
 
-    private float skillDamage;
 
-    protected override void OnEntityInitialize()
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityInitialize();
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 5;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamage = status.stat.AttackDamage* 5;
     }
 
     public override void STAR3()
@@ -44,21 +41,18 @@ public class Roen : HeroSkillControl
     {
         STAR3();
 
-        Defined.SkillTrigger_Roen1 = true;
     }
 
     public override void ULT1()
     {
         STAR5();
 
-        Defined.SkillTrigger_Roen2 = true;
     }
 
     public override void ULT2()
     {
         ULT1();
 
-        Defined.SkillTrigger_Roen3 = true;
     }
 
     public override void Skill()
@@ -71,15 +65,10 @@ public class Roen : HeroSkillControl
         {
             if (IdentifyFunc.IsInDistance(gameObject, unit, skillRange))
             {
-                unit.GetComponent<Status>().RoenSkill(10.0f);
+                UnitLogic.From(unit).RoenSkill(3.0f);
             }
-        }, IdentifyFunc.IsAlly, IdentifyFunc.IsSoldier);
+        }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
     }
 
-    public override void AfterDeath()
-    {
-        Defined.SkillTrigger_Roen3 = false;
-        Defined.SkillTrigger_Roen2 = false;
-        Defined.SkillTrigger_Roen1 = false;
-    }
+
 }

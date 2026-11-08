@@ -46,67 +46,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3681040159851000212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectData: {fileID: 11400000, guid: e88a5707e0f19144792a13af9a798c1e, type: 2}
-  unitName: 
-  level: 0
-  type_hero: 0
-  type_enemy: 0
-  type_range: 0
-  type_tower: 0
-  type_soldier: 0
-  type_enemySoldier: 0
-  type_boss: 0
-  superArmour: 0
-  hitPriority: 0
-  ultState: 0
-  hp: 0
-  mp: 0
-  stamina: 0
-  moveSpeed: 0
-  attackSpeed: 0
-  armour: 0
-  attackPoint: 0
-  skillArmour: 0
-  skillPoint: 0
-  attackRange: 0
-  AttckAvoid: 0
-  SkillAvoid: 0
-  DebuffAvoid: 0
-  coefHP: 0
-  coefStamina: 0
-  coefAttackPoint: 0
-  coefSkillPoint: 0
-  coefArmour: 0
-  coefSkillArmour: 0
-  coefAttackSpeed: 0
-  coefMoveSpeed: 0
-  criticalProbability: 0
-  criticalMultiple: 0
-  delay: 0
-  spawnTerm: 0
-  cooltime: 0
-  skillOn: 0
-  action: 0
-  damaged: 0
-  death: 0
-  possibleSummon: 1
-  isSummon: 0
-  skillTargetNeed: 0
-  target: {fileID: 0}
-  attackPos: []
-  targetPos: {fileID: 0}
-  lobbyUiStop: 0
-  lobbyUiStart: 0
-  lobbyUiBack: 0
-  leftHand: 0
-  opposeTower: 0
-  lobbyDistance: 0
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: e88a5707e0f19144792a13af9a798c1e, type: 2}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  attackSoundClip: {fileID: 0}
-  attackEffect: {fileID: 0}
+  ParameterKey: b48cba1cbe2ba6e40a3caf1b1b2696a8:3681040159851000212
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &8651571635977023649
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
 [CreateAssetMenu(fileName = "LunaDataTable", menuName = "Scriptable Object Asset/LunaDataTable")]
-public class LunaDataTable : SingletonSO<LunaDataTable>
+public class LunaDataTable : ScriptableObject
 {
     private static LunaDataTable runtimeTable;
 
-    public new static LunaDataTable Instance
+    public static LunaDataTable Instance
     {
         get
         {
-            if (!Application.isPlaying) return SingletonSO<LunaDataTable>.Instance;
+            if (!Application.isPlaying) return Resources.Load<LunaDataTable>("ScriptableObjects/LunaDataTable");
             if (runtimeTable == null)
             {
                 runtimeTable = CreateInstance<LunaDataTable>();
                 runtimeTable.name = "Luna Runtime Data";
                 runtimeTable.hideFlags = HideFlags.DontSave;
+                LunaRuntimeData.TrackRuntimeAsset(runtimeTable);
             }
             return runtimeTable;
         }
@@ -34,8 +35,8 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
 
     public string[] heroTable = new string[128];
     public string[] soliderTable = new string[128];
-    public SerializeDictionary<string, ObjectData> UnitTable
-        = new SerializeDictionary<string, ObjectData>();
+    [System.NonSerialized] public Dictionary<string, ObjectData> UnitTable
+        = new Dictionary<string, ObjectData>();
 
     public PlayerData playerData;
 
@@ -108,8 +109,8 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
     }
 
     #region LUNA DATA TABLE
-    public SerializeDictionary<string, ObjectData> lunaTable
-        = new SerializeDictionary<string, ObjectData>();
+    [System.NonSerialized] public Dictionary<string, ObjectData> lunaTable
+        = new Dictionary<string, ObjectData>();
 
     public void InitializeLunaDatas()
     {
@@ -139,8 +140,8 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
 
     #region ITEM TABLE
 
-    public SerializeDictionary<int, ItemData> itemTable
-        = new SerializeDictionary<int, ItemData>();
+    [System.NonSerialized] public Dictionary<int, ItemData> itemTable
+        = new Dictionary<int, ItemData>();
 
     public ItemData currentItemData;
 
@@ -171,8 +172,8 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
 
     #region SKILL
 
-    public SerializeDictionary<string, SkillData> skiiTable
-        = new SerializeDictionary<string, SkillData>();
+    [System.NonSerialized] public Dictionary<string, SkillData> skiiTable
+        = new Dictionary<string, SkillData>();
     
     public void InitializeSKillDatas()
     {
@@ -210,8 +211,8 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
 
     #region StageClearState
 
-    public SerializeDictionary<string, StageData> StageTable
-    = new SerializeDictionary<string, StageData>();
+    [System.NonSerialized] public Dictionary<string, StageData> StageTable
+    = new Dictionary<string, StageData>();
 
     public void InitializeStageDatas()
     {

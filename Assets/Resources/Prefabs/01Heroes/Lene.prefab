@@ -112,8 +112,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5546986502660382007}
   - component: {fileID: 5108897714875118225}
-  - component: {fileID: 5393595101659207330}
-  - component: {fileID: 3955006572007718827}
   - component: {fileID: -6106865706499756958}
   m_Layer: 0
   m_Name: Lene
@@ -149,61 +147,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 5821689688568116988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: dbc451905c7f4c840afbb25789e77302, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: dbc451905c7f4c840afbb25789e77302, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &5393595101659207330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5821689688568116988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &3955006572007718827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5821689688568116988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0a9429d06f8a8f4f8b76d1cd3b14de4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2735661620576604303, guid: 236eb0c401f5b0d4da3b9e3dd0839035, type: 3}
-  skillSound: {fileID: 8300000, guid: 33e33e247cb0c33418558596c116d6c4, type: 3}
+  ParameterKey: ed714d25c0f202d4f96b69ef093e1337:5821689688568116988
+  Prefabs:
+  - Name: Lene.skillEffect
+    Value: {fileID: 2735661620576604303, guid: 236eb0c401f5b0d4da3b9e3dd0839035, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2735661620576604303, guid: 236eb0c401f5b0d4da3b9e3dd0839035, type: 3}
+  Sounds:
+  - Name: Lene.skillSound
+    Value: {fileID: 8300000, guid: 33e33e247cb0c33418558596c116d6c4, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 33e33e247cb0c33418558596c116d6c4, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-6106865706499756958
 BoxCollider2D:
   m_ObjectHideFlags: 0

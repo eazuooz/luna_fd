@@ -3,22 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Spine.Unity;
 
 public class UIEquipDesign : UILuna
 {
-    public UIReference refData;
 
     private GameObject uiUpgrade;
     private EquipDesignItemData equipData;
     private GameObject instCharacterUI;
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        
+        
 
         uiUpgrade = GameObject.FindWithTag("UIUpgrade");
 
@@ -32,22 +32,27 @@ public class UIEquipDesign : UILuna
         SetEquipButton();
     }
 
-    public override void OnActive()
+    
+
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed); }
 
+    
+
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
     }
-
-    public override void OnInActive() { }
-
-    public override void OnUpdate() { }
-
-    public override void OnLoop() { }
-
-    public override void OnClear() { }
 
     private void GetItemDataByItemTable()
     {
-        int itemNumber = Game.Instance.dataManager.EquipDesignNumber;
+        int itemNumber = LunaSession.Current.EquipDesignNumber;
 
         ItemData data;
         LunaDataTable.Instance.itemTable.TryGetValue(itemNumber, out data);
@@ -69,13 +74,10 @@ public class UIEquipDesign : UILuna
     {
         GameObject parts = gameObject.transform.Find(partsName).gameObject;
 
-        Rect rect = Rect.zero;
-
         if (texture != null)
         {
-            rect = new Rect(0, 0, texture.width, texture.height);
             parts.GetComponent<Image>().sprite
-                = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
+                = LunaUIViews.CreateSprite(texture);
 
             parts.transform.Find("Text").GetComponent<Text>().text
                 = name + "\n"
@@ -99,12 +101,12 @@ public class UIEquipDesign : UILuna
 
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
     }
 
     public void OnClickReleaseButton()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     IEnumerator SetProfileAnimation(GameObject profile)

@@ -111,9 +111,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6734425679319997174}
-  - component: {fileID: 8566298547282601707}
   - component: {fileID: 153137617122663159}
-  - component: {fileID: 7757831816008322469}
   m_Layer: 0
   m_Name: RedDragon
   m_TagString: Unit
@@ -139,21 +137,6 @@ Transform:
   - {fileID: 509467704476713290}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8566298547282601707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5256493874984466458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
 --- !u!114 &153137617122663159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,46 +146,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 5256493874984466458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: f81f36cf4e766f24e8946e02e674943f, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: f81f36cf4e766f24e8946e02e674943f, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &7757831816008322469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5256493874984466458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c65a143266114be4eb6db75e8bafbd98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect_1: {fileID: 3501867520680034477, guid: 0934fc1e87a911c438f5def436bae72b, type: 3}
-  skillEffect_2: {fileID: 5754616347158544125, guid: 3840cb4420a099e418756a52b42cc746, type: 3}
+  ParameterKey: ce392f5114a2c7b4491efe725de3a833:5256493874984466458
+  Prefabs:
+  - Name: RedDragon.skillEffect_1
+    Value: {fileID: 3501867520680034477, guid: 0934fc1e87a911c438f5def436bae72b, type: 3}
+  - Name: skillEffect_1
+    Value: {fileID: 3501867520680034477, guid: 0934fc1e87a911c438f5def436bae72b, type: 3}
+  - Name: RedDragon.skillEffect_2
+    Value: {fileID: 5754616347158544125, guid: 3840cb4420a099e418756a52b42cc746, type: 3}
+  - Name: skillEffect_2
+    Value: {fileID: 5754616347158544125, guid: 3840cb4420a099e418756a52b42cc746, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &5766017196518885349
 GameObject:
   m_ObjectHideFlags: 0

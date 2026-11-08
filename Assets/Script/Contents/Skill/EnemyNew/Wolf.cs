@@ -2,37 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 
-public class Wolf : EverydayDevup.Framework.LunaEntityBehaviour
+public class Wolf : EnemySkillLogic
 {
-    public Status status { get; set; }
     private int skillControlCounter;
 
-    public GameObject skillEffect_1;
-    public GameObject skillEffect_2;
-    public GameObject skillEffect_3;
+    public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
+    public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
+    public GameObject skillEffect_3 => View.GetPrefab("skillEffect_3");
 
     // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
     }
 
     // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            Skill();
-        }
-    }
+    
 
-    void Skill()
+    protected override void ExecuteSkill()
     {
         skillControlCounter++;
 
@@ -56,30 +47,30 @@ public class Wolf : EverydayDevup.Framework.LunaEntityBehaviour
 
         Vector3 targetPos = gameObject.transform.position + new Vector3(-3.0f, 0.0f, 0.0f);
 
-        Defined.EffectCreate(skillEffect_1, targetPos);
+        Defined.EffectCreate(skillEffect_1, targetPos, Data.RoundId);
 
         IdentifyFunc.PickingUnits((unit) =>
         {
             if ((IdentifyFunc.IsInDistanceLeft(gameObject, unit, 8.0f)) && !(IdentifyFunc.IsInDistanceLeft(gameObject, unit, 3.0f)))
             {
-                unit.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                UnitLogic.From(unit).Attack(gameObject, skillDamage, false, true);
             }
-        }, IdentifyFunc.IsAlly);
+        }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
     }
 
     void Skill_2()
     {
         Vector3 targetPos = gameObject.transform.position + new Vector3(-2.0f, 1.5f, 0.0f);
 
-        Defined.EffectCreate(skillEffect_2, targetPos);
+        Defined.EffectCreate(skillEffect_2, targetPos, Data.RoundId);
 
         IdentifyFunc.PickingUnits((unit) =>
         {
             if (IdentifyFunc.IsInDistanceLeft(gameObject, unit, 3.0f))
             {
-                unit.GetComponent<Status>().TakeStun(4.0f);
+                UnitLogic.From(unit).TakeStun(4.0f);
             }
-        }, IdentifyFunc.IsAlly);
+        }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
     }
 
     void Skill_3()
@@ -93,7 +84,7 @@ public class Wolf : EverydayDevup.Framework.LunaEntityBehaviour
 
         Vector3 targetPos = gameObject.transform.position + new Vector3(-2.5f, 0.0f, 0.0f);
 
-        GameObject tmpEffect = Defined.EffectCreate(skillEffect_3, targetPos);
+        int tmpEffect = Defined.EffectCreate(skillEffect_3, targetPos, Data.RoundId);
 
         for (int i = 0; i < 5; i++)
         {
@@ -103,13 +94,13 @@ public class Wolf : EverydayDevup.Framework.LunaEntityBehaviour
             {
                 if (IdentifyFunc.IsInDistanceLeft(gameObject, unit, 5.0f))
                 {
-                    unit.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                    UnitLogic.From(unit).Attack(gameObject, skillDamage, false, true);
                 }
-            }, IdentifyFunc.IsAlly);
+            }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
         }
 
         yield return new WaitForSeconds(0.2f);
 
-        GameObject.DestroyImmediate(tmpEffect);
+        LunaSpawn.Cancel(tmpEffect);
     }
 }

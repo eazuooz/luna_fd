@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -31,8 +31,6 @@ public class UIUpgrade : UILuna
         public Button designButton;
     }
 
-    public UIReference refData;
-
     private UILobby uiLobby;
     #region tab and view
     private GameObject lunaTab;
@@ -57,10 +55,11 @@ public class UIUpgrade : UILuna
 
     private List<GameObject> equipSkillButtons
         = new List<GameObject>();
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        
+        
         uiLobby = GameObject.FindWithTag("UILobby").GetComponent<UILobby>();
 
         InitTabAndScrollView();
@@ -71,13 +70,20 @@ public class UIUpgrade : UILuna
 
         InitTabs();
     }
-    public override void OnActive() { }
-    public override void OnInActive() { }
-    public override void OnUpdate()
+    
+    
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed);
     }
-    public override void OnLoop() { }
-    public override void OnClear() { }
+    
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
     private void OnClickContent(Contents contents, ContentsCallBack callBack)
     {
         callBack();
@@ -88,23 +94,23 @@ public class UIUpgrade : UILuna
     }
     private void OnClickViewEquipDesign(int itemNumber)
     {
-        Game.Instance.dataManager.EquipDesignNumber = itemNumber;
-        Game.Instance.uiManager.Push(UI_TYPE.EQUIPDESIGN);
+        LunaSession.Current.EquipDesignNumber = itemNumber;
+        LunaUI.Open(UI_TYPE.EQUIPDESIGN);
     }
     private void AddLunaContentInContentsDictionary(string contentName, GameObject prefab, ContentsCallBack callBack)
     {
         Contents content = new Contents();
-        content.parent = LunaUtility.FindChildObject(gameObject, contentName);
-        content.profile = LunaUtility.FindChildObject(content.parent, "Profile");
-        content.button = LunaUtility.FindComponentByChildObject<Button>(content.parent, "Button");
+        content.parent = LunaUIViews.FindChildObject(gameObject, contentName);
+        content.profile = LunaUIViews.FindChildObject(content.parent, "Profile");
+        content.button = LunaUIViews.FindComponentByChildObject<Button>(content.parent, "Button");
 
 
-        GameObject NameObj = LunaUtility.FindChildObject(content.parent, "Name");
+        GameObject NameObj = LunaUIViews.FindChildObject(content.parent, "Name");
 
         if (NameObj != null)
         {
             content.nameText = NameObj.GetComponent<Text>();
-            content.cardText = LunaUtility.FindComponentByChildObject<Text>(content.parent, "Manual");
+            content.cardText = LunaUIViews.FindComponentByChildObject<Text>(content.parent, "Manual");
         }
         content.insertPrefab = prefab;
 
@@ -116,8 +122,8 @@ public class UIUpgrade : UILuna
     private void AddSKillContentInContentsDictionary(string contentName, GameObject prefab, SkillContentCallBack callBack)
     {
         Contents content = new Contents();
-        content.parent = LunaUtility.FindChildObject(gameObject, contentName);
-        content.button = LunaUtility.FindComponentByChildObject<Button>(content.parent, "Button");
+        content.parent = LunaUIViews.FindChildObject(gameObject, contentName);
+        content.button = LunaUIViews.FindComponentByChildObject<Button>(content.parent, "Button");
         content.insertPrefab = prefab;
 
         if (content.button != null)
@@ -128,14 +134,14 @@ public class UIUpgrade : UILuna
     private void AddSkinContentInContentsDictionary(string contentName, GameObject prefab, ContentsCallBack callBack, int itemNumber = -1)
     {
         Contents content = new Contents();
-        content.parent = LunaUtility.FindChildObject(gameObject, contentName);
-        content.profile = LunaUtility.FindChildObject(content.parent, "Profile");
-        content.equipButton = LunaUtility.FindComponentByChildObject<Button>(content.parent, "EquipButton");
-        content.designButton = LunaUtility.FindComponentByChildObject<Button>(content.parent, "DesignButton");
+        content.parent = LunaUIViews.FindChildObject(gameObject, contentName);
+        content.profile = LunaUIViews.FindChildObject(content.parent, "Profile");
+        content.equipButton = LunaUIViews.FindComponentByChildObject<Button>(content.parent, "EquipButton");
+        content.designButton = LunaUIViews.FindComponentByChildObject<Button>(content.parent, "DesignButton");
 
-        GameObject NameObj = LunaUtility.FindChildObject(content.parent, "Name");
+        GameObject NameObj = LunaUIViews.FindChildObject(content.parent, "Name");
         content.nameText = NameObj.GetComponent<Text>();
-        content.cardText = LunaUtility.FindComponentByChildObject<Text>(content.parent, "Manual");
+        content.cardText = LunaUIViews.FindComponentByChildObject<Text>(content.parent, "Manual");
         content.insertPrefab = prefab;
 
         if (content.equipButton != null)
@@ -157,17 +163,17 @@ public class UIUpgrade : UILuna
         LunaDataTable.Instance.lunaTable.TryGetValue(type, out objData);
 
         Text nameText = transform.Find("Board").Find("Title").Find("Name").GetComponent<Text>();
-        nameText.text = "<·ç³ª LV" + objData.Level.ToString() + ">";
+        nameText.text = "<ë£¨ë‚˜ LV" + objData.Level.ToString() + ">";
 
         dis01.GetComponent<Text>().text
-            = "-°ø°İ·Â : " + objData.GetAttackDamage_Value().ToString() + "\n"
-            + "-¹æ¾î·Â : " + objData.GetArmour_ValueInt().ToString() + "\n"
-            + "-Ã¼·Â : " + objData.GetCurrentLevelHP_Value().ToString() + "\n";
+            = "-ê³µê²©ë ¥ : " + objData.GetAttackDamage_Value().ToString() + "\n"
+            + "-ë°©ì–´ë ¥ : " + objData.GetArmour_ValueInt().ToString() + "\n"
+            + "-ì²´ë ¥ : " + objData.GetCurrentLevelHP_Value().ToString() + "\n";
 
 
         dis02.GetComponent<Text>().text
-            = "-°ø°İ¼Óµµ : " + objData.AttackOnceBySecondValue.ToString() + "ÃÊ \n"
-            + "-ÀÌµ¿¼Óµµ : " + objData.GetResultMoveSpeed_Value().ToString() + "\n";
+            = "-ê³µê²©ì†ë„ : " + objData.AttackOnceBySecondValue.ToString() + "ì´ˆ \n"
+            + "-ì´ë™ì†ë„ : " + objData.GetResultMoveSpeed_Value().ToString() + "\n";
     }
     private void UpdateStatText()
     {
@@ -180,17 +186,17 @@ public class UIUpgrade : UILuna
         LunaDataTable.Instance.lunaTable.TryGetValue(type, out objData);
 
         Text nameText = transform.Find("Board").Find("Title").Find("Name").GetComponent<Text>();
-        nameText.text = "<·ç³ª LV" + objData.Level.ToString() + ">";
+        nameText.text = "<ë£¨ë‚˜ LV" + objData.Level.ToString() + ">";
 
         dis01.GetComponent<Text>().text
-            = "-°ø°İ·Â : " + "<color=#00ff00>" + objData.GetAttackDamage_Value().ToString() + "</color>" + "\n"
-            + "-¹æ¾î·Â : " + "<color=#00ff00>" + objData.GetArmour_ValueInt().ToString() + "</color>" + "\n"
-            + "-Ã¼·Â : " + "<color=#00ff00>" + objData.GetCurrentLevelHP_Value().ToString() + "</color>" + "\n";
+            = "-ê³µê²©ë ¥ : " + "<color=#00ff00>" + objData.GetAttackDamage_Value().ToString() + "</color>" + "\n"
+            + "-ë°©ì–´ë ¥ : " + "<color=#00ff00>" + objData.GetArmour_ValueInt().ToString() + "</color>" + "\n"
+            + "-ì²´ë ¥ : " + "<color=#00ff00>" + objData.GetCurrentLevelHP_Value().ToString() + "</color>" + "\n";
 
 
         dis02.GetComponent<Text>().text
-            = "-°ø°İ¼Óµµ : " + "<color=#00ff00>" + objData.AttackOnceBySecondValue.ToString() + "</color>" + "ÃÊ \n"
-            + "-ÀÌµ¿¼Óµµ : " + "<color=#00ff00>" + objData.GetResultMoveSpeed_Value().ToString() + "</color>" + "\n";
+            = "-ê³µê²©ì†ë„ : " + "<color=#00ff00>" + objData.AttackOnceBySecondValue.ToString() + "</color>" + "ì´ˆ \n"
+            + "-ì´ë™ì†ë„ : " + "<color=#00ff00>" + objData.GetResultMoveSpeed_Value().ToString() + "</color>" + "\n";
     }
     private void InitializeSkillSlot()
     {
@@ -235,7 +241,7 @@ public class UIUpgrade : UILuna
             ItemData data = LunaDataTable.Instance.itemTable[itemNumber];
             EquipDesignItemData equipData = data as EquipDesignItemData;
             Image imageUI = equipDiscription.transform.Find("Sword").GetComponent<Image>();
-            imageUI.sprite = LunaUtility.CreateSprite(equipData.weapon);
+            imageUI.sprite = LunaUIViews.CreateSprite(equipData.weapon);
         }
 
         {
@@ -243,7 +249,7 @@ public class UIUpgrade : UILuna
             ItemData data = LunaDataTable.Instance.itemTable[itemNumber];
             EquipDesignItemData equipData = data as EquipDesignItemData;
             Image imageUI = equipDiscription.transform.Find("Shiled").GetComponent<Image>();
-            imageUI.sprite = LunaUtility.CreateSprite(equipData.shield);
+            imageUI.sprite = LunaUIViews.CreateSprite(equipData.shield);
         }
 
         {
@@ -251,7 +257,7 @@ public class UIUpgrade : UILuna
             ItemData data = LunaDataTable.Instance.itemTable[itemNumber];
             EquipDesignItemData equipData = data as EquipDesignItemData;
             Image imageUI = equipDiscription.transform.Find("Ring").GetComponent<Image>();
-            imageUI.sprite = LunaUtility.CreateSprite(equipData.ring);
+            imageUI.sprite = LunaUIViews.CreateSprite(equipData.ring);
         }
     }
     private void InitProfile()
@@ -403,7 +409,7 @@ public class UIUpgrade : UILuna
                 }
                 break;
         }
-        MyUnits.SetColliderEnabled(false);
+        
     }
     private GameObject Luna_LoadPrefab(PlayerData.eLunaSkin skinType)
     {
@@ -469,7 +475,7 @@ public class UIUpgrade : UILuna
     }
     public void OnClickSkillEquipButton(GameObject bttObject, int idx)
     {
-        string skillName = Game.Instance.dataManager.OnClickSkillName;
+        string skillName = LunaSession.Current.OnClickSkillName;
 
         if(skillName == "")
         {
@@ -491,7 +497,7 @@ public class UIUpgrade : UILuna
 
             uiLobby.UpdateLunaProfile();
 
-            Game.Instance.dataManager.OnClickSkillName = "";
+            LunaSession.Current.OnClickSkillName = "";
         }
 
         TurnOn_Off_SkillEffect(false);
@@ -499,10 +505,10 @@ public class UIUpgrade : UILuna
     public void OnClickReleaseButton()
     {
         if (SceneManager.GetActiveScene().name == "Lobby")
-            MyUnits.InstantiateLobby();
+            LunaScenes.CurrentLobbyGame?.RefreshRoster();
 
-        Game.Instance.uiManager.Pop(type);
-        MyUnits.SetColliderEnabled(true);
+        LunaUI.Close(type);
+        
     }
     private void initUpgradeContentsInfo(Contents content, System.Func<string> nameFunc, System.Func<string> textFunc)
     {
@@ -604,7 +610,7 @@ public class UIUpgrade : UILuna
             return false;
 
         ObjectData objectData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
+            = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
         objectData.moveSpeedLevel += 1;
         return true;
@@ -671,23 +677,23 @@ public class UIUpgrade : UILuna
     private string GetLunaLevelString()
     {
         ObjectData playerData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
+            = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
-        string nameStr = "·ç³ªÀÇ ·¹º§ÀÌ "
-           + playerData.Level.ToString() + "·Î <color=whilte>+1</color> Áõ°¡ÇÕ´Ï´Ù. (Max 5)";
+        string nameStr = "ë£¨ë‚˜ì˜ ë ˆë²¨ì´ "
+           + playerData.Level.ToString() + "ë¡œ <color=whilte>+1</color> ì¦ê°€í•©ë‹ˆë‹¤. (Max 5)";
 
         return nameStr;
     }
     private string GetLunaLevelUpInfoString()
     {
         ObjectData objectData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
+            = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
         string str = "";
-        str += "- °ø°İ·Â " + objectData.GetAttackDamage_Value() + "( +" + objectData.LevelUpAttPoint.ToString() + ")";
-        str += "    - Ã¼·Â " + objectData.GetCurrentLevelHP_Value() + "( +" + objectData.LevelUpHpPoint.ToString() + ")\n";
-        str += "- ¾Æ¸Ó " + objectData.GetArmour_ValueInt() + "( +" + objectData.LevelUpArmourPoint.ToString() + ")";
-        //str += "    - ½ºÅ³°ø°İ·Â " + objectData.GetResultSkillAtt_Value() + "( +" + objectData.levelUpSkillDamagePoint.ToString() + ")\n";
+        str += "- ê³µê²©ë ¥ " + objectData.GetAttackDamage_Value() + "( +" + objectData.LevelUpAttPoint.ToString() + ")";
+        str += "    - ì²´ë ¥ " + objectData.GetCurrentLevelHP_Value() + "( +" + objectData.LevelUpHpPoint.ToString() + ")\n";
+        str += "- ì•„ë¨¸ " + objectData.GetArmour_ValueInt() + "( +" + objectData.LevelUpArmourPoint.ToString() + ")";
+        //str += "    - ìŠ¤í‚¬ê³µê²©ë ¥ " + objectData.GetResultSkillAtt_Value() + "( +" + objectData.levelUpSkillDamagePoint.ToString() + ")\n";
 
         return str;
     }
@@ -709,22 +715,22 @@ public class UIUpgrade : UILuna
     private string GetLunaMoveSpeedNameString()
     {
         ObjectData objectData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
+            = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
-        string nameStr = "·ç³ªÀÇ ÀÌµ¿¼Óµµ°¡ <color=whilte>"
+        string nameStr = "ë£¨ë‚˜ì˜ ì´ë™ì†ë„ê°€ <color=whilte>"
             + objectData.GetAddedMoveSpeed().ToString()
-            + "%</color> Áõ°¡ÇÕ´Ï´Ù.";
+            + "%</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
     private string GetLunaMoveSpeedLevelUpInfoString()
     {
         ObjectData objectData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
+            = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
         string str = "";
         str += "LV " + objectData.moveSpeedLevel.ToString() + "\n";
-        str += "ÇöÀç " + objectData.GetAddedMoveSpeed().ToString() +"%";
+        str += "í˜„ì¬ " + objectData.GetAddedMoveSpeed().ToString() +"%";
         str += " -> " + objectData.GetAddedLevelUpMoveSpeed().ToString() + "%";
 
         return str;
@@ -746,9 +752,9 @@ public class UIUpgrade : UILuna
     }
     private string GetTowerHPNameString()
     {
-        string nameStr = "¾Æ±ºÅ¸¿öÀÇ ¹æ¾î·ÂÀÌ <color=whilte>"
+        string nameStr = "ì•„êµ°íƒ€ì›Œì˜ ë°©ì–´ë ¥ì´ <color=whilte>"
                         + LunaDataTable.Instance.playerData.TowerHPLevel.ToString()
-                        + "%</color> Áõ°¡ÇÕ´Ï´Ù.";
+                        + "%</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
@@ -756,7 +762,7 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.TowerHPLevel.ToString() + "\n";
-        str += "ÇöÀç " + LunaDataTable.Instance.playerData.TowerHPLevel.ToString() + "%";
+        str += "í˜„ì¬ " + LunaDataTable.Instance.playerData.TowerHPLevel.ToString() + "%";
         str += " -> " + (LunaDataTable.Instance.playerData.TowerHPLevel + 1).ToString() + "%";
 
         return str;
@@ -777,9 +783,9 @@ public class UIUpgrade : UILuna
     }
     private string GetGoldSpeedNameString()
     {
-        string nameStr = "¼ÒÈ¯·ÂÀÌ <color=whilte>"
+        string nameStr = "ì†Œí™˜ë ¥ì´ <color=whilte>"
                 + LunaDataTable.Instance.playerData.GoldSpeedLevel.ToString()
-                + "%</color> Áõ°¡ÇÕ´Ï´Ù.";
+                + "%</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
@@ -787,7 +793,7 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.GoldSpeedLevel.ToString() + "\n";
-        str += "ÇöÀç " + LunaDataTable.Instance.playerData.GoldSpeedLevel.ToString() + "%";
+        str += "í˜„ì¬ " + LunaDataTable.Instance.playerData.GoldSpeedLevel.ToString() + "%";
         str += " -> " + (LunaDataTable.Instance.playerData.GoldSpeedLevel + 1).ToString() + "%";
 
         return str;
@@ -808,9 +814,9 @@ public class UIUpgrade : UILuna
     }
     private string AuroraRangeNameString()
     {
-        string nameStr = "¿À·Î¶ó ¹üÀ§°¡ <color=whilte>"
+        string nameStr = "ì˜¤ë¡œë¼ ë²”ìœ„ê°€ <color=whilte>"
         + LunaDataTable.Instance.playerData.AuroraLevel.ToString()
-        + "%</color> Áõ°¡ÇÕ´Ï´Ù.";
+        + "%</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
@@ -818,7 +824,7 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.AuroraLevel.ToString() + "\n";
-        str += "ÇöÀç " + LunaDataTable.Instance.playerData.AuroraLevel.ToString() + "%";
+        str += "í˜„ì¬ " + LunaDataTable.Instance.playerData.AuroraLevel.ToString() + "%";
         str += " -> " + (LunaDataTable.Instance.playerData.AuroraLevel + 1).ToString() + "%";
 
         return str;
@@ -839,9 +845,9 @@ public class UIUpgrade : UILuna
     }
     private string UnitMoveSpeedNameString()
     {
-        string nameStr = "À¯´Ö ÀÌµ¿¼Óµµ°¡ <color=whilte>"
+        string nameStr = "ìœ ë‹› ì´ë™ì†ë„ê°€ <color=whilte>"
                        + LunaDataTable.Instance.playerData.UnitMoveSpeedLevel.ToString()
-                       + "%</color> Áõ°¡ÇÕ´Ï´Ù.";
+                       + "%</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
@@ -849,7 +855,7 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.UnitMoveSpeedLevel.ToString() + "\n";
-        str += "ÇöÀç " + LunaDataTable.Instance.playerData.UnitMoveSpeedLevel.ToString() + "%";
+        str += "í˜„ì¬ " + LunaDataTable.Instance.playerData.UnitMoveSpeedLevel.ToString() + "%";
         str += " -> " + (LunaDataTable.Instance.playerData.UnitMoveSpeedLevel + 1).ToString() + "%";
 
         return str;
@@ -870,9 +876,9 @@ public class UIUpgrade : UILuna
     }
     private string LunaRevivalTimeNameString()
     {
-        string nameStr = "·ç³ª ¸®½ºÆù ½Ã°£ÀÌ <color=whilte>"
+        string nameStr = "ë£¨ë‚˜ ë¦¬ìŠ¤í° ì‹œê°„ì´ <color=whilte>"
                + LunaDataTable.Instance.playerData.LunaReviveTimeLevel.ToString()
-               + "%</color> °¨¼ÒÇÕ´Ï´Ù.";
+               + "%</color> ê°ì†Œí•©ë‹ˆë‹¤.";
 
         return nameStr;
     }
@@ -880,7 +886,7 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.LunaReviveTimeLevel.ToString() + "\n";
-        str += "ÇöÀç " + LunaDataTable.Instance.playerData.LunaReviveTimeLevel.ToString() + "%";
+        str += "í˜„ì¬ " + LunaDataTable.Instance.playerData.LunaReviveTimeLevel.ToString() + "%";
         str += " -> " + (LunaDataTable.Instance.playerData.LunaReviveTimeLevel + 1).ToString() + "%";
 
         return str;
@@ -902,23 +908,23 @@ public class UIUpgrade : UILuna
     //{
     //    //int level = LunaDataTable.Instance.playerData.TowerLevel;
 
-    //    //string nameStr = "<Å¸¿ö LV"
+    //    //string nameStr = "<íƒ€ì›Œ LV"
     //    //   + level.ToString() + ">";
 
-    //   // string nameStr = "Å¸¿ö ·¹º§ÀÌ <color=whilte>+"
+    //   // string nameStr = "íƒ€ì›Œ ë ˆë²¨ì´ <color=whilte>+"
     //   //+ LunaDataTable.Instance.playerData.TowerLevel.ToString()
-    //   //+ "</color> Áõ°¡ÇÕ´Ï´Ù.";
+    //   //+ "</color> ì¦ê°€í•©ë‹ˆë‹¤.";
 
     //   // return nameStr;
     //}
     //private string TowerLevelInfoString()
     //{
     //    //string str = "";
-    //    //str += "- Å¸¿ö ¾÷±×·¹ÀÌµå";
+    //    //str += "- íƒ€ì›Œ ì—…ê·¸ë ˆì´ë“œ";
 
     //    string str = "";
     //    str += "LV " + LunaDataTable.Instance.playerData.TowerLevel.ToString() + "\n";
-    //    str += "LV 5, LV 10, LV 15 Æ¯¼ö °ø°İÃß°¡\n";
+    //    str += "LV 5, LV 10, LV 15 íŠ¹ìˆ˜ ê³µê²©ì¶”ê°€\n";
 
     //    return str;
     //}
@@ -926,7 +932,7 @@ public class UIUpgrade : UILuna
     #region EQUIP BUTTON
     private void OnClickDesignPopup()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.EQUIPDESIGN);
+        LunaUI.Open(UI_TYPE.EQUIPDESIGN);
     }
     IEnumerator SetProfileAnimation(GameObject profile)
     {
@@ -971,11 +977,11 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Basic;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
 
-        Game.Instance.uiManager.Push(UI_TYPE.POPUP);
+        LunaUI.Open(UI_TYPE.POPUP);
         //UIPopup popup = Game.Instance.uiManager.Top() as UIPopup;
-        //popup.SetMainText("ÀåÂøÇÏ¿´½À´Ï´Ù.");
+        //popup.SetMainText("ì¥ì°©í•˜ì˜€ìŠµë‹ˆë‹¤.");
 
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
@@ -992,7 +998,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Wood;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1008,7 +1014,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.SkullAx;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1024,7 +1030,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Slime;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1040,7 +1046,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Rich;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1056,7 +1062,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Dragon;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1072,7 +1078,7 @@ public class UIUpgrade : UILuna
             = PlayerData.eLunaSkin.Lene;
         LunaDataTable.Instance.playerData.SetCurPlayer();
 
-        MyUnits.InstantiateLobby();
+        LunaScenes.CurrentLobbyGame?.RefreshRoster();
         UpdateEquipDesignData();
         uiLobby.UpdateLunaProfile();
     }
@@ -1100,8 +1106,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1129,8 +1135,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1158,8 +1164,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1187,8 +1193,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1216,8 +1222,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1245,8 +1251,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1274,8 +1280,8 @@ public class UIUpgrade : UILuna
             = LunaDataTable.Instance.itemTable[itemNumber] as EquipDesignItemData;
 
         string str = "";
-        str += "- ÆÄÃ÷ " + data.level + "/4 È°¼ºÈ­" + "\n";
-        str += " -" + data.dropStageLevel.ToString() + "½ºÅ×ÀÌÁö¿¡¼­ µµ¾È, Àç·á µå¶ø\n";
+        str += "- íŒŒì¸  " + data.level + "/4 í™œì„±í™”" + "\n";
+        str += " -" + data.dropStageLevel.ToString() + "ìŠ¤í…Œì´ì§€ì—ì„œ ë„ì•ˆ, ì¬ë£Œ ë“œë\n";
 
         return str;
     }
@@ -1283,8 +1289,8 @@ public class UIUpgrade : UILuna
     #region SKILL
     private void OnClickSkillButton(string skillName)
     {
-        Game.Instance.dataManager.OnClickSkillName = skillName;
-        Game.Instance.uiManager.Push(UI_TYPE.SKILLINFO);
+        LunaSession.Current.OnClickSkillName = skillName;
+        LunaUI.Open(UI_TYPE.SKILLINFO);
     }
     #endregion
 }

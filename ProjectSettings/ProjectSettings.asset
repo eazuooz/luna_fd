@@ -703,7 +703,9 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: ENABLE_LOG;ENABLE_DEBUG_AND_ABOVE_LOG
+    Standalone: ENABLE_LOG;ENABLE_DEBUG_AND_ABOVE_LOG
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

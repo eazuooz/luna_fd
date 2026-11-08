@@ -144,7 +144,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5218639031159730317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 377b72d0c87f8b048af1360f1bdc1a84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  getCoinEffect: {fileID: 1417255627001234307, guid: 0df3a1b675c52d948b44cdf77be1e5b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 9005b357f61445e4a965d3b2c5b7e881:5218639031159730317
+  Prefabs:
+  - Name: DropCoin.getCoinEffect
+    Value: {fileID: 1417255627001234307, guid: 0df3a1b675c52d948b44cdf77be1e5b3, type: 3}
+  - Name: getCoinEffect
+    Value: {fileID: 1417255627001234307, guid: 0df3a1b675c52d948b44cdf77be1e5b3, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []

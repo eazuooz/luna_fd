@@ -1,13 +1,14 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lene : HeroSkillControl
+public class Lene : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 3f;
     private const float AllyProcChance = 40.0f;
     private float selfProcChance;
     private float coefSkill_2;
@@ -15,21 +16,18 @@ public class Lene : HeroSkillControl
 
     private float skillCount;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 3.0f;
 
         if (triggerSkill_2 == true)
         {
@@ -40,14 +38,15 @@ public class Lene : HeroSkillControl
                 newSkill();
             }
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamage = status.stat.AttackDamage * 0.65f;
+
         selfProcChance = AllyProcChance;
-        coefSkill_2 = 10.0f;
+        coefSkill_2 = 5.0f;
         triggerSkill_2 = false;
 
         skillCount = 3.0f;
@@ -83,46 +82,32 @@ public class Lene : HeroSkillControl
 
     public override void Skill()
     {
-        if (Defined.CanProbability(selfProcChance))
+        IdentifyFunc.PickingUnits(unit =>
         {
-            status.TakeBerserkMode(coefSkill_2);
-        }
-
-        float skillRange = 5.0f;
-
-        IdentifyFunc.PickingUnits((unit) =>
-        {
-            if (IdentifyFunc.IsInDistance(gameObject, unit, skillRange))
-            {
-                if (Defined.CanProbability(AllyProcChance))
-                {
-                    unit.GetComponent<Status>().TakeBerserkMode(coefSkill_2);
-                }
-            }
-        }, IdentifyFunc.IsAlly, IdentifyFunc.IsSoldier);
+            float chance = unit == gameObject ? selfProcChance : AllyProcChance;
+            if (Defined.CanProbability(chance)) UnitLogic.From(unit).TakeBerserkMode(coefSkill_2);
+        }, IdentifyFunc.IsAlly, IdentifyFunc.IsHero, unit => IdentifyFunc.IsInDistance(gameObject, unit, 10f));
     }
 
     void newSkill()
     {
-        if (status.AttackTarget != null)
+        IdentifyFunc.PickingUnit(target =>
         {
             status.PlayOneSound(skillSound);
-
-            Defined.EffectCreate(skillEffect, status.AttackTarget, Defined.eEffectPosition.UNDERFEET);
-
-            StartCoroutine(DelaySkill());
-
-            skillCount = 3.0f;
-        }
+            Defined.EffectCreate(skillEffect, target, Defined.eEffectPosition.UNDERFEET);
+            StartCoroutine(DelaySkill(UnitLogic.From(target).ID));
+            skillCount = 3f;
+        }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower, unit => IdentifyFunc.IsInDistance(gameObject, unit, 3.4f));
     }
 
-    IEnumerator DelaySkill()
+    IEnumerator DelaySkill(int targetId)
     {
         yield return new WaitForSeconds(0.36f);
 
-        if (status.AttackTarget != null)
+        var target = UnitLogic.Find(targetId);
+        if (target != null && target.stat.Hp > 0f)
         {
-            status.AttackTarget.GetComponent<Status>().Attack(gameObject, skillDamage * 2, true, true);
+            target.Attack(gameObject, skillDamage * 2, true, true);
         }
     }
 }

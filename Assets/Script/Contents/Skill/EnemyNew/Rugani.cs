@@ -2,39 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 
-public class Rugani : EverydayDevup.Framework.LunaEntityBehaviour
+public class Rugani : EnemySkillLogic
 {
-    public Status status { get; set; }
     private int skillControlCounter;
 
-    public GameObject skillEffect_1;
-    public GameObject skillEffect_2;
-    public GameObject skillEffect_3;
+    public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
+    public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
+    public GameObject skillEffect_3 => View.GetPrefab("skillEffect_3");
 
     // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
     }
 
     // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            Skill();
-        }
-    }
+    
 
-    void Skill()
+    protected override void ExecuteSkill()
     {
         skillControlCounter++;
+        StartCoroutine(Storm());
 
         if (skillControlCounter % 6 == 0)
         {
@@ -61,9 +53,9 @@ public class Rugani : EverydayDevup.Framework.LunaEntityBehaviour
         {
             if ((IdentifyFunc.IsInDistanceLeft(gameObject, unit, 5.0f)))
             {
-                unit.GetComponent<Status>().TakePoisoning(skillDamage, 4.0f);
+                UnitLogic.From(unit).TakePoisoning(skillDamage, 4.0f);
             }
-        }, IdentifyFunc.IsAlly);
+        }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
     }
 
     void Skill_2()
@@ -78,11 +70,11 @@ public class Rugani : EverydayDevup.Framework.LunaEntityBehaviour
             {
                 if (IdentifyFunc.IsInDistance(unit, unit2, 2.5f))
                 {
-                    unit2.GetComponent<Status>().TakePoisoning(skillDamage, 4.0f);
+                    UnitLogic.From(unit2).TakePoisoning(skillDamage, 4.0f);
                 }
-            }, IdentifyFunc.IsAlly);
+            }, IdentifyFunc.IsAlly, unit2 => UnitLogic.From(unit2).Data.RoundId == Data.RoundId);
 
-        }, IdentifyFunc.IsAlly);
+        }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
     }
 
     void Skill_3()
@@ -93,8 +85,24 @@ public class Rugani : EverydayDevup.Framework.LunaEntityBehaviour
         {
             Defined.EffectCreate(skillEffect_3, unit, Defined.eEffectPosition.TARGET);
 
-            unit.GetComponent<Status>().TakePoisoning(skillDamage, 5.0f);
+            UnitLogic.From(unit).TakePoisoning(skillDamage, 5.0f);
 
-        }, IdentifyFunc.IsAlly);
+        }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
+    }
+    private IEnumerator Storm()
+    {
+        var cloud = View.GetPrefab("Rugani1.skillEffect_2");
+        var bolt = View.GetPrefab("Rugani1.skillEffect_2_1");
+        if (cloud != null) LunaEffects.Show(cloud, new Vector3(0f, 3f, 0f), roundId: Data.RoundId);
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(1f);
+            IdentifyFunc.PickingUnits(unit =>
+            {
+                if (!Defined.CanProbability(35f)) return;
+                if (bolt != null) LunaEffects.Show(bolt, unit.transform.position, roundId: Data.RoundId);
+                UnitLogic.From(unit).TakeStun(2f);
+            }, IdentifyFunc.IsAlly, unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
+        }
     }
 }

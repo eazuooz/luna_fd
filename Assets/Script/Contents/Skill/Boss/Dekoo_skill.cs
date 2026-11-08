@@ -1,57 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity;
+using Luna.Gameplay;
 
-public class Dekoo_skill : EverydayDevup.Framework.LunaEntityBehaviour
+public class Dekoo_skill : EnemySkillLogic
 {
-    [SerializeField] private string skillMatter = "타겟 주위 범위 공격";
-    public string SkillDescription => skillMatter;
-    [HideInInspector] public Status status;
-    public GameObject effect;
-    private GameObject tmpEffect;
-    public float skillDamage = 500.0f;
-    public float splashRange = 2.0f;
-    private Vector3 attackPos;
+    public string SkillDescription => View.GetText("skillMatter");
+    public GameObject effect => View.GetPrefab("effect");
+    public float skillDamage => View.GetFloat("skillDamage", 500f);
+    public float splashRange => View.GetFloat("splashRange", 2f);
 
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn() { unitState.IsTargetingSkill = true; }
+    protected override void ExecuteSkill()
     {
-        status = GetComponent<Status>();
-        status.unitState.IsTargetingSkill = true;
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            StartCoroutine("InstantSkill");
-        }
-    }
-
-    IEnumerator InstantSkill()
-    {
-        if (status.AttackTarget != null)
-        {
-            attackPos = status.AttackTarget.transform.position;
-
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Unit");
-
-            foreach (GameObject enemy in enemies)
-            {
-                if (enemy != null && enemy.GetComponent<Status>().UnitSide == eUnitSide.Enemy )
-                {
-                    float distance = enemy.GetComponent<Transform>().position.x - attackPos.x;
-
-                    if (enemy != null && distance >= -splashRange && splashRange >= distance)
-                    {
-                        enemy.GetComponent<Status>().Attack(gameObject, skillDamage);
-                    //    GameObject.Instantiate(effect, enemy.transform.position + effect.transform.position, effect.transform.rotation);
-                    }
-                }
-            }
-        }
-
-        yield return null;
+        var target = Target;
+        if (target == null || !LunaCombat.IsAlive(target.gameObject)) return;
+        Vector3 center = target.transform.position;
+        if (effect != null) Defined.EffectCreate(effect, center, Data.RoundId);
+        IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).Attack(gameObject, skillDamage, false, true),
+            unit => UnitLogic.From(unit).UnitSide != UnitSide,
+            unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
+            unit => Mathf.Abs(unit.transform.position.x - center.x) <= splashRange);
     }
 }

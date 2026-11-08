@@ -982,7 +982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32387834a9d03b344a2bff7b31461e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refData: {fileID: 11400000, guid: fa853b5a625505549a57d89d7cab8016, type: 2}
   backGround: {fileID: 0}
 --- !u!222 &6268098377269487427
 CanvasRenderer:

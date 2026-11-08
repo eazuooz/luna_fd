@@ -2,40 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UIPopup : UILuna
 {
-    public UIReference refData;
 
     private GameObject mainTextObj;
     public string mainText;
-    public override void OnInit() 
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        
+        
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     public void SetMainText(string str)

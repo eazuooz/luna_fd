@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
 
 [CreateAssetMenu(fileName = "DungeonTable", menuName = "Scriptable Object Asset/DungeonTable")]

@@ -1,163 +1,58 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using Luna.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
+/// <summary>Displays the round's settled result; the round owns progress and rewards.</summary>
 public class UIResult : UILuna
 {
-    public UIReference refData;
-
-    private List<GameObject> resultItems
-        = new List<GameObject>();
-    public override void OnInit() 
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        
-        GameObject stage = GameObject.FindGameObjectWithTag("Stage");
-        if (stage.GetComponent<BasicDungeon>() != null)
+        base.OnOpen(userData);
+        var round = LunaScenes.CurrentGame;
+        if (round == null) throw new System.InvalidOperationException("Result form requires its completed round.");
+        bool won = round.isStageWin;
+        var plate = transform.Find("ImagePlate");
+        plate.Find("ImageTitle/ResultText").GetComponent<Text>().text = won ? "승리!" : "패배!";
+        transform.Find("ResultBoard/ResultText").GetComponent<Text>().text = won ? "'승리'" : "<color=red>'패배'</color>";
+        bool campaign = round is BasicDungeon;
+        bool nextAvailable = campaign && won;
+        plate.Find("NextStage").gameObject.SetActive(nextAvailable);
+        var retry = plate.Find("CurrentStage");
+        if (!nextAvailable) retry.localPosition = new Vector2(0f, -225f);
+        retry.Find("CurrentStage_Text").GetComponent<Text>().text = campaign ? LunaSession.Current.CurrentStageLevelString() : "다시 도전";
+        plate.Find("NextStage/NextStage_Text").GetComponent<Text>().text = campaign ? LunaSession.Current.NextStageLevelString() : string.Empty;
+        transform.Find("Coin/Text").GetComponent<Text>().text = "골드 " + (LunaDataTable.Instance.playerData.RewardGold * 100) + "골드 획득\n";
+
+        var contents = transform.Find("Item_ScrollView/Item_Scroll View_Viewport/Item_Content");
+        var prefab = Resources.Load<GameObject>("Prefabs/09UI/ProfileInformation");
+        int count = 0;
+        foreach (var reward in LunaSession.Current.pickUpData)
         {
-            if (stage.GetComponent<BasicDungeon>().isStageWin == true)
-            {
-                transform.Find("ImagePlate").Find("ImageTitle").Find("ResultText").GetComponent<Text>().text = "승리!";
-
-                transform.Find("ResultBoard").Find("ResultText").GetComponent<Text>().text = "'승리'";
-
-                LunaDataTable.Instance.playerData.SaveStageName = Game.Instance.dataManager.NextStageString();
-                if (LunaDataTable.Instance.StageTable.TryGetValue(Game.Instance.dataManager.CurrentStageName, out var completedStage))
-                    completedStage.isClear = true;
-                LunaRuntimeData.SaveNow();
-            }
-            else
-            {
-                transform.Find("ImagePlate").Find("ImageTitle").Find("ResultText").GetComponent<Text>().text = "패배!";
-                
-                transform.Find("ResultBoard").Find("ResultText").GetComponent<Text>().text = "​<color=red>'패배'</color>";
-
-                transform.Find("ImagePlate").Find("NextStage").gameObject.SetActive(false);
-                transform.Find("ImagePlate").Find("CurrentStage").localPosition = new Vector2(0.0f, -225.0f);
-            }
-
-            transform.Find("Coin").Find("Text").GetComponent<Text>().text
-                = "골드 " + ( LunaDataTable.Instance.playerData.RewardGold * 100 ).ToString() + "골드 획득\n";
-
-            transform.Find("ImagePlate").Find("NextStage").Find("NextStage_Text").GetComponent<Text>().text
-                =  Game.Instance.dataManager.NextStageLevelString();
-
-            transform.Find("ImagePlate").Find("CurrentStage").Find("CurrentStage_Text").GetComponent<Text>().text
-                = Game.Instance.dataManager.CurrentStageLevelString();
+            if (!LunaDataTable.Instance.itemTable.TryGetValue(reward.Key, out var item) || item.IconImage == null) continue;
+            var row = Instantiate(prefab, contents, false);
+            var rect = row.GetComponent<RectTransform>();
+            rect.localScale = Vector3.one; rect.localPosition = Vector3.zero; rect.localRotation = Quaternion.identity;
+            rect.sizeDelta = new Vector2(100f, 100f);
+            var profile = row.GetComponent<ProfileInformation>();
+            profile.SetProfilePicture(LunaUIViews.CreateSprite(item.IconImage));
+            profile.SetCountText("x" + reward.Value);
+            count++;
         }
-
-        Transform itemContents 
-            = gameObject.transform.Find("Item_ScrollView")
-                                  .Find("Item_Scroll View_Viewport")
-                                  .Find("Item_Content");
-
-        GameObject prefab
-            = Resources.Load<GameObject>("Prefabs/09UI/ProfileInformation");
-
-
-        int itemCount = 0;
-        foreach (var item in Game.Instance.dataManager.pickUpData)
-        {
-            Texture texture = LunaDataTable.Instance.itemTable[item.Key].IconImage;
-            if (texture)
-            {
-                GameObject instant
-                    = Game.Instantiate(prefab);
-
-                instant.transform.SetParent(itemContents.transform);
-                instant.GetComponent<RectTransform>().localScale = Vector3.one;
-                instant.GetComponent<RectTransform>().position = gameObject.transform.position;
-                instant.GetComponent<RectTransform>().localPosition = Vector3.zero;
-                instant.GetComponent<RectTransform>().localRotation = Quaternion.identity;
-                instant.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
-
-                Rect rect = new Rect(0, 0, texture.width, texture.height);
-                Sprite monsterSprite
-                    = Sprite.Create(texture as Texture2D, rect, new Vector2(0.5f, 0.5f));
-
-                instant.GetComponent<ProfileInformation>().SetProfilePicture(monsterSprite);
-                instant.GetComponent<ProfileInformation>().SetCountText("x" + item.Value.ToString());
-            }
-            itemCount++;
-        }
-
-        int spacingValue = 0;
-        switch (itemCount)
-        {
-            case 2:
-                {
-                    spacingValue = -400;
-                }
-                break;
-
-            case 3:
-                {
-                    spacingValue = -300;
-                }
-                break;
-
-            case 4:
-                {
-                    spacingValue = -150;
-                }
-                break;
-
-            default:
-                break;
-        }
-        itemContents.GetComponent<HorizontalLayoutGroup>().spacing = spacingValue;
-
+        contents.GetComponent<HorizontalLayoutGroup>().spacing = count == 2 ? -400 : count == 3 ? -300 : count == 4 ? -150 : 0;
     }
-
-    public override void OnActive()
-    {
-
-    }
-
-    public override void OnInActive() { }
-
-    public override void OnUpdate() { }
-
-    public override void OnLoop() { }
-
-    public override void OnClear() { }
 
     public void ReStage()
     {
-        Game.Instance.uiManager.Pop(UI_TYPE.RESULT);
-
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
-        {
-            Game.Instance.lunaSceneManager.LoadScene("Game");
-        });
+        string scene = LunaScenes.CurrentGame is BasicDungeon ? "Game" : "Dungeon";
+        LunaUI.Close(UI_TYPE.RESULT);
+        LunaScenes.FadeIn(1.5f, () => LunaScenes.Load(scene));
     }
-    public void GoNextStage()
-    {
-        GameObject stage = GameObject.FindGameObjectWithTag("Stage");
-        stage.GetComponent<BasicDungeon>().ToNextStage();
-    }
-
+    public void GoNextStage() => (LunaScenes.CurrentGame as BasicDungeon)?.ToNextStage();
     public void ReleaseBt()
     {
-        Game.Instance.uiManager.Pop(UI_TYPE.RESULT);
-
-        IdentifyFunc.PickingUnits((unit) =>
-        {
-            unit.GetComponent<Status>().unitState.IsLobbyBackMove = true;
-        }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
-
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
-        {
-            Game.Instance.lunaSceneManager.LoadScene("Lobby");
-        });
+        LunaUI.Close(UI_TYPE.RESULT);
+        IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).unitState.IsLobbyBackMove = true, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
+        LunaScenes.FadeIn(1.5f, () => LunaScenes.Load("Lobby"));
     }
-
-    public void PartyBt()
-    {
-        Game.Instance.uiManager.Push(UI_TYPE.CHARACTERLIST);
-    }
+    public void PartyBt() => LunaUI.Open(UI_TYPE.CHARACTERLIST);
 }

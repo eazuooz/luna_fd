@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.UI;
 
 public class UIStageText : UILuna
 {
-	public UIReference refData;
 
 	private Image titleImage;
 	private Text titleText;
@@ -16,9 +15,10 @@ public class UIStageText : UILuna
 	
 
 
-	public override void OnInit()
-	{
-		base.OnInit();
+	protected override void OnOpen(object userData)
+    {
+        base.OnOpen(userData);
+		
 
 		titleImage = gameObject.transform.Find("TitleImage").gameObject.GetComponent<Image>();
 		titleText = gameObject.transform.Find("TitleText").gameObject.GetComponent<Text>();
@@ -27,21 +27,28 @@ public class UIStageText : UILuna
 		GameObject staegeObj = GameObject.FindGameObjectWithTag("Stage");
 
 		titleText.text 
-			+= "æ«∏Ò¿« º∫ " + Game.Instance.dataManager.CurrentStageLevelString();
+			+= "ÏïÖÎ™©Ïùò ÏÑ± " + LunaSession.Current.CurrentStageLevelString();
 	}
 
-	public override void OnActive() { }
-	public override void OnInActive() { }
-	public override void OnUpdate()
-	{
+	
+	
+	protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed);
 		TitleImageProcess();
 
 
 	}
 
-	public override void OnLoop() { }
+	
 
-	public override void OnClear() { }
+	protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
 	private void TitleImageProcess()
 	{

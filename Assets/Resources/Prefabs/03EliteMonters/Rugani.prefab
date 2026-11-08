@@ -41,9 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3293020718358993128}
   - component: {fileID: 6008125359868253406}
-  - component: {fileID: 303559929384416019}
-  - component: {fileID: 5874125198536035967}
-  - component: {fileID: 1528799700799420540}
   m_Layer: 0
   m_Name: Rugani
   m_TagString: Unit
@@ -78,76 +75,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 2473417511884180560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 2a312c3c9c513594db9dad994cc48b03, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 2a312c3c9c513594db9dad994cc48b03, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &303559929384416019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473417511884180560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &5874125198536035967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473417511884180560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f7769d3dd9771c4b8e65620843124c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect_1: {fileID: 5787790316679077291, guid: 66d7e456e92630840b83c9e0b58cee48, type: 3}
-  skillEffect_2: {fileID: 3186746898192741198, guid: 84557c1867c3a944e920e275d0783386, type: 3}
-  skillEffect_3: {fileID: 3418554938069839417, guid: d31b1fb4402fe7d49ae18d564b99d07a, type: 3}
---- !u!114 &1528799700799420540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473417511884180560}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bae1f10eff212d4d91d3e593076765c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect_2: {fileID: 4269613333509998535, guid: 8c71e5e5053f7304f99c947a18b4c787, type: 3}
-  skillEffect_2_1: {fileID: 4577612504725559893, guid: 74884c37f0cc1e54cb35271394dc1985, type: 3}
+  ParameterKey: 6887a74d141f2834c9d459adaa3daae7:2473417511884180560
+  Prefabs:
+  - Name: Rugani.skillEffect_1
+    Value: {fileID: 5787790316679077291, guid: 66d7e456e92630840b83c9e0b58cee48, type: 3}
+  - Name: skillEffect_1
+    Value: {fileID: 5787790316679077291, guid: 66d7e456e92630840b83c9e0b58cee48, type: 3}
+  - Name: Rugani.skillEffect_2
+    Value: {fileID: 3186746898192741198, guid: 84557c1867c3a944e920e275d0783386, type: 3}
+  - Name: skillEffect_2
+    Value: {fileID: 3186746898192741198, guid: 84557c1867c3a944e920e275d0783386, type: 3}
+  - Name: Rugani.skillEffect_3
+    Value: {fileID: 3418554938069839417, guid: d31b1fb4402fe7d49ae18d564b99d07a, type: 3}
+  - Name: skillEffect_3
+    Value: {fileID: 3418554938069839417, guid: d31b1fb4402fe7d49ae18d564b99d07a, type: 3}
+  - Name: Rugani1.skillEffect_2
+    Value: {fileID: 4269613333509998535, guid: 8c71e5e5053f7304f99c947a18b4c787, type: 3}
+  - Name: Rugani1.skillEffect_2_1
+    Value: {fileID: 4577612504725559893, guid: 74884c37f0cc1e54cb35271394dc1985, type: 3}
+  - Name: skillEffect_2_1
+    Value: {fileID: 4577612504725559893, guid: 74884c37f0cc1e54cb35271394dc1985, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &6264172557017605797
 GameObject:
   m_ObjectHideFlags: 0

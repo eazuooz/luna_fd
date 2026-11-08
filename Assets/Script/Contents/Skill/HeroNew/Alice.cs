@@ -1,33 +1,32 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Alice : HeroSkillControl
+public class Alice : HeroUnitLogic
 {
-    public GameObject skillEffect1;
-    public GameObject skillEffect2;
+    public GameObject skillEffect1 => View.GetPrefab("skillEffect1");
+    public GameObject skillEffect2 => View.GetPrefab("skillEffect2");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 3f;
     private float coefSkill_1;
     private float coefSkill_2;
     private bool triggerSkill_1;
     private bool triggerSkill_2;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 3.0f;
+        base.OnUpdate(elapsed, realElapsed);
     }
     public override void STAR1()
     {
@@ -56,7 +55,7 @@ public class Alice : HeroSkillControl
     {
         STAR5();
 
-        coefSkill_2 = 5.0f;
+        coefSkill_2 = 9.0f;
     }
 
     public override void ULT2()
@@ -111,11 +110,11 @@ public class Alice : HeroSkillControl
 
     void NormalSkill()
     {
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
             Defined.EffectCreate(skillEffect2, status.AttackTarget);
 
-            status.AttackTarget.GetComponent<Status>().Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, true, true);
+            UnitLogic.From(status.AttackTarget).Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, true, true);
         }
     }
 
@@ -124,7 +123,7 @@ public class Alice : HeroSkillControl
         Vector3 attackPos;
         float splashRange;
 
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
             Defined.EffectCreate(skillEffect2, status.AttackTarget);
 
@@ -135,7 +134,7 @@ public class Alice : HeroSkillControl
             {
                 if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, splashRange))
                 {
-                    unit.GetComponent<Status>().Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, Defined.CanProbability(status.stat.CriticalActuationProbability), true);
+                    UnitLogic.From(unit).Attack(gameObject, skillDamage * coefSkill_1 * coefSkill_2, Defined.CanProbability(status.stat.CriticalActuationProbability), true);
                 }
             }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
         }

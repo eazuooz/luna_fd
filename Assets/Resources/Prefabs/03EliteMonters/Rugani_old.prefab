@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3293020718358993128}
   - component: {fileID: 6008125359868253406}
-  - component: {fileID: 303559929384416019}
-  - component: {fileID: 7280669731774663312}
   m_Layer: 0
   m_Name: Rugani_old
   m_TagString: Unit
@@ -45,63 +43,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2473417511884180560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 2a312c3c9c513594db9dad994cc48b03, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 2a312c3c9c513594db9dad994cc48b03, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &303559929384416019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473417511884180560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &7280669731774663312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473417511884180560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c70a653c6db2844bbe219822daa82b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillMatter: "\uB9F5\uC804\uCCB4 \uACF5\uACA9"
-  status: {fileID: 0}
-  effect: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
-  skillDamage: 300
+  ParameterKey: 77c47ba27db05824cb1c9956040474ea:2473417511884180560
+  Prefabs:
+  - Name: Rugani_skill.effect
+    Value: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
+  - Name: effect
+    Value: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts:
+  - Name: Rugani_skill.skillMatter
+    Value: "\uB9F5\uC804\uCCB4 \uACF5\uACA9"
+  - Name: skillMatter
+    Value: "\uB9F5\uC804\uCCB4 \uACF5\uACA9"
 --- !u!1 &6264172557017605797
 GameObject:
   m_ObjectHideFlags: 0

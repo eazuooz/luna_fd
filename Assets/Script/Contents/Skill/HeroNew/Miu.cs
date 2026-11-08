@@ -1,36 +1,35 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Miu : HeroSkillControl
+public class Miu : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 2f;
     private float coefSkill_1;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 2.0f;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamage = status.stat.AttackDamage * 3.5f;
+
         coefSkill_1 = 1.0f;
     }
 
@@ -53,14 +52,14 @@ public class Miu : HeroSkillControl
     {
         STAR5();
 
-        coefSkill_1 = 1.5f;
+        coefSkill_1 = 2.5f;
     }
 
     public override void ULT2()
     {
         ULT1();
 
-        status.stat.SkillAvoidance = 1000.0f;
+        status.stat.SkillAvoidance = 100f;
     }
 
     public override void Skill()
@@ -74,7 +73,8 @@ public class Miu : HeroSkillControl
             if (IdentifyFunc.IsInDistance(gameObject, unit, healingRange))
             {
                 Defined.EffectCreate(skillEffect, unit, Defined.eEffectPosition.TARGET, true);
-                unit.GetComponent<Status>().Heal(skillDamage * coefSkill_1);
+                UnitLogic.From(unit).Heal(skillDamage * coefSkill_1);
+                if (status.ultState >= eUltState.STAR5) UnitLogic.From(unit).CleanseCurse(10f);
             }
         }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
     }

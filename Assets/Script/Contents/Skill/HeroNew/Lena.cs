@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Spine.Unity;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
-public class Lena : HeroSkillControl
+public class Lena : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
-    public GameObject NormalMinion;
-    public GameObject SkillMinion;
-    public GameObject UltMinion;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
+    public GameObject NormalMinion => View.GetPrefab("NormalMinion");
+    public GameObject SkillMinion => View.GetPrefab("SkillMinion");
+    public GameObject UltMinion => View.GetPrefab("UltMinion");
 
     private bool triggerSkill_1;
     private bool triggerSkill_2;
@@ -19,29 +19,27 @@ public class Lena : HeroSkillControl
 
     private SkeletonAnimation ani;
     private float counter;
+    private float normalCounter;
 
-    private GameObject curMinion;
     private bool triggerSkill_In_Action;
 
-    protected override void OnEntityInitialize()
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityInitialize();
-
-        counter = 0.0f;
-
-        if (SceneManager.GetActiveScene().name == "Game")
-        {
-            InitializeWarmPool();
-        }
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
+        }
+
+        normalCounter += elapsed;
+        if (normalCounter >= 4f)
+        {
+            normalCounter -= 4f;
+            NormalSkill();
         }
 
         if (triggerSkill_In_Action == false)
@@ -56,17 +54,13 @@ public class Lena : HeroSkillControl
         }
         else
         {
-            if (curMinion == null || curMinion.activeSelf == false)
+            if (CountSummons(UltMinion) == 0)
                 triggerSkill_In_Action = false;
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
-    private void InitializeWarmPool()
-    {
-        PoolManager.WarmPool(NormalMinion, 20);
-        PoolManager.WarmPool(SkillMinion, 20);
-        PoolManager.WarmPool(UltMinion, 5);
-    }
+    
 
     public override void STAR1()
     {
@@ -76,7 +70,7 @@ public class Lena : HeroSkillControl
         triggerSkill_2 = false;
         ultUnlocked = false;
         counter = 0.0f;
-        curMinion = null;
+        normalCounter = 0f;
         triggerSkill_In_Action = false;
 
         if (ani != null) ani.AnimationState.Event -= OnAttackAnimationEvent;
@@ -86,13 +80,12 @@ public class Lena : HeroSkillControl
 
     private void OnAttackAnimationEvent(Spine.TrackEntry trackEntry, Spine.Event e)
     {
-        if (e.Data.Name == "attack") NormalSkill();
+        if (e.Data.Name == "attack" && IsRankReady && Luna.Gameplay.LunaCombat.IsInCombat(status) && normalCounter >= 4f) { normalCounter = 0f; NormalSkill(); }
     }
 
     public override void AfterDeath()
     {
         if (ani != null) ani.AnimationState.Event -= OnAttackAnimationEvent;
-        curMinion = null;
         triggerSkill_In_Action = false;
     }
 
@@ -126,45 +119,29 @@ public class Lena : HeroSkillControl
 
     public override void Skill()
     {
-        status.PlayOneSound(skillSound);
-
-        GameObject Slime = PoolManager.Instance.spawnObject(SkillMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), SkillMinion.transform.rotation);
-        InitializeSummonedUnit(Slime);
-
-        Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
-
-        if (triggerSkill_2 == true && Defined.CanProbability(65))
+        PlayOneSound(skillSound);
+        for (int i = 0; i < 2; i++) SpawnSummon(SkillMinion, transform.position + Vector3.left * 0.5f, data =>
         {
-            Slime.GetComponent<Status>().TakeBerserkMode(5.0f);
-        }
+            data.AttackMultiplier = triggerSkill_1 ? 1.1f : 1f;
+            data.BerserkSeconds = triggerSkill_2 && Defined.CanProbability(65f) ? 5f : 0f;
+        }, skillEffect);
     }
 
     void NormalSkill()
     {
-        status.PlayOneSound(skillSound);
-
-        GameObject Slime = PoolManager.Instance.spawnObject(NormalMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), NormalMinion.transform.rotation);
-        InitializeSummonedUnit(Slime);
-
-        Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
-
-        if (triggerSkill_1 == true && Defined.CanProbability(65))
-        {
-            Slime.GetComponent<Status>().coefficient.AttackDamage += 0.1f;
-            Slime.GetComponent<Status>().StatusAfterReady();
-        }
+        int count = Mathf.Max(0, 2 - CountSummons(NormalMinion));
+        for (int i = 0; i < count; i++) SpawnSummon(NormalMinion, transform.position + Vector3.left * 0.5f,
+            data => data.AttackMultiplier = triggerSkill_1 ? 1.1f : 1f, skillEffect);
+        if (count > 0) PlayOneSound(skillSound);
     }
+    
 
     void UltSkill()
     {
-        status.PlayOneSound(skillSound);
-
-        GameObject Slime = PoolManager.Instance.spawnObject(UltMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), UltMinion.transform.rotation);
-        InitializeSummonedUnit(Slime);
-
-        Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
-
-        curMinion = Slime;
+        if (CountSummons(UltMinion) > 0) return;
+        PlayOneSound(skillSound);
+        SpawnSummon(UltMinion, transform.position + Vector3.left * 0.5f,
+            data => data.AttackMultiplier = triggerSkill_1 ? 1.1f : 1f, skillEffect);
         triggerSkill_In_Action = true;
     }
 }

@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 243575773275058316}
-  - component: {fileID: 2249817707024399515}
   - component: {fileID: 4958548270335338037}
   m_Layer: 0
   m_Name: 06_DragonPet
@@ -36,21 +35,6 @@ Transform:
   - {fileID: 7565616178020015434}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2249817707024399515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444592816212863594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
 --- !u!114 &4958548270335338037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,32 +44,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1444592816212863594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: c42b26e632ca991479f147b9fbe94101, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: c42b26e632ca991479f147b9fbe94101, type: 2}
+  Projectile: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
+  ParameterKey: c60b4d9515cdf714bad8b5870b206d17:1444592816212863594
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
+  - Name: projectile
+    Value: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &4668174668538742652
 GameObject:
   m_ObjectHideFlags: 0

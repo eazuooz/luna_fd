@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: e5ccf0cd0e040a042ab8aa300ef92f77
   m_currentHash:
     serializedVersion: 2
-    Hash: b2f0949eef80999c6c7784d60f25d382
+    Hash: 3269cd171ad531e3e3b1b745cd57f5d0
   m_ExtractTypeTreeData: 0
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
@@ -58,8 +58,8 @@ MonoBehaviour:
   m_RemoteCatalogLoadPath:
     m_Id: 
   m_ContentStateBuildPathProfileVariableName: 
-  m_CustomContentStateBuildPath: 
-  m_ContentStateBuildPath: 
+  m_CustomContentStateBuildPath: Builds/Revival/AddressablesState/StandaloneWindows64
+  m_ContentStateBuildPath: Builds/Revival/AddressablesState/StandaloneWindows64
   m_BuildAddressablesWithPlayerBuild: 1
   m_overridePlayerVersion: 
   m_GroupAssets:
@@ -104,6 +104,8 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - Luna/UI/ACCOUNTSHOP
+    - Luna/UI/PVP
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 77af6f91b784f344183394b54ba404e0, type: 2}

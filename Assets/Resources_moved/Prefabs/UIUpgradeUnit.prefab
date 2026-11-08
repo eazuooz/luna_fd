@@ -10790,7 +10790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c719b85a610d0ac458dd9311a57500c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refData: {fileID: 11400000, guid: 327c295547ddee249850acc30a8bf8c1, type: 2}
   player: {fileID: 5811659828842603964, guid: b84f4f503dc4ea241b41b6b46ca01b4c, type: 3}
 --- !u!222 &7837808216308367112
 CanvasRenderer:

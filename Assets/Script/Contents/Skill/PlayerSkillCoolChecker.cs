@@ -1,27 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerSkillCoolChecker : EverydayDevup.Framework.LunaEntityBehaviour
+/// <summary>Cooldown label binding; the owning UI form supplies its current value.</summary>
+public sealed class PlayerSkillCoolChecker : MonoBehaviour
 {
-    public int skillCooltime { get; set; }
-    private Text skillCooltimeText;
-
-    protected override void OnEntityInitialize()
+    private Text label;
+    private int remaining;
+    public int skillCooltime
     {
-        skillCooltimeText = transform.Find("SkillCool").GetComponent<Text>();
-        skillCooltime = 0;
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if(skillCooltimeText != null)
+        get => remaining;
+        set
         {
-            if (skillCooltime == 0)
-                skillCooltimeText.text = "";
-            else
-                skillCooltimeText.text = skillCooltime.ToString();
+            remaining = Mathf.Max(0, value);
+            if (label == null)
+            {
+                Transform child = transform.Find("SkillCool");
+                if (child != null) label = child.GetComponent<Text>();
+            }
+            if (label != null) label.text = remaining == 0 ? string.Empty : remaining.ToString();
         }
     }
 }

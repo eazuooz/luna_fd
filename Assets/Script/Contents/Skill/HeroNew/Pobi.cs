@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Spine.Unity;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
-public class Pobi : HeroSkillControl
+public class Pobi : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
-    public GameObject minion1;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
+    public GameObject minion1 => View.GetPrefab("minion1");
 
     private int coefSkill_1;
 
@@ -19,30 +19,21 @@ public class Pobi : HeroSkillControl
     private SkeletonAnimation ani;
 
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
+    
 
-        if (SceneManager.GetActiveScene().name == "Game")
-        {
-            InitializeWarmPool();
-        }
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
-    private void InitializeWarmPool()
-    {
-        PoolManager.WarmPool(minion1, 20);
-    }
+    
 
     public override void STAR1()
     {
@@ -102,31 +93,23 @@ public class Pobi : HeroSkillControl
         else
             coefSkill_1 = 3;
 
+        if (skill_In_Action) return;
+        skill_In_Action = true;
         StartCoroutine(NormalSkill());
     }
 
     IEnumerator NormalSkill()
     {
-
-        for (int i = 0; i < coefSkill_1; i++)
+        int count = coefSkill_1;
+        for (int i = 0; i < count; i++)
         {
-            status.PlayOneSound(skillSound);
-
-            GameObject tmpMinion = PoolManager.Instance.spawnObject(minion1, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion1.transform.rotation);
-            InitializeSummonedUnit(tmpMinion);
-
-            Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
-
-            if(triggerSkill_1 == true)
+            PlayOneSound(skillSound);
+            SpawnSummon(minion1, transform.position + Vector3.left, data =>
             {
-                tmpMinion.GetComponent<Status>().coefficient.AttackDamage += 0.1f;
-                tmpMinion.GetComponent<Status>().coefficient.Armour += 0.1f;
-                tmpMinion.GetComponent<Status>().coefficient.HP += 0.1f;
-                tmpMinion.GetComponent<Status>().StatusAfterReady();
-                tmpMinion.GetComponent<Status>().HpAfterReady();
-            }
-
+                if (triggerSkill_1) data.AttackMultiplier = data.ArmourMultiplier = data.HealthMultiplier = 1.1f;
+            }, skillEffect);
             yield return new WaitForSeconds(0.2f);
         }
+        skill_In_Action = false;
     }
 }

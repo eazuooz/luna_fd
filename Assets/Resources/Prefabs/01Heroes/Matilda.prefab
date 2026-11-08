@@ -139,8 +139,6 @@ GameObject:
   m_Component:
   - component: {fileID: 998574553976947739}
   - component: {fileID: 9175081307723645544}
-  - component: {fileID: 2596504598140387626}
-  - component: {fileID: 6284029146706501365}
   - component: {fileID: 5281812458957330738}
   m_Layer: 0
   m_Name: Matilda
@@ -178,64 +176,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 2967491250884582408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: e4ad694b06882bf41b5d1fe873c410d6, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: e4ad694b06882bf41b5d1fe873c410d6, type: 2}
+  Projectile: {fileID: 6741737302365193638, guid: d8858c23780c0da429a4cbd71cca9bd4, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 12
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &2596504598140387626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2967491250884582408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 6741737302365193638, guid: d8858c23780c0da429a4cbd71cca9bd4, type: 3}
---- !u!114 &6284029146706501365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2967491250884582408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 480e4746b484b6545a6325a4669332f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: 9a34ae941b8212e4d8a3e91ab6d7adc8, type: 3}
-  minion1: {fileID: 3601769417073393332, guid: 50de5c1134ebe884eb38284a45e0287c, type: 3}
-  minion2: {fileID: 6957893479433811638, guid: b7b60133b28c5e44e996add36fa4bdc8, type: 3}
-  minion3: {fileID: 6981234479424132648, guid: 1214cadb5f6bcb34b9a07d2b81f2c29c, type: 3}
+  ParameterKey: 09c90bd1884bdc24b84c52007ee40855:2967491250884582408
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 6741737302365193638, guid: d8858c23780c0da429a4cbd71cca9bd4, type: 3}
+  - Name: projectile
+    Value: {fileID: 6741737302365193638, guid: d8858c23780c0da429a4cbd71cca9bd4, type: 3}
+  - Name: Matilda.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Matilda.minion1
+    Value: {fileID: 3601769417073393332, guid: 50de5c1134ebe884eb38284a45e0287c, type: 3}
+  - Name: minion1
+    Value: {fileID: 3601769417073393332, guid: 50de5c1134ebe884eb38284a45e0287c, type: 3}
+  - Name: Matilda.minion2
+    Value: {fileID: 6957893479433811638, guid: b7b60133b28c5e44e996add36fa4bdc8, type: 3}
+  - Name: minion2
+    Value: {fileID: 6957893479433811638, guid: b7b60133b28c5e44e996add36fa4bdc8, type: 3}
+  - Name: Matilda.minion3
+    Value: {fileID: 6981234479424132648, guid: 1214cadb5f6bcb34b9a07d2b81f2c29c, type: 3}
+  - Name: minion3
+    Value: {fileID: 6981234479424132648, guid: 1214cadb5f6bcb34b9a07d2b81f2c29c, type: 3}
+  Sounds:
+  - Name: Matilda.skillSound
+    Value: {fileID: 8300000, guid: 9a34ae941b8212e4d8a3e91ab6d7adc8, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 9a34ae941b8212e4d8a3e91ab6d7adc8, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &5281812458957330738
 BoxCollider2D:
   m_ObjectHideFlags: 0

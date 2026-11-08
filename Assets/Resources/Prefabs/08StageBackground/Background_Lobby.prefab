@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 285147998676713528}
-  - component: {fileID: 7842212428607771368}
   m_Layer: 0
   m_Name: Sparkles
   m_TagString: Untagged
@@ -34,18 +33,6 @@ Transform:
   - {fileID: 8308640511091576426}
   m_Father: {fileID: 1826099739272283067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7842212428607771368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8087877985582876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 184a84a53c2a07840b6c04208e9fe1e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &406075110024544062
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,11 +424,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2554689742541872723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06330c673e6eb2e4e80c5b7786866f39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effect: {fileID: 100000, guid: 701d9c21f424fb243917d9eea3b44a8d, type: 3}
-  delayTime: 7
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: bc1568d5b4fd28940ae8e0b2e2aa7ea3:2554689742541872723
+  Prefabs:
+  - Name: BGEffectCreator.effect
+    Value: {fileID: 100000, guid: 701d9c21f424fb243917d9eea3b44a8d, type: 3}
+  - Name: effect
+    Value: {fileID: 100000, guid: 701d9c21f424fb243917d9eea3b44a8d, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &4127012677373752845
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +580,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4698748171068555722}
   - component: {fileID: 8332146322126334532}
-  - component: {fileID: 838144750597235481}
   - component: {fileID: 1323393255682091907}
   m_Layer: 0
   m_Name: Door
@@ -665,18 +663,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!114 &838144750597235481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4136687905222040603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bcbc83ef89b412439f2dbd28b0ac9c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &1323393255682091907
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1367,6 +1353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826099739272283067}
+  - component: {fileID: 9000000000000000000}
   m_Layer: 0
   m_Name: Background_Lobby
   m_TagString: BackGround
@@ -1397,6 +1384,25 @@ Transform:
   - {fileID: 5525294941777097634}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9000000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383516895249335979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a759829bbf54749a63b9a45019b35bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Door: {fileID: 4698748171068555722}
+  DoorSound: {fileID: 1323393255682091907}
+  LobbySparkles: {fileID: 285147998676713528}
+  ScrollingPlates: []
+  WanderingDemons: []
+  Emitters:
+  - {fileID: 2932802455450833736}
 --- !u!1 &8465359713810725361
 GameObject:
   m_ObjectHideFlags: 0

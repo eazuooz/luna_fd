@@ -2016,7 +2016,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0ef29542c56fd4cb9aca02b1cbc7e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refData: {fileID: 11400000, guid: f103868a1a879a1468d7eb63c927cf67, type: 2}
 --- !u!114 &3931088598411526264
 MonoBehaviour:
   m_ObjectHideFlags: 0

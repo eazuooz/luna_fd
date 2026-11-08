@@ -455,6 +455,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 9056176284352268964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 658abfe9508af684096302a615375627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 28816833120fbf64d8f5fd115e389749:9056176284352268964
+  Prefabs: []
+  Sounds: []
+  Numbers: []
+  Texts: []

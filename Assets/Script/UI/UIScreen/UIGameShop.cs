@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class UIGameShop : UILuna
 {
-    public UIReference refData;
 
     private GameObject summonTab;
     private GameObject goldTab;
@@ -29,10 +28,11 @@ public class UIGameShop : UILuna
     }
 
     private List<StarStone> starStoneChests = new List<StarStone>();
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
-        MyUnits.SetColliderEnabled(false);
+        base.OnOpen(userData);
+        
+        
 
         InitTabInfo();
 
@@ -45,18 +45,25 @@ public class UIGameShop : UILuna
         //Game.Instance.tutorialManager.SetTutorial(gameObject, "SlimeTenTimesButton", 1);
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate()
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed);
 
     }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void OnClickSummon()
     {
@@ -82,7 +89,7 @@ public class UIGameShop : UILuna
 
         LunaDataTable.Instance.playerData.IsBegining = false;
 
-        Game.Instance.uiManager.Push(UI_TYPE.LOTTERY);
+        LunaUI.Open(UI_TYPE.LOTTERY);
     }
     public void OnClickSummons()
     {
@@ -112,7 +119,7 @@ public class UIGameShop : UILuna
 
                 LunaDataTable.Instance.LotteryResult.Add(name);
                 LunaDataTable.Instance.IncreaseCardCount(name);
-                resultText += name + "´çÃ·\n";
+                resultText += name + "ë‹¹ì²¨\n";
             }
             else
             {
@@ -126,7 +133,7 @@ public class UIGameShop : UILuna
                     LunaDataTable.Instance.LotteryResult.Add(name);
                     LunaDataTable.Instance.IncreaseCardCount(name);
 
-                    resultText += name + "´çÃ·\n";
+                    resultText += name + "ë‹¹ì²¨\n";
                 }
                 else
                 {
@@ -136,14 +143,14 @@ public class UIGameShop : UILuna
 
                     LunaDataTable.Instance.LotteryResult.Add(name);
                     LunaDataTable.Instance.IncreaseCardCount(name);
-                    resultText += name + "´çÃ·\n";
+                    resultText += name + "ë‹¹ì²¨\n";
                 }
             }
         }
 
         LunaDataTable.Instance.playerData.IsBegining = false;
 
-        Game.Instance.uiManager.Push(UI_TYPE.LOTTERY);
+        LunaUI.Open(UI_TYPE.LOTTERY);
     }
     public void OnClickBuyStarStone()
     {
@@ -153,16 +160,16 @@ public class UIGameShop : UILuna
 
     public void EquipLunaSlimeSkin()
     {
-        Game.Instance.dataManager.EquipDesignNumber = 3;
-        Game.Instance.uiManager.Push(UI_TYPE.EQUIPDESIGN);
+        LunaSession.Current.EquipDesignNumber = 3;
+        LunaUI.Open(UI_TYPE.EQUIPDESIGN);
     }
     private void InitTabInfo()
     {
-        summonTab = LunaUtility.FindChildObject(gameObject, "Summon_Tab");
-        goldTab = LunaUtility.FindChildObject(gameObject, "Gold_Tab");
-        starStoneTab = LunaUtility.FindChildObject(gameObject, "StarStone_Tab");
-        rubyTab = LunaUtility.FindChildObject(gameObject, "Ruby_Tab");
-        rainbowStoneTab = LunaUtility.FindChildObject(gameObject, "RainbowStone_Tab");
+        summonTab = LunaUIViews.FindChildObject(gameObject, "Summon_Tab");
+        goldTab = LunaUIViews.FindChildObject(gameObject, "Gold_Tab");
+        starStoneTab = LunaUIViews.FindChildObject(gameObject, "StarStone_Tab");
+        rubyTab = LunaUIViews.FindChildObject(gameObject, "Ruby_Tab");
+        rainbowStoneTab = LunaUIViews.FindChildObject(gameObject, "RainbowStone_Tab");
 
 
         summonTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(summonTab));
@@ -272,21 +279,21 @@ public class UIGameShop : UILuna
     }
     public void OnReleaseButton()
     {
-        Game.Instance.uiManager.Pop(type);
-        MyUnits.SetColliderEnabled(true);
+        LunaUI.Close(type);
+        
     }
 
 
-    //ÀÓ½Ã ¹æÆí¿ë »Ì±â
+    //ìž„ì‹œ ë°©íŽ¸ìš© ë½‘ê¸°
     public void OnReleaseResult()
     {
-        GameObject resultObj = LunaUtility.FindChildObject(gameObject, "Result");
+        GameObject resultObj = LunaUIViews.FindChildObject(gameObject, "Result");
         resultObj.SetActive(false);
     }
     
     public void SetStringResult(string str)
     {
-        GameObject Text = LunaUtility.FindChildObject(gameObject.transform.Find("Result").gameObject, "Text");
+        GameObject Text = LunaUIViews.FindChildObject(gameObject.transform.Find("Result").gameObject, "Text");
         Text.GetComponent<Text>().text = str;
     }
 

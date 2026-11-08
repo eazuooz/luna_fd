@@ -1,428 +1,165 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Luna.Gameplay;
 using UnityEngine;
-using EverydayDevup.Framework;
-using Spine.Unity;
-using UnityEngine.SceneManagement;
 
-public class BasicDungeon : LunaGame
+/// <summary>Main campaign round. Procedure.Update advances intro, waves, result and floor transition.</summary>
+public sealed class BasicDungeon : LunaGame
 {
-    public GameObject enemyTower;
-    public GameObject allyTower;
-
-    private GameObject gameBGimage;
-    public GameObject gameEnemyTower { get; set; }
-    public GameObject gameAllyTower { get; set; }
-    public GameObject gamePlayer { get; set; }
-
-    public float stageWidth = 3.25f;
-    private float stageCount = 0.0f;
-
-    public bool isBossStage = false;
-    private bool skipStartCameraMove;
-
-    private GameObject firstMonster;
-
-    private GameObject commonObject;
-
-    private BasicDungeonData thisDungeonData;
-
-
+    private enum Phase { Loading, IntroWait, IntroSpawns, IntroRight, IntroHold, IntroLeft, Combat, NextLoading, NextWait, NextRise, NextWalk }
+    private Phase phase;
+    private float timer, spawnTimer;
+    private int enemyTowerId, allyTowerId, backgroundId;
+    private int nextBackgroundId, nextPlayerId;
+    private int waveIndex, repeatCount;
+    private bool skipIntro;
+    private List<LunaStageWaveRow> repeatWaves;
+    public GameObject gameEnemyTower => LunaSpawn.Find<UnitLogic>(enemyTowerId)?.gameObject;
+    public GameObject gameAllyTower => LunaSpawn.Find<UnitLogic>(allyTowerId)?.gameObject;
+    public GameObject gamePlayer => Player != null ? Player.gameObject : null;
+    public float stageWidth => row.Width;
+    public bool isBossStage => row.IsBossStage;
+    public string PhaseName => phase.ToString();
+    public override void Initialize(LunaStageDefinition source)
+    {
+        base.Initialize(source);
+        Defined.OriginPosition = Vector3.zero;
+        Defined.AllyTowerPosition = new Vector3(-8f, 0f, 0f);
+        Defined.EnemyTowerPosition = new Vector3(8f, 0f, 0f);
+        Defined.LunaStartPosition = new Vector3(-5f, 0f, 0f);
+        Defined.StayMonsterPosition = new Vector3(5f, 0f, 0f);
+        phase = Phase.Loading;
+        repeatWaves = LunaStageTables.GetWaves(row.Id, "Repeat");
+        foreach (var wave in repeatWaves) repeatCount += wave.Count;
+        if (repeatCount <= 0) throw new InvalidOperationException("Campaign stage has no repeating wave: " + row.Key);
+        backgroundId = SpawnBackdrop(definition.backgroundImage, Vector3.zero);
+        enemyTowerId = SpawnUnit(LunaStageTables.RequireAsset<GameObject>(row.EnemyTower), Defined.EnemyTowerPosition, UnitSpawnMode.Staged);
+        allyTowerId = SpawnUnit(LunaStageTables.RequireAsset<GameObject>(row.AllyTower), Defined.AllyTowerPosition, UnitSpawnMode.Staged,
+            healthMultiplier: Mathf.Max(1, LunaDataTable.Instance.playerData.TowerHPLevel),
+            shown: tower => SpawnPlayer(Defined.LunaStartPosition, tower.ID, true));
+        var p = stageCamera.transform.position; p.x = -stageWidth + 0.01f; p.y = 1.865f; stageCamera.transform.position = p;
+    }
+    protected override void OnPlayerShown(UnitLogic actor) { if (IntroComplete) FollowCamera = true; }
+    protected override bool CanRespawnPlayer => Alive(LunaSpawn.Find<UnitLogic>(allyTowerId));
+    protected override void OnFinished(bool won)
+    {
+        if (!won) return;
+        LunaDataTable.Instance.playerData.SaveStageName = LunaSession.Current.NextStageString();
+        if (LunaDataTable.Instance.StageTable.TryGetValue(StageKey, out var stage)) stage.isClear = true;
+    }
     public bool PlayerSkillMPCheck()
     {
-        if (gamePlayer.GetComponent<Status>().stat.Mp >= 100)
-        {
-            gamePlayer.GetComponent<Status>().stat.Mp = 0;
-            return true;
-        }
-        else
-            return false;
+        if (Player == null || Player.stat.Mp < 100f) return false;
+        Player.stat.Mp = 0f; return true;
     }
-
-
-    override public void Init()
+    protected override void TickRound(float elapsed, float realElapsed)
     {
-        base.Init();
-
-        string dungeonDataPath = "ScriptableObjects/DungeonData/BasicDungeon/" + name.Replace("(Clone)", "");
-
-        thisDungeonData = Resources.Load<BasicDungeonData>(dungeonDataPath);
-        commonObject = Resources.Load<GameObject>("LunaAssetBundle");
-
-        Defined.OriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        Defined.AllyTowerPosition = new Vector3(-8.0f, 0.0f, 0.0f);
-        Defined.EnemyTowerPosition = new Vector3(8.0f, 0.0f, 0.0f);
-        Defined.LunaStartPosition = new Vector3(-5.0f, 0.0f, 0.0f);
-        Defined.StayMonsterPosition = new Vector3(5.0f, 0.0f, 0.0f);
-
-        Defined.SkillTrigger_Goldy = 0.0f;
-
-        isStageStop = true;
-        isStageWin = true;
-        ShakeOn = false;
-        AttachCamera = false;
-        FollowCamera = false;
-        skipStartCameraMove = false;
-    }
-
-    protected override void OnEntityInitialize()
-    {
-        Init();
-
-        if (backgroundImage != null &&
-                enemyTower != null &&
-                allyTower != null &&
-                GameObject.Find("2DCamera") != null)
+        if (!IntroComplete && Input.GetMouseButtonDown(0)) skipIntro = true;
+        switch (phase)
         {
-            StartGameObjectsSetting();
-            StartCoroutine(PreCameraMove(/*3.25f*/ stageWidth - 0.01f));
-            StartCoroutine(PreCameraMoveSkipCheck());
-        }
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (isStageStop == false)
-        {
-            stageCount += Time.deltaTime * 1.0f;
-
-            if (gameAllyTower == null)
-            {
-                StageStopCheck(false);
-            }
-            if (gameEnemyTower == null)
-            {
-                StageStopCheck(true);
-            }
-        }
-    }
-
-    void StartGameObjectsSetting()
-    {
-        PoolManager.WarmPool(LunaDataTable.Instance.playerData.CurPlayer(), 1);
-
-        foreach (var monsterData in thisDungeonData.nonBossMonsters)
-        {
-            Status status = monsterData.monster.GetComponent<Status>();
-
-            if (status != null)
-                PoolManager.WarmPool(monsterData.monster, 50);
-            //monsterData.gameObj.GetComponent<UnitAI>().InitProjectTile();
-        }
-
-        gameBGimage = EverydayDevup.Framework.LunaEntities.Spawn(backgroundImage, Defined.OriginPosition, Quaternion.identity);
-
-        gameEnemyTower = EverydayDevup.Framework.LunaEntities.Spawn(enemyTower, Defined.EnemyTowerPosition, Quaternion.identity);
-        gameAllyTower = EverydayDevup.Framework.LunaEntities.Spawn(allyTower, Defined.AllyTowerPosition, Quaternion.identity);
-        gamePlayer = PoolManager.Instance.spawnObject(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity);
-
-        gameEnemyTower.GetComponent<Status>().unitState.IsLobbyMove = true;
-        gameAllyTower.GetComponent<Status>().unitState.IsLobbyMove = true;
-        gamePlayer.GetComponent<Status>().unitState.IsLobbyMove = true;
-
-        Game.Instance.dataManager.LunaPlayer = gamePlayer;
-
-        gamePlayer.GetComponent<LunaStateMachine>().PrepareForStage(gameAllyTower);
-
-        stageCamera = GameObject.Find("2DCamera").gameObject;
-        stageCamera.GetComponent<Camera2D>().target = gamePlayer.transform;
-
-        Vector3 firstCameraPosition = new Vector3(  gamePlayer.transform.position.x - 0.52f,
-                                                    gamePlayer.transform.position.y + 1.865f, 
-                                                    stageCamera.transform.position.z);
-
-        stageCamera.transform.position = firstCameraPosition;
-    }
-
-    void StageStopCheck(bool result)
-    {
-        StopAllCoroutines();
-        isStageWin = result;
-        StartCoroutine(StageStop());
-    }
-
-    IEnumerator PreCameraMoveSkipCheck()
-    {
-        while(true)
-        {
-            //InfiniteLoopDetector.Run();
-            if (Input.GetMouseButtonDown(0))
-            {
-                skipStartCameraMove = true;
-            }
-
-            yield return null;
-        }
-    }
-    IEnumerator PreCameraMove(float Coef)
-    {
-        stageCamera.transform.position = new Vector3(-Coef, stageCamera.transform.position.y, stageCamera.transform.position.z);
-
-        yield return new WaitForSeconds(0.8f);
-
-        thisDungeonData.SettingMonsterBeforeStart(firstMonster);
-
-        float speed = 4.0f;
-        float tmpCounter = 0.0f;
-
-        while (stageCamera.transform.position.x < Coef && skipStartCameraMove == false)
-        {
-            //InfiniteLoopDetector.Run();
-            stageCamera.transform.Translate(Vector2.right * speed * Time.deltaTime);
-            yield return null;
-        }
-
-        while(tmpCounter < 1.0f && skipStartCameraMove == false)
-        {
-            //InfiniteLoopDetector.Run();
-            tmpCounter += Time.deltaTime;
-
-            yield return null;
-        }
-
-        while (stageCamera.transform.position.x > -Coef && skipStartCameraMove == false)
-        {
-            //InfiniteLoopDetector.Run();
-            stageCamera.transform.Translate(Vector2.left * speed * Time.deltaTime);
-            yield return null;
-        }
-
-        stageCamera.transform.position = new Vector3( -Coef, stageCamera.transform.position.y, stageCamera.transform.position.z);
-
-        IdentifyFunc.PickingUnits((unit) => 
-        {
-            unit.GetComponent<Status>().unitState.IsLobbyMove = false;
-        }, IdentifyFunc.IsUnit);
-
-        StopCoroutine(PreCameraMoveSkipCheck());
-
-        Game.Instance.uiManager.Push(UI_TYPE.GAMEOPTION);
-        Game.Instance.uiManager.Push(UI_TYPE.PLAYER);
-        Game.Instance.uiManager.Push(UI_TYPE.SKILL);
-        Game.Instance.uiManager.Push(UI_TYPE.PROGRESSBAR);
-
-        StartCoroutine(CameraStatusCheck(Coef));
-        StartCoroutine(CameraMoveCheck(Coef));
-        StartCoroutine(thisDungeonData.SpawnMonster());
-        //StartCoroutine(SummonAllOneAlert30(thisDungeonData.nonBossMonsters));
-
-        isStageStop = false;
-    }
-    
-
-    IEnumerator CameraStatusCheck(float Coef)
-    {
-        while (true)
-        {
-            //InfiniteLoopDetector.Run();
-            if (AttachCamera == false)
-            {
-                if (FollowCamera == true)
+            case Phase.Loading:
+                if (PendingSpawnCount == 0 && Player != null && gameAllyTower != null && gameEnemyTower != null)
+                { timer = 0.8f; phase = Phase.IntroWait; }
+                break;
+            case Phase.IntroWait:
+                timer -= elapsed;
+                if (timer > 0f) break;
+                foreach (var wave in LunaStageTables.GetWaves(row.Id, "Start"))
+                    for (int i = 0; i < wave.Count; i++)
+                        SpawnUnit(LunaStageTables.RequireAsset<GameObject>(wave.Prefab), Defined.StayMonsterPosition + new Vector3(i * 0.3f, 0f, i * 0.3f), UnitSpawnMode.Staged, wave.Level);
+                phase = Phase.IntroSpawns;
+                break;
+            case Phase.IntroSpawns:
+                if (PendingSpawnCount == 0) phase = Phase.IntroRight;
+                break;
+            case Phase.IntroRight:
+                if (skipIntro || MoveCameraX(stageWidth - 0.01f, 4f * elapsed)) { timer = 1f; phase = Phase.IntroHold; }
+                break;
+            case Phase.IntroHold:
+                timer -= elapsed;
+                if (skipIntro || timer <= 0f) phase = Phase.IntroLeft;
+                break;
+            case Phase.IntroLeft:
+                if (skipIntro || MoveCameraX(-stageWidth + 0.01f, 4f * elapsed))
                 {
-                    float disMinus = (gamePlayer.transform.position.x + 0.5f) - stageCamera.transform.position.x;
-
-                    if (disMinus < 0.1f && disMinus > -0.1f)
-                    {
-                        FollowCamera = false;
-                        AttachCamera = true;
-                    }
-
-                    stageCamera.transform.Translate(new Vector3((disMinus > 0 ? disMinus * 2.5f + 1.0f : disMinus * 2.5f - 1.0f) * Time.deltaTime, 0, 0));
-
+                    var p = stageCamera.transform.position; p.x = -stageWidth + 0.01f; stageCamera.transform.position = p;
+                    StartCombat(true); spawnTimer = row.SpawnInterval; phase = Phase.Combat;
                 }
-            }
-            else
-            {
-                stageCamera.transform.position
-                       = new Vector3(gamePlayer.transform.position.x + 0.5f,
-                                       stageCamera.transform.position.y, stageCamera.transform.position.z);
-            }
-
-
-            if (stageCamera.transform.position.x < -Coef)
-            {
-                stageCamera.transform.position = new Vector3(-Coef, stageCamera.transform.position.y, stageCamera.transform.position.z);
-                FollowCamera = false;
-            }
-            else if (stageCamera.transform.position.x > Coef)
-            {
-                stageCamera.transform.position = new Vector3(Coef, stageCamera.transform.position.y, stageCamera.transform.position.z);
-                FollowCamera = false;
-            }
-
-            yield return null;
+                break;
+            case Phase.Combat:
+                if (isStageStop) break;
+                StageCount += elapsed;
+                if (!Alive(LunaSpawn.Find<UnitLogic>(allyTowerId))) { Finish(false); break; }
+                if (!Alive(LunaSpawn.Find<UnitLogic>(enemyTowerId))) { Finish(true); break; }
+                spawnTimer -= elapsed;
+                if (spawnTimer <= 0f) { SpawnNextWave(); spawnTimer += row.SpawnInterval; }
+                TickCamera(elapsed, stageWidth - 0.01f);
+                break;
+            case Phase.NextLoading:
+                if (PendingSpawnCount == 0) { timer = 1.8f; phase = Phase.NextWait; }
+                break;
+            case Phase.NextWait:
+                timer -= elapsed;
+                if (timer <= 0f) phase = Phase.NextRise;
+                break;
+            case Phase.NextRise:
+                var next = LunaSpawn.Find<LunaStageBackdropLogic>(nextBackgroundId);
+                var old = LunaSpawn.Find<LunaStageBackdropLogic>(backgroundId);
+                if (next == null) throw new InvalidOperationException("Next floor scenery was hidden during its transition.");
+                float rise = Mathf.Min(elapsed * 3f, -next.transform.position.y);
+                next.transform.position += Vector3.up * rise;
+                if (old != null) old.transform.position += Vector3.up * rise;
+                foreach (var unit in Units()) unit.CachedTransform.position += Vector3.up * rise;
+                if (next.transform.position.y >= -0.001f) phase = Phase.NextWalk;
+                break;
+            case Phase.NextWalk:
+                var preview = LunaSpawn.Find<UnitLogic>(nextPlayerId);
+                if (preview == null) throw new InvalidOperationException("Next floor player was hidden during its transition.");
+                float target = stageCamera.transform.position.x + stageWidth - 0.01f + Defined.LunaStartPosition.x;
+                var position = preview.CachedTransform.position;
+                position.x = Mathf.MoveTowards(position.x, target, elapsed * 5f); preview.CachedTransform.position = position;
+                if (Mathf.Abs(position.x - target) < 0.001f) LunaScenes.Load("Game");
+                break;
         }
     }
-
-    IEnumerator StageStop()
+    private bool MoveCameraX(float target, float step)
     {
-        isStageStop = true;
-
-        Game.Instance.dataManager.LunaPlayer = null;
-
-        if(gamePlayer != null)
-            gamePlayer.GetComponent<LunaStateMachine>().moving = 0;
-
-        IdentifyFunc.PickingUnits((unit) => 
-        {
-            unit.GetComponent<Status>().unitState.IsLobbyMove = true;
-        }, IdentifyFunc.IsUnit);
-
-        if (isStageWin == true)
-        {
-            DropItem();
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        if (isStageWin == true)
-        {
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                unit.GetComponent<Status>().stat.Hp = 0;
-            }, IdentifyFunc.IsEnemy);
-        }
-
-        IdentifyFunc.PickingUnits((unit) =>
-        {
-            unit.GetComponent<Status>().unitState.IsLobbyMove = true;
-        }, IdentifyFunc.IsUnit);
-
-        yield return new WaitForSeconds(0.5f);
-
-        GameObject resultText = Game.Instance.transform.Find("2DCamera").Find("WinLoseText").gameObject;
-
-        SpriteRenderer sr = resultText.GetComponent<SpriteRenderer>();
-        Color tempColor = sr.color;
-        tempColor.a = 1.0f;
-        sr.color = tempColor;
-
-        if(isStageWin == true)
-        {
-            sr.sprite = resultText.GetComponent<WinLoseText>().winText;
-        }
-        else
-        {
-            sr.sprite = resultText.GetComponent<WinLoseText>().loseText;
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        while (tempColor.a > 0f)
-        {
-            //InfiniteLoopDetector.Run();
-            tempColor.a -= Time.deltaTime / 1.0f;
-            sr.color = tempColor;
-
-            if (tempColor.a <= 0f) tempColor.a = 0f;
-
-            yield return null;
-        }
-
-        sr.color = tempColor;
-
-        Game.Instance.uiManager.Pop(UI_TYPE.PROGRESSBAR);
-        Game.Instance.uiManager.Pop(UI_TYPE.SKILL);
-        Game.Instance.uiManager.Pop(UI_TYPE.PLAYER);
-        Game.Instance.uiManager.Pop(UI_TYPE.GAMEOPTION);
-
-        Game.Instance.uiManager.Push(UI_TYPE.RESULT);
+        var p = stageCamera.transform.position; p.x = Mathf.MoveTowards(p.x, target, step); stageCamera.transform.position = p;
+        return Mathf.Abs(p.x - target) < 0.001f;
     }
-
+    private void SpawnNextWave()
+    {
+        int index = waveIndex++ % repeatCount;
+        foreach (var wave in repeatWaves)
+        {
+            if (index >= wave.Count) { index -= wave.Count; continue; }
+            var position = Defined.EnemyTowerPosition; position.z = 0.00001f * waveIndex;
+            SpawnUnit(LunaStageTables.RequireAsset<GameObject>(wave.Prefab), position, level: wave.Level); return;
+        }
+    }
+    public override void DropItem()
+    {
+        base.DropItem();
+        int multiplier = LunaDataTable.Instance.playerData.SkinType == PlayerData.eLunaSkin.Rich && Defined.CanProbability(50) ? 2 : 1;
+        var common = LunaStageTables.RequireAsset<GameObject>("LunaAssetBundle").GetComponent<LunaAssetBundle>();
+        for (int i = 0; i < row.Gold * multiplier; i++)
+        {
+            var data = LootData.Create(0, 1, Defined.EnemyTowerPosition + Vector3.right * UnityEngine.Random.Range(-2f, 2f), roundId: RoundId);
+            data.Rotation = common.Coin.transform.rotation;
+            Show<DropCoinLogic>(common.Coin, data);
+        }
+    }
     public void ToNextStage()
     {
-        Game.Instance.uiManager.Pop(UI_TYPE.RESULT);
-
-        string nextStageName = Game.Instance.dataManager.NextStageString();
-
-        Game.Instance.dataManager.CurrentStageName = nextStageName;
-        Game.Instance.dataManager.SetStagePrefab(nextStageName);
-
-        StartCoroutine(GoDownNextStage(stageWidth - 0.01f));
-        StartCoroutine(StageBlinkText(3.0f, 3.0f));
-    }
-
-    IEnumerator GoDownNextStage(float coef)
-    {
-        yield return null;
-
-        IdentifyFunc.PickingUnits((unit) =>
-        {
-            unit.GetComponent<Status>().unitState.IsLobbyStartMove = true;
-        }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
-
-        BasicDungeon nextStage = Game.Instance.dataManager.SelectStagePrefab.GetComponent<BasicDungeon>();
-        GameObject gameBGimageNext = EverydayDevup.Framework.LunaEntities.Spawn(nextStage.backgroundImage, Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
-        GameObject gameAllyTowerNext = EverydayDevup.Framework.LunaEntities.Spawn(nextStage.allyTower, Defined.AllyTowerPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
-        GameObject gamePlayerNext = EverydayDevup.Framework.LunaEntities.Spawn(LunaDataTable.Instance.playerData.CurPlayer(), Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef + -13, -15.265f, 0), Quaternion.identity);
-
-        yield return new WaitForSeconds(1.8f);
-
-        while (gameBGimageNext.transform.position.y < 0)
-        {
-            //InfiniteLoopDetector.Run();
-            gameBGimage.transform.Translate(Vector3.up * Time.deltaTime * 3);
-            gameBGimageNext.transform.Translate(Vector3.up * Time.deltaTime * 3);
-
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                unit.transform.Translate(Vector3.up * Time.deltaTime * 3);
-            }, IdentifyFunc.IsUnit);
-
-            yield return null;
-        }
-
-
-        while (gamePlayerNext.transform.position.x < stageCamera.transform.position.x + coef + Defined.LunaStartPosition.x)
-        {
-            //InfiniteLoopDetector.Run();
-            gamePlayerNext.transform.Translate(Vector3.right * Time.deltaTime * 5);
-
-            yield return null;
-        }
-
-        Game.Instance.lunaSceneManager.LoadScene("Game");
-    }
-
-    IEnumerator StageBlinkText(float beforeSecond, float afterSecond)
-    {
-        yield return new WaitForSeconds(beforeSecond);
-
-        //Game.Instance.uiManager.Push(UI_TYPE.STAGETEXT);
-
-
-        yield return new WaitForSeconds(afterSecond);
-
-        //Game.Instance.uiManager.Pop(UI_TYPE.STAGETEXT);
-    }
-
-    void DropItem()
-    {
-        thisDungeonData.DropItem();
-
-        DropGold();
-    }
-
-    void DropGold()
-    {
-        int RichDouble = 1;
-
-        if (LunaDataTable.Instance.playerData.SkinType == PlayerData.eLunaSkin.Rich &&
-                    Defined.CanProbability(50))
-        {
-            RichDouble = 2;
-        }
-
-        for (int i = 0; i < thisDungeonData.goldAmount * RichDouble; i++)
-        {
-            EverydayDevup.Framework.LunaEntities.Spawn(commonObject.GetComponent<LunaAssetBundle>().Coin
-                , Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0)
-                , commonObject.GetComponent<LunaAssetBundle>().Coin.transform.rotation);
-        }
-    }
-
-    public void DropItemMonster(Vector3 pos)
-    {
-        thisDungeonData.DropItemMonster(pos);
+        if (!IsActive || phase >= Phase.NextLoading) return;
+        LunaUI.Close(UI_TYPE.RESULT); LeaveResultPresentation(); isStageStop = true;
+        string nextKey = LunaSession.Current.NextStageString();
+        LunaSession.Current.CurrentStageName = nextKey; LunaSession.Current.SetStagePrefab(nextKey);
+        var next = LunaStageTables.Get(nextKey);
+        float offset = stageCamera.transform.position.x + stageWidth - 0.01f;
+        nextBackgroundId = SpawnBackdrop(LunaStageTables.RequireAsset<GameObject>(next.Background), new Vector3(offset, -15.265f, 0));
+        SpawnUnit(LunaStageTables.RequireAsset<GameObject>(next.AllyTower), Defined.AllyTowerPosition + new Vector3(offset, -15.265f, 0), UnitSpawnMode.Staged);
+        nextPlayerId = SpawnUnit(LunaDataTable.Instance.playerData.CurPlayer(), new Vector3(offset - 13f, -15.265f, 0), UnitSpawnMode.Staged);
+        phase = Phase.NextLoading;
     }
 }

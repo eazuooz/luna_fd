@@ -143,8 +143,6 @@ GameObject:
   m_Component:
   - component: {fileID: 455137693673348252}
   - component: {fileID: 6413328042851825532}
-  - component: {fileID: 9032741172561115016}
-  - component: {fileID: 7721363134874831776}
   - component: {fileID: -5606017380290836741}
   m_Layer: 0
   m_Name: Joe
@@ -182,60 +180,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 455137693673348255}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 4e46c76578f960f438a21d9656870cdf, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 4e46c76578f960f438a21d9656870cdf, type: 2}
+  Projectile: {fileID: 3643117912314875687, guid: da34cee7643f8dd4c86ce79c4bed9938, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 12
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &9032741172561115016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455137693673348255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 3643117912314875687, guid: da34cee7643f8dd4c86ce79c4bed9938, type: 3}
---- !u!114 &7721363134874831776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455137693673348255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc66f5c4dfbbff24fad6a9a96dfa23a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2410642808980458660, guid: 24700e3f636e8434db86cac60c2917e2, type: 3}
+  ParameterKey: 9ec902ff59d74854fb785418af6b9c2b:455137693673348255
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 3643117912314875687, guid: da34cee7643f8dd4c86ce79c4bed9938, type: 3}
+  - Name: projectile
+    Value: {fileID: 3643117912314875687, guid: da34cee7643f8dd4c86ce79c4bed9938, type: 3}
+  - Name: Joe.skillEffect
+    Value: {fileID: 2410642808980458660, guid: 24700e3f636e8434db86cac60c2917e2, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2410642808980458660, guid: 24700e3f636e8434db86cac60c2917e2, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!61 &-5606017380290836741
 BoxCollider2D:
   m_ObjectHideFlags: 0

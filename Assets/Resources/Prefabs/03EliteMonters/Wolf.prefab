@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3069091059018221309}
   - component: {fileID: 7404916262715976900}
-  - component: {fileID: 3522753852252438841}
-  - component: {fileID: 6359425303630597884}
   m_Layer: 0
   m_Name: Wolf
   m_TagString: Unit
@@ -46,62 +44,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 899539269983342042}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 615baf08dfbea1c4fae53c9206eab6ff, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 615baf08dfbea1c4fae53c9206eab6ff, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &3522753852252438841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 899539269983342042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &6359425303630597884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 899539269983342042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3489e5ea8bf2c2648837ecb85b5ab544, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect_1: {fileID: 7799843936064239870, guid: c48f3767b85d1504489236d051d28bc2, type: 3}
-  skillEffect_2: {fileID: 8763081831516634674, guid: 7cfe452f284dbfc499c933733f887266, type: 3}
-  skillEffect_3: {fileID: 3828337621315214319, guid: de660b795e021f346828d4036f7d462d, type: 3}
+  ParameterKey: e950809796b52024b8a986c401ee11ad:899539269983342042
+  Prefabs:
+  - Name: Wolf.skillEffect_1
+    Value: {fileID: 7799843936064239870, guid: c48f3767b85d1504489236d051d28bc2, type: 3}
+  - Name: skillEffect_1
+    Value: {fileID: 7799843936064239870, guid: c48f3767b85d1504489236d051d28bc2, type: 3}
+  - Name: Wolf.skillEffect_2
+    Value: {fileID: 8763081831516634674, guid: 7cfe452f284dbfc499c933733f887266, type: 3}
+  - Name: skillEffect_2
+    Value: {fileID: 8763081831516634674, guid: 7cfe452f284dbfc499c933733f887266, type: 3}
+  - Name: Wolf.skillEffect_3
+    Value: {fileID: 3828337621315214319, guid: de660b795e021f346828d4036f7d462d, type: 3}
+  - Name: skillEffect_3
+    Value: {fileID: 3828337621315214319, guid: de660b795e021f346828d4036f7d462d, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &2404102194630072630
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,67 +1,30 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dren : HeroSkillControl
+public class Dren : HeroUnitLogic
 {
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 3f;
     private float coefSkill_1;
-    private float coefSkill_2;
-    private float coefSkill_3;
-    private float coefSkill_4;
-    private bool triggerSkill_1;
-    private bool triggerSkill_2;
 
-    protected override void OnEntityInitialize()
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityInitialize();
-    }
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        base.OnEntityUpdate(elapsed, realElapsed);
-
-        if (status.unitState.IsLobbyMove == true)
-        {
-            return;
-        }
-
-        skillDamage = status.stat.AttackDamage * 3.0f;
-
-        if (triggerSkill_1 == true)
-        {
-            if (triggerSkill_2 == false)
-            {
-                if (status.AttackTarget != null/* && 공중 적군*/)
-                {
-                    triggerSkill_2 = true;
-
-                    status.coefficient.AttackDamage += 0.3f;
-                    status.StatusAfterReady();
-                }
-            }
-            else
-            {
-                if (status.AttackTarget == null/* || 공중 적군X*/)
-                {
-                    triggerSkill_2 = false;
-
-                    status.coefficient.AttackDamage -= 0.3f;
-                    status.StatusAfterReady();
-                }
-            }
-        }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 3.0f;
+
         coefSkill_1 = 1.0f;
-        triggerSkill_1 = false;
-        triggerSkill_2 = false;
     }
 
 
@@ -69,7 +32,8 @@ public class Dren : HeroSkillControl
     {
         STAR1();
 
-        triggerSkill_1 = true;
+        status.coefficient.AttackDamage += 0.15f;
+        status.StatusAfterReady();
     }
 
     public override void STAR5() 
@@ -98,7 +62,7 @@ public class Dren : HeroSkillControl
         Vector3 attackPos;
         float splashRange;
 
-        if (status.AttackTarget != null)
+        if (IdentifyFunc.IsAlive(status.AttackTarget))
         {
             Defined.EffectCreate(skillEffect, status.AttackTarget, Defined.eEffectPosition.UNDERFEET);
 
@@ -109,7 +73,7 @@ public class Dren : HeroSkillControl
             {
                 if (IdentifyFunc.IsInDistance(status.AttackTarget, unit, splashRange))
                 {
-                    unit.GetComponent<Status>().Attack(gameObject, skillDamage * coefSkill_1/* * coefSkill_2*/, true);
+                    UnitLogic.From(unit).Attack(gameObject, skillDamage * coefSkill_1, true, true);
                 }
             }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
         }

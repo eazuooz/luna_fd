@@ -3,27 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Spine.Unity;
 
 public class UISkillInfo : UILuna
 {
-    public UIReference refData;
 
     private GameObject uiUpgrade;
     private SkillData skillData;
     private UILobby uiLobby;
     private string skillName;
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
 
         uiUpgrade = GameObject.FindWithTag("UIUpgrade");
-        uiLobby = LunaUtility.FindWithTagGameObjectComponent<UILobby>("UILobby");
+        uiLobby = LunaUIViews.FindWithTagGameObjectComponent<UILobby>("UILobby");
 
-        skillName = Game.Instance.dataManager.OnClickSkillName;
+        skillName = LunaSession.Current.OnClickSkillName;
         skillData = LunaDataTable.Instance.skiiTable[skillName];
 
         transform.Find("Object").GetComponent<Image>().sprite = skillData.skillImage;
@@ -37,21 +37,26 @@ public class UISkillInfo : UILuna
         transform.Find("LevelupStat").GetComponent<Text>().text
             = skillData.skillLevelDiscription;
 
-        Game.Instance.dataManager.OnClickSkillName = "";
+        LunaSession.Current.OnClickSkillName = "";
     }
 
-    public override void OnActive()
+    
+
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed); }
 
+    
+
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
     }
-
-    public override void OnInActive() { }
-
-    public override void OnUpdate() { }
-
-    public override void OnLoop() { }
-
-    public override void OnClear() { }
 
     public void OnClickSkillLevelUp()
     {
@@ -61,14 +66,14 @@ public class UISkillInfo : UILuna
 
     public void OnClickRelease()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     public void OnClickEquipButton()
     {
         uiUpgrade.GetComponent<UIUpgrade>().TurnOn_Off_SkillEffect(true);
-        Game.Instance.uiManager.Pop(type);
-        Game.Instance.dataManager.OnClickSkillName = skillName;
+        LunaUI.Close(type);
+        LunaSession.Current.OnClickSkillName = skillName;
 
     }
 

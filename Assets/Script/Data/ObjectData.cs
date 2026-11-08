@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 
 
 
@@ -50,6 +50,8 @@ public class ObjectData : ScriptableObject
 
     public bool TypeLunaPlayer = false;
     public bool TypeSuperArmour = false;
+    public bool IsAirborne;
+    public bool IsOffensiveHero;
     [Space(15.0f)]
     #endregion
 
@@ -86,57 +88,47 @@ public class ObjectData : ScriptableObject
     /// <summary>
     /// 강화 또는 레벨업 관찰자들에게 Noti를 하기 위한 subject
     /// </summary>
-    Subject _subject;
-    public Subject subject
-    {
-        get
-        {
-            if (_subject == null)
-            {
-                _subject = new Subject();
-            }
-
-            return _subject;
-        }
-    }
+    [field: System.NonSerialized] public event System.Action<ObjectData> Changed;
+    public void NotifyChanged() => Changed?.Invoke(this);
     public void RankUp()
     {
-        ultState += 1;
+        if (ultState < eUltState.ULT2) ultState += 1;
 
-        subject.OnNotify();
+        NotifyChanged();
     }
 
     public void LevelUp()
     {
         Level += 1;
 
-        subject.OnNotify();
+        NotifyChanged();
     }
 
     #endregion
+
+    private static float Factor(float value) => float.IsNaN(value) || float.IsInfinity(value) ? 1f : Mathf.Max(0f, value);
 
     #region GETSTAT
 
     public int GetCurrentLevelHP_Value(float coefficient = 1.0f)
     {
-        return (int)Hp + ((int)LevelUpHpPoint * (Level - 1));
+        return Mathf.Max(0, (int)((Hp + LevelUpHpPoint * Mathf.Max(0, Level - 1)) * Factor(coefficient)));
     }
     public int GetCurrentLevelMP_Value(float coefficient = 1.0f)
     {
-        return (int)Mp;
+        return Mathf.Max(0, (int)(Mp * Factor(coefficient)));
     }
     public int GetCurrentLevelStamina_Value(float coefficient = 1.0f)
     {
-        return (int)Stamina;
+        return Stamina > 0f ? Mathf.Max(1, Mathf.CeilToInt(Stamina * Factor(coefficient))) : 0;
     }
     public float GetAttackOnceBySecond_Value(float coefficient = 1.0f)
     {
-        return 1.0f / (AttackOnceBySecondValue * coefficient);
+        return 1f / Mathf.Max(0.0001f, AttackOnceBySecondValue * Factor(coefficient));
     }
     public float GetMoveSpeed_Value(float coefficient = 1.0f)
     {
-        float resultMoveSpeed = (MoveSpeed + LevelUpMoveSpeed)
-            * coefficient;
+        float resultMoveSpeed = MoveSpeed + LevelUpMoveSpeed * Mathf.Max(0, moveSpeedLevel - 1);
 
         if (TypeLunaPlayer)
         {
@@ -152,41 +144,41 @@ public class ObjectData : ScriptableObject
             resultMoveSpeed += (Defined.AddMoveSpeedValue * unitMoveSpeedLevel);
         }
 
-        resultMoveSpeed *= (UnitSide == eUnitSide.Enemy ? -1.0f : 1.0f);
+        resultMoveSpeed *= Factor(coefficient) * (UnitSide == eUnitSide.Enemy ? -1.0f : 1.0f);
         return resultMoveSpeed;
     }
     public float GetArmour_Value(float coefficient = 1.0f)
     {
-        return Armour + (Level - 1) * LevelUpArmourPoint;
+        return Mathf.Max(0f, (Armour + Mathf.Max(0, Level - 1) * LevelUpArmourPoint) * Factor(coefficient));
     }
     public int GetArmour_ValueInt(float coefficient = 1.0f)
     {
-        return (int)Armour + ((int)LevelUpArmourPoint * (Level - 1));
+        return (int)GetArmour_Value(coefficient);
     }
     public int GetAttackDamage_Value(float coefficient = 1.0f)
     {
-        return (int)AttackDamage + ((int)LevelUpAttPoint * (Level - 1));
+        return Mathf.Max(0, (int)((AttackDamage + LevelUpAttPoint * Mathf.Max(0, Level - 1)) * Factor(coefficient)));
     }
     public float GetSkillResistance_Value(float coefficient = 1.0f)
     {
-        return SkillResistance * coefficient;
+        return Mathf.Max(0f, SkillResistance * Factor(coefficient));
     }
     public float GetSkillDamage_Value(float coefficient = 1.0f)
     {
-        return SkillDamage * coefficient;
+        return GetResultSkillAtt_Value(coefficient);
     }
     public float GetAttackRange_Value(float coefficient = 1.0f)
     {
-        return AttackRange * Random.Range(0.8f, 1.2f) * coefficient;
+        return Mathf.Max(0f, AttackRange * Random.Range(0.8f, 1.2f) * Factor(coefficient));
     }
     public int GetResultSkillAtt_Value(float coefficient = 1.0f)
     {
-        return (int)SkillDamage + ((int)LevelUpSkillDamage * (Level - 1));
+        return Mathf.Max(0, (int)((SkillDamage + LevelUpSkillDamage * Mathf.Max(0, Level - 1)) * Factor(coefficient)));
     }
 
     public float GetResultMoveSpeed_Value(float coefficient = 1.0f)
     {
-        return MoveSpeed + (LevelUpMoveSpeed * (float)(moveSpeedLevel - 1));
+        return (MoveSpeed + LevelUpMoveSpeed * Mathf.Max(0, moveSpeedLevel - 1)) * Factor(coefficient);
     }
 
     public float GetAddedMoveSpeed(float coefficient = 1.0f)

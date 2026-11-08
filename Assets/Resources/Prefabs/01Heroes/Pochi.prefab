@@ -272,8 +272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 623525062824102656}
   - component: {fileID: 623525062824102663}
-  - component: {fileID: 623525062824102662}
-  - component: {fileID: 5508778667448195048}
   - component: {fileID: 4924102947204306317}
   m_Layer: 0
   m_Name: Pochi
@@ -310,60 +308,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 623525062824102660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 50fe7c8db2c410242bc1d33ec2485fd7, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 50fe7c8db2c410242bc1d33ec2485fd7, type: 2}
+  Projectile: {fileID: 8649930151829609472, guid: ca2a22d600131c04baaf49499f078d48, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 10
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &623525062824102662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623525062824102660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 8649930151829609472, guid: ca2a22d600131c04baaf49499f078d48, type: 3}
---- !u!114 &5508778667448195048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623525062824102660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddd5bcce68c55264f8d205cf403cbee9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillSound: {fileID: 8300000, guid: 21a0e48fcb7c9514b9ccef1ff12a825f, type: 3}
+  ParameterKey: c995db8cd1fd3334f83d05558cd1c4d6:623525062824102660
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 8649930151829609472, guid: ca2a22d600131c04baaf49499f078d48, type: 3}
+  - Name: projectile
+    Value: {fileID: 8649930151829609472, guid: ca2a22d600131c04baaf49499f078d48, type: 3}
+  Sounds:
+  - Name: Pochi.skillSound
+    Value: {fileID: 8300000, guid: 21a0e48fcb7c9514b9ccef1ff12a825f, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: 21a0e48fcb7c9514b9ccef1ff12a825f, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &4924102947204306317
 BoxCollider2D:
   m_ObjectHideFlags: 0

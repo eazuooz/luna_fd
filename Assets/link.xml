@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='utf-8'?>
+<linker>
+  <!--Exact dynamic roots for the native entity catalog, configured procedures/helpers,
+      and CSV field reflection. Update alongside those contracts; Editor audit checks coverage.
+      This declaration does not replace platform-specific release/IL2CPP execution tests.-->
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="Alice" preserve="all" />
+    <type fullname="Asmo" preserve="all" />
+    <type fullname="Bellerin" preserve="all" />
+    <type fullname="Clare" preserve="all" />
+    <type fullname="Dekoo_skill" preserve="all" />
+    <type fullname="Deus_skill" preserve="all" />
+    <type fullname="Dren" preserve="all" />
+    <type fullname="DwarfLogic" preserve="all" />
+    <type fullname="Elena" preserve="all" />
+    <type fullname="Goldy" preserve="all" />
+    <type fullname="Joe" preserve="all" />
+    <type fullname="Lena" preserve="all" />
+    <type fullname="Lene" preserve="all" />
+    <type fullname="Lennon" preserve="all" />
+    <type fullname="Luna.Gameplay.BackPlateLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.BackgroundDemonLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.BuffIconLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.DamageTextLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.DragonPetLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.DragonPlayerLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.DropCoinLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.DropItemLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.EffectLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.HealthBarLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.MartinLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.MiniMartinLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.PlayerLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.ProjectileLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.RichPlayerLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.SkeletonAxeLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.SlimePlayerLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.TowerLogic" preserve="all" />
+    <type fullname="Luna.Gameplay.UnitLogic" preserve="all" />
+    <type fullname="LunaStageBackdropLogic" preserve="all" />
+    <type fullname="MartinKing" preserve="all" />
+    <type fullname="Matilda" preserve="all" />
+    <type fullname="Mei" preserve="all" />
+    <type fullname="Miu" preserve="all" />
+    <type fullname="Pobi" preserve="all" />
+    <type fullname="Pochi" preserve="all" />
+    <type fullname="PoisonSlime" preserve="all" />
+    <type fullname="Pring" preserve="all" />
+    <type fullname="Raccon" preserve="all" />
+    <type fullname="RedDragon" preserve="all" />
+    <type fullname="Ria" preserve="all" />
+    <type fullname="Roen" preserve="all" />
+    <type fullname="Roni" preserve="all" />
+    <type fullname="Rose" preserve="all" />
+    <type fullname="Rugani" preserve="all" />
+    <type fullname="Rugani_skill" preserve="all" />
+    <type fullname="Scalet" preserve="all" />
+    <type fullname="Skeleton_ax_skill" preserve="all" />
+    <type fullname="Skeleton_magicianLeader_skill" preserve="all" />
+    <type fullname="SkillBomb" preserve="all" />
+    <type fullname="Tira" preserve="all" />
+    <type fullname="Wolf" preserve="all" />
+    <type fullname="Wolf_skill_tmp" preserve="all" />
+    <type fullname="Luna.Gameplay.LunaBattleProcedure" preserve="all" />
+    <type fullname="Luna.Gameplay.LunaLaunchProcedure" preserve="all" />
+    <type fullname="Luna.Gameplay.LunaLoadingProcedure" preserve="all" />
+    <type fullname="Luna.Gameplay.LunaLobbyProcedure" preserve="all" />
+    <type fullname="Luna.Gameplay.LunaTransitionProcedure" preserve="all" />
+    <type fullname="ObjectData" preserve="nothing">
+      <field name="ID" />
+      <field name="Level" />
+      <field name="moveSpeedLevel" />
+      <field name="cardCount" />
+      <field name="ultState" />
+      <field name="cardLevel" />
+      <field name="hitPriority" />
+      <field name="UnitSide" />
+      <field name="UnitType" />
+      <field name="UnitAttackType" />
+      <field name="TypeLunaPlayer" />
+      <field name="TypeSuperArmour" />
+      <field name="Price" />
+      <field name="Hp" />
+      <field name="Mp" />
+      <field name="Stamina" />
+      <field name="MoveSpeed" />
+      <field name="Armour" />
+      <field name="AttackDamage" />
+      <field name="AttackOnceBySecondValue" />
+      <field name="SkillResistance" />
+      <field name="SkillDamage" />
+      <field name="AttackRange" />
+      <field name="SpawnDelayTime" />
+      <field name="CriticalMultiples" />
+      <field name="CriticalProbability" />
+      <field name="LevelUpHpPoint" />
+      <field name="LevelUpAttPoint" />
+      <field name="LevelUpArmourPoint" />
+      <field name="LevelUpSkillDamage" />
+      <field name="LevelUpMoveSpeed" />
+      <field name="EffectScale" />
+      <field name="IsAirborne" />
+      <field name="IsOffensiveHero" />
+    </type>
+    <type fullname="SkillData" preserve="nothing">
+      <field name="type" />
+      <field name="isMultiple" />
+      <field name="mana" />
+      <field name="passiveDelay" />
+      <field name="activeDelay" />
+      <field name="damage" />
+      <field name="range" />
+      <field name="splashRange" />
+      <field name="coolTime" />
+      <field name="stunTime" />
+      <field name="burfTime" />
+      <field name="probablity" />
+      <field name="multipleSkillDamageBuff" />
+      <field name="multipleSkillResistanceBuff" />
+      <field name="coefficient" />
+      <field name="levelUpPoint" />
+      <field name="maxSummonCount" />
+      <field name="ableSkill" />
+    </type>
+  </assembly>
+  <assembly fullname="UnityGameFramework.Runtime">
+    <type fullname="UnityGameFramework.Runtime.DefaultCompressionHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultConfigHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultDataTableHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultEntityGroupHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultEntityHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultFileSystemHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultJsonHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultLocalizationHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultLogHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultSettingHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultSoundAgentHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultSoundGroupHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultSoundHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultTextHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultUIFormHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultUIGroupHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.DefaultVersionHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.UnityWebRequestAgentHelper" preserve="all" />
+    <type fullname="UnityGameFramework.Runtime.UnityWebRequestDownloadAgentHelper" preserve="all" />
+  </assembly>
+  <!--Supplied Core GetModule derives implementation names from IManager interfaces and creates them with Activator. The binary has no preservation annotations.-->
+  <assembly fullname="GameFramework">
+    <type fullname="GameFramework.Config.ConfigManager" preserve="all" />
+    <type fullname="GameFramework.DataNode.DataNodeManager" preserve="all" />
+    <type fullname="GameFramework.DataTable.DataTableManager" preserve="all" />
+    <type fullname="GameFramework.Debugger.DebuggerManager" preserve="all" />
+    <type fullname="GameFramework.Download.DownloadManager" preserve="all" />
+    <type fullname="GameFramework.Entity.EntityManager" preserve="all" />
+    <type fullname="GameFramework.Event.EventManager" preserve="all" />
+    <type fullname="GameFramework.FileSystem.FileSystemManager" preserve="all" />
+    <type fullname="GameFramework.Fsm.FsmManager" preserve="all" />
+    <type fullname="GameFramework.Localization.LocalizationManager" preserve="all" />
+    <type fullname="GameFramework.Network.NetworkManager" preserve="all" />
+    <type fullname="GameFramework.ObjectPool.ObjectPoolManager" preserve="all" />
+    <type fullname="GameFramework.Procedure.ProcedureManager" preserve="all" />
+    <type fullname="GameFramework.Scene.SceneManager" preserve="all" />
+    <type fullname="GameFramework.Setting.SettingManager" preserve="all" />
+    <type fullname="GameFramework.Sound.SoundManager" preserve="all" />
+    <type fullname="GameFramework.UI.UIManager" preserve="all" />
+    <type fullname="GameFramework.WebRequest.WebRequestManager" preserve="all" />
+    <!--These two private generic implementations are closed with MakeGenericType and constructed through Activator by the native managers.-->
+    <type fullname="GameFramework.ObjectPool.ObjectPoolManager/ObjectPool`1" preserve="all" />
+    <type fullname="GameFramework.DataTable.DataTableManager/DataTable`1" preserve="all" />
+  </assembly>
+</linker>

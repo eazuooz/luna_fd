@@ -25,18 +25,6 @@ namespace UnityGameFramework.Runtime
     /// </summary>
     public sealed class ResourceManager : IResourceManager
     {
-        // Resident assets let game-specific Entity helpers preserve serialized prefab references.
-        // They are explicitly registered/unregistered by the owning game; Addressables still owns
-        // all other keys and their reference counts.
-        private readonly Dictionary<string, object> mResidentAssets = new Dictionary<string, object>();
-        public void RegisterResidentAsset(string key, object asset)
-        {
-            if (string.IsNullOrEmpty(key)) throw new ArgumentException("Resident asset key is empty.", nameof(key));
-            if (asset == null) throw new ArgumentNullException(nameof(asset));
-            mResidentAssets[key] = asset;
-        }
-        public void UnregisterResidentAsset(string key) { mResidentAssets.Remove(key); }
-
         // 로드된 에셋 핸들 추적 (UnloadAsset 시 Release하기 위해)
         //
         // 주소(assetName) 하나당 핸들 목록을 들고 취득 1회 : 해제 1회로 맞춘다.
@@ -174,12 +162,6 @@ namespace UnityGameFramework.Runtime
             if (string.IsNullOrEmpty(assetName))
             {
                 loadAssetCallbacks?.LoadAssetFailureCallback?.Invoke(assetName, LoadResourceStatus.NotExist, "Asset name is invalid.", userData);
-                return;
-            }
-
-            if (mResidentAssets.TryGetValue(assetName, out var resident))
-            {
-                loadAssetCallbacks?.LoadAssetSuccessCallback?.Invoke(assetName, resident, 0f, userData);
                 return;
             }
 

@@ -92,6 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826099739272283067}
+  - component: {fileID: 9000000000000000000}
   m_Layer: 0
   m_Name: Background_Remain
   m_TagString: BackGround
@@ -758,3 +759,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 413462, guid: 196d5c78b77728e458cbfadcba518631, type: 3}
   m_PrefabInstance: {fileID: 8792506718886341113}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9000000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383516895249335979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a759829bbf54749a63b9a45019b35bb, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ScrollingPlates: []
+  WanderingDemons: []
+  Emitters: []

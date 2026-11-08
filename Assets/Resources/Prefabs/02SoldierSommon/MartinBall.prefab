@@ -203,11 +203,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6957893479433811638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45bc29f5471402648823789c8c912b59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  range: 1
-  damage: 100
-  isEnemy: 0
-  explosionEffect: {fileID: 7769346568784682466, guid: 810a3abb336121244b04769edef34c8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: d986999e921bbd741b349e04c00b7128, type: 2}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: b7b60133b28c5e44e996add36fa4bdc8:6957893479433811638
+  Prefabs:
+  - Name: MartinControl.explosionEffect
+    Value: {fileID: 7769346568784682466, guid: 810a3abb336121244b04769edef34c8c, type: 3}
+  - Name: explosionEffect
+    Value: {fileID: 7769346568784682466, guid: 810a3abb336121244b04769edef34c8c, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []

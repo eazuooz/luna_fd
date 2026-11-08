@@ -40,15 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 661645798056106814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39d66a2ab2f7f134794b182bb45c831a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgroundImage: {fileID: 8383516895249335979, guid: 4ab3ed2c93590494bafb07411d9fc2c7, type: 3}
-  rewardExp: 0
-  rewardGold: 0
-  Monsters:
-  - {fileID: 4100995970120910541, guid: 989d27020dad0e54fba2721371a3a187, type: 3}
-  - {fileID: 5756290492642287939, guid: bf1d17dc6170d4245b01c4083883c650, type: 3}
-  - {fileID: 3039898614407082880, guid: 01f9b308a0b94fa409399d53a6c08ef4, type: 3}
-  - {fileID: 524913559582004976, guid: 5852d947dceddf44689e92c0f95f2365, type: 3}
-  dungeonLevel: 0
+  m_Script: {fileID: 11500000, guid: 09f8a05808794181b3581913cff5906f, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  TableKey: Dungeon05_old
+  dungeonTable: {fileID: 0}

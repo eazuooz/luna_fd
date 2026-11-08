@@ -40,10 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5811659828842603963}
-  - component: {fileID: 5811659828842603962}
   - component: {fileID: 5811659828842603965}
-  - component: {fileID: 5608777666370361901}
-  - component: {fileID: 7406001835186433873}
   - component: {fileID: 4240471402811106853}
   m_Layer: 0
   m_Name: 06Luna_Dragon
@@ -68,26 +65,8 @@ Transform:
   - {fileID: 5811659829783042388}
   - {fileID: 4901776095268275931}
   - {fileID: 651512078371848974}
-  - {fileID: 8580917065936782990}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5811659828842603962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811659828842603964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aee8ac206ba70df449b523d939a40a2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myTower: {fileID: 0}
-  buffPrefab: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
-  curStateString: none
-  status: {fileID: 0}
-  moving: 0
 --- !u!114 &5811659828842603965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,60 +76,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5811659828842603964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 294aeda62e1038f4d828d0df12fcda66, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 294aeda62e1038f4d828d0df12fcda66, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 7408102139933840762, guid: 45947cec6352de04d9921fdd8121fbd8, type: 3}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &5608777666370361901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811659828842603964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6baa2ed15a4d58f4e87aaf082e0ce322, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &7406001835186433873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811659828842603964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d965277d9f237f4dbc2f729eb9fc276, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DragonPet: {fileID: 6951563279374113896}
+  ParameterKey: 4059dce56b27b384fac79896e0441b8b:5811659828842603964
+  Prefabs:
+  - Name: LunaStateMachine.buffPrefab
+    Value: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
+  - Name: buffPrefab
+    Value: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!61 &4240471402811106853
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -428,78 +370,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1001 &8391561234743080450
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 5811659828842603963}
-    m_Modifications:
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1444592816212863594, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_Name
-      value: 06_DragonPet
-      objectReference: {fileID: 0}
-    - target: {fileID: 1660504085076568135, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
---- !u!1 &6951563279374113896 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1444592816212863594, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-  m_PrefabInstance: {fileID: 8391561234743080450}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8580917065936782990 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 243575773275058316, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
-  m_PrefabInstance: {fileID: 8391561234743080450}
-  m_PrefabAsset: {fileID: 0}

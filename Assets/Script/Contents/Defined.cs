@@ -1,56 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
-
-public static class Manager
-{
-    public static ScreenManager Screen()
-    {
-        return Game.Instance.screenManager;
-    }
-    public static ResourcesManager Resources()
-    {
-        return Game.Instance.resourcesManager;
-    }
-    public static CryptoManager Crypto()
-    {
-        return Game.Instance.cryptoManager;
-    }
-    public static UIManager UI()
-    {
-        return Game.Instance.uiManager;
-    }
-    public static DataManager Data
-    {
-        get { return Game.Instance.dataManager; }
-        private set { }
-    }
-    public static LunaSceneManager LunaScene()
-    {
-        return Game.Instance.lunaSceneManager;
-    }
-    public static LightManager Lightr()
-    {
-        return Game.Instance.lightManager;
-    }
-    public static TutorialManager Tutorial()
-    {
-        return Game.Instance.tutorialManager;
-    }
-    public static LanguageManager Language()
-    {
-        return Game.Instance.languageManager;
-    }
-    public static InputManager Input()
-    {
-        return Game.Instance.inputManager;
-    }
-    public static SoundManager Sound()
-    {
-        return Game.Instance.soundManager;
-    }
-}
+using Luna.Gameplay;
+using UnityGameFramework.Runtime;
 
 public static class Defined
 {
@@ -75,16 +27,6 @@ public static class Defined
     public static int MaxSoldierCnt = 2;
     public static int MaxUnitCnt = 6;
 
-    //skill trigger
-    public static bool SkillTrigger_Roni = false;
-    public static bool SkillTrigger_Rose = false;
-    public static bool SkillTrigger_Roen1 = false;
-    public static bool SkillTrigger_Roen2 = false;
-    public static bool SkillTrigger_Roen3 = false;
-    public static bool SkillTrigger_Elena = false;
-    public static bool SkillTrigger_Pochi = false;
-    public static float SkillTrigger_Goldy = 0.0f;
-
     //LevelUp const value
     public const float AddMoveSpeedValue = 0.1f;
     public const float AddGoldSpeedValue = 0.03f;
@@ -95,237 +37,74 @@ public static class Defined
     public const float magneticDistacne = 100.0f;
 
     /// <summary>
-    /// return prob >= Random.Range(1.0f, 100.0f);
+    /// return prob >= 100f || (prob > 0f && Random.value < prob * 0.01f);
     /// </summary>
     /// <param name="prob"></param>
     /// <returns></returns>
     public static bool CanProbability(float prob)
     {
-        return prob >= Random.Range(1.0f, 100.0f);
+        return prob >= 100f || (prob > 0f && Random.value < prob * 0.01f);
     }
-    public static GameObject EffectCreate(GameObject originEffect
-                                        , Vector3 targetPos)
+    public static int EffectCreate(GameObject prefab, Vector3 position, int roundId)
     {
-        if (originEffect == null)
-            return null;
-
-        GameObject tmpEffect 
-            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, originEffect.transform.rotation);
-
-        return tmpEffect;
+        return EffectCreate(prefab, position, prefab != null ? prefab.transform.rotation : Quaternion.identity, roundId);
     }
-    public static GameObject EffectCreate(GameObject originEffect
-                                                    , Vector3 targetPos
-                                                    , Quaternion rot )
+    public static int EffectCreate(GameObject prefab, Vector3 position, Quaternion rotation, int roundId)
     {
-        if (originEffect == null)
-            return null;
-
-        GameObject tmpEffect
-            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, rot);
-
-        return tmpEffect;
+        if (prefab == null) return 0;
+        var data = EffectData.Create(position, roundId: roundId); data.Rotation = rotation;
+        return LunaSpawn.Show<EffectLogic>(prefab, data);
     }
-    public static GameObject EffectCreate(GameObject originEffect
-                                        , Vector3 targetPos
-                                        , Vector3 size)
+    public static int EffectCreate(GameObject prefab, Vector3 position, Vector3 size, int roundId)
     {
-        if (originEffect == null)
-            return null;
-
-        GameObject tmpEffect 
-            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, originEffect.transform.rotation);
-        tmpEffect.transform.localScale = size;
-
-        return tmpEffect;
+        if (prefab == null) return 0;
+        var data = EffectData.Create(position, roundId: roundId); data.Rotation = prefab.transform.rotation;
+        data.ScaleMultiplier = size.x;
+        return LunaSpawn.Show<EffectLogic>(prefab, data);
     }
-
-    public static GameObject EffectCreate(GameObject originEffect
-                                        , GameObject target
-                                        , eEffectPosition effectPosition = eEffectPosition.TARGET
-                                        , bool chase = false)
+    public static int EffectCreate(GameObject prefab, GameObject target,
+        eEffectPosition effectPosition = eEffectPosition.TARGET, bool chase = false)
     {
-        Vector3 pos = new Vector3();
-
-        if (target == null)
-            return null;
-
-        switch (effectPosition)
+        if (prefab == null || target == null) return 0;
+        Vector3 point = target.transform.position;
+        var unit = UnitLogic.From(target);
+        if (effectPosition == eEffectPosition.TARGET)
         {
-            case Defined.eEffectPosition.UNDERFEET:
-                { 
-                    pos = target.transform.position;
-                }
-                break;
-            case Defined.eEffectPosition.TARGET:
-                {
-                    pos = GetEffectPositionType(target);
-                }
-                break;
-            case Defined.eEffectPosition.HEAD:
-                break;
-            default:
-                break;
+            if (unit != null && unit.ProjecttileArrivalLocation != null) point = unit.ProjecttileArrivalLocation.transform.position;
+            else if (target.transform.Find("Sprite") != null) point = target.transform.Find("Sprite").position;
         }
-
-        GameObject createdEffect = EffectCreate(originEffect, pos);
-
-        if (chase == true)
-        {   
-            FollowTarget(createdEffect, target);
-        }
-
-        return createdEffect;
-    }
-    private static Vector3 GetEffectPositionType(GameObject target)
-    {
-        Status status = target.GetComponent<Status>();
-        Transform targetTr = target.transform;
-
-        if (status)
-        {
-            GameObject projectTileArrivalLocation
-                = status.ProjecttileArrivalLocation;
-
-            if (projectTileArrivalLocation != null)
-                return projectTileArrivalLocation.transform.position;
-        }
-
-        if (targetTr.Find("Sprite"))
-        {
-            return targetTr.Find("Sprite").position;
-        }
-
-        return targetTr.position; 
-    }
-    private static void FollowTarget(GameObject effect, GameObject target)
-    {
-        Effect effectCom 
-            = effect.GetComponent<Effect>();
-        if(effectCom)
-        {
-            Vector3 effectPos = effect.transform.position;
-            Vector3 targetPos = target.transform.position;
-
-            effectCom.IsChase = true;
-            effectCom.ChaseDirectionVector = effectPos - targetPos;
-            effectCom.ChaseTargetObject = target;
-        }
-        else
-        {
-            effect.transform.SetParent(target.transform);
-        }
+        else if (effectPosition == eEffectPosition.HEAD) point += Vector3.up * 1.5f;
+        var owner = target.GetComponent<Entity>()?.Logic as EntityLogicBase;
+        var data = EffectData.Create(point, owner != null ? owner.ID : 0, chase);
+        data.Rotation = prefab.transform.rotation;
+        return LunaSpawn.Show<EffectLogic>(prefab, data);
     }
 }
 
 public static class IdentifyFunc
 {
-    public static void PickingUnit(System.Action<GameObject> action
-                                 , params System.Func<GameObject, bool>[] conditions)
+    public static bool IsAlive(GameObject unit) => Luna.Gameplay.LunaCombat.IsAlive(unit);
+    private static List<GameObject> SelectUnits(params System.Func<GameObject, bool>[] conditions)
     {
-        GameObject[] units 
-            = GameObject.FindGameObjectsWithTag("Unit");
-
-        int trueUnitsCount
-            = CheckUnitsConditions(units, conditions);
-
-        if (trueUnitsCount > 0)
+        var matches = new List<GameObject>();
+        foreach (var actor in new List<Luna.Gameplay.UnitLogic>(Luna.Gameplay.UnitLogic.ActiveUnits))
         {
-            while (!DoPickedAction(units, action))
-            {
-                //          InfiniteLoopDetector.Run();
-            }
+            var unit = actor != null ? actor.gameObject : null;
+            if (!LunaCombat.IsInCombat(actor)) continue;
+            bool match = true;
+            foreach (var condition in conditions) if (condition != null && !condition(unit)) { match = false; break; }
+            if (match) matches.Add(unit);
         }
+        return matches;
     }
-
-    public static void PickingUnits(System.Action<GameObject> action
-                                 , params System.Func<GameObject, bool>[] conditions)
+    public static void PickingUnit(System.Action<GameObject> action, params System.Func<GameObject, bool>[] conditions)
     {
-        GameObject[] units 
-            = GameObject.FindGameObjectsWithTag("Unit");
-
-        int trueUnitsCount 
-            = CheckUnitsConditions(units, conditions);
-
-        DoPicksAction(units, action);
+        var matches = SelectUnits(conditions);
+        if (matches.Count > 0) action(matches[Random.Range(0, matches.Count)]);
     }
-    private static int CheckUnitsConditions(GameObject[] units, params System.Func<GameObject, bool>[] conditions)
+    public static void PickingUnits(System.Action<GameObject> action, params System.Func<GameObject, bool>[] conditions)
     {
-        int trueUnitsCount = 0;
-        for (int i = 0; i < units.Length; i++)
-        {
-            bool condition
-                = CheckConditions(units[i], conditions);
-
-            if (condition)
-                trueUnitsCount++;
-            else
-                EraseUnit(units, units[i]);
-        }
-
-        return trueUnitsCount;
-    }
-    private static bool CheckConditions(GameObject unit, params System.Func<GameObject, bool>[] conditions)
-    {
-        bool check = true;
-        foreach (var condition in conditions)
-        {
-            bool unitFlag = condition(unit);
-            check = check && unitFlag;
-
-            if (check == false)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    private static void EraseUnit(GameObject[] units, GameObject eraseUnit)
-    {
-        for (int i = 0; i < units.Length; i++)
-        {
-            if (units[i] == eraseUnit)
-            {
-                units[i] = null;
-            }
-        }
-    }
-    private static bool DoPickedAction(GameObject[] units, System.Action<GameObject> action)
-    {
-        int index 
-            = Random.Range(0, units.Length);
-
-        if (units[index] == null)
-            return false;
-
-        if (units[index].GetComponent<Status>() == null)
-            return false;
-
-        if (units[index].GetComponent<Status>().stat.Hp <= 0.0f)
-            return false;
-
-        action(units[index]);
-
-        return true;
-    }
-    private static bool DoPicksAction(GameObject[] units, System.Action<GameObject> action)
-    {
-        foreach (GameObject unit in units)
-        {
-            if (unit == null)
-                continue;
-
-            if (unit.GetComponent<Status>() == null)
-                continue;
-
-            if (unit.GetComponent<Status>().stat.Hp <= 0.0f)
-                continue;
-
-            action(unit);
-        }
-
-        return true;
+        foreach (var unit in SelectUnits(conditions)) if (IsAlive(unit)) action(unit);
     }
     public static bool IsUnit(GameObject unit)
     {
@@ -336,70 +115,71 @@ public static class IdentifyFunc
     }
     public static bool IsAlly(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitSide == eUnitSide.Allied)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitSide == eUnitSide.Allied)
             return true;
         else
             return false;
     }
     public static bool IsEnemy(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitSide == eUnitSide.Enemy)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitSide == eUnitSide.Enemy)
             return true;
         else
             return false;
     }
     public static bool IsPlayer(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().hitPriority == eHitPriority.VIP)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).hitPriority == eHitPriority.VIP)
             return true;
         else
             return false;
     }
     public static bool IsSoldier(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().hitPriority == eHitPriority.NORMAL)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).hitPriority == eHitPriority.NORMAL)
             return true;
         else
             return false;
     }
     public static bool IsTower(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().hitPriority == eHitPriority.TOWER)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).hitPriority == eHitPriority.TOWER)
             return true;
         else
             return false;
     }
     public static bool IsNotTower(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().hitPriority != eHitPriority.TOWER)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).hitPriority != eHitPriority.TOWER)
             return true;
         else
             return false;
     }
+    public static bool IsAirborne(GameObject unit) => unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).objectData.IsAirborne;
     public static bool IsMelee(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitAttackType == eUnitAttackType.Closed)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitAttackType == eUnitAttackType.Closed)
             return true;
         else
             return false;
     }
     public static bool IsRange(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitAttackType == eUnitAttackType.Ranged)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitAttackType == eUnitAttackType.Ranged)
             return true;
         else
             return false;
     }
     public static bool IsHero(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitType == eUnitType.Hero)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitType == eUnitType.Hero)
             return true;
         else
             return false;
     }
     public static bool IsNotHero(GameObject unit)
     {
-        if (unit != null && unit.GetComponent<Status>().UnitType != eUnitType.Hero)
+        if (unit != null && Luna.Gameplay.UnitLogic.From(unit) != null && Luna.Gameplay.UnitLogic.From(unit).UnitType != eUnitType.Hero)
             return true;
         else
             return false;
@@ -435,6 +215,7 @@ public static class IdentifyFunc
     }
     public static bool IsInDistanceRight(GameObject standard, Vector3 unitPos, float attackRange)
     {
+        if (standard == null) return false;
         float standardToUnitDistance = standard.GetComponent<Transform>().position.x - unitPos.x;
 
         if (standard != null && standardToUnitDistance <= 0 && -standardToUnitDistance <= attackRange )
@@ -467,6 +248,7 @@ public static class IdentifyFunc
     }
     public static bool IsInDistanceLeft(GameObject standard, Vector3 unitPos, float dis)
     {
+        if (standard == null) return false;
         float distance = standard.GetComponent<Transform>().position.x - unitPos.x;
 
         if (standard != null && distance >= 0 && dis >= distance)

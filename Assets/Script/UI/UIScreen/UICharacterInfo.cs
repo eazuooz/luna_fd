@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.UI;
 
-public class UICharacterInfo : UILuna, IObserver
+public class UICharacterInfo : UILuna
 {
     public enum eState
     {
         Basic,
         JoinToParty,
     }
-
-    public UIReference refData;
 
     private eState state;
     private string clickedType;
@@ -24,7 +22,7 @@ public class UICharacterInfo : UILuna, IObserver
     
     private GameObject prefabObj;
     private ObjectData objData;
-    private Status objStatus;
+
 
     private UICharacterList uiCharacterList;
     public UICharacterList UICharacterList 
@@ -32,8 +30,8 @@ public class UICharacterInfo : UILuna, IObserver
         get { return uiCharacterList; }
         set { uiCharacterList = value; }
     }
-    public int Priority { get; set; }
-    public int ID { get; set; }
+
+
     public void OnResponse(object obj)
     {
         UpdateLevelUpInfo();
@@ -45,15 +43,16 @@ public class UICharacterInfo : UILuna, IObserver
 
 
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
 
         uiCharacterList = GameObject.FindWithTag("UICharacterList").GetComponent<UICharacterList>();
 
         if(uiCharacterList.PickedUnitName == null)
         {
-            Game.Instance.uiManager.Pop(type);
+            LunaUI.Close(type);
             return;
         }
 
@@ -68,8 +67,7 @@ public class UICharacterInfo : UILuna, IObserver
         {
             return;
         }
-        objStatus = prefabObj.GetComponent<Status>();
-        objData = objStatus.objectData;
+        objData = prefabObj.GetComponent<UnitView>().Data;
 
         InitTab();
         InitializeUnitData(levelup);
@@ -79,25 +77,31 @@ public class UICharacterInfo : UILuna, IObserver
         
 
 
-        LunaDataTable.Instance.UnitTable[objData.engName].subject.AddObserver(this);
+        LunaDataTable.Instance.UnitTable[objData.engName].Changed += OnResponse;
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate()
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed);
 
 
 
     }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear()
+    protected override void OnClose(bool isShutdown, object userData)
     {
-        LunaDataTable.Instance.UnitTable[objData.engName].subject.RemoveObserver(this);
+        try
+        {
+        if (objData != null) objData.Changed -= OnResponse;
+    
+        }
+        finally { base.OnClose(isShutdown, userData); }
     }
 
     public void ReleaseUI()
@@ -106,25 +110,25 @@ public class UICharacterInfo : UILuna, IObserver
         //if(uICharacterList)
         //    uICharacterList.GetComponent<UICharacterList>().SetActivCardDeck(true);
 
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     private void InitTab()
     {
-        wakeUpTab = LunaUtility.FindChildObject(gameObject, "wakeUpTab");
-        levelUpTab = LunaUtility.FindChildObject(gameObject, "levelupTab");
+        wakeUpTab = LunaUIViews.FindChildObject(gameObject, "wakeUpTab");
+        levelUpTab = LunaUIViews.FindChildObject(gameObject, "levelupTab");
 
         wakeUpTab.GetComponent<Button>().onClick.AddListener(() => OnTabClick(wakeUpTab.name));
         levelUpTab.GetComponent<Button>().onClick.AddListener(() => OnTabClick(levelUpTab.name));
 
         if (levelup == null)
         {
-            levelup = LunaUtility.FindChildObject(gameObject, "bgLevelUp");
+            levelup = LunaUIViews.FindChildObject(gameObject, "bgLevelUp");
         }
 
         if (wakeup == null)
         {
-            wakeup = LunaUtility.FindChildObject(gameObject, "bgWakeUp");
+            wakeup = LunaUIViews.FindChildObject(gameObject, "bgWakeUp");
         }
 
         InitializePartyButtons();
@@ -183,13 +187,13 @@ public class UICharacterInfo : UILuna, IObserver
     
     private void InitializePartyButtons()
     {
-        List<GameObject> joinButtons = LunaUtility.FindChildObjects(transform.gameObject, "JoinPartyButton");
+        List<GameObject> joinButtons = LunaUIViews.FindChildObjects(transform.gameObject, "JoinPartyButton");
         foreach (GameObject go in joinButtons)
         {
             go.GetComponent<Button>().onClick.AddListener(OnClickJoinMyDeck);
         }
 
-        List<GameObject> exitButtons = LunaUtility.FindChildObjects(transform.gameObject, "ExitPartyButton");
+        List<GameObject> exitButtons = LunaUIViews.FindChildObjects(transform.gameObject, "ExitPartyButton");
         foreach (GameObject go in exitButtons)
         {
             go.GetComponent<Button>().onClick.AddListener(OnClickExitMyDeck);
@@ -262,10 +266,10 @@ public class UICharacterInfo : UILuna, IObserver
             ultState -= 5;
         }
 
-        text.text = "-" + objData.Level.ToString() + "<color=lime>(+1)</color>" + " ∑π∫ß " + "\n"
-                        + "- " + star.ToString() + "º∫" + "\n"
-                        + "- " + ultState.ToString() + "∞¢º∫\n"
-                        + "- ∞≠»≠ ƒ´µÂ " + objData.cardCount.ToString() + "¿Â";
+        text.text = "-" + objData.Level.ToString() + "<color=lime>(+1)</color>" + " Î†àÎ≤® " + "\n"
+                        + "- " + star.ToString() + "ÏÑ±" + "\n"
+                        + "- " + ultState.ToString() + "Í∞ÅÏÑ±\n"
+                        + "- Í∞ïÌôî Ïπ¥Îìú " + objData.cardCount.ToString() + "Ïû•";
     }
 
     private string CalculateTempString(string frontString)
@@ -282,26 +286,26 @@ public class UICharacterInfo : UILuna, IObserver
     private void UpdateLevelUpInfo()
     {
         GameObject statObj
-            = LunaUtility.FindChildObject(levelup, "LevelUpStat");
+            = LunaUIViews.FindChildObject(levelup, "LevelUpStat");
 
         GameObject subObj = statObj.transform.Find("Text").gameObject;
         Text statText = subObj.GetComponent<Text>();
 
-        //∞¯∞›∑¬ HP
-        //πÊæÓ∑¬ Ω∫≈≥∞¯∞›∑¬
-        statText.text = "-∞¯∞›∑¬ " + objData.GetAttackDamage_Value().ToString()
+        //Í≥µÍ≤©Î†• HP
+        //Î∞©Ïñ¥Î†• Ïä§ÌÇ¨Í≥µÍ≤©Î†•
+        statText.text = "-Í≥µÍ≤©Î†• " + objData.GetAttackDamage_Value().ToString()
                         + "<color=lime>(+" + objData.LevelUpAttPoint.ToString() + ")</color>"
                         + CalculateTempString(objData.LevelUpAttPoint.ToString())
                         + "-HP " + objData.GetCurrentLevelHP_Value().ToString()
                         + "<color=lime>(+" + objData.LevelUpHpPoint.ToString() + ")</color>\n"
-                        + "-πÊæÓ∑¬ " + objData.GetArmour_ValueInt().ToString()
+                        + "-Î∞©Ïñ¥Î†• " + objData.GetArmour_ValueInt().ToString()
                         + "<color=lime>(+" + objData.LevelUpArmourPoint.ToString() + ")</color>\n"
                         + CalculateTempString(objData.LevelUpArmourPoint.ToString())
-                        + "-Ω∫≈≥ ∞¯∞›∑¬ " + objData.GetResultSkillAtt_Value().ToString()
+                        + "-Ïä§ÌÇ¨ Í≥µÍ≤©Î†• " + objData.GetResultSkillAtt_Value().ToString()
                         + "<color=lime>(+" + objData.LevelUpSkillDamage.ToString() + ")</color>\n";
 
         GameObject specialObj
-             = LunaUtility.FindChildObject(levelup, "SpecialStat");
+             = LunaUIViews.FindChildObject(levelup, "SpecialStat");
 
         specialObj.GetComponent<Text>().text
             = objData.skillName.ToString();
@@ -320,15 +324,15 @@ public class UICharacterInfo : UILuna, IObserver
     private void UpdateWakeUpInfo()
     {
         GameObject statObj
-            = LunaUtility.FindChildObject(wakeup, "WakeUpStat");
+            = LunaUIViews.FindChildObject(wakeup, "WakeUpStat");
 
         GameObject subObj = statObj.transform.Find("Text").gameObject;
         Text statText = subObj.GetComponent<Text>();
 
-        statText.text = "3 º∫ : " + objData.start3.ToString() + "\n"
-                        + "5 º∫ : " + objData.start5.ToString() + "\n\n"
-                        + "1∞¢º∫ : " + objData.ultra1.ToString() + "\n"
-                        + "2∞¢º∫ : " + objData.ultra2.ToString() + "\n";
+        statText.text = "3 ÏÑ± : " + objData.start3.ToString() + "\n"
+                        + "5 ÏÑ± : " + objData.start5.ToString() + "\n\n"
+                        + "1Í∞ÅÏÑ± : " + objData.ultra1.ToString() + "\n"
+                        + "2Í∞ÅÏÑ± : " + objData.ultra2.ToString() + "\n";
     }
 
     private void UpdateRankUpButton()
@@ -336,13 +340,13 @@ public class UICharacterInfo : UILuna, IObserver
         if ((int)objData.ultState > 4)
         {
             GameObject statObj
-                = LunaUtility.FindChildObject(wakeup, "WakeUpButton");
+                = LunaUIViews.FindChildObject(wakeup, "WakeUpButton");
 
             GameObject imgObj
-                = LunaUtility.FindChildObject(statObj, "SourceImage");
+                = LunaUIViews.FindChildObject(statObj, "SourceImage");
 
             //Text costText
-            //    = LunaUtility.FindComponentByChildObject<Text>(statObj, "CostText");
+            //    = LunaUIViews.FindComponentByChildObject<Text>(statObj, "CostText");
 
             Sprite starStoneSprite
                 = Resources.Load<Sprite>("UI/UICharacterList/popup_ soldier/goods/starstone");
@@ -375,13 +379,13 @@ public class UICharacterInfo : UILuna, IObserver
         LunaDataTable.Instance.playerData.Gold -= cost;
 
         Text infoText =
-            LunaUtility.FindComponentByChildObject<Text>(levelup, "InfoText");
+            LunaUIViews.FindComponentByChildObject<Text>(levelup, "InfoText");
 
         UpdateCharacterInfoText(infoText);
         UpdateLevelUpInfo();
 
         GameObject levelUpButton
-            = LunaUtility.FindChildObject(gameObject, "LevelupButton");
+            = LunaUIViews.FindChildObject(gameObject, "LevelupButton");
         Transform costText = levelUpButton.transform.Find("CostText");
         costText.GetComponent<Text>().text = "x" + cost.ToString();
     }
@@ -393,7 +397,7 @@ public class UICharacterInfo : UILuna, IObserver
 
         if ((int)objData.ultState >= 7)
         {
-            Debug.Log("√÷¥Î∞≠»≠¿‘¥œ¥Ÿ");
+            Debug.Log("ÏµúÎåÄÍ∞ïÌôîÏûÖÎãàÎã§");
 
             return;
         }
@@ -403,8 +407,8 @@ public class UICharacterInfo : UILuna, IObserver
             return;
         }
 
-        //∑π∫ß 5¿ÃªÛ¿Ã∏È ƒ´µÂ º“∏
-        //5¿Ã«œ¿Ã∏È Ω∫≈∏Ω∫≈Ê 1000∞≥ º“∏
+        //Î†àÎ≤® 5Ïù¥ÏÉÅÏù¥Î©¥ Ïπ¥Îìú ÏÜåÎ™®
+        //5Ïù¥ÌïòÏù¥Î©¥ Ïä§ÌÉÄÏä§ÌÜ§ 1000Í∞ú ÏÜåÎ™®
         if ((int)objData.ultState >= 5)
         {
             LunaDataTable.Instance.playerData.StarStone -= 2000;
@@ -417,11 +421,11 @@ public class UICharacterInfo : UILuna, IObserver
         objData.RankUp();
 
         Text infoText =
-             LunaUtility.FindComponentByChildObject<Text>(wakeup, "InfoText");
+             LunaUIViews.FindComponentByChildObject<Text>(wakeup, "InfoText");
         UpdateCharacterInfoText(infoText);
 
         //GameObject levelUpButton
-        //    = LunaUtility.FindChildObject(gameObject, "WakeUpButton");
+        //    = LunaUIViews.FindChildObject(gameObject, "WakeUpButton");
         //Transform costText = levelUpButton.transform.Find("StarStone").Find("CostText");
         //costText.GetComponent<Text>().text = "x" + cost.ToString();
     }

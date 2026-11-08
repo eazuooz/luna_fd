@@ -1,33 +1,31 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Clare : HeroSkillControl
+public class Clare : HeroUnitLogic
 {
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage * 3f;
 
     private bool triggerSkill_1;
     private bool triggerSkill_2;
 
     private float skillCount;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage * 3.0f;
 
         if (triggerSkill_2 == true)
         {
@@ -38,12 +36,13 @@ public class Clare : HeroSkillControl
                 newSkill();
             }
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = true;
-        skillDamage = status.stat.AttackDamage * 3.0f;
+
         triggerSkill_1 = false;
         triggerSkill_2 = false;
 
@@ -81,27 +80,12 @@ public class Clare : HeroSkillControl
 
     public override void Skill()
     {
-        float skillRange = 4.0f;
-        bool tmpSkillTrigger = triggerSkill_1 && Defined.CanProbability(70);
-
-
-        if (triggerSkill_1 && Defined.CanProbability(70))
-        {
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                if (IdentifyFunc.IsInDistanceRight(status.AttackTarget, unit, skillRange))
-                {
-                    unit.GetComponent<Status>().TakeBleeding(skillDamage, 5.0f);
-                }
-            }, IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower);
-        }
-        else
-        {
-            if (status.AttackTarget != null)
-            {
-                status.AttackTarget.GetComponent<Status>().TakeBleeding(skillDamage, 5.0f);
-            }
-        }
+        if (!Defined.CanProbability(60f)) return;
+        if (triggerSkill_1 && Defined.CanProbability(70f))
+            IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).TakeBleeding(skillDamage, 5f),
+                IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower, unit => IdentifyFunc.IsInDistance(gameObject, unit, 4f));
+        else if (IdentifyFunc.IsAlive(status.AttackTarget) && IdentifyFunc.IsInDistance(gameObject, status.AttackTarget, 4f))
+            UnitLogic.From(status.AttackTarget).TakeBleeding(skillDamage, 5f);
     }
 
     void newSkill()

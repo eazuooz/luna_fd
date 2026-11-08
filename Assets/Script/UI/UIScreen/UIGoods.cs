@@ -1,43 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.UI;
 
 public class UIGoods : UILuna
 {
-	public UIReference refData;
 
 	private Text goldText;
 	private Text starStoneText;
 
 
-	public override void OnInit() 
-	{
-		base.OnInit();
+	protected override void OnOpen(object userData)
+    {
+        base.OnOpen(userData);
+		
 
-		goldText = LunaUtility.FindComponentByChildObject<Text>(gameObject, "GoldText");
-		starStoneText = LunaUtility.FindComponentByChildObject<Text>(gameObject, "StarStoneText");
+		goldText = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "GoldText");
+		starStoneText = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "StarStoneText");
 
 		goldText.text = LunaDataTable.Instance.playerData.Gold.ToString();
 		starStoneText.text = LunaDataTable.Instance.playerData.StarStone.ToString();
 
 	}
 
-	public override void OnActive() { }
-	public override void OnInActive() { }
-	public override void OnUpdate()
-	{
+	
+	
+	protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed);
 		goldText.text = LunaDataTable.Instance.playerData.Gold.ToString();
 		starStoneText.text = LunaDataTable.Instance.playerData.StarStone.ToString();
 	}
 
-	public override void OnLoop() { }
+	
 
-	public override void OnClear() { }
+	protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
 	public void OnClickAddButton()
     {
-		Game.Instance.uiManager.Push(UI_TYPE.GAMESHOP);
+		LunaUI.Open(UI_TYPE.GAMESHOP);
     }
 }

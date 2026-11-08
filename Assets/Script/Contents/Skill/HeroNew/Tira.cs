@@ -1,10 +1,11 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tira : HeroSkillControl
+public class Tira : HeroUnitLogic
 {
-    // public AudioClip skillSound;
+    // public AudioClip skillSound => View.GetSound("skillSound");
 
     private float durationEnemy;
 
@@ -13,14 +14,12 @@ public class Tira : HeroSkillControl
 
     private float skillCount;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -36,6 +35,7 @@ public class Tira : HeroSkillControl
                 newSkill();
             }
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
@@ -83,14 +83,14 @@ public class Tira : HeroSkillControl
         {
             IdentifyFunc.PickingUnits((unit) =>
             {
-                unit.GetComponent<Status>().GrowUp(5.0f);
+                UnitLogic.From(unit).GrowUp(5.0f);
             }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower, IdentifyFunc.IsMelee);
         }
         else
         {
             IdentifyFunc.PickingUnits((unit) =>
             {
-                unit.GetComponent<Status>().GrowUp(5.0f);
+                UnitLogic.From(unit).GrowUp(5.0f);
             }, IdentifyFunc.IsAlly, IdentifyFunc.IsPlayer);
         }
     }
@@ -100,7 +100,7 @@ public class Tira : HeroSkillControl
         if (status.AttackTarget != null)
         {
             //   status.PlayOneSound(skillSound);
-            status.AttackTarget.GetComponent<Status>().GrowDownSkill(durationEnemy);
+            UnitLogic.From(status.AttackTarget).GrowDownSkill(durationEnemy);
 
             skillCount = 20.0f;
         }

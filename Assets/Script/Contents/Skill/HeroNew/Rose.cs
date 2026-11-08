@@ -1,34 +1,33 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rose : HeroSkillControl
+public class Rose : HeroUnitLogic
 {
-    private float skillDamage;
+    private float skillDamage => status.stat.AttackDamage;
     private float coefSkill_1;
     private float coefSkill_2;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
 
-        skillDamage = status.stat.AttackDamage;
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamage = status.stat.AttackDamage * 1.1f;
+
         coefSkill_1 = 5.0f;
         coefSkill_2 = 5.0f;
     }
@@ -59,7 +58,6 @@ public class Rose : HeroSkillControl
     {
         ULT1();
 
-        Defined.SkillTrigger_Rose = true;
     }
 
     public override void Skill()
@@ -68,20 +66,17 @@ public class Rose : HeroSkillControl
 
         IdentifyFunc.PickingUnits((unit) =>
         {
-            if (IdentifyFunc.IsAlly(unit) && Defined.CanProbability(80))
+            if (IdentifyFunc.IsAlly(unit) && IdentifyFunc.IsMelee(unit) && Defined.CanProbability(80))
             {
-                unit.GetComponent<Status>().TakeBerserkMode(coefSkill_1);
+                UnitLogic.From(unit).TakeBerserkMode(coefSkill_1);
             }
 
             if (IdentifyFunc.IsEnemy(unit) && IdentifyFunc.IsInDistance(gameObject, unit, skillRange) && Defined.CanProbability(50))
             {
-                unit.GetComponent<Status>().TakeBleeding(skillDamage, coefSkill_2);
+                UnitLogic.From(unit).TakeBleeding(skillDamage, coefSkill_2);
             }
-        }, IdentifyFunc.IsSoldier);
+        }, IdentifyFunc.IsNotTower);
     }
 
-    public override void AfterDeath()
-    {
-        Defined.SkillTrigger_Rose = false;
-    }
+
 }

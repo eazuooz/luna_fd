@@ -1,4 +1,4 @@
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using GameFramework;
 using GameFramework.Setting;
 using UnityEngine;
@@ -7,14 +7,15 @@ using UnityEngine.UI;
 
 public class UIGameOption : UILuna
 {
-    public UIReference refData;
+
     public Sprite soundX;
     private bool soundOnOff;
     private Image soundButtonImage;
     private Sprite soundOnSprite;
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
+        base.OnOpen(userData);
         if (soundButtonImage == null)
         {
             soundButtonImage = transform.Find("ButtonSound").GetComponent<Image>();
@@ -24,17 +25,25 @@ public class UIGameOption : UILuna
         ApplySoundState();
     }
 
-    public override void OnActive() { }
-    public override void OnInActive() { }
-    public override void OnUpdate() { }
-    public override void OnLoop() { }
-    public override void OnClear() { }
+    
+    
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
+    
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        { 
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void OnClickGameOption()
     {
         var scene = SceneManager.GetActiveScene().name;
-        if (scene == "Lobby") Game.Instance.uiManager.Push(UI_TYPE.QUITPOPUP);
-        else if (scene == "Game" || scene == "Dungeon") Game.Instance.uiManager.Push(UI_TYPE.SELECTPOPUP);
+        if (scene == "Lobby") LunaUI.Open(UI_TYPE.QUITPOPUP);
+        else if (scene == "Game" || scene == "Dungeon") LunaUI.Open(UI_TYPE.SELECTPOPUP);
     }
 
     public void OnClickSoundOnOff()

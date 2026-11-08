@@ -170,8 +170,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8392180741111213598}
   - component: {fileID: 3158628550107299074}
-  - component: {fileID: 3326263343680648998}
-  - component: {fileID: 812990139717511559}
   - component: {fileID: 5282249744395596014}
   m_Layer: 0
   m_Name: Tira
@@ -208,59 +206,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 6267948604418665180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: aeb5a6aa82118c149a19ba06a615cdf2, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: aeb5a6aa82118c149a19ba06a615cdf2, type: 2}
+  Projectile: {fileID: 7151192383833321309, guid: e61b0b41a9a2f554c876f57dd1411eaf, type: 3}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &3326263343680648998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6267948604418665180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 7151192383833321309, guid: e61b0b41a9a2f554c876f57dd1411eaf, type: 3}
---- !u!114 &812990139717511559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6267948604418665180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fdd62c13456a6946b6ddb647ca05666, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  ParameterKey: 73a273807203eea4fa47a96f73f1f838:6267948604418665180
+  Prefabs:
+  - Name: UnitAI.projectile
+    Value: {fileID: 7151192383833321309, guid: e61b0b41a9a2f554c876f57dd1411eaf, type: 3}
+  - Name: projectile
+    Value: {fileID: 7151192383833321309, guid: e61b0b41a9a2f554c876f57dd1411eaf, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!61 &5282249744395596014
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -641,6 +641,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826099739272283067}
+  - component: {fileID: 9000000000000000000}
   m_Layer: 0
   m_Name: Background_DemonField
   m_TagString: BackGround
@@ -711,11 +712,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8660121696128865559}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06330c673e6eb2e4e80c5b7786866f39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effect: {fileID: 100000, guid: 46f09b0900949d1499051ed78fe2c5be, type: 3}
-  delayTime: 10
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 0}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 34a9517bcaa0da5468996de5eb0e9bf5:8660121696128865559
+  Prefabs:
+  - Name: BGEffectCreator.effect
+    Value: {fileID: 100000, guid: 46f09b0900949d1499051ed78fe2c5be, type: 3}
+  - Name: effect
+    Value: {fileID: 100000, guid: 46f09b0900949d1499051ed78fe2c5be, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1001 &894767704347540877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -790,3 +803,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4005808538926482, guid: 0e1276eeee6de6a4eb0173e713ab2a4d, type: 3}
   m_PrefabInstance: {fileID: 894767704347540877}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9000000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383516895249335979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a759829bbf54749a63b9a45019b35bb, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ScrollingPlates: []
+  WanderingDemons: []
+  Emitters:
+  - {fileID: 3491440867776936813}

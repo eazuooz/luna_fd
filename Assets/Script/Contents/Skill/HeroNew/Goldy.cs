@@ -1,56 +1,56 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goldy : HeroSkillControl
+public class Goldy : HeroUnitLogic
 {
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
-    }
+    
 
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
             return;
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
 
     public override void STAR1()
     {
         //status.skillTargetNeed = false;
-        Defined.SkillTrigger_Goldy = 6.0f;
+        status.unitState.IsTargetingSkill = false;
     }
 
     public override void STAR3()
     {
         STAR1();
 
-        Defined.SkillTrigger_Goldy = 7.0f;
+        status.unitState.IsTargetingSkill = false;
     }
 
     public override void STAR5() 
     {
         STAR3();
 
-        Defined.SkillTrigger_Goldy = 8.0f;
+        status.unitState.IsTargetingSkill = false;
     }
 
     public override void ULT1() 
     {
         STAR5();
 
-        Defined.SkillTrigger_Goldy = 9.0f;
+        status.unitState.IsTargetingSkill = false;
     }
 
     public override void ULT2()
     {
         ULT1();
 
-        Defined.SkillTrigger_Goldy = 10.0f;
+        status.unitState.IsTargetingSkill = false;
     }
 
     public override void Skill()

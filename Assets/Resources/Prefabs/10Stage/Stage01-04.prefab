@@ -40,32 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 661645798056106814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c26634bf59e65294f915118ccd97d5d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageName: "\uC545\uBABD\uC758 \uC131 \uC9C0\uD558 4\uCE35"
+  m_Script: {fileID: 11500000, guid: 09f8a05808794181b3581913cff5906f, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  TableKey: Stage01-04
   dungeonTable: {fileID: 0}
-  backgroundImage: {fileID: 8383516895249335979, guid: 7b5811bdbb1189e4b8cdcf085d9f6c37, type: 3}
-  rewardGold: 0
-  enemyTower: {fileID: 7528829204366405261, guid: 31e469611d403d1498aa54c4c7eba692, type: 3}
-  allyTower: {fileID: 7528829204366405261, guid: 07144c725e49c5749985f2b4474fa9ed, type: 3}
-  spawnDelayStartTime: 7
-  spawnDelayEndTime: 10
-  stageWidth: 3.25
-  isBossStage: 0
-  startMonsters:
-    gameObj: {fileID: 0}
-    spawnPercentage: 0
-  nonBossMonsters:
-  - gameObj: {fileID: 3039898614407082880, guid: 01f9b308a0b94fa409399d53a6c08ef4, type: 3}
-    spawnPercentage: 40
-  - gameObj: {fileID: 4100995970120910541, guid: 989d27020dad0e54fba2721371a3a187, type: 3}
-    spawnPercentage: 40
-  - gameObj: {fileID: 7459635392476332599, guid: 0d46b052f75995749a1ff5e8c30c70a1, type: 3}
-    spawnPercentage: 40
-  gamePlayer: {fileID: 0}
-  goldAmount: 5
-  ItemDropTable: []
-  MonterDropTable:
-  - itemData: {fileID: 11400000, guid: 486db92c4442f7242b7d6f56bcf0c11e, type: 2}
-    probability: 0.01

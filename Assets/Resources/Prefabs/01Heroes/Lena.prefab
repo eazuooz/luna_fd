@@ -272,8 +272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5615607307978691232}
   - component: {fileID: 1013303261416035990}
-  - component: {fileID: 3065869039956253958}
-  - component: {fileID: -5938677480097624654}
   - component: {fileID: 5860788537159747931}
   m_Layer: 0
   m_Name: Lena
@@ -309,64 +307,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 6074120681809563578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: 9834c9a90cf2d76449fba264c45b14b7, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: 9834c9a90cf2d76449fba264c45b14b7, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: -1
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &3065869039956253958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6074120681809563578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &-5938677480097624654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6074120681809563578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab698a0671bdcc47923c0b3e7e880b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
-  NormalMinion: {fileID: 4469422527661173269, guid: da7d6d225a2f8ee41ad6435186948d1b, type: 3}
-  SkillMinion: {fileID: 6521433145196985937, guid: e846be11094819047b0f9c6b5f924d0d, type: 3}
-  UltMinion: {fileID: 7783413216280583934, guid: 12122b711cddad842b9a62e3e322ab0e, type: 3}
+  ParameterKey: 113baa66fa151a64399761e03a184bde:6074120681809563578
+  Prefabs:
+  - Name: Lena.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Lena.NormalMinion
+    Value: {fileID: 4469422527661173269, guid: da7d6d225a2f8ee41ad6435186948d1b, type: 3}
+  - Name: NormalMinion
+    Value: {fileID: 4469422527661173269, guid: da7d6d225a2f8ee41ad6435186948d1b, type: 3}
+  - Name: Lena.SkillMinion
+    Value: {fileID: 6521433145196985937, guid: e846be11094819047b0f9c6b5f924d0d, type: 3}
+  - Name: SkillMinion
+    Value: {fileID: 6521433145196985937, guid: e846be11094819047b0f9c6b5f924d0d, type: 3}
+  - Name: Lena.UltMinion
+    Value: {fileID: 7783413216280583934, guid: 12122b711cddad842b9a62e3e322ab0e, type: 3}
+  - Name: UltMinion
+    Value: {fileID: 7783413216280583934, guid: 12122b711cddad842b9a62e3e322ab0e, type: 3}
+  Sounds:
+  - Name: Lena.skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: c22686c745d2d874fb2f9112865a52f5, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &5860788537159747931
 BoxCollider2D:
   m_ObjectHideFlags: 0

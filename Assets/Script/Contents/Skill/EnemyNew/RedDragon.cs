@@ -2,36 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 
-public class RedDragon : EverydayDevup.Framework.LunaEntityBehaviour
+public class RedDragon : EnemySkillLogic
 {
-    public Status status { get; set; }
     private int skillControlCounter;
 
-    public GameObject skillEffect_1;
-    public GameObject skillEffect_2;
+    public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
+    public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
 
     // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
     }
 
     // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            Skill();
-        }
-    }
+    
 
-    void Skill()
+    protected override void ExecuteSkill()
     {
         skillControlCounter++;
 
@@ -71,9 +62,12 @@ public class RedDragon : EverydayDevup.Framework.LunaEntityBehaviour
 
         if(tmp != null)
         {
+            int targetId = UnitLogic.From(tmp).ID;
             for (int i = 0; i < 3; i++)
             {
-                tmp.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                var target = UnitLogic.Find(targetId);
+                if (target == null || target.stat.Hp <= 0f) yield break;
+                target.Attack(gameObject, skillDamage, false, true);
 
                 Defined.EffectCreate(skillEffect_1, tmp, Defined.eEffectPosition.UNDERFEET);
 
@@ -104,7 +98,7 @@ public class RedDragon : EverydayDevup.Framework.LunaEntityBehaviour
                 {
                     if (IdentifyFunc.IsInDistance(tmp, unit2, 1.0f))
                     {
-                        unit2.GetComponent<Status>().Attack(gameObject, skillDamage, false, true);
+                        UnitLogic.From(unit2).Attack(gameObject, skillDamage, false, true);
                     }
                 }, IdentifyFunc.IsAlly);
 

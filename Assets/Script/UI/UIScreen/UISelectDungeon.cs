@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,7 +9,6 @@ using System;
 
 public class UISelectDungeon : UILuna
 {
-    public UIReference refData;
 
     private GameObject[] stagePrefabs;
     private Dictionary<string, Button> stageButtons
@@ -30,11 +29,14 @@ public class UISelectDungeon : UILuna
         = new List<GameObject>();
 
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        stageButtons.Clear();
+        dungeonBtts.Clear();
+        
 
-        MyUnits.SetColliderEnabled(false);
+        
 
         InitializeGameObjects();
         InitStageList();
@@ -45,25 +47,28 @@ public class UISelectDungeon : UILuna
         
     }
 
-    public override void OnActive() 
+    
+
+    
+
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-
-    }
-
-    public override void OnInActive() { }
-
-    public override void OnUpdate() 
-    {
+        base.OnUpdate(elapsed, realElapsed);
         
 
 
     }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() 
+    protected override void OnClose(bool isShutdown, object userData)
     {
+        try
+        {
         StageButton.OnClear();
+    
+        }
+        finally { base.OnClose(isShutdown, userData); }
     }
 
     private void InitializeGameObjects()
@@ -78,11 +83,11 @@ public class UISelectDungeon : UILuna
             = Resources.Load<GameObject>("Prefabs/09UI/StageButton");
 
         stageScrollView = stageTab.transform.Find("Stage_ScrollView").gameObject;
-          //= LunaUtility.FindChildObject(gameObject, "Stage_ScrollView");
+          //= LunaUIViews.FindChildObject(gameObject, "Stage_ScrollView");
         stageContentTr = stageScrollView.transform.Find("Stage_Viewport").Find("Stage_Content");
 
         dungeonScrollView = dungeonTab.transform.Find("Dungeon_ScrollView").gameObject;
-            //= LunaUtility.FindChildObject(gameObject, "Dungeon_ScrollView");
+            //= LunaUIViews.FindChildObject(gameObject, "Dungeon_ScrollView");
 
         dungeonBttPrefab = Resources.Load<GameObject>("Prefabs/09UI/DungeonInfo");
 
@@ -91,10 +96,10 @@ public class UISelectDungeon : UILuna
     }
     private void SetStage(string stageName)
     {
-        Game.Instance.dataManager.SelectStagePrefab
-            = Game.Instance.dataManager.AllStagePrefab.Find(obj => obj.name == stageName);
+        LunaSession.Current.SelectStagePrefab
+            = LunaSession.Current.AllStagePrefab.Find(obj => obj.name == stageName);
 
-        Game.Instance.dataManager.CurrentStageName = stageName;
+        LunaSession.Current.CurrentStageName = stageName;
         LunaDataTable.Instance.playerData.SaveStageName = stageName;
     }
 
@@ -132,9 +137,9 @@ public class UISelectDungeon : UILuna
     }
     private void tabClick(GameObject tabObject)
     {
-        if(Game.Instance.uiManager.CompareTop(UI_TYPE.STAGEINFO))
+        if(LunaUI.IsTop(UI_TYPE.STAGEINFO))
         {
-            Game.Instance.uiManager.Pop(UI_TYPE.STAGEINFO);
+            LunaUI.Close(UI_TYPE.STAGEINFO);
         }
 
         SwitchTab(tabObject.name);
@@ -171,7 +176,8 @@ public class UISelectDungeon : UILuna
             stageList.Add(item);
         }
 
-        Game.Instance.dataManager.AllStagePrefab = stageList;
+        LunaSession.Current.AllStagePrefab.Clear();
+        LunaSession.Current.AllStagePrefab.AddRange(stageList);
     }
 
     private void InitStageButtons()
@@ -208,7 +214,7 @@ public class UISelectDungeon : UILuna
         StartCoroutine(MoveContentTr(moveSize));
 
         
-        Game.Instance.uiManager.Push(UI_TYPE.STAGEINFO);
+        LunaUI.Open(UI_TYPE.STAGEINFO);
     }
     IEnumerator MoveContentTr(float movePos)
     {
@@ -234,56 +240,56 @@ public class UISelectDungeon : UILuna
         int stageLevel = (((stageFront - 1) * 10) + stageBack);
 
         newButton.transform.Find("Text").GetComponent<Text>().text 
-            = "ÁöÇÏ " + stageLevel.ToString() + "Ãþ";
+            = "ì§€í•˜ " + stageLevel.ToString() + "ì¸µ";
         newButton.GetComponent<StageButton>().StageName = StageName;
 
         return newButton;
     }
     public void OnClickReleaseButton()
     {
-        if (Game.Instance.uiManager.CompareTop(UI_TYPE.STAGEINFO))
+        if (LunaUI.IsTop(UI_TYPE.STAGEINFO))
         {
-            Game.Instance.uiManager.Pop(UI_TYPE.STAGEINFO);
+            LunaUI.Close(UI_TYPE.STAGEINFO);
         }
 
-        Game.Instance.uiManager.Pop(type);
-        MyUnits.SetColliderEnabled(true);
+        LunaUI.Close(type);
+        
     }
 
     public int DungeonNumber { get; set; }
     public void OnClickSelectDungeon(int idx)
     {
-        //Game.Instance.uiManager.Pop(UI_TYPE.SELECTSTAGE);
+        //LunaUI.Close(UI_TYPE.SELECTSTAGE);
 
 
 
         string dungeonString = "Dungeon0";
         dungeonString += idx.ToString();
 
-        Game.Instance.dataManager.SelectDungeonString = dungeonString;
+        LunaSession.Current.SelectDungeonString = dungeonString;
 
         string stageDir = "Prefabs/11Dungeons/"
-                + Game.Instance.dataManager.SelectDungeonString;
+                + LunaSession.Current.SelectDungeonString;
 
-        Game.Instance.dataManager.selectDungeon
+        LunaSession.Current.selectDungeon
             = Resources.Load<GameObject>(stageDir);
 
         //MoveDungeonScene();
 
-        Game.Instance.uiManager.Push(UI_TYPE.DUNGEONINFO);
+        LunaUI.Open(UI_TYPE.DUNGEONINFO);
 
     }
     public void MoveDungeonScene()
     {
-        foreach (GameObject unit in Game.Instance.dataManager.lobbyUnits)
+        foreach (GameObject unit in LunaSession.Current.lobbyUnits)
         {
             if (unit != null)
-                unit.GetComponent<Status>().unitState.IsLobbyStartMove = true;
+                unit.GetComponent<UnitLogic>().unitState.IsLobbyStartMove = true;
         }
 
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
+        LunaScenes.FadeIn(1.5f, () =>
         {
-            Game.Instance.lunaSceneManager.LoadScene("Dungeon");
+            LunaScenes.Load("Dungeon");
         });
     }
 }

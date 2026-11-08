@@ -1,0 +1,835 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed173d5ef25c4a86898099d19364c17b, type: 3}
+  m_Name: EntityCatalog
+  m_EditorClassIdentifier: ''
+  Entries:
+  - Prefab: {fileID: 5811659828842603964, guid: b84f4f503dc4ea241b41b6b46ca01b4c, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/01Luna_Basic.prefab
+    LogicType: Luna.Gameplay.PlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: 134818ebe2a9a524595f41313480064c, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/02Luna_Wood.prefab
+    LogicType: Luna.Gameplay.PlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: d69f61a4c9f37f1429933bd713633152, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/03Luna_Skull.prefab
+    LogicType: Luna.Gameplay.SkeletonAxeLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: 13984c7c2b708104cb8e0b3e82cf1931, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/04Luna_Slime.prefab
+    LogicType: Luna.Gameplay.SlimePlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: f0338a0f8bee95a4094c1d6a55d6d6c4, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/05Luna_Rich.prefab
+    LogicType: Luna.Gameplay.RichPlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 1444592816212863594, guid: c60b4d9515cdf714bad8b5870b206d17, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/06_DragonPet.prefab
+    LogicType: Luna.Gameplay.DragonPetLogic
+    Group: Actors
+  - Prefab: {fileID: 7408102139933840762, guid: 45947cec6352de04d9921fdd8121fbd8, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/06DragonClawEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5811659828842603964, guid: 4059dce56b27b384fac79896e0441b8b, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/06Luna_Dragon.prefab
+    LogicType: Luna.Gameplay.DragonPlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: 05ac6f1a014de96448f3497117e2679f, type: 3}
+    Address: Assets/Resources/Prefabs/00Luna/07Luna_Lene.prefab
+    LogicType: Luna.Gameplay.PlayerLogic
+    Group: Actors
+  - Prefab: {fileID: 1949047231196266805, guid: 710fcfb6b39c464479a8de9cd3830a2f, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Alice.prefab
+    LogicType: Alice
+    Group: Actors
+  - Prefab: {fileID: 8706435506471164217, guid: 28362d241c336f848918671478dbf506, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Clare.prefab
+    LogicType: Clare
+    Group: Actors
+  - Prefab: {fileID: 6268672391277535269, guid: 0cd197b8df19e8d4bba9061befb80893, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Dren.prefab
+    LogicType: Dren
+    Group: Actors
+  - Prefab: {fileID: 6554372063937404331, guid: 4932b598bf928a348ba827aa2b4cb133, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Elena.prefab
+    LogicType: Elena
+    Group: Actors
+  - Prefab: {fileID: 8544926535061599160, guid: 50ea171f7b73cc84c8041fbbd85a527c, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Goldy.prefab
+    LogicType: Goldy
+    Group: Actors
+  - Prefab: {fileID: 455137693673348255, guid: 9ec902ff59d74854fb785418af6b9c2b, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Joe.prefab
+    LogicType: Joe
+    Group: Actors
+  - Prefab: {fileID: 6074120681809563578, guid: 113baa66fa151a64399761e03a184bde, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Lena.prefab
+    LogicType: Lena
+    Group: Actors
+  - Prefab: {fileID: 5821689688568116988, guid: ed714d25c0f202d4f96b69ef093e1337, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Lene.prefab
+    LogicType: Lene
+    Group: Actors
+  - Prefab: {fileID: 2743612314126954935, guid: bb71e3fde07a18245a78d0bc83f141e6, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Lennon.prefab
+    LogicType: Lennon
+    Group: Actors
+  - Prefab: {fileID: 2967491250884582408, guid: 09c90bd1884bdc24b84c52007ee40855, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Matilda.prefab
+    LogicType: Matilda
+    Group: Actors
+  - Prefab: {fileID: 556141471431159575, guid: e49bdab19cc72c44eb7ce22f94992051, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Mei.prefab
+    LogicType: Mei
+    Group: Actors
+  - Prefab: {fileID: 6955227986785806060, guid: 65d185d730994894fb25d08bc1d3a781, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Miu.prefab
+    LogicType: Miu
+    Group: Actors
+  - Prefab: {fileID: 8649366903592255535, guid: 586ed10e8a03cb644b449372f6821c9e, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Pobi.prefab
+    LogicType: Pobi
+    Group: Actors
+  - Prefab: {fileID: 623525062824102660, guid: c995db8cd1fd3334f83d05558cd1c4d6, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Pochi.prefab
+    LogicType: Pochi
+    Group: Actors
+  - Prefab: {fileID: 3793999366603015411, guid: e835418fec177184cb62bec0b800d6d2, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Pring.prefab
+    LogicType: Pring
+    Group: Actors
+  - Prefab: {fileID: 7353924261295496072, guid: 6fcc8e6c2631cbf428cce54dc88a2869, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Raccon.prefab
+    LogicType: Raccon
+    Group: Actors
+  - Prefab: {fileID: 4091641544218325043, guid: 824aab15b9cfe75409dd10a6828b3746, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Ria.prefab
+    LogicType: Ria
+    Group: Actors
+  - Prefab: {fileID: 1404517601080786067, guid: 34aa3ba15da8ffc4b9dceb1684d82141, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Roen.prefab
+    LogicType: Roen
+    Group: Actors
+  - Prefab: {fileID: 5161901356910452450, guid: 0c5f2ac537b5ebc43a8258e804ebd717, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Roni.prefab
+    LogicType: Roni
+    Group: Actors
+  - Prefab: {fileID: 3681040159851000212, guid: 8979b254788b3eb49a8c3b30a0c29006, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Rose.prefab
+    LogicType: Rose
+    Group: Actors
+  - Prefab: {fileID: 3397676516173491815, guid: 9bfae3cff2f07924ea722f706c11eca4, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Scarlet.prefab
+    LogicType: Scalet
+    Group: Actors
+  - Prefab: {fileID: 6267948604418665180, guid: 73a273807203eea4fa47a96f73f1f838, type: 3}
+    Address: Assets/Resources/Prefabs/01Heroes/Tira.prefab
+    LogicType: Tira
+    Group: Actors
+  - Prefab: {fileID: 862916423849009597, guid: 8a7bf6c8b219c624fb7871511aacee8d, type: 3}
+    Address: Assets/Resources/Prefabs/02Soldiers/PorongArcher.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3998855229750175230, guid: 97a37861cb607ea43a34af3f5bc02b28, type: 3}
+    Address: Assets/Resources/Prefabs/02Soldiers/PorongLance.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4417688911223962869, guid: 00077e3ee343316479358a71c9ed645f, type: 3}
+    Address: Assets/Resources/Prefabs/02Soldiers/PorongMace.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 6955098087988498187, guid: df960eaf336cf5a44a19e28a2378a8c8, type: 3}
+    Address: Assets/Resources/Prefabs/02Soldiers/PorongMaceHigh.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3080436021324505469, guid: e34b6ec1d72595e458a3573582518229, type: 3}
+    Address: Assets/Resources/Prefabs/02Soldiers/PorongSword.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 6485393535228168260, guid: 122e20fcab5d8b9478440edca6277637, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Dwarf.prefab
+    LogicType: DwarfLogic
+    Group: Actors
+  - Prefab: {fileID: 5811659828842603964, guid: c91e798e94a43db44956f05026002c87, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Luna_ghost.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 6981234479424132648, guid: 1214cadb5f6bcb34b9a07d2b81f2c29c, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Martin.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 6957893479433811638, guid: b7b60133b28c5e44e996add36fa4bdc8, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/MartinBall.prefab
+    LogicType: Luna.Gameplay.MartinLogic
+    Group: Effects
+  - Prefab: {fileID: 3601769417073393332, guid: 50de5c1134ebe884eb38284a45e0287c, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Mni_Martin.prefab
+    LogicType: Luna.Gameplay.MiniMartinLogic
+    Group: Effects
+  - Prefab: {fileID: 394394573834287666, guid: 31e492c7727e701498c3f1cfb7063a1b, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Pobi_ghost.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4154425776239870616, guid: add714557f4605e4c9ec8b4f78f1437b, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/SkeletonKing.prefab
+    LogicType: Bellerin
+    Group: Actors
+  - Prefab: {fileID: 6521433145196985937, guid: e846be11094819047b0f9c6b5f924d0d, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Slime_needle.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4469422527661173269, guid: da7d6d225a2f8ee41ad6435186948d1b, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Slime_normal.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7783413216280583934, guid: 2144c866a90196e42bba8f9adf5ce1bf, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/SlimeKing.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7783413216280583934, guid: 6064c24d75640fc4699e2f268b508fe4, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/SlimeKing_Ring.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7783413216280583934, guid: 12122b711cddad842b9a62e3e322ab0e, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/SlimeKing_Skill.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 5666776957943127363, guid: a76682e9aed119440bd046e7a3a066dd, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/Sword_Sprit.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4100995970120910541, guid: f10f4b1896e31cd42be4f82d5bbf16c8, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/해골 궁수 아군.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3039898614407082880, guid: 65166657c1376d446a3bca87d6a90459, type: 3}
+    Address: Assets/Resources/Prefabs/02SoldierSommon/해골 병 아군.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7439465572325926225, guid: a7bc2c00faa56ff49910eda8955231ce, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Asmo.prefab
+    LogicType: Asmo
+    Group: Actors
+  - Prefab: {fileID: 7439465572325926225, guid: b148d2dfd97e42e439c000d048d07fc1, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Bellerin.prefab
+    LogicType: Bellerin
+    Group: Actors
+  - Prefab: {fileID: 5486077676104021000, guid: 3972782244aafc44fa2bcececac20ea5, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Dekoo.prefab
+    LogicType: Dekoo_skill
+    Group: Actors
+  - Prefab: {fileID: 4361031282667252010, guid: eed4779d909d5704eb388a9efbee4c05, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Deus.prefab
+    LogicType: Deus_skill
+    Group: Actors
+  - Prefab: {fileID: 7439465572325926225, guid: 45146e08c36959c41b7b85f9b3a14544, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/MartinKingEnemy.prefab
+    LogicType: MartinKing
+    Group: Actors
+  - Prefab: {fileID: 5256493874984466458, guid: ce392f5114a2c7b4491efe725de3a833, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/RedDragon.prefab
+    LogicType: RedDragon
+    Group: Actors
+  - Prefab: {fileID: 5256493874984466458, guid: 8721cd4a567ef7d4c8b224a3c9b5a1ed, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/RedDragonAlt.prefab
+    LogicType: RedDragon
+    Group: Actors
+  - Prefab: {fileID: 2473417511884180560, guid: 6887a74d141f2834c9d459adaa3daae7, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Rugani.prefab
+    LogicType: Rugani
+    Group: Actors
+  - Prefab: {fileID: 2473417511884180560, guid: 77c47ba27db05824cb1c9956040474ea, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Rugani_old.prefab
+    LogicType: Rugani_skill
+    Group: Actors
+  - Prefab: {fileID: 899539269983342042, guid: e950809796b52024b8a986c401ee11ad, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Wolf.prefab
+    LogicType: Wolf
+    Group: Actors
+  - Prefab: {fileID: 899539269983342042, guid: 863bb58c0f66b72448ba350d86a4d33b, type: 3}
+    Address: Assets/Resources/Prefabs/03EliteMonters/Wolf_old.prefab
+    LogicType: Wolf_skill_tmp
+    Group: Actors
+  - Prefab: {fileID: 6957893479433811638, guid: da24c27e8ccb56e4bb80e199369d4fe0, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/MartinBallEnemy.prefab
+    LogicType: Luna.Gameplay.MartinLogic
+    Group: Effects
+  - Prefab: {fileID: 6981234479424132648, guid: eac34865d22b4814d8020dde538c17e0, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/MartinEnemy.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3601769417073393332, guid: 9ab7ff8882cd33c40a7a6d910c5e2d17, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/Mni_MartinEnemy.prefab
+    LogicType: Luna.Gameplay.MiniMartinLogic
+    Group: Effects
+  - Prefab: {fileID: 3039898614407082880, guid: be23961201777204691cbf3fb5738e63, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/Mogle.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4100995970120910541, guid: 5ff2158a33bcdeb4a94185ea54113da9, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/MogleArcher.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7459635392476332599, guid: 0d46b052f75995749a1ff5e8c30c70a1, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/PoisonSlime.prefab
+    LogicType: PoisonSlime
+    Group: Actors
+  - Prefab: {fileID: 4100995970120910541, guid: 989d27020dad0e54fba2721371a3a187, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonArcher.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 524913559582004976, guid: 5852d947dceddf44689e92c0f95f2365, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonBigAx.prefab
+    LogicType: Skeleton_ax_skill
+    Group: Actors
+  - Prefab: {fileID: 4470234834166696752, guid: 38bd98e069548da49a8156a14d033a52, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonHighArher.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 1465169547286952525, guid: 46b67b0426a86f440818cda37f713d92, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonHighLance.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 4093393404412460108, guid: 3a0d7aacba4a72843bd54c46357b6ef8, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonHighSword.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 5756290492642287939, guid: bf1d17dc6170d4245b01c4083883c650, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonLance.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 2207719470367130388, guid: 364c123b8786b2e4cb772a8dabea5da6, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonMace.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7524329147428401971, guid: d80879e43f3e0ca42b21e2af21c9d13e, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonMagicianLeader.prefab
+    LogicType: Skeleton_magicianLeader_skill
+    Group: Actors
+  - Prefab: {fileID: 3151572913005269249, guid: 02ece1f5a102226488f2c6c0179ef10d, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonSorcery.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3039898614407082880, guid: 01f9b308a0b94fa409399d53a6c08ef4, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonSword.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 3039898614407082880, guid: cd4b33a54408d9b4b91f78da418111a0, type: 3}
+    Address: Assets/Resources/Prefabs/04Monsters/SkeletonTest.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 6741737302365193638, guid: 9ff93fb2eeae42240a351e59139b9abb, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/07Dagger.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 8450033590197087485, guid: 9b83a8907e81bf24788056f1f66afafa, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/ArrowBullet_Ally.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 8450033590197087485, guid: 5dbccb0c3894b72489d1452294688040, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/ArrowBullet_Enemy.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 5024750572790278361, guid: 2d78af749e4a0a94098863c929a4d7da, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/BallBullet.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 147436, guid: f104ca49bf390b340ac78b269c40d18b, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Fireball.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 147436, guid: 806afaea199c2a848a881f921abfc469, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Fireball_Arrow.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 7151192383833321309, guid: e61b0b41a9a2f554c876f57dd1411eaf, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Hero/BlueLightningMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 321090315161646400, guid: b33f4634829ca774cb0ac5577706ae9e, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Hero/BlueMagicMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 3153620333690948906, guid: d6349301d04228b43aec0cf2bf6e100c, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Hero/PinkMagicMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 8356439581823784285, guid: 8e500b6420093ba4d965f5b5a4322a8a, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Hero/RedFireballMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 1975757412687639289, guid: d87697e3ec88a814f840a42167e3dfe0, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Hero/RedStarMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 2410642808980458660, guid: 24700e3f636e8434db86cac60c2917e2, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/IronBallBomb.prefab
+    LogicType: SkillBomb
+    Group: Effects
+  - Prefab: {fileID: 6741737302365193638, guid: d8858c23780c0da429a4cbd71cca9bd4, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Matilda_dagger.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 5962168376686784431, guid: c4ed6e0ab0ee0b646ac8b7b306bc2a6a, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Miu_Bullet.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 8649930151829609472, guid: ca2a22d600131c04baaf49499f078d48, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/Pochi_Arrow.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 3643117912314875687, guid: da34cee7643f8dd4c86ce79c4bed9938, type: 3}
+    Address: Assets/Resources/Prefabs/05Bullets/ThrowingDagger.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 100000, guid: 46f09b0900949d1499051ed78fe2c5be, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/BatsCloud.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100000, guid: 701d9c21f424fb243917d9eea3b44a8d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/BatsCloudLobby.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 123644, guid: ca3c94f7ffdd1b54d816d119fa70dd53, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CandleLightBlue.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 186986, guid: 196d5c78b77728e458cbfadcba518631, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CandleLightGreen.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 127620, guid: 29b49e9266528484ba62a9259862a900, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchIntenseBlue 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 167718, guid: 0c944cc362082f04baa09df3ac98fa1e, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchIntenseGreen 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 121190, guid: 4193d238b8b1307419e24c88245be052, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchIntensePink 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 161738, guid: 585e337f55816224c93929c3cfd2089c, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchIntenseYellow 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 136522, guid: 775dada7ebae6134da284a067e3b3acf, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchPink 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 149928, guid: f0a9b6e7fa6d01c45a99fd664e738845, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/CartoonFireTorchRed 1.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 115116, guid: 3554e3f444ad04941bd2d835a05e2dec, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/LobbySparkles.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 1781930563638536, guid: 0e1276eeee6de6a4eb0173e713ab2a4d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/BackGround/Wandering_Spirits.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5218639031159730317, guid: 9005b357f61445e4a965d3b2c5b7e881, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/CoinTmp.prefab
+    LogicType: Luna.Gameplay.DropCoinLogic
+    Group: Effects
+  - Prefab: {fileID: 100004, guid: 9e4c44432779ecc4aaab962edb35651b, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/DemonMark.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100008, guid: aec5caeeda2c9544d90a72e3c4dd809d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/ElectricSpark.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4590274181954077980, guid: 897b1aad599306d4bbaf1df684b78a52, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/BloodHit.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2493680917766019764, guid: e4ad7524d3cacf7449d8a19b08bec915, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/BloodShadowMissile.prefab
+    LogicType: Luna.Gameplay.ProjectileLogic
+    Group: Effects
+  - Prefab: {fileID: 4072659708080731603, guid: 058fc1f3c67029249a05e7896b2f8579, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/BloodWave.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 876684397078555117, guid: 008532e562bd3984aa14bf538a033d04, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/EarthShock.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3828337621315214319, guid: de660b795e021f346828d4036f7d462d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/FireArea.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2646741981534945723, guid: d881c86f9ebab3d4bbb4fac5c4e7796c, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/GroundShock.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3501867520680034477, guid: 0934fc1e87a911c438f5def436bae72b, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/LightningOneShotSharp.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5754616347158544125, guid: 3840cb4420a099e418756a52b42cc746, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/LightningShotBlue.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5787790316679077291, guid: 66d7e456e92630840b83c9e0b58cee48, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/PoisonBreath.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3186746898192741198, guid: 84557c1867c3a944e920e275d0783386, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/PoisonExplode.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3418554938069839417, guid: d31b1fb4402fe7d49ae18d564b99d07a, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/PoisonShot.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4269613333509998535, guid: 8c71e5e5053f7304f99c947a18b4c787, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/Snow.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4577612504725559893, guid: 74884c37f0cc1e54cb35271394dc1985, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/SnowExplosion.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 8763081831516634674, guid: 7cfe452f284dbfc499c933733f887266, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/StunStrikeEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7799843936064239870, guid: c48f3767b85d1504489236d051d28bc2, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Enemy/WolfBreath.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 8265616613397018974, guid: 26012090378be2a409cfacbede3c4a71, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/ExplosionMartin.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 130848, guid: b97e4d2ee0065094f85aa828509f1fa8, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/FireballEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 180702, guid: dc4453701e2cc1b4790123e435cdba92, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/FireTower.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 1417255627001234307, guid: 0df3a1b675c52d948b44cdf77be1e5b3, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/GetCoinEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7898926120985898504, guid: 60240ca465e9100439b2453b5736d2c7, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Grave_tmp.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 178192, guid: f522797f3fbf83e45bdb6b671e821c80, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/GreenBloodSplitLeft.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 178192, guid: b62b6912073040b418ddc93175d4a061, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/GreenBloodSplitRight.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100004, guid: e83e2c7cb072c5b44a06dddb9a6f7883, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Heart.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 6950504855831904610, guid: ad8a262bc3ef3d94ebc8220fd00ea1a1, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/AliceSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3877392664317604070, guid: 7a51f7a05a5ccb447b8521773ce61836, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/DrenSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2410642808980458660, guid: c9b2547f1a7e1084abad2e7bb46078b9, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/JoeSkillEffect.prefab
+    LogicType: SkillBomb
+    Group: Effects
+  - Prefab: {fileID: 2735661620576604303, guid: 236eb0c401f5b0d4da3b9e3dd0839035, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/LeneSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 877183457287023498, guid: de8a9cb9458ebb94ab06818df6b4db81, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/MeiSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2889557771794906839, guid: 7be7566501fe4d54d8789ce471e75fb4, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/MiuSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 6983557244905663391, guid: dee1fd899846e724bbba5e18621dc30f, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/PringSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 26252897181232422, guid: e92dc57cb5a75a24f802299ddbeae8c1, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/RedFireballEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3950034234864978867, guid: 680468f9744688a439e2eadcfb06d91c, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/RoniSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4434674699074411508, guid: de6411f140753984da2fb6bb843539ce, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/ScaletSkillEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5954282583259416313, guid: f2fec534f13b93540bfc8be52864f2c0, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/StealthSmoke.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Hero/SummonEffectYellow.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 166724, guid: 1ddab729be19fab4d8e70d800ad793d4, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/MagicAuraLuna.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 6586253991894491037, guid: 84a64b860d317504db3140cbbcb6d875, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/MagicAuraLunaSmall.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7898926120985898504, guid: 8d730317d2a26f94b98b343b036f50ac, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/RebirthStoneEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 5363235405458485068, guid: 75dd543d8402cbd48abedec5bbd24cfa, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/BeleifWave.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 6106962902648410061, guid: 9b1626e082055d44896e3022589276f6, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/BerserkEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7736010241663286828, guid: 1dd29d4578d89ae43882328eae51c865, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/BleedEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3645732678699818952, guid: d32e1f3fd33611c49ad293faa1a4cd6d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/DamageText.prefab
+    LogicType: Luna.Gameplay.DamageTextLogic
+    Group: Effects
+  - Prefab: {fileID: 3587292115095982589, guid: a65d45f546e196543907102de0ef91e4, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/DeathNormal.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 1672615557190831086, guid: 9ee7b8466c98f3a4a8c058624fec6cbe, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/DeathTower.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7769346568784682466, guid: 810a3abb336121244b04769edef34c8c, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Explosion_Bomb.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 877183457287023498, guid: b5509572f5ca1a941b46412b2f08f353, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Glacier.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7586507727869278445, guid: a6886557d8a43474a8dade74b2148f1e, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/GreenBloodLeft.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3551066041865095410, guid: 03f09b612d6799843862ec035a2bcc34, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/HitNormal.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2735661620576604303, guid: 689b4479c5751704bb76c9d9bbbe93a6, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Judge_sword.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 8834625100829242434, guid: a903a565b7e47864ab4e68fe0a24ce9d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/JumpEffectWhite.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3392590279206567995, guid: 2eb45b8bcb2bfb94f845cadebc9d3c74, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/LoneBlessing.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2889557771794906839, guid: 68ff08f6773836b48ab69fe2afdf287d, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Miu_Healing.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 6983557244905663391, guid: 5a58b3f9f545a874a88e6b10b02282b6, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Normal_healing.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 3380528063788859628, guid: 391fe80f1ffbdb045bfa29f0f16f35f0, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Pink_Flare.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2167839889477522151, guid: 6860b1121e06ebd4b8b68308496785f4, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/PochiBarrier.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 2017651347332932292, guid: 983921b7614a46844bb93a02f442d781, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Red_Fire.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4677210535222496541, guid: 18b7335a6b539b748823f77d8cc6589c, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/ResurrectPlayer.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 601659344080798872, guid: 6644889cfad3baf4e879e4649b491566, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/SerenBlessing.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 7475035389137886811, guid: 4df5a23993355814c9afbed3efa96932, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/StunEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 8797770489970855463, guid: 3f701eb24cb9fdd428bf3f0ae316cad7, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Skill/Summon_Light.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100006, guid: 8fc06027b01064e4f885fd8dd2929310, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/Star.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/SummonLight.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4289011761116430748, guid: 8de094d8211fb634ea432ceca8a11c3f, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/UI/EquipSlotEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100004, guid: a3d71d2749d309c41a85eb2040f944dd, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/UI/LotteryBGEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 100000, guid: 308fac4890035de42aa5211b3df7dc27, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/UI/PickupDiamond.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4289011761116430748, guid: c4a9917615d97b9409370c6af02f2ec7, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/UI/SKillSlotEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 4289011761116430748, guid: 010aa21071a6d864ea8193434c66b443, type: 3}
+    Address: Assets/Resources/Prefabs/06Effects/UI/SlotEffect.prefab
+    LogicType: Luna.Gameplay.EffectLogic
+    Group: Effects
+  - Prefab: {fileID: 8383516895249335979, guid: 73c86fa3a04190143b54914d2b6dad59, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_11_15.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 52ee3fd7103f84a42944f2637e254b05, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_11_20.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 42c7c10314721a94b880fac6ab5e91fe, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_21_30.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 4ab3ed2c93590494bafb07411d9fc2c7, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_Demon.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 34a9517bcaa0da5468996de5eb0e9bf5, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_DemonField.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: bc1568d5b4fd28940ae8e0b2e2aa7ea3, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_Lobby.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 8eb4e5c35e5d0ed4b8991c8a605ae2d2, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_Remain.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 8383516895249335979, guid: 7b5811bdbb1189e4b8cdcf085d9f6c37, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Background_Ruin.prefab
+    LogicType: LunaStageBackdropLogic
+    Group: World
+  - Prefab: {fileID: 9056176284352268964, guid: 28816833120fbf64d8f5fd115e389749, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Object/BackPlateDemon.prefab
+    LogicType: Luna.Gameplay.BackPlateLogic
+    Group: Effects
+  - Prefab: {fileID: 5611385387738470179, guid: 0121cf4757326a3409e912bf891a1928, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Object/BGDemon.prefab
+    LogicType: Luna.Gameplay.BackgroundDemonLogic
+    Group: Effects
+  - Prefab: {fileID: 7528829204366405261, guid: 07144c725e49c5749985f2b4474fa9ed, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Tower/AllyTower.prefab
+    LogicType: Luna.Gameplay.TowerLogic
+    Group: Actors
+  - Prefab: {fileID: 7528829204366405261, guid: 31e469611d403d1498aa54c4c7eba692, type: 3}
+    Address: Assets/Resources/Prefabs/08StageBackground/Tower/EnemyTower.prefab
+    LogicType: Luna.Gameplay.UnitLogic
+    Group: Actors
+  - Prefab: {fileID: 7489636612972795738, guid: 701cec6cd46190445bf74e98bb5c4387, type: 3}
+    Address: Assets/Resources/Prefabs/09UI/HealthBarAlly.prefab
+    LogicType: Luna.Gameplay.HealthBarLogic
+    Group: Effects
+  - Prefab: {fileID: 7489636612972795738, guid: a9097039054e24843ad805ef56311a46, type: 3}
+    Address: Assets/Resources/Prefabs/09UI/HealthBarEnemy.prefab
+    LogicType: Luna.Gameplay.HealthBarLogic
+    Group: Effects
+  - Prefab: {fileID: 8035962919921087473, guid: 7fa0d6e05a1bdb34192b103ee200885d, type: 3}
+    Address: Assets/Resources/Prefabs/09UI/HealthBarGreen.prefab
+    LogicType: Luna.Gameplay.HealthBarLogic
+    Group: Effects
+  - Prefab: {fileID: 3287167813285269568, guid: e6db43aac7bb75046bf217d2e6b3211b, type: 3}
+    Address: Assets/Resources/Prefabs/09UI/HealthBarViolet.prefab
+    LogicType: Luna.Gameplay.HealthBarLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: e3cdd3ed4c189254b88f10cc3035ed8a, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_AsmoSwordBook.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: 47e5dc253c5545f47b6b8926f2dcaa09, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_BellerinSkull.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: 5d644023fdc876148a9fa564b58efff3, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_EquipDesign.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: b60a6fbc6506ff149a68a3627dee7ec4, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_EquipStone.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: b1013d6a79ac06f41a4ff4b97b2f0838, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_RainbowStone.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: 367c004ff63cbbf4cba3fc7f587c874e, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_SkillBook.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3986165932232600216, guid: f872c0d9eeeac884bb9932394bff3b64, type: 3}
+    Address: Assets/Resources/Prefabs/13Items/Drop/Drop_SkillStone.prefab
+    LogicType: Luna.Gameplay.DropItemLogic
+    Group: Effects
+  - Prefab: {fileID: 3111958209849865329, guid: cc5e56f27ffce7946bdad78baa307e7d, type: 3}
+    Address: Assets/Resources/UI/Buff/BuffIcon_AtkSpeed.prefab
+    LogicType: Luna.Gameplay.BuffIconLogic
+    Group: Effects
+  - Prefab: {fileID: 7098447513246903068, guid: e3e486e197975974f8427a6e40534c89, type: 3}
+    Address: Assets/Resources/UI/Buff/BuffIcon_Attack.prefab
+    LogicType: Luna.Gameplay.BuffIconLogic
+    Group: Effects
+  - Prefab: {fileID: 1311759105865643839, guid: 35e6e6b30d47f084687a26823b8c8cae, type: 3}
+    Address: Assets/Resources/UI/Buff/BuffIcon_Critical.prefab
+    LogicType: Luna.Gameplay.BuffIconLogic
+    Group: Effects
+  - Prefab: {fileID: 1971975174292155815, guid: 0899a7bc2b2d0844cbdb4ca181ff2203, type: 3}
+    Address: Assets/Resources/UI/Buff/BuffIcon_Defense.prefab
+    LogicType: Luna.Gameplay.BuffIconLogic
+    Group: Effects
+  - Prefab: {fileID: 1833841118825356454, guid: 6d0edcc9f900c5a40b17c2f7c289cb57, type: 3}
+    Address: Assets/Resources/UI/Buff/BuffIcon_MoveSpeed.prefab
+    LogicType: Luna.Gameplay.BuffIconLogic
+    Group: Effects

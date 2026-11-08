@@ -1,218 +1,95 @@
-using System.Collections;
 using System.Collections.Generic;
+using GameFramework.Event;
 using UnityEngine;
-using EverydayDevup.Framework;
 using UnityEngine.UI;
-using System;
+using UnityGameFramework.Runtime;
+using Luna.Gameplay;
 
 public class UIProgressBar : UILuna
 {
-	public UIReference refData;
-
-	public class MinimapProfile
+    private readonly Dictionary<int, GameObject> profiles = new Dictionary<int, GameObject>();
+    private readonly List<int> retired = new List<int>();
+    private RectTransform minimap;
+    private Image titleImage;
+    private Text titleText;
+    private EventComponent events;
+    private bool subscribed;
+    private float age;
+    protected override void OnOpen(object userData)
     {
-		public GameObject MinimapObject;
-		public GameObject GameObject;
+        base.OnOpen(userData);
+        age = 0f;
+        minimap = transform.Find("MinimapImage") as RectTransform;
+        titleImage = transform.Find("TitleImage").GetComponent<Image>();
+        titleText = transform.Find("TitleText").GetComponent<Text>();
+        titleText.text = "ÏïÖÎßàÏùò ÌÉë\nÏßÄÌïò " + LunaSession.Current.CurrentStageLevelString();
+        transform.Find("MinimapText").GetComponent<Text>().text = "ÏïÖÎßàÏùò ÌÉë ÏßÄÌïò " + LunaSession.Current.CurrentStageLevelString();
+        events = GameEntry.GetComponent<EventComponent>();
+        events.Subscribe(ShowEntitySuccessEventArgs.EventId, OnEntityShown);
+        events.Subscribe(HideEntityCompleteEventArgs.EventId, OnEntityHidden);
+        subscribed = true;
+        foreach (var unit in UnitLogic.ActiveUnits) Add(unit);
     }
-
-	private Image titleImage;
-	private Text titleText;
-	private float time;
-
-	private GameObject player;
-	private GameObject allyTower;
-	private GameObject enemyTower;
-
-	float minimapRectWidth;
-	float betweenTowerDistacne;
-
-	private RectTransform minimapTr;
-	private GameObject minimapPlayer;
-	private GameObject minimapAllyTower;
-	private GameObject minimapEnemyTower;
-
-	private List<GameObject> Boss = new List<GameObject>();
-	private List<GameObject> minimapBoss = new List<GameObject>();
-
-	public List<GameObject> heroesMinimap = new List<GameObject>();
-	public List<GameObject> herose = new List<GameObject>();
-
-	private GameObject uiPlayer;
-
-    private LinkedList<MinimapProfile> heroes
-        = new LinkedList<MinimapProfile>();
-
-    //private Dictionary<GameObject, GameObject> heroes
-    //	= new Dictionary<GameObject, GameObject>();
-
-    public void PushProfile(GameObject instance)
+    public void PushProfile(GameObject instance) => Add(UnitLogic.From(instance));
+    public void ReleaseMinimapObject(GameObject instance)
     {
-		MinimapProfile newProfile = new MinimapProfile();
-		newProfile.GameObject = instance;
-		newProfile.MinimapObject = InitMinimapProfile(instance, true);
-
-		heroes.AddLast(newProfile);
-	}
-
-	public void ReleaseMinimapObject(GameObject minimapObject)
+        var unit = UnitLogic.From(instance);
+        if (unit != null) Remove(unit.ID);
+    }
+    private void Add(UnitLogic unit)
     {
-		if (heroes.Count == 0)
-			return;
-
-		MinimapProfile releaseProfile = null;
-		foreach (var item in heroes)
+        if (unit == null || unit.IsHiding || !unit.Available || unit.SpawnData == null || LunaScenes.CurrentGame == null ||
+            unit.SpawnData.RoundId != LunaScenes.CurrentGame.RoundId || profiles.ContainsKey(unit.ID)) return;
+        if (!unit.objectData.TypeLunaPlayer && unit.UnitType != eUnitType.Hero && unit.UnitType != eUnitType.Tower &&
+            unit.UnitType != eUnitType.TowerAndBoss && unit.UnitType != eUnitType.Boss) return;
+        if (unit.objectData.minimapPicture == null) return;
+        var prefab = Resources.Load<GameObject>("Prefabs/09UI/minimapObject");
+        var icon = Instantiate(prefab, minimap, false);
+        icon.transform.localScale = Vector3.one;
+        var image = icon.GetComponent<Image>();
+        image.sprite = unit.objectData.minimapPicture; image.SetNativeSize();
+        var distance = icon.transform.Find("DistanceText");
+        if (distance != null) distance.gameObject.SetActive(unit.UnitType == eUnitType.Hero || unit.objectData.TypeLunaPlayer);
+        profiles.Add(unit.ID, icon);
+    }
+    private void OnEntityShown(object sender, GameEventArgs args) => Add(((ShowEntitySuccessEventArgs)args).Entity.Logic as UnitLogic);
+    private void OnEntityHidden(object sender, GameEventArgs args) => Remove(((HideEntityCompleteEventArgs)args).EntityId);
+    private void Remove(int id)
+    {
+        if (!profiles.TryGetValue(id, out var icon)) return;
+        profiles.Remove(id);
+        if (icon != null) Destroy(icon);
+    }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed);
+        age += elapsed;
+        float alpha = 1f - Mathf.Clamp01(age / 3f);
+        var color = titleImage.color; color.a = alpha; titleImage.color = color;
+        color = titleText.color; color.a = alpha; titleText.color = color;
+        retired.Clear();
+        float width = minimap.rect.width * 0.5f;
+        foreach (var entry in profiles)
         {
-			if(item.GameObject == minimapObject)
-            {
-				releaseProfile = item;
-            }
+            var unit = LunaSpawn.Find<UnitLogic>(entry.Key);
+            if (unit == null || entry.Value == null) { retired.Add(entry.Key); continue; }
+            float rate = Mathf.InverseLerp(Defined.AllyTowerPosition.x, Defined.EnemyTowerPosition.x, unit.CachedTransform.position.x);
+            entry.Value.transform.localPosition = new Vector3(Mathf.Lerp(-width + 10f, width - 19f, rate), 3f, 0f);
+            var distance = entry.Value.transform.Find("DistanceText");
+            if (distance != null) distance.GetComponent<Text>().text = Mathf.RoundToInt(50f * rate) + "m";
         }
-
-		releaseProfile.GameObject = null;
-		Destroy(releaseProfile.MinimapObject);
-		releaseProfile.MinimapObject = null;
-
-		heroes.Remove(releaseProfile);
-	}
-
-	public override void OnInit() 
-	{
-		base.OnInit();
-
-		titleImage = gameObject.transform.Find("TitleImage").gameObject.GetComponent<Image>();
-		titleText = gameObject.transform.Find("TitleText").gameObject.GetComponent<Text>();
-
-		minimapTr = transform.Find("MinimapImage") as RectTransform;
-		minimapRectWidth = ( minimapTr.rect.width / 2.0f );
-		betweenTowerDistacne = Mathf.Abs(Defined.EnemyTowerPosition.x - Defined.AllyTowerPosition.x);
-
-		GameObject staegeObj = GameObject.FindGameObjectWithTag("Stage");
-		uiPlayer = GameObject.FindGameObjectWithTag("UIPlayer");
-
-		if (staegeObj.GetComponent<BasicDungeon>() != null)
-			titleText.text = "æ«∏˘¿« º∫\n" + "¡ˆ«œ " + Game.Instance.dataManager.CurrentStageLevelString();
-
-		gameObject.transform.Find("MinimapText").gameObject.GetComponent<Text>().text
-			= "æ«∏˘¿« º∫ " + "¡ˆ«œ " + Game.Instance.dataManager.CurrentStageLevelString();
-
-		player = staegeObj.GetComponent<BasicDungeon>().gamePlayer;
-		allyTower = staegeObj.GetComponent<BasicDungeon>().gameAllyTower;
-		enemyTower = staegeObj.GetComponent<BasicDungeon>().gameEnemyTower;
-
-		minimapPlayer = InitMinimapProfile(player, true);
-		minimapAllyTower = InitMinimapProfile(allyTower);
-		minimapEnemyTower = InitMinimapProfile(enemyTower);
-
-        if (minimapPlayer != null)
-            MoveMinimapProfile(minimapPlayer, player, true);
-
-        if (minimapAllyTower != null)
-            MoveMinimapProfile(minimapAllyTower, allyTower);
-
-        if (minimapEnemyTower != null)
-            MoveMinimapProfile(minimapEnemyTower, enemyTower);
-
-        //for (int i = 0; i < Game.Instance.dataManager.InstHeroes.Count; i++)
-        //{
-        //	heroesMinimap.Add(InitMinimapProfile(Game.Instance.dataManager.InstHeroes[i]));
-        //}
+        foreach (int id in retired) Remove(id);
     }
-
-	public override void OnActive() { }
-	public override void OnInActive() { }
-	public override void OnUpdate()
-	{
-		TitleImageProcess();
-
-		if (minimapPlayer != null)
-            MoveMinimapProfile(minimapPlayer, player, true);
-
-		if (heroes.Count == 0)
-			return;
-
-        foreach (var item in heroes)
-        {
-			MoveMinimapProfile(item.MinimapObject, item.GameObject, true);
-		}
-    }
-
-	public override void OnLoop() { }
-
-	public override void OnClear() { }
-
-	private void TitleImageProcess()
+    protected override void OnClose(bool isShutdown, object userData)
     {
-		if (time > 1)
-		{
-			return;
-		}
-
-		time += Time.deltaTime * 0.01f;
-
-		titleImage.color = new Color(titleImage.color.r, titleImage.color.g, titleImage.color.b,
-			titleImage.color.a - time);
-
-		titleText.color = new Color(titleText.color.r, titleText.color.g, titleText.color.b,
-			titleText.color.a - time);
-	}
-	private GameObject InitMinimapProfile(GameObject gameObj, bool disText = false)
-    {
-		Sprite newMinimapSPrite = gameObj.GetComponent<Status>().objectData.minimapPicture;
-		if (newMinimapSPrite == null)
-			return null;
-
-		string prefabDir = "Prefabs/09UI/minimapObject";
-
-		GameObject minimapPrefab =
-			Resources.Load(prefabDir) as GameObject;
-
-		GameObject newMinimapObj = null;
-
-		newMinimapObj = Instantiate(minimapPrefab);
-		newMinimapObj.transform.SetParent(minimapTr);
-		newMinimapObj.transform.localPosition = Vector3.zero;
-		newMinimapObj.transform.localScale = Vector3.one;
-		
-		newMinimapObj.GetComponent<Image>().sprite = newMinimapSPrite;
-		newMinimapObj.GetComponent<Image>().SetNativeSize();
-
-        if (false == disText)
+        if (subscribed && events != null)
         {
-			newMinimapObj.transform.Find("DistanceText").gameObject.SetActive(false);
-		}
-
-		return newMinimapObj;
-	}
-
-	private void MoveMinimapProfile(GameObject minimapObj, GameObject gameObj, bool disText = false)
-	{
-		if (gameObj == null)
-		{
-			Destroy(minimapObj);
-			return;
-		}
-
-		if(minimapObj == null)
-        {
-			return;
+            events.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnEntityShown);
+            events.Unsubscribe(HideEntityCompleteEventArgs.EventId, OnEntityHidden);
         }
-
-		if (gameObj.activeSelf == false)
-        {
-			minimapObj.transform.localPosition = new Vector3(-minimapRectWidth + 10.0f, 3.0f);
-		}
-
-
-		float rate = (gameObj.transform.position.x + 8.0f) / betweenTowerDistacne;
-		Vector3 uiPos 
-			= Vector3.Lerp(new Vector3(-minimapRectWidth + 10.0f, 3.0f, 0), new Vector3(minimapRectWidth -19.0f, 3.0f, 0), rate);
-		minimapObj.transform.localPosition = uiPos;
-
-        if (disText)
-        {
-			minimapObj.transform.Find("DistanceText").GetComponent<Text>().text
-				= Convert.ToInt32(50.0f * rate).ToString() + "m"; ;
-		}
-
-	}
+        subscribed = false;
+        // UILuna owns generated child cleanup; Unity owns them during teardown.
+        profiles.Clear(); retired.Clear();
+        base.OnClose(isShutdown, userData);
+    }
 }

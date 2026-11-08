@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using Luna_Network;
 using LunaChatServer;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChatManager : MonoBehaviour, IObserver
+public class ChatManager : MonoBehaviour
 {
     public List<string> chatList = new List<string>();
     public Button sendBtn;
@@ -25,8 +25,7 @@ public class ChatManager : MonoBehaviour, IObserver
     private RemoteServerPeer server;
     private volatile bool disposed;
     private bool connectionStarted;
-    public int Priority { get; set; }
-    public int ID { get; set; }
+
 
     public void OnResponse(object value)
     {

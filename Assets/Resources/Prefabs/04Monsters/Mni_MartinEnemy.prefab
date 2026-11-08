@@ -172,14 +172,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3601769417073393332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175ab39934f6e5429379a2af0bbd388, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 3
-  range: 0.5
-  damage: 50
-  isEnemy: 1
-  explosionEffect: {fileID: 8265616613397018974, guid: 26012090378be2a409cfacbede3c4a71, type: 3}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: d986999e921bbd741b349e04c00b7128, type: 2}
+  Projectile: {fileID: 0}
+  AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
+  AttackSoundType: -1
+  ParameterKey: 9ab7ff8882cd33c40a7a6d910c5e2d17:3601769417073393332
+  Prefabs:
+  - Name: MniMartinContol.explosionEffect
+    Value: {fileID: 8265616613397018974, guid: 26012090378be2a409cfacbede3c4a71, type: 3}
+  - Name: explosionEffect
+    Value: {fileID: 8265616613397018974, guid: 26012090378be2a409cfacbede3c4a71, type: 3}
+  Sounds: []
+  Numbers: []
+  Texts: []
 --- !u!1 &7357340095219646105
 GameObject:
   m_ObjectHideFlags: 0

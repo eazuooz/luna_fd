@@ -272,8 +272,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8810837454503339058}
   - component: {fileID: 1486031749878758084}
-  - component: {fileID: 1871615672561592048}
-  - component: {fileID: 3580733336554413133}
   - component: {fileID: -9221060723943077301}
   m_Layer: 0
   m_Name: Pobi
@@ -309,62 +307,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 8649366903592255535}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5830b1b685c1948b78fea87d07c930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatusDataLoadComplete: 0
-  sourceObjectData: {fileID: 11400000, guid: cdc74cd7449362a4db5fae726ce700d4, type: 2}
-  AudioSource: {fileID: 0}
-  AttackSoundClip: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 200b4907c42849d9a6e5dad370d9b3a3, type: 3}
+  m_Name: null
+  m_EditorClassIdentifier: null
+  Definition: {fileID: 11400000, guid: cdc74cd7449362a4db5fae726ce700d4, type: 2}
+  Projectile: {fileID: 0}
   AttackEffectPrefab: {fileID: 0}
+  AttackSoundClip: {fileID: 0}
   AttackSoundType: 0
-  UnitName: 
-  Level: 0
-  hitPriority: 0
-  ultState: 0
-  UnitSide: 0
-  UnitType: 0
-  UnitAttackType: 0
-  ProjecttileCreateLocations: []
-  ProjecttileArrivalLocation: {fileID: 0}
-  AttackTarget: {fileID: 0}
-  LobbyDistance: 0
-  HealthBarHpPoint: 0
-  warfRange: 0
-  isWarf: 0
-  isStun: 0
-  isStunAttack: 0
-  nextStunDuring: 0
---- !u!114 &1871615672561592048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8649366903592255535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f001e177f551ae644ac1c287560fb753, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugOn: 0
-  status: {fileID: 0}
-  projectile: {fileID: 0}
---- !u!114 &3580733336554413133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8649366903592255535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a72cbf8001120148bc607f36b98b9ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillEffect: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
-  skillSound: {fileID: 8300000, guid: a2538bdbef8c63f46b53dc9a1a30257e, type: 3}
-  minion1: {fileID: 394394573834287666, guid: 31e492c7727e701498c3f1cfb7063a1b, type: 3}
+  ParameterKey: 586ed10e8a03cb644b449372f6821c9e:8649366903592255535
+  Prefabs:
+  - Name: Pobi.skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: skillEffect
+    Value: {fileID: 2820573319325118600, guid: 7e7f2d2f9bba920418d661d770c86a2e, type: 3}
+  - Name: Pobi.minion1
+    Value: {fileID: 394394573834287666, guid: 31e492c7727e701498c3f1cfb7063a1b, type: 3}
+  - Name: minion1
+    Value: {fileID: 394394573834287666, guid: 31e492c7727e701498c3f1cfb7063a1b, type: 3}
+  Sounds:
+  - Name: Pobi.skillSound
+    Value: {fileID: 8300000, guid: a2538bdbef8c63f46b53dc9a1a30257e, type: 3}
+  - Name: skillSound
+    Value: {fileID: 8300000, guid: a2538bdbef8c63f46b53dc9a1a30257e, type: 3}
+  Numbers: []
+  Texts: []
 --- !u!61 &-9221060723943077301
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'Report-Time.ps1')
+. (Join-Path $PSScriptRoot 'Warning-Policy.ps1')
 $projectPath = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $sourceDirectory = Join-Path $projectPath 'Logs/Revival'
 $runDirectory = Join-Path $sourceDirectory "FinalReview/$RunId"
@@ -31,15 +32,29 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
         startedUtc = Format-LunaUtcTimestamp
         finishedUtc = $null
         success = $false
+        source = $null
         steps = @()
     }
-    $steps = @('Audit', 'Smoke')
-    if ($round -eq 3) { $steps += 'BuildWindows' }
+    $fingerprintTool = Join-Path $PSScriptRoot 'source_fingerprint.py'
+    $before = & python $fingerprintTool (Join-Path $roundDirectory 'source-before.json') | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0) { throw 'Could not fingerprint Unity source before review.' }
+    # A RunId denotes three reviews of the same implementation, including when
+    # passes are invoked separately. A changed implementation needs a new RunId.
+    $priorSummaries = Get-ChildItem -LiteralPath $runDirectory -Filter 'summary.json' -Recurse -File
+    foreach ($priorFile in $priorSummaries) {
+        $prior = Get-Content -LiteralPath $priorFile.FullName -Raw | ConvertFrom-Json
+        if ($prior.success -and ($prior.source.sha256 -ne $before.sha256 -or $prior.source.algorithmVersion -ne $before.algorithmVersion)) {
+            throw "Source differs from a completed pass in '$RunId'. Start a new RunId and run all three passes."
+        }
+    }
+    $summary.source = $before
+    $steps = @('Audit', 'Smoke', 'ContentMatrix')
+    if ($round -eq 3) { $steps += @('BuildWindows', 'Player') }
     try {
         foreach ($step in $steps) {
-            $operation = switch ($step) { 'Audit' { 'audit' }; 'Smoke' { 'smoke' }; 'BuildWindows' { 'build-windows' } }
+            $operation = switch ($step) { 'Audit' { 'audit' }; 'Smoke' { 'smoke' }; 'ContentMatrix' { 'content-matrix' }; 'BuildWindows' { 'build-windows' }; 'Player' { 'player' } }
             $started = [DateTime]::UtcNow
-            $entry = [ordered]@{ operation = $operation; startedUtc = (Format-LunaUtcTimestamp $started); finishedUtc = $null; success = $false; error = $null; files = @() }
+            $entry = [ordered]@{ operation = $operation; startedUtc = (Format-LunaUtcTimestamp $started); finishedUtc = $null; success = $false; error = $null; warningAudits = @(); files = @() }
             $summary.steps += $entry
             $summary | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $summaryPath -Encoding utf8
             $arguments = @{ Mode = $step; TimeoutMinutes = $TimeoutMinutes }
@@ -48,9 +63,25 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
             if ($CleanBuildCache -and $step -eq 'BuildWindows') { $arguments.CleanBuildCache = $true }
             if ($JobLeakDiagnostics -and $step -eq 'BuildWindows') { $arguments.JobLeakDiagnostics = $true }
             Write-Host "Final review pass $round / $step"
+            $playerEvidence = $null
             try {
-                # Validate-Luna starts and waits for one new editor process per step.
-                & $runner @arguments
+                if ($step -eq 'Player') {
+                    $playerRun = "$RunId-pass03-$attempt"
+                    $playerEvidence = Join-Path $sourceDirectory "PlayerValidation/$playerRun"
+                    # Exercise the exact executable just built, with hidden graphics/audio
+                    # and offscreen capture. No desktop input or foreground window is used.
+                    & (Join-Path $PSScriptRoot 'Validate-Player.ps1') -Mode All -Section all -RenderMode offscreen -RunId $playerRun -SoakSeconds 300 -TimeoutMinutes $TimeoutMinutes
+                    foreach ($probe in @('seed', 'verify')) {
+                        $probeReport = Get-Content -LiteralPath (Join-Path $playerEvidence "player-$probe.json") -Raw | ConvertFrom-Json
+                        $entry.warningAudits += Assert-LunaExpectedWarnings -Report $probeReport -Context "Final pass $round / Player $probe"
+                    }
+                }
+                else {
+                    # Validate-Luna starts and waits for one new editor process per step.
+                    & $runner @arguments
+                    $stepReport = Get-Content -LiteralPath (Join-Path $sourceDirectory "$operation.json") -Raw | ConvertFrom-Json
+                    $entry.warningAudits += Assert-LunaExpectedWarnings -Report $stepReport -Context "Final pass $round / $step"
+                }
                 $entry.success = $true
             }
             catch {
@@ -58,6 +89,10 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
                 throw
             }
             finally {
+                if ($playerEvidence -and (Test-Path -LiteralPath $playerEvidence)) {
+                    Copy-Item -LiteralPath $playerEvidence -Destination (Join-Path $roundDirectory 'PlayerValidation') -Recurse
+                    $entry.files += 'PlayerValidation'
+                }
                 foreach ($extension in @('json', 'log')) {
                     $source = Join-Path $sourceDirectory "$operation.$extension"
                     if (Test-Path -LiteralPath $source -PathType Leaf) {
@@ -70,10 +105,19 @@ foreach ($round in ($Pass | Select-Object -Unique)) {
                         }
                     }
                 }
+                if ($step -eq 'Smoke' -or $step -eq 'ContentMatrix') {
+                    $runtime = Join-Path $sourceDirectory "native-runtime-$operation.json"
+                    if ((Test-Path -LiteralPath $runtime) -and (Get-Item -LiteralPath $runtime).LastWriteTimeUtc -ge $started.AddSeconds(-2)) {
+                        Copy-Item -LiteralPath $runtime -Destination $roundDirectory
+                        $entry.files += [IO.Path]::GetFileName($runtime)
+                    }
+                }
                 $entry.finishedUtc = Format-LunaUtcTimestamp
                 $summary | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $summaryPath -Encoding utf8
             }
         }
+        $after = & python $fingerprintTool (Join-Path $roundDirectory 'source-after.json') | ConvertFrom-Json
+        if ($LASTEXITCODE -ne 0 -or $before.sha256 -ne $after.sha256 -or $before.algorithmVersion -ne $after.algorithmVersion) { throw 'Unity source changed during this review; stabilize the source and repeat this pass.' }
         $summary.success = $true
     }
     finally {

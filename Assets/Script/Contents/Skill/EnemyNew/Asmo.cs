@@ -1,46 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using Spine.Unity;
 
-public class Asmo : EverydayDevup.Framework.LunaEntityBehaviour
+public class Asmo : EnemySkillLogic
 {
-    public Status status { get; set; }
 
-    public GameObject skillEffect;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
 
     // Start is called before the first frame update
-    protected override void OnEntityInitialize()
+    protected override void ConfigureUnitForSpawn()
     {
-        status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
     }
 
     // Update is called once per frame
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
-    {
-        if (status.unitState.IsSkillActivaion == true)
-        {
-            status.unitState.IsSkillActivaion = false;
-            Skill();
-        }
-    }
+    
 
-    void Skill()
+    protected override void ExecuteSkill()
     {
         float Damage = 300.0f;
 
-        if (Game.Instance.lunaSceneManager.CurrentStage.GetComponent<BasicDungeon>() != null)
-            Game.Instance.lunaSceneManager.CurrentStage.GetComponent<BasicDungeon>().ShakeCameraOn(4);
+
 
         IdentifyFunc.PickingUnits((unit) =>
         {
             Defined.EffectCreate(skillEffect, unit, Defined.eEffectPosition.UNDERFEET);
 
-            unit.GetComponent<Status>().Attack(gameObject, Damage, false, true);
-            unit.GetComponent<Status>().TakeStun(1.0f);
-            unit.GetComponent<Status>().TakeNuckbackMovement();
+            UnitLogic.From(unit).Attack(gameObject, Damage, false, true);
+            UnitLogic.From(unit).TakeStun(1.0f);
+            UnitLogic.From(unit).TakeNuckbackMovement();
 
         }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
     }

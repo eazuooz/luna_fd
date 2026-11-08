@@ -2,41 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UIQuitPopup : UILuna
 {
-    public UIReference refData;
 
     private GameObject mainTextObj;
     private string mainText;
-    public override void OnInit() 
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        
 
-        MyUnits.SetColliderEnabled(false);
+        
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate() { }
+    protected override void OnUpdate(float elapsed, float realElapsed)
+    {
+        base.OnUpdate(elapsed, realElapsed); }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear() { MyUnits.SetColliderEnabled(true); }
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        try
+        {  
+        }
+        finally { base.OnClose(isShutdown, userData); }
+    }
 
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(type);
+        LunaUI.Open(type);
     }
 
     public void ReleaseThisUI()
     {
-        Game.Instance.uiManager.Pop(type);
+        LunaUI.Close(type);
     }
 
     public void OnClickEscape()

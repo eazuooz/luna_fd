@@ -1,117 +1,123 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EverydayDevup.Framework;
+using Luna.Gameplay;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-public class UILobby : UILuna, IObserver
+public class UILobby : UILuna
 {
-    public UIReference refData;
+    public bool ProfileReady { get; private set; }
 
-    public GameObject backGround;
-    public int Priority { get; set; }
-    public int ID { get; set; }
+
+
     public void OnResponse(object obj)
     {
         SetStageInfo();
     }
 
 
-    public override void OnInit()
+    protected override void OnOpen(object userData)
     {
-        base.OnInit();
+        base.OnOpen(userData);
+        ProfileReady = false;
+        
 
-        Game.Instance.dataManager.CurrentStageName
+        LunaSession.Current.CurrentStageName
             = LunaDataTable.Instance.playerData.SaveStageName;
 
-        backGround = GameObject.FindWithTag("BackGround");
 
-        MyUnits.InstantiateLobby();
         SetStageInfo();
 
         UpdateLunaProfile();
 
-        Game.Instance.dataManager.currentStageString_Subject.AddObserver(this);
+        LunaSession.Current.CurrentStageChanged += OnResponse;
     }
 
-    public override void OnActive() { }
+    
 
-    public override void OnInActive() { }
+    
 
-    public override void OnUpdate()
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
+        base.OnUpdate(elapsed, realElapsed);
 
     }
 
-    public override void OnLoop() { }
+    
 
-    public override void OnClear()
+    protected override void OnClose(bool isShutdown, object userData)
     {
-        Game.Instance.dataManager.currentStageString_Subject.RemoveObserver(this);
+        try
+        {
+        ProfileReady = false;
+        if (LunaSession.Current != null) LunaSession.Current.CurrentStageChanged -= OnResponse;
+    
+        }
+        finally { base.OnClose(isShutdown, userData); }
     }
 
     public void OnClickCharacterList()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.CHARACTERLIST);
+        LunaUI.Open(UI_TYPE.CHARACTERLIST);
     }
 
     public void OnClickUpgrade()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.GOODS);
-        Game.Instance.uiManager.Push(UI_TYPE.UPGRADE);
+        LunaUI.Open(UI_TYPE.GOODS);
+        LunaUI.Open(UI_TYPE.UPGRADE);
     }
 
     public void OnClickAdventure()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.ADVENTURE);
+        LunaUI.Open(UI_TYPE.ADVENTURE);
     }
     public void OnClickShop()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.GAMESHOP);
+        LunaUI.Open(UI_TYPE.GAMESHOP);
     }
     public void OnClickSelectDungeon()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.SELECTSTAGE);
+        LunaUI.Open(UI_TYPE.SELECTSTAGE);
     }
     public void OnClickInventory()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.INVENTORY);
+        LunaUI.Open(UI_TYPE.INVENTORY);
     }
 
     private void MoveLobbyUnits()
     {
-        foreach (GameObject unit in Game.Instance.dataManager.lobbyUnits)
+        foreach (GameObject unit in LunaSession.Current.lobbyUnits)
         {
             if (unit != null)
-                unit.GetComponent<Status>().unitState.IsLobbyStartMove = true;
+                unit.GetComponent<UnitLogic>().unitState.IsLobbyStartMove = true;
         }
     }
 
     private void LoadStage()
     {
         //게임 시작 최초 선택된 스테이지가 없을 경우
-        if (Game.Instance.dataManager.CurrentStageName == "")
+        if (LunaSession.Current.CurrentStageName == "")
         {
-            Game.Instance.dataManager.SelectStagePrefab =
+            LunaSession.Current.SelectStagePrefab =
                 Resources.Load<GameObject>("Prefabs/10Stage/Stage01-01");
         }
         else
         {
             string stageDir = "Prefabs/10Stage/"
-                    + Game.Instance.dataManager.CurrentStageName;
+                    + LunaSession.Current.CurrentStageName;
 
-            Game.Instance.dataManager.SelectStagePrefab
+            LunaSession.Current.SelectStagePrefab
                 = Resources.Load<GameObject>(stageDir);
         }
     }
 
     private void MoveGameScene()
     {
-        Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
+        LunaScenes.FadeIn(1.5f, () =>
         {
-            Game.Instance.lunaSceneManager.LoadScene("Game");
+            LunaScenes.Load("Game");
         });
     }
 
@@ -119,10 +125,7 @@ public class UILobby : UILuna, IObserver
     {
         LoadStage();
 
-        backGround.transform
-            .Find("Entrance")
-            .Find("Door").GetComponent<LobbyDoor>()
-            .DoorOpenAction();
+        LunaScenes.CurrentLobbyGame?.OpenDoor();
 
         MoveLobbyUnits();
         MoveGameScene();
@@ -130,21 +133,21 @@ public class UILobby : UILuna, IObserver
 
     public void PushPopupUI()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.POPUP);
+        LunaUI.Open(UI_TYPE.POPUP);
     }
 
     private void SetStageInfo()
     {
         Text stageName
-            = LunaUtility.FindComponentByChildObject<Text>(this.gameObject, "DungeonText");
+            = LunaUIViews.FindComponentByChildObject<Text>(this.gameObject, "DungeonText");
 
-        stageName.text = Game.Instance.dataManager.CurrentStageLevelString("지하 ");
+        stageName.text = LunaSession.Current.CurrentStageLevelString("지하 ");
 
     }
 
     public void OnClickLunaProfile()
     {
-        Game.Instance.uiManager.Push(UI_TYPE.UPGRADE);
+        LunaUI.Open(UI_TYPE.UPGRADE);
     }
 
     public void UpdateLunaProfile()
@@ -154,10 +157,8 @@ public class UILobby : UILuna, IObserver
             = lunaProfile.Find("NameBackImage")
             .Find("LevelText").GetComponent<Text>();
 
-        ObjectData playerData
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().objectData;
-
-        levelText.text = "LV ​<color=#D1A606>" + playerData.Level.ToString() + "</color>";
+        // Lobby actors load asynchronously; profile data already exists in the session.
+        levelText.text = "LV ​<color=#D1A606>" + LunaDataTable.Instance.playerData.LunaLevel.ToString() + "</color>";
 
         List<GameObject> skillObjects = new List<GameObject>();
         skillObjects.Add(lunaProfile.Find("LunaImage").Find("Skill_01").gameObject);
@@ -184,18 +185,16 @@ public class UILobby : UILuna, IObserver
 
 
         design.GetComponent<Image>().sprite
-            = LunaUtility.CreateSprite(data.equipIcon);
+            = LunaUIViews.CreateSprite(data.equipIcon);
 
         weapon.GetComponent<Image>().sprite
-            = LunaUtility.CreateSprite(data.weapon);
+            = LunaUIViews.CreateSprite(data.weapon);
 
         shiled.GetComponent<Image>().sprite
-            = LunaUtility.CreateSprite(data.shield);
+            = LunaUIViews.CreateSprite(data.shield);
 
         ring.GetComponent<Image>().sprite
-            = LunaUtility.CreateSprite(data.ring);
-
-
-
+            = LunaUIViews.CreateSprite(data.ring);
+        ProfileReady = true;
     }
 }

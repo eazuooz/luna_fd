@@ -1,14 +1,15 @@
+using Luna.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Matilda : HeroSkillControl
+public class Matilda : HeroUnitLogic
 {
-    public GameObject skillEffect;
-    public AudioClip skillSound;
-    public GameObject minion1;
-    public GameObject minion2;
-    public GameObject minion3;
+    public GameObject skillEffect => View.GetPrefab("skillEffect");
+    public AudioClip skillSound => View.GetSound("skillSound");
+    public GameObject minion1 => View.GetPrefab("minion1");
+    public GameObject minion2 => View.GetPrefab("minion2");
+    public GameObject minion3 => View.GetPrefab("minion3");
 
     private bool triggerSkill_1;
     private bool triggerSkill_3;
@@ -16,17 +17,12 @@ public class Matilda : HeroSkillControl
     private float counter1;
     private float counter2;
 
-    protected override void OnEntityInitialize()
-    {
-        base.OnEntityInitialize();
+    
 
-        counter1 = 0.0f;
-        counter2 = 0.0f;
-    }
-
-    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
-        base.OnEntityUpdate(elapsed, realElapsed);
+        if (Data == null || IsHiding) return;
+        if (!LunaCombat.IsInCombat(this)) { base.OnUpdate(elapsed, realElapsed); return; }
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -47,6 +43,7 @@ public class Matilda : HeroSkillControl
             counter2 = 0.0f;
             Ult2Skill();
         }
+        base.OnUpdate(elapsed, realElapsed);
     }
     public override void STAR1()
     {
@@ -54,6 +51,7 @@ public class Matilda : HeroSkillControl
 
         triggerSkill_1 = false;
         triggerSkill_3 = false;
+        counter1 = counter2 = 0f;
     }
 
     public override void STAR3()
@@ -86,6 +84,8 @@ public class Matilda : HeroSkillControl
 
     public override void Skill()
     {
+        if (skill_In_Action) return;
+        skill_In_Action = true;
         StartCoroutine(NormalSkill());
     }
 
@@ -93,46 +93,28 @@ public class Matilda : HeroSkillControl
     {
         for (int i = 0; i < 4; i++)
         {
-            status.PlayOneSound(skillSound);
-
-            GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion1, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion1.transform.rotation);
-
-            Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
-
-            //if(triggerSkill_2 == true)
-            //{
-            //    tmpMinion.GetComponent<Status>().Invincible(0);
-            //}
-
+            PlayOneSound(skillSound);
+            SpawnSummon(minion1, transform.position + Vector3.left, data =>
+            { data.Lifetime = 30f; data.InvincibleSeconds = ultState >= eUltState.ULT1 ? -1f : 0f; }, skillEffect);
             yield return new WaitForSeconds(0.2f);
         }
+        skill_In_Action = false;
     }
 
     IEnumerator Star5Skill()
     {
         for (int i = 0; i < 2; i++)
         {
-            status.PlayOneSound(skillSound);
-
-            GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion2, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion2.transform.rotation);
-
-            Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
-
-            //if (triggerSkill_2 == true)
-            //{
-            //    tmpMinion.GetComponent<Status>().Invincible(0);
-            //}
-
+            PlayOneSound(skillSound);
+            SpawnSummon(minion2, transform.position + Vector3.left, data =>
+            { data.Lifetime = 30f; data.InvincibleSeconds = ultState >= eUltState.ULT1 ? -1f : 0f; }, skillEffect);
             yield return new WaitForSeconds(0.2f);
         }
     }
 
     void Ult2Skill()
     {
-        status.PlayOneSound(skillSound);
-
-        GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion3, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion3.transform.rotation);
-
-        Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
+        PlayOneSound(skillSound);
+        SpawnSummon(minion3, transform.position + Vector3.left, data => data.Lifetime = 16f, skillEffect);
     }
 }

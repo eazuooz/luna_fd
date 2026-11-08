@@ -1,28 +1,37 @@
-# [Unity3D] 루나 디펜스 
+# [Unity3D] 루나 디펜스
 
-## 2026 복구 및 Game Framework 전환
+## 2026 복구 및 Toybox 방식 Game Framework 재작성
 
-`ProjectSettings/ProjectVersion.txt`의 **Unity 6000.6.0f1**으로 엽니다. Play 시작 씬은 `Loading`이며, 시작 버튼을 누르면 로비로 이동합니다. CLI 검사 전에는 같은 프로젝트의 Unity 에디터를 닫아야 합니다.
+`ProjectSettings/ProjectVersion.txt`의 **Unity 6000.6.0f1**으로 엽니다. Play 시작 씬은 `Loading`이며 시작 화면을 클릭하면 로비로 이동합니다. CLI 검사 전에는 같은 프로젝트의 Unity 에디터를 닫습니다.
 
-- [프레임워크 구조와 Entity 수명 관리](Docs/Framework-Migration.md)
+제공된 GameFramework Core/Unity 0.1.0을 사용하고, `ToyboxNightmare`의 실제 작성 방식에 맞춰 액터별 `EntityLogic`·typed `EntityData`·native FSM, Procedure가 소유하는 일반 C# 판 객체, native `UIFormLogic`으로 재작성했습니다. Everyday 패키지와 12개 관리자, MonoBehaviour 수명 중계는 제거했습니다. 소환 경제·쿨다운·전리품·재생성은 판과 플레이어가 소유합니다.
+
+전투 설정은 유닛76행, 스킬/장비32행·18필드, Entity 매개변수260행과 스테이지/웨이브/보상 CSV를 native DataTable로 읽습니다. 저장된 성장·선택 정보와 아트 에셋 참조는 분리합니다. 아래 원래 소개·영상·이미지는 개발 당시 기록으로 유지하며, 복구 후 확정한 스킬 성장 규칙은 별도 문서를 기준으로 합니다.
+
+- [Toybox 작성 방식과 native 수명 구조](Docs/Framework-Migration.md)
+- [인수 기준과 실제 검증 근거](Docs/Toybox-Authoring-Acceptance.md)
 - [CSV / DataTable 편집 및 저장 데이터 우선순위](Docs/UnitBalance-DataTable.md)
-- [복구 변경 사항과 남은 콘텐츠 검토](Docs/Revival-Gameplay.md)
-- [최종 검수 목록, 3회 검수 결과와 재실행 방법](Docs/Revival-QA.md)
-- [빌드 경고 수정 내역과 엔진 종료 진단](Docs/Warning-Review.md)
-- [원본 설명과 구현이 다른 남은 게임 규칙](Docs/Gameplay-Open-Issues.md)
+- [승인된 플레이어 스킬 LV5·10·15·20 복구 규칙](Docs/Player-Skill-Level-Rules.md)
+- [현재 검수 상태와 재실행 방법](Docs/Revival-QA.md)
+- [역사적 경고 수정 내역과 현재 엔진 종료 진단](Docs/Warning-Review.md)
+- [원본 설명과 구현의 남은 게임 규칙 검토](Docs/Gameplay-Open-Issues.md)
+
+**계획한 PC 검수는 최종 r04에서3/3회 통과했습니다.** 매 회차 Audit15·Smoke8·전체 Matrix442를 같은 소스 지문으로 실행했고, 마지막에는 새 Windows 빌드와 별도 저장 프로세스·DSP 오디오·입력 처리·3개 해상도 캡처·302초11회 순환을 확인했습니다. 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`입니다.
+
+**native 메모리 문제는 아직 전부 해결되지 않았습니다.** Editor 종료의 shader 할당5개/1,366바이트와 최종 Player 종료의 귀속 미확인 native 집계41,463/45,302바이트가 남습니다. Player의 실행 중 오류·경고는0이었지만 모든 native 할당이 해제됐다는 뜻은 아닙니다. Android/iOS·IL2CPP 실행과 모든 확률/조합의 완전 검증도 포함하지 않았습니다. 이전 r01~r03 실패·중단 기록과 실제 검사 범위는 위 QA/인수 문서에서 확인합니다.
 
 ```powershell
-# 임포트·참조 검사, 실제 플레이 검사, Windows 개발 빌드
-& .\Tools\validation\Validate-Luna.ps1 -Mode All
-# 화면 없이 콘텐츠 사례 검사
+# 화면 없는 Editor: 임포트/참조 감사 + Smoke + 전체 콘텐츠 + clean Windows 빌드
+& .\Tools\validation\Validate-Luna.ps1 -Mode All -NoGraphics -CleanBuildCache -JobLeakDiagnostics
+# 특정 전체 콘텐츠 검사만 다시 실행
 & .\Tools\validation\Validate-Luna.ps1 -Mode ContentMatrix -MatrixSection all -NoGraphics
-# 숨김 Windows 프로세스의 저장/입력/오디오/오프스크린/반복 전투 검사
-& .\Tools\validation\Validate-Player.ps1 -Mode All -RenderMode offscreen
-# 독립 Unity 프로세스로 최종 검수 3회
-& .\Tools\validation\Final-Review.ps1
+# 실제 그래픽/오디오를 켠 숨김 Windows 프로세스: 별도 저장/입력/DSP/3해상도/300초
+& .\Tools\validation\Validate-Player.ps1 -Mode All -Section all -RenderMode offscreen -SoakSeconds 300
+# 소스가 고정된 뒤 새 RunId로 독립 Editor 검수3회; 3회차에 새 빌드와 Player 검사 포함
+& .\Tools\validation\Final-Review.ps1 -NoGraphics -CleanBuildCache -JobLeakDiagnostics
 ```
 
-Windows 검증 빌드는 `Builds/Revival/Windows/LunaDefense.exe`, 실행 보고서는 `Logs/Revival/`에 생성됩니다. 기존 경제 수치·보상 설계는 유지하며 상용 배포용 밸런스 확정을 의미하지 않습니다.
+`-NoGraphics`는 Editor에만 적용하며 실제 Player의 그래픽·오디오는 켭니다. BuildReport의 경고0과 프로세스 종료 로그는 별도로 확인해야 합니다. Windows 실행 파일은 `Builds/Revival/Windows/LunaDefense.exe`, 격리 검사 보고서는 `Logs/Revival/`, 최종 회차별 원본은 `Logs/Revival/FinalReview/`에 생성됩니다. 최종 검사 도구는 소스 지문과 알고리즘 버전을 비교하며, 중간 소스 변경 시 새 RunId로 다시 시작합니다. 검사는 실제 사용자 저장 대신 격리 저장을 사용합니다. Android/IL2CPP·모바일 기기와 상용 배포 밸런스는 검증 완료 범위가 아닙니다.
 
 
 🖥️ 프로젝트 소개
