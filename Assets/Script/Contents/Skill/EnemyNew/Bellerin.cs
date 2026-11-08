@@ -5,25 +5,23 @@ using UnityEngine.EventSystems;
 using EverydayDevup.Framework;
 using UnityEngine.SceneManagement;
 
-public class Bellerin : MonoBehaviour
+public class Bellerin : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public Status status { get; set; }
-    private int skillControlCounter;
 
     public GameObject skillEffect_1;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
-        skillControlCounter = 0;
 
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.unitState.IsSkillActivaion == true)
         {

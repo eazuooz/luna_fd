@@ -1,0 +1,9 @@
+{
+  "name": "UnityGameFramework.Runtime",
+  "references": [
+    "Unity.Addressables",
+    "Unity.ResourceManager",
+    "Unity.SharpZipLib"
+  ],
+  "autoReferenced": true
+}

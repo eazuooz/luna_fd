@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class MartinControl : MonoBehaviour
+public class MartinControl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public float moveSpeed;
     public float range;
@@ -17,7 +17,7 @@ public class MartinControl : MonoBehaviour
     private GameObject target;
     private float counter;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         counter = 0.0f;
 
@@ -28,12 +28,12 @@ public class MartinControl : MonoBehaviour
             if (trackEntry.Animation.Name == "attack")
             {
 
-                tmpEffect = GameObject.Instantiate(explosionEffect, transform.Find("AttackPos").position, explosionEffect.transform.rotation);
+                tmpEffect = EverydayDevup.Framework.LunaEntities.Spawn(explosionEffect, transform.Find("AttackPos").position, explosionEffect.transform.rotation);
 
                 if (target != null)
                     target.GetComponent<Status>().Attack(gameObject, damage, true, true);
 
-                Destroy(gameObject);
+                EverydayDevup.Framework.LunaEntities.Hide(gameObject);
             }
         };
 
@@ -55,7 +55,7 @@ public class MartinControl : MonoBehaviour
         ani.AnimationState.SetAnimation(0, "idle", false);
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (target == null)
         {

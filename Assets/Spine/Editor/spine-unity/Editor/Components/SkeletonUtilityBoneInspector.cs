@@ -336,7 +336,7 @@ namespace Spine.Unity.Editor {
 			followerKinematicObject.transform.parent = normalChainParentObject.transform;
 			var followerRigidbody = followerKinematicObject.AddComponent<Rigidbody2D>();
 			followerRigidbody.mass = mass;
-			followerRigidbody.isKinematic = true;
+			followerRigidbody.bodyType = RigidbodyType2D.Kinematic;
 			followerKinematicObject.AddComponent<FollowLocationRigidbody2D>().reference = kinematicParentUtilityBone.transform;
 			followerKinematicObject.transform.position = kinematicParentUtilityBone.transform.position;
 			followerKinematicObject.transform.rotation = kinematicParentUtilityBone.transform.rotation;

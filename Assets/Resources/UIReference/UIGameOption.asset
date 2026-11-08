@@ -17,6 +17,7 @@ MonoBehaviour:
     keys:
     - UIGameOption
     - ButtonOption
+    - ButtonSound
     - ButtonMission
     - ButtonRanking
     values:
@@ -26,6 +27,9 @@ MonoBehaviour:
     - name: ButtonOption
       path: /UIGameOption/ButtonOption
       obj: {fileID: 6202243091908060356, guid: 5b63149d460f1e54abbb2829744f2b65, type: 3}
+    - name: ButtonSound
+      path: /UIGameOption/ButtonSound
+      obj: {fileID: 4959536642108450035, guid: 5b63149d460f1e54abbb2829744f2b65, type: 3}
     - name: ButtonMission
       path: /UIGameOption/ButtonMission
       obj: {fileID: 7779293709035589256, guid: 5b63149d460f1e54abbb2829744f2b65, type: 3}

@@ -26,6 +26,9 @@ public class UIResult : UILuna
                 transform.Find("ResultBoard").Find("ResultText").GetComponent<Text>().text = "'승리'";
 
                 LunaDataTable.Instance.playerData.SaveStageName = Game.Instance.dataManager.NextStageString();
+                if (LunaDataTable.Instance.StageTable.TryGetValue(Game.Instance.dataManager.CurrentStageName, out var completedStage))
+                    completedStage.isClear = true;
+                LunaRuntimeData.SaveNow();
             }
             else
             {
@@ -129,7 +132,7 @@ public class UIResult : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Game");
+            Game.Instance.lunaSceneManager.LoadScene("Game");
         });
     }
     public void GoNextStage()
@@ -149,7 +152,7 @@ public class UIResult : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Lobby");
+            Game.Instance.lunaSceneManager.LoadScene("Lobby");
         });
     }
 

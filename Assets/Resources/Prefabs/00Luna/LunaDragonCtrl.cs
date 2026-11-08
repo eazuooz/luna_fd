@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class LunaDragonCtrl : MonoBehaviour
+public class LunaDragonCtrl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private SkeletonAnimation ani;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         
     }

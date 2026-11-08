@@ -9,17 +9,16 @@ public class Scalet : HeroSkillControl
     private float skillDamage;
     private float coefSkill_1;
     private float coefSkill_2;
-    private float coefSkill_3;
     private bool triggerSkill_1;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -35,7 +34,6 @@ public class Scalet : HeroSkillControl
         skillDamage = status.stat.AttackDamage * 5;
         coefSkill_1 = 1.0f;
         coefSkill_2 = 8.0f;
-        coefSkill_3 = 1.0f;
         triggerSkill_1 = false;
     }
 
@@ -46,14 +44,14 @@ public class Scalet : HeroSkillControl
         coefSkill_1 = 2.0f;
     }
 
-    public override void STAR5() 
+    public override void STAR5()
     {
         STAR3();
 
         coefSkill_2 = 10.0f;
     }
 
-    public override void ULT1() 
+    public override void ULT1()
     {
         STAR5();
 
@@ -101,7 +99,7 @@ public class Scalet : HeroSkillControl
             {
                 if (target != null)
                 { // ¿˙¡÷
-                //    target.GetComponent<Status>().Curse();
+                    target.GetComponent<Status>().Curse();
                 }
             }
         }

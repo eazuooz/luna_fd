@@ -4,7 +4,7 @@ using UnityEngine;
 using EverydayDevup.Framework;
 
 
-public class Arrow : MonoBehaviour
+public class Arrow : EverydayDevup.Framework.LunaEntityBehaviour
 {
     enum eArrowPath
     {
@@ -23,6 +23,7 @@ public class Arrow : MonoBehaviour
     // Start is called before the first frame update
 
     private GameObject shooterObject;
+    private bool pendingLaunch;
     public GameObject ShooterObject
     {
         get { return shooterObject; }
@@ -80,30 +81,38 @@ public class Arrow : MonoBehaviour
         iTween.MoveTo(gameObject, iTween.Hash("path", path, "time", moveTime, "easeType", "easeOutCirc"));
     }
 
-    private void OnEnable()
+    protected override void OnEntityShow()
     {
+        shooterObject = null;
+        destroyTime = 5.0f;
+        pendingLaunch = true;
         ResetTarget();
-        MoveArrow();
     }
 
-    private void OnDisable()
+    protected override void OnEntityHide()
     {
-        
-    }
-
-    void Start()
-    {
-        ResetTarget();
-        MoveArrow();
+        pendingLaunch = false;
+        iTween.Stop(gameObject);
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
+        // The shooter and destination are supplied by the caller after Spawn returns.
+        if (pendingLaunch)
+        {
+            pendingLaunch = false;
+            if (shooterObject == null)
+            {
+                DestroyArrow();
+                return;
+            }
+            MoveArrow();
+        }
         if(destroyTime < 0.0f)
         {
             DestroyArrow();
-            destroyTime = 5.0f;
+            return;
         }
 
         destroyTime -= Time.deltaTime;

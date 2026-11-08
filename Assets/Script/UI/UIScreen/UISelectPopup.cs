@@ -52,7 +52,7 @@ public class UISelectPopup : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Lobby");
+            Game.Instance.lunaSceneManager.LoadScene("Lobby");
         });
     }
 }

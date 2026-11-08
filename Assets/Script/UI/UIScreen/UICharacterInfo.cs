@@ -345,7 +345,7 @@ public class UICharacterInfo : UILuna, IObserver
             //    = LunaUtility.FindComponentByChildObject<Text>(statObj, "CostText");
 
             Sprite starStoneSprite
-                = Resources.Load<Sprite>("UI/popup_ soldier/goods/starstone");
+                = Resources.Load<Sprite>("UI/UICharacterList/popup_ soldier/goods/starstone");
 
             imgObj.GetComponent<Image>().sprite = starStoneSprite;
 

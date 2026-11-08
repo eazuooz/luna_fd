@@ -8,21 +8,21 @@ public class Lene : HeroSkillControl
     public AudioClip skillSound;
 
     private float skillDamage;
-    private float coefSkill_1;
+    private const float AllyProcChance = 40.0f;
+    private float selfProcChance;
     private float coefSkill_2;
-    private bool triggerSkill_1;
     private bool triggerSkill_2;
 
     private float skillCount;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -46,9 +46,8 @@ public class Lene : HeroSkillControl
     {
         status.unitState.IsTargetingSkill = false;
         skillDamage = status.stat.AttackDamage * 0.65f;
-        coefSkill_1 = 40.0f;
+        selfProcChance = AllyProcChance;
         coefSkill_2 = 10.0f;
-        triggerSkill_1 = false;
         triggerSkill_2 = false;
 
         skillCount = 3.0f;
@@ -65,15 +64,14 @@ public class Lene : HeroSkillControl
     public override void STAR5()
     {
         STAR3();
-
-        triggerSkill_1 = true;
+        selfProcChance += 40.0f;
     }
 
     public override void ULT1()
     {
         STAR5();
 
-        coefSkill_1 += 20.0f;
+        selfProcChance += 20.0f;
     }
 
     public override void ULT2()
@@ -85,7 +83,7 @@ public class Lene : HeroSkillControl
 
     public override void Skill()
     {
-        if (Defined.CanProbability(coefSkill_1 + 40))
+        if (Defined.CanProbability(selfProcChance))
         {
             status.TakeBerserkMode(coefSkill_2);
         }
@@ -96,7 +94,7 @@ public class Lene : HeroSkillControl
         {
             if (IdentifyFunc.IsInDistance(gameObject, unit, skillRange))
             {
-                if (Defined.CanProbability(coefSkill_1 + 40))
+                if (Defined.CanProbability(AllyProcChance))
                 {
                     unit.GetComponent<Status>().TakeBerserkMode(coefSkill_2);
                 }

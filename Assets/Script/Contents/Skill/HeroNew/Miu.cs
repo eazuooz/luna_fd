@@ -9,16 +9,15 @@ public class Miu : HeroSkillControl
 
     private float skillDamage;
     private float coefSkill_1;
-    private bool triggerSkill_1;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -33,7 +32,6 @@ public class Miu : HeroSkillControl
         status.unitState.IsTargetingSkill = false;
         skillDamage = status.stat.AttackDamage * 3.5f;
         coefSkill_1 = 1.0f;
-        triggerSkill_1 = false;
     }
 
 
@@ -45,14 +43,13 @@ public class Miu : HeroSkillControl
         status.HpAfterReady();
     }
 
-    public override void STAR5() 
+    public override void STAR5()
     {
         STAR3();
 
-        triggerSkill_1 = true;
     }
 
-    public override void ULT1() 
+    public override void ULT1()
     {
         STAR5();
 

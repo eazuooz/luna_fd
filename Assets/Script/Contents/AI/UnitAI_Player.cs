@@ -10,7 +10,7 @@ public class UnitAI_Player : BaseAI
     [HideInInspector] public Status status;
     public GameObject projectile;
 
-    private void OnEnable()
+    protected override void OnEntityShow()
     {
         if (status != null)
         {
@@ -19,42 +19,32 @@ public class UnitAI_Player : BaseAI
         }
     }
 
-    private void OnDisable()
+    protected override void OnEntityHide()
     {
         StopAllCoroutines();
+        if (status == null) return;
         status.IsStatusDataLoadComplete = false;
         status.unitState.IsSummonState = false;
 
         status.ReleaseData();
     }
 
-    public void ResetAnimation()
-    {
-        if (SkeletonAnimation != null)
-        {
-            SkeletonAnimation.ClearState();
-            SkeletonAnimation.skeletonDataAsset.Clear();
-            SkeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-
-            
-        }
-    }
-
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
-        
+
         SkeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
 
         SkeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        
+
         CreateBehaviorTreeAIState();
 
         InitProjectTile();
     }
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         SkeletonAnimation.timeScale = 0.6f;
+        if (status == null || !status.IsStatusDataLoadComplete || AIState == null) return;
         AIState.Tick();
         StatusUpdate();
     }
@@ -63,7 +53,7 @@ public class UnitAI_Player : BaseAI
     {
         AIState = new BtRootNode();
         {
-            // BT Root ¼¿·ºÅÍ
+            // BT Root ì…€ë ‰í„°
             BtSelector mainSelector = new BtSelector();
 
             BtSequence deadSequence = new BtSequence();
@@ -77,7 +67,7 @@ public class UnitAI_Player : BaseAI
                 mainSelector.AddChild(deadSequence);
             }
 
-            // ÇÇ°İ ½ÃÄö½º
+            // í”¼ê²© ì‹œí€€ìŠ¤
             BtSequence damagedSequence = new BtSequence();
             {
                 DamagedCondition damagedCondition = new DamagedCondition(gameObject);
@@ -89,7 +79,7 @@ public class UnitAI_Player : BaseAI
                 mainSelector.AddChild(damagedSequence);
             }
 
-            // ±âº» ½ÃÄö½º - µô·¹ÀÌ»óÅÂ Ã³¸®
+            // ê¸°ë³¸ ì‹œí€€ìŠ¤ - ë”œë ˆì´ìƒíƒœ ì²˜ë¦¬
             BtSequence idleSequence = new BtSequence();
             {
                 idleCondition idle = new idleCondition(gameObject);
@@ -98,8 +88,8 @@ public class UnitAI_Player : BaseAI
                 mainSelector.AddChild(idleSequence);
             }
 
-            // °ø°İ ½ÃÄö½º
-            if (status.stat.AttackRange != 0) // »ç°Å¸®°¡ 0ÀÌ¸é °ø°İ½ÃÄö½º X
+            // ê³µê²© ì‹œí€€ìŠ¤
+            if (status.stat.AttackRange != 0) // ì‚¬ê±°ë¦¬ê°€ 0ì´ë©´ ê³µê²©ì‹œí€€ìŠ¤ X
             {
                 BtSequence attackSqeuence = new BtSequence();
                 {
@@ -133,7 +123,7 @@ public class UnitAI_Player : BaseAI
         if (SceneManager.GetActiveScene().name == "Game"
                 && projectile != null)
         {
-            projectile.transform.position = new Vector2(10000.0f, 1000.0f);
+            // Warming registers the prefab; never reposition the source asset.
 
             if (status.UnitType == eUnitType.Hero)
             {
@@ -158,7 +148,7 @@ public class UnitAI_Player : BaseAI
             status.stat.AttackDelayTime += Time.deltaTime;
         }
 
-        if (status.stat.Mp <= 100.0f)
+        if (status.stat.Mp <= 100.0f && status.stat.Stamina > 0f)
         {
             status.stat.Mp += (100.0f / status.stat.Stamina) * Time.deltaTime;
         }

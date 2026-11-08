@@ -1,5 +1,30 @@
 # [Unity3D] 루나 디펜스 
 
+## 2026 복구 및 Game Framework 전환
+
+`ProjectSettings/ProjectVersion.txt`의 **Unity 6000.6.0f1**으로 엽니다. Play 시작 씬은 `Loading`이며, 시작 버튼을 누르면 로비로 이동합니다. CLI 검사 전에는 같은 프로젝트의 Unity 에디터를 닫아야 합니다.
+
+- [프레임워크 구조와 Entity 수명 관리](Docs/Framework-Migration.md)
+- [CSV / DataTable 편집 및 저장 데이터 우선순위](Docs/UnitBalance-DataTable.md)
+- [복구 변경 사항과 남은 콘텐츠 검토](Docs/Revival-Gameplay.md)
+- [최종 검수 목록, 3회 검수 결과와 재실행 방법](Docs/Revival-QA.md)
+- [빌드 경고 수정 내역과 엔진 종료 진단](Docs/Warning-Review.md)
+- [원본 설명과 구현이 다른 남은 게임 규칙](Docs/Gameplay-Open-Issues.md)
+
+```powershell
+# 임포트·참조 검사, 실제 플레이 검사, Windows 개발 빌드
+& .\Tools\validation\Validate-Luna.ps1 -Mode All
+# 화면 없이 콘텐츠 사례 검사
+& .\Tools\validation\Validate-Luna.ps1 -Mode ContentMatrix -MatrixSection all -NoGraphics
+# 숨김 Windows 프로세스의 저장/입력/오디오/오프스크린/반복 전투 검사
+& .\Tools\validation\Validate-Player.ps1 -Mode All -RenderMode offscreen
+# 독립 Unity 프로세스로 최종 검수 3회
+& .\Tools\validation\Final-Review.ps1
+```
+
+Windows 검증 빌드는 `Builds/Revival/Windows/LunaDefense.exe`, 실행 보고서는 `Logs/Revival/`에 생성됩니다. 기존 경제 수치·보상 설계는 유지하며 상용 배포용 밸런스 확정을 의미하지 않습니다.
+
+
 🖥️ 프로젝트 소개
 
 아트 + 프로그래머 2인개발로 루나 디펜스 게임을 개발하였습니다.

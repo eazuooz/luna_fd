@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class NormalSkeletonObjControl : MonoBehaviour
+public class NormalSkeletonObjControl : EverydayDevup.Framework.LunaEntityBehaviour
 {
 
     private SkeletonAnimation skeleton;
     private AudioSource audioSource;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         audioSource = GetComponent<AudioSource>();
 
@@ -20,7 +20,7 @@ public class NormalSkeletonObjControl : MonoBehaviour
             skeleton.AnimationState.SetAnimation(0, "idle", true);
         }
     }
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (audioSource != null)
         {
@@ -43,6 +43,6 @@ public class NormalSkeletonObjControl : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        Destroy(this.gameObject);
+        EverydayDevup.Framework.LunaEntities.Hide(gameObject);
     }
 }

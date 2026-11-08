@@ -8,17 +8,15 @@ public class Roen : HeroSkillControl
     public AudioClip skillSound;
 
     private float skillDamage;
-    private float coefSkill_1;
-    private bool triggerSkill_1;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -32,8 +30,6 @@ public class Roen : HeroSkillControl
     {
         status.unitState.IsTargetingSkill = false;
         skillDamage = status.stat.AttackDamage* 5;
-        coefSkill_1 = 1.0f;
-        triggerSkill_1 = false;
     }
 
     public override void STAR3()
@@ -44,14 +40,14 @@ public class Roen : HeroSkillControl
         status.StatusAfterReady();
     }
 
-    public override void STAR5() 
+    public override void STAR5()
     {
         STAR3();
 
         Defined.SkillTrigger_Roen1 = true;
     }
 
-    public override void ULT1() 
+    public override void ULT1()
     {
         STAR5();
 

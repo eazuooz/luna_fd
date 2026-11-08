@@ -166,7 +166,7 @@ public class UIStageInfo : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Game");
+            Game.Instance.lunaSceneManager.LoadScene("Game");
         });
     }
     

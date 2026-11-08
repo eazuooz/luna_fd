@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class LunaCtrl_Rich : MonoBehaviour
+public class LunaCtrl_Rich : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private Status status;
 
 
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         Defined.SkillTrigger_Goldy *= 1.1f;
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         
     }

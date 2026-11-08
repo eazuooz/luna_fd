@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Skeleton_ax_ally : MonoBehaviour 
+public class Skeleton_ax_ally : EverydayDevup.Framework.LunaEntityBehaviour
 {
     [SerializeField] private string skillMatter = "타겟 주위 범위 공격";
+    public string SkillDescription => skillMatter;
     [HideInInspector] public Status status;
     public GameObject effect;
     private GameObject tmpEffect;
@@ -14,7 +15,7 @@ public class Skeleton_ax_ally : MonoBehaviour
     private SkeletonAnimation skeletonAnimation;
     private GameObject attackPos;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         skeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
@@ -43,7 +44,7 @@ public class Skeleton_ax_ally : MonoBehaviour
         };
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
 
     }

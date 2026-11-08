@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class SkillBomb : MonoBehaviour
+public class SkillBomb : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private SkeletonAnimation ani;
     public GameObject effect;
@@ -11,7 +11,7 @@ public class SkillBomb : MonoBehaviour
     public float Damage;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
         ani.AnimationState.SetAnimation(0, "normal", false);
@@ -22,7 +22,7 @@ public class SkillBomb : MonoBehaviour
             {
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Unit");
 
-                GameObject.Instantiate(effect, transform.Find("Sprite").position, effect.transform.rotation);
+                EverydayDevup.Framework.LunaEntities.Spawn(effect, transform.Find("Sprite").position, effect.transform.rotation);
 
                 foreach (GameObject enemy in enemies)
                 {
@@ -43,11 +43,11 @@ public class SkillBomb : MonoBehaviour
         {
             if (trackEntry.Animation.Name == "normal")
             {
-                Destroy(gameObject);
+                EverydayDevup.Framework.LunaEntities.Hide(gameObject);
             }
         };
     }
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         
     }

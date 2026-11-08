@@ -65,7 +65,7 @@ public class BasicDungeon : LunaGame
         skipStartCameraMove = false;
     }
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         Init();
 
@@ -80,7 +80,7 @@ public class BasicDungeon : LunaGame
         }
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (isStageStop == false)
         {
@@ -110,10 +110,10 @@ public class BasicDungeon : LunaGame
             //monsterData.gameObj.GetComponent<UnitAI>().InitProjectTile();
         }
 
-        gameBGimage = GameObject.Instantiate(backgroundImage, Defined.OriginPosition, Quaternion.identity);
+        gameBGimage = EverydayDevup.Framework.LunaEntities.Spawn(backgroundImage, Defined.OriginPosition, Quaternion.identity);
 
-        gameEnemyTower = GameObject.Instantiate(enemyTower, Defined.EnemyTowerPosition, Quaternion.identity);
-        gameAllyTower = GameObject.Instantiate(allyTower, Defined.AllyTowerPosition, Quaternion.identity);
+        gameEnemyTower = EverydayDevup.Framework.LunaEntities.Spawn(enemyTower, Defined.EnemyTowerPosition, Quaternion.identity);
+        gameAllyTower = EverydayDevup.Framework.LunaEntities.Spawn(allyTower, Defined.AllyTowerPosition, Quaternion.identity);
         gamePlayer = PoolManager.Instance.spawnObject(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity);
 
         gameEnemyTower.GetComponent<Status>().unitState.IsLobbyMove = true;
@@ -122,7 +122,7 @@ public class BasicDungeon : LunaGame
 
         Game.Instance.dataManager.LunaPlayer = gamePlayer;
 
-        gamePlayer.GetComponent<LunaStateMachine>().myTower = gameAllyTower;
+        gamePlayer.GetComponent<LunaStateMachine>().PrepareForStage(gameAllyTower);
 
         stageCamera = GameObject.Find("2DCamera").gameObject;
         stageCamera.GetComponent<Camera2D>().target = gamePlayer.transform;
@@ -352,9 +352,9 @@ public class BasicDungeon : LunaGame
         }, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
 
         BasicDungeon nextStage = Game.Instance.dataManager.SelectStagePrefab.GetComponent<BasicDungeon>();
-        GameObject gameBGimageNext = GameObject.Instantiate(nextStage.backgroundImage, Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
-        GameObject gameAllyTowerNext = GameObject.Instantiate(nextStage.allyTower, Defined.AllyTowerPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
-        GameObject gamePlayerNext = GameObject.Instantiate(LunaDataTable.Instance.playerData.CurPlayer(), Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef + -13, -15.265f, 0), Quaternion.identity);
+        GameObject gameBGimageNext = EverydayDevup.Framework.LunaEntities.Spawn(nextStage.backgroundImage, Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
+        GameObject gameAllyTowerNext = EverydayDevup.Framework.LunaEntities.Spawn(nextStage.allyTower, Defined.AllyTowerPosition + new Vector3(stageCamera.transform.position.x + coef, -15.265f, 0), Quaternion.identity);
+        GameObject gamePlayerNext = EverydayDevup.Framework.LunaEntities.Spawn(LunaDataTable.Instance.playerData.CurPlayer(), Defined.OriginPosition + new Vector3(stageCamera.transform.position.x + coef + -13, -15.265f, 0), Quaternion.identity);
 
         yield return new WaitForSeconds(1.8f);
 
@@ -381,7 +381,7 @@ public class BasicDungeon : LunaGame
             yield return null;
         }
 
-        SceneManager.LoadScene("Game");
+        Game.Instance.lunaSceneManager.LoadScene("Game");
     }
 
     IEnumerator StageBlinkText(float beforeSecond, float afterSecond)
@@ -415,7 +415,7 @@ public class BasicDungeon : LunaGame
 
         for (int i = 0; i < thisDungeonData.goldAmount * RichDouble; i++)
         {
-            Instantiate(commonObject.GetComponent<LunaAssetBundle>().Coin
+            EverydayDevup.Framework.LunaEntities.Spawn(commonObject.GetComponent<LunaAssetBundle>().Coin
                 , Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0)
                 , commonObject.GetComponent<LunaAssetBundle>().Coin.transform.rotation);
         }

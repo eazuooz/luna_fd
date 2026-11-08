@@ -3,34 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class HeroSkillControl : MonoBehaviour
+public class HeroSkillControl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     protected Status status;
 
     protected bool skill_In_Action;
     protected bool skill_In_Move;
-    protected virtual void Start()
+    private bool rankReady;
+    // Block the complete derived tick until reused status and rank flags agree.
+    protected override bool CanEntityUpdate => rankReady;
+    protected override void OnEntityInitialize()
     {
+        rankReady = false;
         status = GetComponent<Status>();
         StartCoroutine(ReadyUlt());
     }
 
-    private void OnEnable()
+    protected override void OnEntityShow()
     {
+        rankReady = false;
         if (status != null)
         {
             StartCoroutine(ReadyUlt());
         }
     }
 
-    private void OnDisable()
+    protected override void OnEntityHide()
     {
+        rankReady = false;
         if (status != null)
             AfterDeath();
     }
 
     IEnumerator ReadyUlt()
     {
+        yield return null;
+
         while (status.IsStatusDataLoadComplete == false) 
         {
             //InfiniteLoopDetector.Run();
@@ -56,9 +64,10 @@ public class HeroSkillControl : MonoBehaviour
 
         skill_In_Action = false;
         skill_In_Move = false;
+        rankReady = true;
     }
 
-    protected virtual void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.IsStatusDataLoadComplete)
         {
@@ -75,6 +84,13 @@ public class HeroSkillControl : MonoBehaviour
                 SkillMove();
             }
         }
+    }
+
+    protected static void InitializeSummonedUnit(GameObject unit)
+    {
+        // Fresh native entities defer Start. Apply summon buffs after base stats are ready.
+        BaseAI ai = unit.GetComponent<BaseAI>();
+        if (ai != null) ai.EnsureEntityInitialized();
     }
 
     public virtual void Skill() { }

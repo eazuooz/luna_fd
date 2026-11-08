@@ -83,12 +83,11 @@ public class UIPlayer : UILuna
 
 
     Dictionary<KeyCode, System.Action> keypadClick;
+    private bool keyboardMovementActive;
     void KeypadInit()
     {
         keypadClick = new Dictionary<KeyCode, System.Action>
         {
-            { KeyCode.A, () => TmpLMove() },
-            { KeyCode.D, () => TmpRMove() },
             { KeyCode.Alpha1, () => OnClickSummon(0)},
             { KeyCode.Alpha2, () => OnClickSummon(1)},
             { KeyCode.Alpha3, () => OnClickSummon(2)},
@@ -99,42 +98,22 @@ public class UIPlayer : UILuna
         };
     }
 
-    void TmpLMove()
+    /// <summary>Shared held-key movement path; safe while the player is spawning or dead.</summary>
+    public void ApplyKeyboardMovement(bool leftHeld, bool rightHeld)
     {
-        if (Game.Instance.dataManager.LunaPlayer == null)
-        {
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                Game.Instance.dataManager.LunaPlayer = unit;
-            }, IdentifyFunc.IsPlayer);
-
-            if(Game.Instance.dataManager.LunaPlayer == null)
-            {
-                return;
-            }
-        }
-
-        Game.Instance.dataManager.LunaPlayer.GetComponent<LunaStateMachine>().LMove();
+        bool held = leftHeld || rightHeld;
+        // Do not clear movement started by the on-screen buttons when the keyboard is idle.
+        if (!held && !keyboardMovementActive) return;
+        keyboardMovementActive = held;
+        var game = Game.Instance;
+        var player = game != null && game.dataManager != null ? game.dataManager.LunaPlayer : null;
+        if (player == null || !player.activeInHierarchy) return;
+        var controller = player.GetComponent<LunaStateMachine>();
+        if (controller == null) return;
+        if (leftHeld == rightHeld) controller.NMove();
+        else if (leftHeld) controller.LMove();
+        else controller.RMove();
     }
-
-    void TmpRMove()
-    {
-        if (Game.Instance.dataManager.LunaPlayer == null)
-        {
-            IdentifyFunc.PickingUnits((unit) =>
-            {
-                Game.Instance.dataManager.LunaPlayer = unit;
-            }, IdentifyFunc.IsPlayer);
-
-            if (Game.Instance.dataManager.LunaPlayer == null)
-            {
-                return;
-            }
-        }
-
-        Game.Instance.dataManager.LunaPlayer.GetComponent<LunaStateMachine>().RMove();
-    }
-
 
     void OnClickEscape()
     {
@@ -150,18 +129,20 @@ public class UIPlayer : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Lobby");
+            Game.Instance.lunaSceneManager.LoadScene("Lobby");
         });
     }
     IEnumerator CreateAllUnit()
     {
-        yield return 0;
+        yield return null;
+        if (!Game.Instance.dataManager.doNotSummonMode) yield break;
 
         if (Game.Instance.dataManager.doNotSummonMode)
         {
             for (int i = 0; i < 6; i++)
             {
-                if (GameObject.FindGameObjectWithTag("Stage").GetComponent<EndlessDungeon>() != null &
+                if (summonCards[i].unitPrefab == null) continue;
+                if (GameObject.FindGameObjectWithTag("Stage").GetComponent<EndlessDungeon>() != null &&
                     GameObject.FindGameObjectWithTag("Stage").GetComponent<EndlessDungeon>().randomYDistance == true)
                 {
                     float tmpY = UnityEngine.Random.Range(-0.3f, 1.0f);
@@ -198,9 +179,9 @@ public class UIPlayer : UILuna
 
     public override void OnActive() { }
 
-    public override void OnInActive() 
+    public override void OnInActive()
     {
-        
+        ApplyKeyboardMovement(false, false);
     }
 
     public override void OnUpdate()
@@ -654,10 +635,9 @@ public class UIPlayer : UILuna
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-        {
-            Game.Instance.dataManager.LunaPlayer.GetComponent<LunaStateMachine>().NMove();
-        }
+        ApplyKeyboardMovement(
+            Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow),
+            Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow));
     }
 
     public void OnClickSummon(int buttonIndex)
@@ -732,8 +712,9 @@ public class UIPlayer : UILuna
             GameObject uiProgressBar
                 = LunaUtility.FindWithTagGameObject("UIProgressBar");
 
-            UIProgressBar comp = uiProgressBar.GetComponent<UIProgressBar>();
-            comp.PushProfile(tmpUnit);
+            // Boss and endless dungeons have no tower progress/minimap form.
+            if (uiProgressBar != null)
+                uiProgressBar.GetComponent<UIProgressBar>().PushProfile(tmpUnit);
         }
     }
 
@@ -800,34 +781,39 @@ public class UIPlayer : UILuna
         }
     }
 
+    private bool playerRespawnPending;
+
     private void PlayerRespawnCheck()
     {
-        if (Game.Instance.dataManager.LunaPlayer == null)
-        {
-            return;
-        }
-
-        bool IsDeath
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().unitState.IsDeath;
-
-        if (IsDeath == true)
-        {
-            StartCoroutine(SpawnPlayer());
-            Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().unitState.IsDeath = false;
-        }
+        GameObject player = Game.Instance.dataManager.LunaPlayer;
+        if (player != null && player.GetComponent<Status>().unitState.IsDeath)
+            QueuePlayerRespawn(player);
     }
 
-    IEnumerator SpawnPlayer()
+    public void QueuePlayerRespawn(GameObject fallenPlayer)
     {
+        if (playerRespawnPending || fallenPlayer == null) return;
+        Status fallenStatus = fallenPlayer.GetComponent<Status>();
+        if (!fallenStatus.unitState.IsDeath) return;
+        playerRespawnPending = true;
+        fallenStatus.unitState.IsDeath = false;
+        // StartCoroutine captures the dead player before Entity Hide can retire its instance.
+        StartCoroutine(SpawnPlayer(fallenPlayer));
+    }
+
+    IEnumerator SpawnPlayer(GameObject previousPlayer)
+    {
+        LunaStateMachine previousState = previousPlayer.GetComponent<LunaStateMachine>();
+        GameObject playerTower = previousState != null ? previousState.myTower : null;
         float basicSpawnTime
-            = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().stat.SpawnDelayTime;
+            = previousPlayer.GetComponent<Status>().stat.SpawnDelayTime;
         float minusRatio = Defined.lunaReviveTimeValue * LunaDataTable.Instance.playerData.LunaReviveTimeLevel;        float ratio 
             = 1.0f - minusRatio;
         float spawnTime = basicSpawnTime * ratio;
 
         string playerGravePath = "Prefabs/06Effects/Grave_tmp";
         GameObject playerGrave_tmp = Resources.Load<GameObject>(playerGravePath);
-        GameObject playerGrave = Instantiate(playerGrave_tmp, Game.Instance.dataManager.LunaPlayer.transform.position, Quaternion.identity);
+        GameObject playerGrave = Instantiate(playerGrave_tmp, previousPlayer.transform.position, Quaternion.identity);
 
         //부활 이펙트 생성Prefabs/01Heroes/
         string effectPath = "Prefabs/06Effects/Skill/ResurrectPlayer";
@@ -849,20 +835,22 @@ public class UIPlayer : UILuna
 
         yield return new WaitForSeconds(spawnTime);
 
-        DestroyImmediate(playerGrave);
+        LunaEntities.Hide(playerGrave);
 
+        rebirthEffect.GetComponent<NormalSkeletonObjControl>().EnsureEntityInitialized();
         rebirthEffect.GetComponent<NormalSkeletonObjControl>().SetAnimationState("rebirth", false);
         rebirthEffect.GetComponent<NormalSkeletonObjControl>().DestroyThisObject(2.0f);
         GameObject playerPrefab
             = LunaDataTable.Instance.playerData.CurPlayer();
 
-        PoolManager.SpawnObject(playerPrefab
+        GameObject player = PoolManager.SpawnObject(playerPrefab
                                 , Defined.AllyTowerPosition
                                 , Quaternion.identity);
+        Game.Instance.dataManager.LunaPlayer = player;
+        player.GetComponent<LunaStateMachine>().PrepareForSpawn(playerTower);
+        playerRespawnPending = false;
 
-        Game.Instance.dataManager.LunaPlayer.GetComponent<Status>().Ready();
-
-        Game.Destroy(effect);
+        LunaEntities.Hide(effect);
     }
 
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LunaGame : MonoBehaviour
+public class LunaGame : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public string stageName;
 

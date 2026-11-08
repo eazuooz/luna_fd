@@ -116,7 +116,8 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     #region LEVEL UP
     private bool SpendMoney(int cost)
     {
-        int resultGold = (Gold - cost);
+        if (cost < 0 || Gold < cost) return false;
+        int resultGold = Gold - cost;
         if (resultGold < 0)
             return false;
 
@@ -125,92 +126,45 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     }
     public bool LunaLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (LunaLevel < MaxLunaLevel)
-        {
-            LunaLevel += 1;
-            return true;
-        }
-
-        return false;
+        if (LunaLevel >= MaxLunaLevel || !SpendMoney(cost)) return false;
+        LunaLevel++;
+        return true;
     }
     public bool LunaMoveSpeedLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (LunaMoveSpeedLevel < MaxLunaMoveSpeedLevel)
-        {
-            LunaMoveSpeedLevel += 1;
-            return true;
-        }
-        return false;
+        if (LunaMoveSpeedLevel >= MaxLunaMoveSpeedLevel || !SpendMoney(cost)) return false;
+        LunaMoveSpeedLevel++;
+        return true;
     }
     public bool GoldSpeedLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (GoldSpeedLevel < MaxGoldSpeedLevel)
-        {
-            GoldSpeedLevel += 1;
-            return true;
-        }
-
-        return false;
+        if (GoldSpeedLevel >= MaxGoldSpeedLevel || !SpendMoney(cost)) return false;
+        GoldSpeedLevel++;
+        return true;
     }
     public bool TowerHpLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (TowerHPLevel < MaxTowerHPLevel)
-        {
-            TowerHPLevel += 1;
-            return true;
-        }
-        return false;
+        if (TowerHPLevel >= MaxTowerHPLevel || !SpendMoney(cost)) return false;
+        TowerHPLevel++;
+        return true;
     }
     public bool AuroraLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (AuroraLevel < MaxAuroraLevel)
-        {
-            AuroraLevel += 1;
-            return true;
-        }
-
-        return false;
+        if (AuroraLevel >= MaxAuroraLevel || !SpendMoney(cost)) return false;
+        AuroraLevel++;
+        return true;
     }
     public bool UnitMoveSpeedLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (UnitMoveSpeedLevel < MaxUnitMoveSpeedLevel)
-        {
-            UnitMoveSpeedLevel += 1;
-            return true;
-        }
-
-        return false;
+        if (UnitMoveSpeedLevel >= MaxUnitMoveSpeedLevel || !SpendMoney(cost)) return false;
+        UnitMoveSpeedLevel++;
+        return true;
     }
     public bool LunaReviveTimeLevelUp(int cost)
     {
-        if (SpendMoney(cost) == false)
-            return false;
-
-        if (LunaReviveTimeLevel <= MaxLunaRevivalTimeLevel)
-        {
-            LunaReviveTimeLevel += 1;
-            return true;
-        }
-
-        return false;
+        if (LunaReviveTimeLevel >= MaxLunaRevivalTimeLevel || !SpendMoney(cost)) return false;
+        LunaReviveTimeLevel++;
+        return true;
     }
 
     #endregion
@@ -223,27 +177,36 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
         = new List<string>(3);
     #endregion
     #region FUNC
-    PlayerData()
+    public void ValidateDefaults()
     {
-        if (SaveStageName == null || SaveStageName == "")
+        if (string.IsNullOrEmpty(SaveStageName) || Resources.Load<GameObject>("Prefabs/10Stage/" + SaveStageName) == null)
             SaveStageName = "Stage01-01";
-
-        if (UnitNamesInDeck.Count == 0)
+        string[] defaultDeck = { "Lene", "Alice", "Dren", "Tira", "PorongSword", "PorongArcher" };
+        if (UnitNamesInDeck == null) UnitNamesInDeck = new List<string>();
+        while (UnitNamesInDeck.Count < 6) UnitNamesInDeck.Add(defaultDeck[UnitNamesInDeck.Count]);
+        if (UnitNamesInDeck.Count > 6) UnitNamesInDeck.RemoveRange(6, UnitNamesInDeck.Count - 6);
+        for (int i = 0; i < 6; i++)
         {
-            UnitNamesInDeck.Add("Lene");
-            UnitNamesInDeck.Add("Alice");
-            UnitNamesInDeck.Add("Dren");
-            UnitNamesInDeck.Add("Tira");
-            UnitNamesInDeck.Add("PorongSword");
-            UnitNamesInDeck.Add("PorongArcher");
+            if (string.IsNullOrEmpty(UnitNamesInDeck[i])) continue;
+            var path = (i < 4 ? "Prefabs/01Heroes/" : "Prefabs/02Soldiers/") + UnitNamesInDeck[i];
+            if (Resources.Load<GameObject>(path) == null) UnitNamesInDeck[i] = defaultDeck[i];
         }
-
-        if (equippedSkill.Count == 0)
-        {
-            equippedSkill.Add("FireBall");
-            equippedSkill.Add("Thunder");
-            equippedSkill.Add("Healing");
-        }
+        string[] defaultSkills = { "FireBall", "Thunder", "Healing" };
+        if (equippedSkill == null) equippedSkill = new List<string>();
+        while (equippedSkill.Count < 3) equippedSkill.Add(defaultSkills[equippedSkill.Count]);
+        if (equippedSkill.Count > 3) equippedSkill.RemoveRange(3, equippedSkill.Count - 3);
+        for (int i = 0; i < 3; i++)
+            if (string.IsNullOrEmpty(equippedSkill[i]) || Resources.Load<SkillData>("ScriptableObjects/LunaSkills/" + equippedSkill[i]) == null)
+                equippedSkill[i] = defaultSkills[i];
+        LunaLevel = Mathf.Clamp(LunaLevel, 1, MaxLunaLevel);
+        LunaMoveSpeedLevel = Mathf.Clamp(LunaMoveSpeedLevel, 1, MaxLunaMoveSpeedLevel);
+        GoldSpeedLevel = Mathf.Clamp(GoldSpeedLevel, 1, MaxGoldSpeedLevel);
+        TowerHPLevel = Mathf.Clamp(TowerHPLevel, 1, MaxTowerHPLevel);
+        AuroraLevel = Mathf.Clamp(AuroraLevel, 1, MaxAuroraLevel);
+        UnitMoveSpeedLevel = Mathf.Clamp(UnitMoveSpeedLevel, 1, MaxUnitMoveSpeedLevel);
+        LunaReviveTimeLevel = Mathf.Clamp(LunaReviveTimeLevel, 1, MaxLunaRevivalTimeLevel);
+        SkinType = (eLunaSkin)Mathf.Clamp((int)SkinType, 0, 6);
+        PlayerPrefab = null;
     }
 
     public void SetCurPlayer()

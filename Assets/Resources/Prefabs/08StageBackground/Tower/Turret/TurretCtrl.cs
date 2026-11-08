@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EverydayDevup.Framework;
 
-public class TurretCtrl : MonoBehaviour
+public class TurretCtrl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public enum eTurret
     {
@@ -45,7 +45,7 @@ public class TurretCtrl : MonoBehaviour
 
     private Status thisStatus;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         thisStatus = GetComponent<Status>();
 

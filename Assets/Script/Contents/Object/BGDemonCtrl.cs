@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class BGDemonCtrl : MonoBehaviour
+public class BGDemonCtrl : EverydayDevup.Framework.LunaEntityBehaviour
 {
 
     private SkeletonAnimation skeletonAnimation;
     private float counter;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         skeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
 
@@ -20,7 +20,7 @@ public class BGDemonCtrl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         counter += 1.0f * Time.deltaTime;
 

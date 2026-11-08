@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffIconCtrl : MonoBehaviour
+public class BuffIconCtrl : EverydayDevup.Framework.LunaEntityBehaviour
 {
 
 
@@ -14,7 +14,7 @@ public class BuffIconCtrl : MonoBehaviour
     IEnumerator BlinkFlag;
 
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if(CharacterObject != null)
         {

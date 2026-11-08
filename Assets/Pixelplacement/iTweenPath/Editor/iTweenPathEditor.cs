@@ -106,8 +106,7 @@ public class iTweenPathEditor : Editor
 	void OnSceneGUI(){
 		if(_target.pathVisible){			
 			if(_target.nodes.Count > 0){
-				//allow path adjustment undo:
-				Undo.SetSnapshotTarget(_target,"Adjust iTween Path");
+				// Each changed node records the component before applying the handle edit.
 				
 				//path begin and end labels:
 				Handles.Label(_target.nodes[0], "'" + _target.pathName + "' Begin", style);
@@ -115,7 +114,14 @@ public class iTweenPathEditor : Editor
 				
 				//node handle display:
 				for (int i = 0; i < _target.nodes.Count; i++) {
-					_target.nodes[i] = Handles.PositionHandle(_target.nodes[i], Quaternion.identity);
+					EditorGUI.BeginChangeCheck();
+					Vector3 position = Handles.PositionHandle(_target.nodes[i], Quaternion.identity);
+					if (EditorGUI.EndChangeCheck()) {
+						Undo.RecordObject(_target, "Adjust iTween Path");
+						_target.nodes[i] = position;
+						PrefabUtility.RecordPrefabInstancePropertyModifications(_target);
+						EditorUtility.SetDirty(_target);
+					}
 				}	
 			}	
 		}

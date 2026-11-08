@@ -27,7 +27,7 @@ public class UIQuitPopup : UILuna
 
     public override void OnLoop() { }
 
-    public override void OnClear() { }
+    public override void OnClear() { MyUnits.SetColliderEnabled(true); }
 
     public void PushPopupUI()
     {
@@ -41,6 +41,7 @@ public class UIQuitPopup : UILuna
 
     public void OnClickEscape()
     {
+        LunaRuntimeData.SaveNow();
         Application.Quit();
     }
 }

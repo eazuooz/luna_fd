@@ -49,7 +49,7 @@ namespace Spine.Unity.Editor {
 	public partial class SpineEditorUtilities {
 		public static class DataReloadHandler {
 
-			internal static Dictionary<int, string> savedSkeletonDataAssetAtSKeletonGraphicID = new Dictionary<int, string>();
+			internal static Dictionary<EntityId, string> savedSkeletonDataAssetAtSKeletonGraphicID = new Dictionary<EntityId, string>();
 
 #if NEWPLAYMODECALLBACKS
 			internal static void OnPlaymodeStateChanged (PlayModeStateChange stateChange) {
@@ -68,7 +68,7 @@ namespace Spine.Unity.Editor {
 
 				var skeletonDataAssetsToReload = new HashSet<SkeletonDataAsset>();
 
-				var activeSkeletonRenderers = GameObject.FindObjectsOfType<SkeletonRenderer>();
+				var activeSkeletonRenderers = GameObject.FindObjectsByType<SkeletonRenderer>();
 				foreach (var sr in activeSkeletonRenderers) {
 					var skeletonDataAsset = sr.skeletonDataAsset;
 					if (skeletonDataAsset != null) skeletonDataAssetsToReload.Add(skeletonDataAsset);
@@ -79,12 +79,12 @@ namespace Spine.Unity.Editor {
 				// by the instance of the ScriptableObject being destroyed but still assigned.
 				// Here we save the skeletonGraphic.skeletonDataAsset asset path in order
 				// to restore it later.
-				var activeSkeletonGraphics = GameObject.FindObjectsOfType<SkeletonGraphic>();
+				var activeSkeletonGraphics = GameObject.FindObjectsByType<SkeletonGraphic>();
 				foreach (var sg in activeSkeletonGraphics) {
 					var skeletonDataAsset = sg.skeletonDataAsset;
 					if (skeletonDataAsset != null) {
 						var assetPath = AssetDatabase.GetAssetPath(skeletonDataAsset);
-						var sgID = sg.GetInstanceID();
+						var sgID = sg.GetEntityId();
 						savedSkeletonDataAssetAtSKeletonGraphicID[sgID] = assetPath;
 						skeletonDataAssetsToReload.Add(skeletonDataAsset);
 					}
@@ -118,12 +118,12 @@ namespace Spine.Unity.Editor {
 				if (EditorApplication.isCompiling) return;
 				if (EditorApplication.isPlayingOrWillChangePlaymode) return;
 
-				var activeSkeletonRenderers = GameObject.FindObjectsOfType<SkeletonRenderer>();
+				var activeSkeletonRenderers = GameObject.FindObjectsByType<SkeletonRenderer>();
 				foreach (var sr in activeSkeletonRenderers) {
 					if (sr.isActiveAndEnabled && sr.skeletonDataAsset == skeletonDataAsset) sr.Initialize(true);
 				}
 
-				var activeSkeletonGraphics = GameObject.FindObjectsOfType<SkeletonGraphic>();
+				var activeSkeletonGraphics = GameObject.FindObjectsByType<SkeletonGraphic>();
 				foreach (var sg in activeSkeletonGraphics) {
 					if (sg.isActiveAndEnabled && sg.skeletonDataAsset == skeletonDataAsset) sg.Initialize(true);
 				}

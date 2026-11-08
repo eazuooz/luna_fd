@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EverydayDevup.Framework;
 
-public class MyUnits : MonoBehaviour
+public static class MyUnits
 {
     const int playerIndex = 6;
 
@@ -13,7 +13,8 @@ public class MyUnits : MonoBehaviour
         {
             if (unit)
             {
-                unit.GetComponent<BoxCollider2D>().enabled = value;
+                var collider = unit.GetComponent<BoxCollider2D>();
+                if (collider != null) collider.enabled = value;
             }
         }
     }
@@ -33,33 +34,33 @@ public class MyUnits : MonoBehaviour
         int idx = 0;
         foreach (GameObject unit in Game.Instance.dataManager.lobbyUnits)
         {
-            Destroy(unit);
-            Game.Instance.dataManager.lobbyUnits[idx] = null;
+            LunaEntities.Hide(unit);
+            Game.Instance.dataManager.lobbyUnits[idx++] = null;
         }
 
         LunaDataTable.Instance.playerData.SetCurPlayer();
-        GameObject luna = Instantiate(LunaDataTable.Instance.playerData.CurPlayer());
+        GameObject luna = LunaEntities.Spawn(LunaDataTable.Instance.playerData.CurPlayer(), Vector3.zero, Quaternion.identity);
         Game.Instance.dataManager.lobbyUnits[playerIndex] = luna;
         Game.Instance.dataManager.LunaPlayer = luna;
 
         for (int i = 0; i < Defined.MaxHeroCnt; i++)
         {
-            if (Game.Instance.dataManager.HeroePrefabs.Count == 0)
+            if (i >= Game.Instance.dataManager.HeroePrefabs.Count)
                 break;
 
             if (Game.Instance.dataManager.HeroePrefabs[i] != null)
                 Game.Instance.dataManager.lobbyUnits[i] 
-                    = Instantiate(Game.Instance.dataManager.HeroePrefabs[i]);
+                    = LunaEntities.Spawn(Game.Instance.dataManager.HeroePrefabs[i], Vector3.zero, Quaternion.identity);
         }
 
         for (int i = Defined.MaxHeroCnt; i < Defined.MaxUnitCnt; i++)
         {
-            if (Game.Instance.dataManager.SoldierPrefabs.Count == 0)
+            if (i - Defined.MaxHeroCnt >= Game.Instance.dataManager.SoldierPrefabs.Count)
                 break;
 
             if (Game.Instance.dataManager.SoldierPrefabs[i - Defined.MaxHeroCnt] != null)
                 Game.Instance.dataManager.lobbyUnits[i] 
-                    = Instantiate(Game.Instance.dataManager.SoldierPrefabs[i - Defined.MaxHeroCnt]);
+                    = LunaEntities.Spawn(Game.Instance.dataManager.SoldierPrefabs[i - Defined.MaxHeroCnt], Vector3.zero, Quaternion.identity);
         }
 
         for (int i = 0; i < 7; i++)

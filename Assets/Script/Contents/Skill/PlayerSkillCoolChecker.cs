@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerSkillCoolChecker : MonoBehaviour
+public class PlayerSkillCoolChecker : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public int skillCooltime { get; set; }
     private Text skillCooltimeText;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         skillCooltimeText = transform.Find("SkillCool").GetComponent<Text>();
         skillCooltime = 0;
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if(skillCooltimeText != null)
         {

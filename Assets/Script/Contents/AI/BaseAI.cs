@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class BaseAI : MonoBehaviour
+public class BaseAI : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private BtRootNode mAIState;
     private SkeletonAnimation mSkeletonAnimation;
@@ -21,10 +21,10 @@ public class BaseAI : MonoBehaviour
         set { mSkeletonAnimation = value; }
     }
 
-    
+
     public void InitializeBaseSkeletonAnimation()
     {
-        SkeletonAnimation 
+        SkeletonAnimation
             = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
     }
 

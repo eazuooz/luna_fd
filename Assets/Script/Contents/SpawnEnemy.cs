@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnEnemy : MonoBehaviour
+public class SpawnEnemy : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public List<GameObject> eEnemySlots = new List<GameObject>();
     public List<bool> eEnemySlotTrigger = new List<bool>();
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         for (int i = 0; i < eEnemySlotTrigger.Count; i++)
         {
@@ -16,13 +16,13 @@ public class SpawnEnemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         for (int i = 0; i < eEnemySlotTrigger.Count; i++)
         {
             if(eEnemySlotTrigger[i] == true)
             {
-                GameObject.Instantiate(eEnemySlots[i], Defined.EnemyTowerPosition, Quaternion.identity);
+                EverydayDevup.Framework.LunaEntities.Spawn(eEnemySlots[i], Defined.EnemyTowerPosition, Quaternion.identity);
                 eEnemySlotTrigger[i] = false;
             }
         }

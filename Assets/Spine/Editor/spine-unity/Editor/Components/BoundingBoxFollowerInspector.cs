@@ -136,7 +136,7 @@ namespace Spine.Unity.Editor {
 						foreach (var col in follower.colliderTable.Values) {
 							col.isTrigger = isTrigger.boolValue;
 							col.usedByEffector = usedByEffector.boolValue;
-							col.usedByComposite = usedByComposite.boolValue;
+							col.compositeOperation = usedByComposite.boolValue ? Collider2D.CompositeOperation.Merge : Collider2D.CompositeOperation.None;
 						}
 				}
 			}

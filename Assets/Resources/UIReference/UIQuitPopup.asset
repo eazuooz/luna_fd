@@ -12,51 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f022f367fe686e0468233dd569326e27, type: 3}
   m_Name: UIQuitPopup
   m_EditorClassIdentifier: 
-  uiTarget: {fileID: 5101918769205690582, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
+  uiTarget: {fileID: 8542744528999431485, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
   dic:
     keys:
-    - UIAdventure
-    - Dungeon_ScrollView
-    - Dungeon_Scroll View_Viewport
-    - Dungeon_Content
-    - Luna_LevelUp
-    - Button
+    - UIQuitPopup
+    - Image
+    - YesButton
     - Text
-    - CardName
-    - Profile
-    - IncreaseGoldSpeed
     - ReleaseButton
+    - MainText
+    - NoButton
+    - /UIQuitPopup/Image/NoButton/Text
     values:
-    - name: UIAdventure
-      path: /UIAdventure
-      obj: {fileID: 5101918769205690582, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Dungeon_ScrollView
-      path: /UIAdventure/Dungeon_ScrollView
-      obj: {fileID: 6644034688035935847, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Dungeon_Scroll View_Viewport
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport
-      obj: {fileID: 7925867395680514097, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Dungeon_Content
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content
-      obj: {fileID: 5089899299172616688, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Luna_LevelUp
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/Luna_LevelUp
-      obj: {fileID: 3125594490273136338, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Button
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/Luna_LevelUp/Button
-      obj: {fileID: 3432630972937606076, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
+    - name: UIQuitPopup
+      path: /UIQuitPopup
+      obj: {fileID: 8542744528999431485, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+    - name: Image
+      path: /UIQuitPopup/Image
+      obj: {fileID: 5055312831125082108, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+    - name: YesButton
+      path: /UIQuitPopup/Image/YesButton
+      obj: {fileID: 4987886603621174840, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
     - name: Text
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/Luna_LevelUp/Button/Text
-      obj: {fileID: 5645538304677639535, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: CardName
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/Luna_LevelUp/CardName
-      obj: {fileID: 1339988770546051343, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: Profile
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/Luna_LevelUp/Profile
-      obj: {fileID: 2805949093430438078, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
-    - name: IncreaseGoldSpeed
-      path: /UIAdventure/Dungeon_ScrollView/Dungeon_Scroll View_Viewport/Dungeon_Content/IncreaseGoldSpeed
-      obj: {fileID: 2941180280280005629, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
+      path: /UIQuitPopup/Image/YesButton/Text
+      obj: {fileID: 4361083794019622445, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
     - name: ReleaseButton
-      path: /UIAdventure/ReleaseButton
-      obj: {fileID: 3214119781633140447, guid: bc9e18131df32f145b568b0b267d50f2, type: 3}
+      path: /UIQuitPopup/Image/ReleaseButton
+      obj: {fileID: 2272596342876196884, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+    - name: MainText
+      path: /UIQuitPopup/Image/MainText
+      obj: {fileID: 8844694633079724231, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+    - name: NoButton
+      path: /UIQuitPopup/Image/NoButton
+      obj: {fileID: 4820642888186613044, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}
+    - name: Text
+      path: /UIQuitPopup/Image/NoButton/Text
+      obj: {fileID: 8350432460431870132, guid: f6a2a5223489404498ce7e2458cccee2, type: 3}

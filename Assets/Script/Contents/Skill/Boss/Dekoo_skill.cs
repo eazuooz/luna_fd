@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Dekoo_skill : MonoBehaviour 
+public class Dekoo_skill : EverydayDevup.Framework.LunaEntityBehaviour
 {
     [SerializeField] private string skillMatter = "타겟 주위 범위 공격";
+    public string SkillDescription => skillMatter;
     [HideInInspector] public Status status;
     public GameObject effect;
     private GameObject tmpEffect;
@@ -13,13 +14,13 @@ public class Dekoo_skill : MonoBehaviour
     public float splashRange = 2.0f;
     private Vector3 attackPos;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = true;
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.unitState.IsSkillActivaion == true)
         {

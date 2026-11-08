@@ -19,9 +19,9 @@ public class Lennon : HeroSkillControl
     private SkeletonAnimation ani;
 
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
 
         if (SceneManager.GetActiveScene().name == "Game")
         {
@@ -29,9 +29,9 @@ public class Lennon : HeroSkillControl
         }
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -113,6 +113,7 @@ public class Lennon : HeroSkillControl
             status.PlayOneSound(skillSound);
 
             GameObject tmpMinion = PoolManager.Instance.spawnObject(minion1, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion1.transform.rotation);
+            InitializeSummonedUnit(tmpMinion);
 
             Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
 

@@ -63,7 +63,7 @@ public class UIGameShop : UILuna
         LunaDataTable.Instance.LotteryResult.Clear();
         if (Random.Range(0, 2) == 0)
         {
-            int randIndex = Random.Range(0, 21);
+            int randIndex = Random.Range(0, 22);
 
             string name = LunaDataTable.Instance.heroTable[randIndex];
 
@@ -106,7 +106,7 @@ public class UIGameShop : UILuna
         {
             if (LunaDataTable.Instance.playerData.IsBegining)
             {
-                int randIndex = Random.Range(0, 21);
+                int randIndex = Random.Range(0, 22);
 
                 string name = LunaDataTable.Instance.heroTable[randIndex];
 
@@ -118,7 +118,7 @@ public class UIGameShop : UILuna
             {
                 if (Random.Range(0, 2) == 0)
                 {
-                    int randIndex = Random.Range(0, 21);
+                    int randIndex = Random.Range(0, 22);
 
 
                     string name = LunaDataTable.Instance.heroTable[randIndex];

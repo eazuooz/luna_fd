@@ -50,7 +50,7 @@ namespace Spine.Unity.Examples {
 		protected string blackPropertyName = "_Black";
 		#endregion
 
-		public Slot slot;
+		[System.NonSerialized] public Slot slot;
 		MeshRenderer mr;
 		MaterialPropertyBlock mb;
 		int colorPropertyId, blackPropertyId;

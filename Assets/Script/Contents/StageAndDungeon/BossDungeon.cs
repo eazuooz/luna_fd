@@ -48,7 +48,7 @@ public class BossDungeon : LunaGame
         isStageWin = true;
         StageCount = 0.0f;
     }
-    void Start()
+    protected override void OnEntityInitialize()
     {
         Init();
 
@@ -57,14 +57,12 @@ public class BossDungeon : LunaGame
                 bossMonster != null &&
                 GameObject.Find("2DCamera") != null)
         {
-            gameBGimage = GameObject.Instantiate(backgroundImage, Defined.OriginPosition, Quaternion.identity);
-            gameBossMonster = GameObject.Instantiate(bossMonster, Defined.EnemyTowerPosition, Quaternion.identity);
-            GamePlayer = GameObject.Instantiate(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity);
+            gameBGimage = EverydayDevup.Framework.LunaEntities.Spawn(backgroundImage, Defined.OriginPosition, Quaternion.identity);
+            gameBossMonster = EverydayDevup.Framework.LunaEntities.Spawn(bossMonster, Defined.EnemyTowerPosition, Quaternion.identity);
+            GamePlayer = EverydayDevup.Framework.LunaEntities.Spawn(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity, reusable: true);
 
-            if (Game.Instance.dataManager.LunaPlayer == null)
-                Game.Instance.dataManager.LunaPlayer = GamePlayer; // 플레이어 접근을 위함
-            else
-                return;
+            Game.Instance.dataManager.LunaPlayer = GamePlayer;
+            GamePlayer.GetComponent<LunaStateMachine>().PrepareForSpawn(null);
 
             stageCamera = GameObject.Find("2DCamera").gameObject;
             stageCamera.GetComponent<Camera2D>().target = GamePlayer.transform;
@@ -80,7 +78,7 @@ public class BossDungeon : LunaGame
         StartCoroutine(PreCameraMove(0.0f));
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (isStageStop == false)
         {
@@ -249,7 +247,7 @@ public class BossDungeon : LunaGame
         for (int i = 0; i < ItemBox.Count; ++i)
         {
             GameObject drop
-                = Instantiate(ItemBox[i], Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0), ItemBox[i].transform.rotation);
+                = EverydayDevup.Framework.LunaEntities.Spawn(ItemBox[i], Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0), ItemBox[i].transform.rotation);
 
             drop.GetComponent<DropItem>().SetId(ItemDropTable[itemDataID[i]].itemData);
         }

@@ -1,81 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Collections;
 using EverydayDevup.Framework;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class UILoading : UILuna
 {
-	public UIReference refData;
+    public UIReference refData;
+    private Image tapToStartImage;
+    private AsyncOperation loadingOperation;
+    private bool continueRequested;
 
-    private string sceneName = "Lobby";
-    private float loadingTIme;
-
-    private Image tabToStartImage;
-
-	public override void OnInit()
-	{
-		base.OnInit();
-        LunaDataTable.Instance.playerData
-            = Resources.Load<PlayerData>("ScriptableObjects/PlayerData");
-
-
-        //Scriptabl Load
-        LunaDataTable.Instance.InitializeLunaDatas();
-        LunaDataTable.Instance.InitializeUnitNames();
-        LunaDataTable.Instance.InitializeObjectDatas();
-        LunaDataTable.Instance.InitializeItemDatas();
-        LunaDataTable.Instance.InitializeSKillDatas();
-        LunaDataTable.Instance.InitializeStageDatas();
-
-        Transform tabToStartTr = gameObject.transform.Find("TabToStart");
-        tabToStartImage = tabToStartTr.GetComponent<Image>();
-
-        StartCoroutine(LoadAsynSceneCoroutine());
-
-
-        MyUnits.SetMyDeckUnitPrafab();
-     
-
-
+    public override void OnInit()
+    {
+        base.OnInit();
+        LunaRuntimeData.Initialize();
+        var tapToStart = transform.Find("TabToStart");
+        if (tapToStart != null) tapToStartImage = tapToStart.GetComponent<Image>();
+        StartCoroutine(LoadLobby());
     }
 
-    IEnumerator LoadAsynSceneCoroutine()
+    private IEnumerator LoadLobby()
     {
-        AsyncOperation operation 
-            = SceneManager.LoadSceneAsync(sceneName);
-        operation.allowSceneActivation = false;
-        tabToStartImage.color 
-            = new Color
-            (tabToStartImage.color.r
-            ,tabToStartImage.color.g
-            ,tabToStartImage.color.b
-            ,0);
-
-        while (!operation.isDone)
+        loadingOperation = SceneManager.LoadSceneAsync("Lobby");
+        if (loadingOperation == null) yield break;
+        loadingOperation.allowSceneActivation = false;
+        while (!loadingOperation.isDone)
         {
-            //InfiniteLoopDetector.Run();
-            loadingTIme = +Time.time;
-            
-            tabToStartImage.color 
-                = new Color
-                    (tabToStartImage.color.r
-                    ,tabToStartImage.color.g
-                    ,tabToStartImage.color.b
-                    ,Mathf.Abs(Mathf.Sin(loadingTIme) * 2.0f));
-
-            if (Input.GetMouseButtonDown(0))
+            if (tapToStartImage != null)
             {
-                Game.Instance.lunaSceneManager.FadeIn(1.0f, () =>
-                {
-                    operation.allowSceneActivation = true;
-                });
+                var color = tapToStartImage.color;
+                color.a = Mathf.Clamp01(Mathf.Abs(Mathf.Sin(Time.unscaledTime) * 2f));
+                tapToStartImage.color = color;
             }
-
+            if (Input.GetMouseButtonDown(0)) ContinueToLobby();
             yield return null;
         }
     }
-}
 
+    // Input and the play-mode smoke test use the same guarded entry point.
+    public void ContinueToLobby()
+    {
+        if (continueRequested || loadingOperation == null || loadingOperation.progress < 0.9f) return;
+        continueRequested = true;
+        Game.Instance.lunaSceneManager.FadeIn(1f, () => loadingOperation.allowSceneActivation = true);
+    }
+}

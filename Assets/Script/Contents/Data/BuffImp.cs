@@ -71,7 +71,7 @@ public class BuffImp //: MonoBehaviour
                     if (buffs[i].BuffLeftTime <= 0)
                     {
                         if (buffs[i].IconObject != null)
-                            Game.Destroy(buffs[i].IconObject);
+                            LunaEntities.Hide(buffs[i].IconObject);
                         //Destroy(buffs[i].IconObject);
 
                         buffs.RemoveAt(i);
@@ -97,8 +97,7 @@ public class BuffImp //: MonoBehaviour
                     continue;
                 }
 
-                buffData.IconObject.SetActive(false);
-                Game.Destroy(buffData.IconObject);
+                LunaEntities.Hide(buffData.IconObject);
                 buffData.IconObject = null;
             }
 

@@ -35,6 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.U2D.Sprites;
 using UnityEngine;
 
 namespace Spine.Unity.Editor {
@@ -136,7 +137,7 @@ namespace Spine.Unity.Editor {
 			if (SpineInspectorUtility.LargeCenteredButton(SpineInspectorUtility.TempContent("Set Mipmap Bias to " + SpinePreferences.DEFAULT_MIPMAPBIAS, tooltip: "This may help textures with mipmaps be less blurry when used for 2D sprites."))) {
 				foreach (var m in atlasAsset.materials) {
 					var texture = m.mainTexture;
-					string texturePath = AssetDatabase.GetAssetPath(texture.GetInstanceID());
+					string texturePath = AssetDatabase.GetAssetPath(texture);
 					var importer = (TextureImporter)TextureImporter.GetAtPath(texturePath);
 					importer.mipMapBias = SpinePreferences.DEFAULT_MIPMAPBIAS;
 					EditorUtility.SetDirty(texture);
@@ -313,11 +314,31 @@ namespace Spine.Unity.Editor {
 		}
 
 		static public void UpdateSpriteSlices (Texture texture, Atlas atlas) {
-			string texturePath = AssetDatabase.GetAssetPath(texture.GetInstanceID());
-			var t = (TextureImporter)TextureImporter.GetAtPath(texturePath);
-			t.spriteImportMode = SpriteImportMode.Multiple;
-			var spriteSheet = t.spritesheet;
-			var sprites = new List<SpriteMetaData>(spriteSheet);
+			string texturePath = AssetDatabase.GetAssetPath(texture);
+			var t = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+			if (t == null)
+				throw new ArgumentException("Sprite slicing requires an imported texture.", nameof(texture));
+			bool hadSpriteSlices = t.textureType == TextureImporterType.Sprite && t.spriteImportMode == SpriteImportMode.Multiple;
+			if (!hadSpriteSlices) {
+				// Commit importer mode before the provider snapshots serialized sprite data.
+				t.textureType = TextureImporterType.Sprite;
+				t.spriteImportMode = SpriteImportMode.Multiple;
+				t.SaveAndReimport();
+				t = (TextureImporter)AssetImporter.GetAtPath(texturePath);
+			}
+			var factories = new SpriteDataProviderFactories();
+			factories.Init();
+			var dataProvider = factories.GetSpriteEditorDataProviderFromObject(t);
+			if (dataProvider == null)
+				throw new InvalidOperationException("The texture importer does not provide sprite data.");
+			dataProvider.InitSpriteEditorDataProvider();
+			// Converting a plain texture can generate a full-image placeholder slice.
+			// Keep authored multiple-sprite data, not that conversion artifact.
+			var sprites = hadSpriteSlices ? new List<SpriteRect>(dataProvider.GetSpriteRects()) : new List<SpriteRect>();
+			var nameFileIdProvider = dataProvider.GetDataProvider<ISpriteNameFileIdDataProvider>();
+			if (nameFileIdProvider == null)
+				throw new InvalidOperationException("The texture importer does not provide sprite identity data.");
+			var nameFileIdPairs = hadSpriteSlices ? new List<SpriteNameFileIdPair>(nameFileIdProvider.GetNameFileIdPairs()) : new List<SpriteNameFileIdPair>();
 
 			var regions = SpineAtlasAssetInspector.GetRegions(atlas);
 			char[] FilenameDelimiter = { '.' };
@@ -361,20 +382,27 @@ namespace Spine.Unity.Editor {
 						sprites[spriteIndex] = s;
 						updatedCount++;
 					} else {
-						sprites.Add(new SpriteMetaData {
+						var sprite = new SpriteRect {
 							name = r.name,
+							spriteID = GUID.Generate(),
+							alignment = SpriteAlignment.Center,
 							pivot = new Vector2(0.5f, 0.5f),
 							rect = spriteRect
-						});
+						};
+						sprites.Add(sprite);
+						nameFileIdPairs.Add(new SpriteNameFileIdPair(sprite.name, sprite.spriteID));
 						addedCount++;
 					}
 				}
 
 			}
 
-			t.spritesheet = sprites.ToArray();
-			EditorUtility.SetDirty(t);
-			AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
+			// Existing SpriteRects retain their GUID, pivot and border. Preserve the
+			// name/file-ID table so referenced Sprite subassets keep their identity.
+			dataProvider.SetSpriteRects(sprites.ToArray());
+			nameFileIdProvider.SetNameFileIdPairs(nameFileIdPairs);
+			dataProvider.Apply();
+			t.SaveAndReimport();
 			EditorGUIUtility.PingObject(texture);
 			Debug.Log(string.Format("Applied sprite slices to {2}. {0} added. {1} updated.", addedCount, updatedCount, texture.name));
 		}

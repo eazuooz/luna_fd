@@ -6,14 +6,14 @@ public class DropCoin : LunaItem
 {
     private float waitTime = 1.5f;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         ItemInfoInitialized();
         StartCoroutine(WaitForChase());
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         ChasePlayer(GetCoin);
     }
@@ -34,6 +34,6 @@ public class DropCoin : LunaItem
             Defined.EffectCreate(gainEffect, target, Defined.eEffectPosition.UNDERFEET);
         }
 
-        Destroy(gameObject);
+        EverydayDevup.Framework.LunaEntities.Hide(gameObject);
     }
 }

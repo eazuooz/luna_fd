@@ -41,7 +41,7 @@ public class UILottery : UILuna
 
             GameObject chracterUIPrefab = Resources.Load<GameObject>(dir);
             //GameObject chracterSkeletonGraphic = Resources.Load<GameObject>(dir);
-            GameObject instObject = Instantiate(chracterUIPrefab);
+            GameObject instObject = LunaEntities.Spawn(chracterUIPrefab, card.transform.position, Quaternion.identity, card.transform);
 
             instObject.GetComponent<RectTransform>().SetParent(card.transform);
             instObject.GetComponent<RectTransform>().localScale = chracterUIPrefab.transform.localScale;

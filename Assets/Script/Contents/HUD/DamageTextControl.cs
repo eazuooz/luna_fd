@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DamageTextControl : MonoBehaviour
+public class DamageTextControl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private float moveSpeed;
     private float duration;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         moveSpeed = 1.5f;
         duration = 0.3f;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (duration <= 0)
-            Destroy(gameObject);
+            EverydayDevup.Framework.LunaEntities.Hide(gameObject);
 
         transform.Translate(new Vector3(0,moveSpeed * Time.deltaTime,0));
 

@@ -16,7 +16,179 @@ MonoBehaviour:
   dic:
     keys:
     - UISkill
+    - mask
+    - Text
+    - Skill_Button_0
+    - Skill_Button_Image
+    - SkillCool
+    - SKillSlotEffect
+    - Spine
+    - Mana
+    - Image
+    - SkillPoint
+    - Skill_Button_1
+    - /UISkill/Skill_Button_1/Skill_Button_Image
+    - /UISkill/Skill_Button_1/SkillCool
+    - /UISkill/Skill_Button_1/SKillSlotEffect
+    - /UISkill/Skill_Button_1/SKillSlotEffect/Spine
+    - /UISkill/Skill_Button_1/Mana
+    - /UISkill/Skill_Button_1/Mana/Image
+    - /UISkill/Skill_Button_1/Mana/SkillPoint
+    - Skill_Button_2
+    - /UISkill/Skill_Button_2/Skill_Button_Image
+    - /UISkill/Skill_Button_2/SkillCool
+    - /UISkill/Skill_Button_2/SKillSlotEffect
+    - /UISkill/Skill_Button_2/SKillSlotEffect/Spine
+    - /UISkill/Skill_Button_2/Mana
+    - /UISkill/Skill_Button_2/Mana/Image
+    - /UISkill/Skill_Button_2/Mana/SkillPoint
+    - AutoSkillButton
+    - AutoText
+    - Equip_0
+    - Equip_Image
+    - EquipCoolTime
+    - /UISkill/Equip_0/SKillSlotEffect
+    - /UISkill/Equip_0/SKillSlotEffect/Spine
+    - Equip_1
+    - /UISkill/Equip_1/Equip_Image
+    - /UISkill/Equip_1/EquipCoolTime
+    - /UISkill/Equip_1/SKillSlotEffect
+    - /UISkill/Equip_1/SKillSlotEffect/Spine
+    - Equip_2
+    - /UISkill/Equip_2/Equip_Image
+    - /UISkill/Equip_2/EquipCoolTime
+    - /UISkill/Equip_2/SKillSlotEffect
+    - /UISkill/Equip_2/SKillSlotEffect/Spine
     values:
     - name: UISkill
       path: /UISkill
       obj: {fileID: 8542744528999431485, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: mask
+      path: /UISkill/mask
+      obj: {fileID: 7918000927579194854, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Text
+      path: /UISkill/mask/Text
+      obj: {fileID: 7464065434907092392, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_0
+      path: /UISkill/Skill_Button_0
+      obj: {fileID: 8701007860321453508, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_Image
+      path: /UISkill/Skill_Button_0/Skill_Button_Image
+      obj: {fileID: 6011654505978171589, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillCool
+      path: /UISkill/Skill_Button_0/SkillCool
+      obj: {fileID: 2005359161396990411, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Skill_Button_0/SKillSlotEffect
+      obj: {fileID: 8442733284952869655, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Skill_Button_0/SKillSlotEffect/Spine
+      obj: {fileID: 6217291587224852076, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Mana
+      path: /UISkill/Skill_Button_0/Mana
+      obj: {fileID: 6374995372762036170, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Image
+      path: /UISkill/Skill_Button_0/Mana/Image
+      obj: {fileID: 8230905750648141972, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillPoint
+      path: /UISkill/Skill_Button_0/Mana/SkillPoint
+      obj: {fileID: 1722394236526939026, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_1
+      path: /UISkill/Skill_Button_1
+      obj: {fileID: 7838553207894208887, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_Image
+      path: /UISkill/Skill_Button_1/Skill_Button_Image
+      obj: {fileID: 7014934873663966161, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillCool
+      path: /UISkill/Skill_Button_1/SkillCool
+      obj: {fileID: 3103511637188348038, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Skill_Button_1/SKillSlotEffect
+      obj: {fileID: 7115511142260717330, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Skill_Button_1/SKillSlotEffect/Spine
+      obj: {fileID: 4746094021174946409, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Mana
+      path: /UISkill/Skill_Button_1/Mana
+      obj: {fileID: 5507736137762108428, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Image
+      path: /UISkill/Skill_Button_1/Mana/Image
+      obj: {fileID: 4523415746556732527, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillPoint
+      path: /UISkill/Skill_Button_1/Mana/SkillPoint
+      obj: {fileID: 3932229354659821446, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_2
+      path: /UISkill/Skill_Button_2
+      obj: {fileID: 2907355395085308495, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Skill_Button_Image
+      path: /UISkill/Skill_Button_2/Skill_Button_Image
+      obj: {fileID: 7430773081097427376, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillCool
+      path: /UISkill/Skill_Button_2/SkillCool
+      obj: {fileID: 2257317256737018181, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Skill_Button_2/SKillSlotEffect
+      obj: {fileID: 4806936583380694131, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Skill_Button_2/SKillSlotEffect/Spine
+      obj: {fileID: 7050235306473695496, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Mana
+      path: /UISkill/Skill_Button_2/Mana
+      obj: {fileID: 9201371323220890824, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Image
+      path: /UISkill/Skill_Button_2/Mana/Image
+      obj: {fileID: 5931566735090701185, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SkillPoint
+      path: /UISkill/Skill_Button_2/Mana/SkillPoint
+      obj: {fileID: 1658712757932159930, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: AutoSkillButton
+      path: /UISkill/AutoSkillButton
+      obj: {fileID: 4210421124200300709, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: AutoText
+      path: /UISkill/AutoSkillButton/AutoText
+      obj: {fileID: 8677232945723116387, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_0
+      path: /UISkill/Equip_0
+      obj: {fileID: 4509302533621544361, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_Image
+      path: /UISkill/Equip_0/Equip_Image
+      obj: {fileID: 3521970688571038388, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: EquipCoolTime
+      path: /UISkill/Equip_0/EquipCoolTime
+      obj: {fileID: 2812687961994784437, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Equip_0/SKillSlotEffect
+      obj: {fileID: 6942089562488429817, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Equip_0/SKillSlotEffect/Spine
+      obj: {fileID: 4842950008949277058, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_1
+      path: /UISkill/Equip_1
+      obj: {fileID: 873279378694422806, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_Image
+      path: /UISkill/Equip_1/Equip_Image
+      obj: {fileID: 3472046745063564122, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: EquipCoolTime
+      path: /UISkill/Equip_1/EquipCoolTime
+      obj: {fileID: 4563091662041663788, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Equip_1/SKillSlotEffect
+      obj: {fileID: 5192322627798878508, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Equip_1/SKillSlotEffect/Spine
+      obj: {fileID: 7740571865111368791, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_2
+      path: /UISkill/Equip_2
+      obj: {fileID: 8818196736958035110, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Equip_Image
+      path: /UISkill/Equip_2/Equip_Image
+      obj: {fileID: 2442119261976415203, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: EquipCoolTime
+      path: /UISkill/Equip_2/EquipCoolTime
+      obj: {fileID: 3914857901381768084, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: SKillSlotEffect
+      path: /UISkill/Equip_2/SKillSlotEffect
+      obj: {fileID: 8097654281399882466, guid: cc361b48a3047f146921a59da439e0f4, type: 3}
+    - name: Spine
+      path: /UISkill/Equip_2/SKillSlotEffect/Spine
+      obj: {fileID: 5981476676309520281, guid: cc361b48a3047f146921a59da439e0f4, type: 3}

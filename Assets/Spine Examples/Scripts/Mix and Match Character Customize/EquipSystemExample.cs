@@ -44,7 +44,7 @@ namespace Spine.Unity.Examples {
 		public List<EquipHook> equippables = new List<EquipHook>();
 
 		public EquipsVisualsComponentExample target;
-		public Dictionary<EquipAssetExample, Attachment> cachedAttachments = new Dictionary<EquipAssetExample, Attachment>();
+		[System.NonSerialized] public Dictionary<EquipAssetExample, Attachment> cachedAttachments = new Dictionary<EquipAssetExample, Attachment>();
 
 		[System.Serializable]
 		public class EquipHook {

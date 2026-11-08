@@ -11,23 +11,22 @@ public class Matilda : HeroSkillControl
     public GameObject minion3;
 
     private bool triggerSkill_1;
-    private bool triggerSkill_2;
     private bool triggerSkill_3;
 
     private float counter1;
     private float counter2;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
 
         counter1 = 0.0f;
         counter2 = 0.0f;
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -54,7 +53,6 @@ public class Matilda : HeroSkillControl
         status.unitState.IsTargetingSkill = false;
 
         triggerSkill_1 = false;
-        triggerSkill_2 = false;
         triggerSkill_3 = false;
     }
 
@@ -77,7 +75,6 @@ public class Matilda : HeroSkillControl
     {
         STAR5();
 
-        triggerSkill_2 = true;
     }
 
     public override void ULT2()
@@ -98,7 +95,7 @@ public class Matilda : HeroSkillControl
         {
             status.PlayOneSound(skillSound);
 
-            GameObject tmpMinion = GameObject.Instantiate(minion1, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion1.transform.rotation);
+            GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion1, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion1.transform.rotation);
 
             Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
 
@@ -117,7 +114,7 @@ public class Matilda : HeroSkillControl
         {
             status.PlayOneSound(skillSound);
 
-            GameObject tmpMinion = GameObject.Instantiate(minion2, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion2.transform.rotation);
+            GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion2, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion2.transform.rotation);
 
             Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
 
@@ -134,7 +131,7 @@ public class Matilda : HeroSkillControl
     {
         status.PlayOneSound(skillSound);
 
-        GameObject tmpMinion = GameObject.Instantiate(minion3, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion3.transform.rotation);
+        GameObject tmpMinion = EverydayDevup.Framework.LunaEntities.Spawn(minion3, GetComponent<Transform>().position + new Vector3(-1.0f, 0, 0.0f), minion3.transform.rotation);
 
         Defined.EffectCreate(skillEffect, tmpMinion, Defined.eEffectPosition.UNDERFEET, true);
     }

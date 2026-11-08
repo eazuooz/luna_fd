@@ -20,17 +20,27 @@ MonoBehaviour:
     - ImageTitle
     - ResultText
     - CurrentStage
+    - Text
     - CurrentStage_Text
+    - Image
     - NextStage
+    - /UIResult/ImagePlate/NextStage/Text
     - NextStage_Text
+    - /UIResult/ImagePlate/NextStage/Image
     - ReleaseButton
     - ResultBoard
+    - MainText
+    - /UIResult/ResultBoard/ResultText
+    - PartyButton
+    - /UIResult/PartyButton/Text
+    - LobbyButton
+    - /UIResult/LobbyButton/Text
     - Coin
-    - Image
-    - Exp
-    - Image (1)
-    - Button
-    - Text
+    - /UIResult/Coin/Image
+    - /UIResult/Coin/Text
+    - Item_ScrollView
+    - Item_Scroll View_Viewport
+    - Item_Content
     values:
     - name: UIResult
       path: /UIResult
@@ -47,36 +57,66 @@ MonoBehaviour:
     - name: CurrentStage
       path: /UIResult/ImagePlate/CurrentStage
       obj: {fileID: 1963056740531962164, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Text
+      path: /UIResult/ImagePlate/CurrentStage/Text
+      obj: {fileID: 243678558522129514, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: CurrentStage_Text
       path: /UIResult/ImagePlate/CurrentStage/CurrentStage_Text
-      obj: {fileID: 243678558522129514, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+      obj: {fileID: 5738669234291743324, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Image
+      path: /UIResult/ImagePlate/CurrentStage/Image
+      obj: {fileID: 7796074094623658039, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: NextStage
       path: /UIResult/ImagePlate/NextStage
       obj: {fileID: 5152741579573587392, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Text
+      path: /UIResult/ImagePlate/NextStage/Text
+      obj: {fileID: 2292662106713676013, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: NextStage_Text
       path: /UIResult/ImagePlate/NextStage/NextStage_Text
-      obj: {fileID: 2292662106713676013, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+      obj: {fileID: 1593268604247693761, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Image
+      path: /UIResult/ImagePlate/NextStage/Image
+      obj: {fileID: 5456804621105798639, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: ReleaseButton
       path: /UIResult/ImagePlate/ReleaseButton
       obj: {fileID: 870956889305878762, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: ResultBoard
       path: /UIResult/ResultBoard
       obj: {fileID: 3706032745428066170, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
-    - name: Coin
-      path: /UIResult/ResultBoard/Coin
-      obj: {fileID: 1891962252918095018, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
-    - name: Image
-      path: /UIResult/ResultBoard/Coin/Image
-      obj: {fileID: 870399146533250318, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
-    - name: Exp
-      path: /UIResult/ResultBoard/Exp
-      obj: {fileID: 8678486764033136741, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
-    - name: Image (1)
-      path: /UIResult/ResultBoard/Exp/Image (1)
-      obj: {fileID: 5013479148700018555, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
-    - name: Button
-      path: /UIResult/Button
+    - name: MainText
+      path: /UIResult/ResultBoard/MainText
+      obj: {fileID: 6758173472574193082, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: ResultText
+      path: /UIResult/ResultBoard/ResultText
+      obj: {fileID: 1637646358785938079, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: PartyButton
+      path: /UIResult/PartyButton
       obj: {fileID: 2864873171959127410, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
     - name: Text
-      path: /UIResult/Button/Text
+      path: /UIResult/PartyButton/Text
       obj: {fileID: 7177615116202834617, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: LobbyButton
+      path: /UIResult/LobbyButton
+      obj: {fileID: 207144666339304076, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Text
+      path: /UIResult/LobbyButton/Text
+      obj: {fileID: 7664732622947575991, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Coin
+      path: /UIResult/Coin
+      obj: {fileID: 1891962252918095018, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Image
+      path: /UIResult/Coin/Image
+      obj: {fileID: 870399146533250318, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Text
+      path: /UIResult/Coin/Text
+      obj: {fileID: 1842882711318443976, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Item_ScrollView
+      path: /UIResult/Item_ScrollView
+      obj: {fileID: 1078822499821933962, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Item_Scroll View_Viewport
+      path: /UIResult/Item_ScrollView/Item_Scroll View_Viewport
+      obj: {fileID: 1320703890175301719, guid: 06ba4b203dc79e240bb927575075607f, type: 3}
+    - name: Item_Content
+      path: /UIResult/Item_ScrollView/Item_Scroll View_Viewport/Item_Content
+      obj: {fileID: 7077936304124100378, guid: 06ba4b203dc79e240bb927575075607f, type: 3}

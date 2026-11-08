@@ -34,6 +34,13 @@ public class UISkill : UILuna
     private Dictionary<string, System.Func<SkillData, bool>> skillFuncDictionary
         = new Dictionary<string, System.Func<SkillData, bool>>();
     private GameObject maskObject;
+    private bool thunderTargeting;
+    private bool thunderTargetSubmitted;
+    private Vector3 thunderTargetPosition;
+    private float thunderPreviousTimeScale;
+    private Spine.AnimationState dragonSwordAnimationState;
+    private Status dragonSwordStatus;
+    private SkillData dragonSwordData;
 
 
     public bool Auto { get; set; }
@@ -64,6 +71,7 @@ public class UISkill : UILuna
             string skillStr = equip.name;
             string buttonSkill = "Equip_" + idx.ToString();
             CreateEquipSkillButton(skillStr, buttonSkill, skillFuncDictionary[skillStr]);
+            idx++;
         }
         
         ///
@@ -121,7 +129,12 @@ public class UISkill : UILuna
 
     public override void OnLoop() { }
 
-    public override void OnClear() { }
+    public override void OnClear()
+    {
+        StopAllCoroutines();
+        FinishThunderTargeting();
+        UnbindDragonSword();
+    }
 
     private void InitializeSkillFunction()
     {
@@ -393,32 +406,47 @@ public class UISkill : UILuna
 
     private bool StartThunder(SkillData data)
     {
+        if (thunderTargeting) return false;
         StartCoroutine(Thunder(data));
-
         return true;
     }
+
+    /// <summary>Submits the pending Thunder target through the normal gameplay selection path.</summary>
+    public bool TrySubmitThunderTarget(Vector3 worldPosition)
+    {
+        if (!thunderTargeting || thunderTargetSubmitted) return false;
+        if (float.IsNaN(worldPosition.x) || float.IsInfinity(worldPosition.x)) return false;
+        worldPosition.y = 0f;
+        worldPosition.z = 0f;
+        thunderTargetPosition = worldPosition;
+        thunderTargetSubmitted = true;
+        return true;
+    }
+
+    private void FinishThunderTargeting()
+    {
+        if (!thunderTargeting) return;
+        thunderTargeting = false;
+        thunderTargetSubmitted = false;
+        Time.timeScale = thunderPreviousTimeScale;
+        if (maskObject != null) maskObject.SetActive(false);
+    }
+
     IEnumerator Thunder(SkillData data)
     {
+        thunderPreviousTimeScale = Time.timeScale;
+        thunderTargeting = true;
+        thunderTargetSubmitted = false;
         maskObject.SetActive(true);
-        Vector3 clickedPos = Vector3.zero;
-        bool clicked = false;
-        while (!clicked)
+        while (!thunderTargetSubmitted)
         {
-            //InfiniteLoopDetector.Run();
             Time.timeScale = 0.5f;
-            if (Input.GetMouseButtonDown(0))
-            {
-                clicked = true;
-                clickedPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                clickedPos.y = 0;
-                clickedPos.z = 0;
-            }
-
-            ///대충 작동하는내용
+            if (Input.GetMouseButtonDown(0) && Camera.main != null)
+                TrySubmitThunderTarget(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             yield return null;
         }
-        Time.timeScale = 1.5f;
-        maskObject.SetActive(false);
+        Vector3 clickedPos = thunderTargetPosition;
+        FinishThunderTargeting();
 
         GameObject player = Game.Instance.dataManager.LunaPlayer;
         List<GameObject> monsterList = new List<GameObject>();
@@ -759,23 +787,34 @@ public class UISkill : UILuna
 
     private bool LunaEquipmentDragonSword(SkillData data)
     {
-        // 평타 50% 확률로 스킬데미지 50~70% 번개 찍기
-        Status stat = Game.Instance.dataManager.LunaPlayer.GetComponent<Status>();
-        SkeletonAnimation skeletonAnimation = Game.Instance.dataManager.LunaPlayer.transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
-
-        skeletonAnimation.state.Event += delegate (Spine.TrackEntry trackEntry, Spine.Event e)
-        {
-            if (e.Data.Name == "attack")
-            {
-                if (stat.AttackTarget != null && Defined.CanProbability(data.probablity))
-                {
-                    Defined.EffectCreate(data.effectPrefab, stat.AttackTarget, Defined.eEffectPosition.UNDERFEET);
-                    stat.AttackTarget.GetComponent<Status>().Attack(Game.Instance.dataManager.LunaPlayer, stat.stat.AttackDamage * 2.0f * data.coefficient,false,true);
-                }
-            }
-        };
-
+        UnbindDragonSword();
+        GameObject player = Game.Instance.dataManager.LunaPlayer;
+        dragonSwordStatus = player.GetComponent<Status>();
+        dragonSwordData = data;
+        dragonSwordAnimationState = player.transform.Find("Sprite").GetComponent<SkeletonAnimation>().AnimationState;
+        dragonSwordAnimationState.Event += OnDragonSwordAttack;
         return true;
+    }
+
+    private void OnDragonSwordAttack(Spine.TrackEntry trackEntry, Spine.Event e)
+    {
+        if (e.Data.Name != "attack" || dragonSwordStatus == null || dragonSwordData == null) return;
+        GameObject target = dragonSwordStatus.AttackTarget;
+        if (target != null && Defined.CanProbability(dragonSwordData.probablity))
+        {
+            Defined.EffectCreate(dragonSwordData.effectPrefab, target, Defined.eEffectPosition.UNDERFEET);
+            target.GetComponent<Status>().Attack(dragonSwordStatus.gameObject,
+                dragonSwordStatus.stat.AttackDamage * 2.0f * dragonSwordData.coefficient, false, true);
+        }
+    }
+
+    private void UnbindDragonSword()
+    {
+        if (dragonSwordAnimationState != null)
+            dragonSwordAnimationState.Event -= OnDragonSwordAttack;
+        dragonSwordAnimationState = null;
+        dragonSwordStatus = null;
+        dragonSwordData = null;
     }
 
     private bool LunaEquipmentDragonShield(SkillData data)

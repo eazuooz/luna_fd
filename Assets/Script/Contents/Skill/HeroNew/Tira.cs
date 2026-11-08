@@ -6,25 +6,21 @@ public class Tira : HeroSkillControl
 {
     // public AudioClip skillSound;
 
-    private float durationAlly;
     private float durationEnemy;
-    private float skillDamageAlly;
-    private float skillDamageEnemy;
 
-    private float coefSkill_1;
     private bool triggerSkill_1;
     private bool triggerSkill_2;
 
     private float skillCount;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -45,11 +41,7 @@ public class Tira : HeroSkillControl
     public override void STAR1()
     {
         status.unitState.IsTargetingSkill = false;
-        skillDamageAlly = 40.0f;
-        skillDamageEnemy = 50.0f;
-        durationAlly = 5.0f;
         durationEnemy = 4.0f;
-        coefSkill_1 = 0.0f;
         triggerSkill_1 = false;
         triggerSkill_2 = false;
 
@@ -60,17 +52,16 @@ public class Tira : HeroSkillControl
     {
         STAR1();
 
-        coefSkill_1 = 10.0f;
     }
 
-    public override void STAR5() 
+    public override void STAR5()
     {
         STAR3();
 
         triggerSkill_1 = true;
     }
 
-    public override void ULT1() 
+    public override void ULT1()
     {
         STAR5();
 
@@ -81,7 +72,7 @@ public class Tira : HeroSkillControl
     {
         ULT1();
 
-        
+
     }
 
     public override void Skill()

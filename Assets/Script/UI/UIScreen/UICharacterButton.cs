@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using EverydayDevup.Framework;
-using UnityEditor;
 using Spine;
 using Spine.Unity;
 using UnityEngine.UI;
@@ -78,12 +77,12 @@ public class UICharacterButton : MonoBehaviour, IObserver
     {
         if (characterUI == null)
         {
-            Debug.Log(characterUI.name + "is not found\n");
+            Debug.LogWarning("Character UI prefab is not assigned: " + prefabDir);
 
             return;
         }
 
-        instCharacterUI = Instantiate(characterUI);
+        instCharacterUI = LunaEntities.Spawn(characterUI, transform.position, Quaternion.identity, transform);
 
         if (instCharacterUI == null)
         {

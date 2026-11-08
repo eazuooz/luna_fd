@@ -21,7 +21,7 @@ MonoBehaviour:
   ultState: 1
   cardLevel: 68
   hitPriority: 2
-  profilePicture: {fileID: 21300000, guid: 5f4ef45dc0729204fb4e3c78f17bd024, type: 3}
+  profilePicture: {fileID: 21300000, guid: 89a34ad3a6b6ab044b019dc6db3ee76f, type: 3}
   minimapPicture: {fileID: 0}
   illustPicture: {fileID: 0}
   cardPicture: {fileID: 0}

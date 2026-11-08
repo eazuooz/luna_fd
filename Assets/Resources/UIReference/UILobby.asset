@@ -16,21 +16,48 @@ MonoBehaviour:
   dic:
     keys:
     - UILobby
-    - Image
     - SelectDungeonButton
     - DungeonText
     - Upgrade
+    - Text
     - Party
+    - /UILobby/Party/Text
     - Dungeon
+    - /UILobby/Dungeon/Text
     - Shop
+    - /UILobby/Shop/Text
     - Map
+    - /UILobby/Map/Text
+    - Luna
+    - NameBackImage
+    - LevelText
+    - LunaImage
+    - Skill_01
+    - Skill_02
+    - Skill_03
+    - EquipDesign_00
+    - EquipDesign_01
+    - EquipDesign_02
+    - EquipDesign_03
+    - ChatManager
+    - ChattingBox
+    - Viewport
+    - Content
+    - ChatLog
+    - Scrollbar Vertical
+    - Sliding Area
+    - Handle
+    - InputField
+    - Placeholder
+    - /UILobby/ChatManager/ChattingBox/InputField/Text
+    - Send
+    - /UILobby/ChatManager/ChattingBox/Send/Text
+    - UserList
+    - Image
     values:
     - name: UILobby
       path: /UILobby
       obj: {fileID: 5101918769205690582, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
-    - name: Image
-      path: /UILobby/Image
-      obj: {fileID: 8504592964167279955, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
     - name: SelectDungeonButton
       path: /UILobby/SelectDungeonButton
       obj: {fileID: 5359183956810913024, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
@@ -40,15 +67,108 @@ MonoBehaviour:
     - name: Upgrade
       path: /UILobby/Upgrade
       obj: {fileID: 8344657704826113062, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/Upgrade/Text
+      obj: {fileID: 7477091610250167896, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
     - name: Party
       path: /UILobby/Party
       obj: {fileID: 6813951018155092084, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/Party/Text
+      obj: {fileID: 5857331281755211267, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
     - name: Dungeon
       path: /UILobby/Dungeon
       obj: {fileID: 6644812881715181108, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/Dungeon/Text
+      obj: {fileID: 2020502466588386593, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
     - name: Shop
       path: /UILobby/Shop
       obj: {fileID: 6103410937863564647, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/Shop/Text
+      obj: {fileID: 6987529703338533841, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
     - name: Map
       path: /UILobby/Map
       obj: {fileID: 3328409170678859111, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/Map/Text
+      obj: {fileID: 7483871258766864497, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Luna
+      path: /UILobby/Luna
+      obj: {fileID: 3587252170286625079, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: NameBackImage
+      path: /UILobby/Luna/NameBackImage
+      obj: {fileID: 1894125308187745608, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: LevelText
+      path: /UILobby/Luna/NameBackImage/LevelText
+      obj: {fileID: 8201757424433466895, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: LunaImage
+      path: /UILobby/Luna/LunaImage
+      obj: {fileID: 421535149505199793, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Skill_01
+      path: /UILobby/Luna/LunaImage/Skill_01
+      obj: {fileID: 5205112190106598194, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Skill_02
+      path: /UILobby/Luna/LunaImage/Skill_02
+      obj: {fileID: 2885775882990701703, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Skill_03
+      path: /UILobby/Luna/LunaImage/Skill_03
+      obj: {fileID: 4805371048921391777, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: EquipDesign_00
+      path: /UILobby/Luna/LunaImage/EquipDesign_00
+      obj: {fileID: 8978650614399196685, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: EquipDesign_01
+      path: /UILobby/Luna/LunaImage/EquipDesign_01
+      obj: {fileID: 902448331829603260, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: EquipDesign_02
+      path: /UILobby/Luna/LunaImage/EquipDesign_02
+      obj: {fileID: 2453261283830446963, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: EquipDesign_03
+      path: /UILobby/Luna/LunaImage/EquipDesign_03
+      obj: {fileID: 8434684537552502131, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: ChatManager
+      path: /UILobby/ChatManager
+      obj: {fileID: 3085188801007435885, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: ChattingBox
+      path: /UILobby/ChatManager/ChattingBox
+      obj: {fileID: 2943420239822869880, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Viewport
+      path: /UILobby/ChatManager/ChattingBox/Viewport
+      obj: {fileID: 567913925366335655, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Content
+      path: /UILobby/ChatManager/ChattingBox/Viewport/Content
+      obj: {fileID: 8050913328435418066, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: ChatLog
+      path: /UILobby/ChatManager/ChattingBox/Viewport/Content/ChatLog
+      obj: {fileID: 8937229223582294131, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Scrollbar Vertical
+      path: /UILobby/ChatManager/ChattingBox/Scrollbar Vertical
+      obj: {fileID: 5946931225087610877, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Sliding Area
+      path: /UILobby/ChatManager/ChattingBox/Scrollbar Vertical/Sliding Area
+      obj: {fileID: 8151569885496477096, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Handle
+      path: /UILobby/ChatManager/ChattingBox/Scrollbar Vertical/Sliding Area/Handle
+      obj: {fileID: 2484276466161290546, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: InputField
+      path: /UILobby/ChatManager/ChattingBox/InputField
+      obj: {fileID: 3101902088509248404, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Placeholder
+      path: /UILobby/ChatManager/ChattingBox/InputField/Placeholder
+      obj: {fileID: 12068528973685611, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/ChatManager/ChattingBox/InputField/Text
+      obj: {fileID: 1625157718811976103, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Send
+      path: /UILobby/ChatManager/ChattingBox/Send
+      obj: {fileID: 7652422317621611104, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Text
+      path: /UILobby/ChatManager/ChattingBox/Send/Text
+      obj: {fileID: 5435653509649069290, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: UserList
+      path: /UILobby/ChatManager/ChattingBox/UserList
+      obj: {fileID: 633032917042524086, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}
+    - name: Image
+      path: /UILobby/Image
+      obj: {fileID: 7528740271170588249, guid: ebcd36fc4adc9d444807b144a55dc227, type: 3}

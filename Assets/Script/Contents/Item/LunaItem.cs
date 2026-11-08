@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LunaItem : MonoBehaviour
+public class LunaItem : EverydayDevup.Framework.LunaEntityBehaviour
 {
     protected GameObject target;
     protected GameObject gainEffect;
@@ -53,7 +53,7 @@ public class LunaItem : MonoBehaviour
             }
             else
             {
-                Destroy(gameObject);
+                EverydayDevup.Framework.LunaEntities.Hide(gameObject);
             }
         }
         else

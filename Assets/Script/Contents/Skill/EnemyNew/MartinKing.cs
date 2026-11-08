@@ -6,10 +6,9 @@ using EverydayDevup.Framework;
 using UnityEngine.SceneManagement;
 using Spine.Unity;
 
-public class MartinKing : MonoBehaviour
+public class MartinKing : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public Status status { get; set; }
-    private int skillControlCounter;
 
     public GameObject skillEffect_1;
 
@@ -17,41 +16,42 @@ public class MartinKing : MonoBehaviour
     private bool isCharge = false;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
-        skillControlCounter = 0;
 
         animation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
 
-        animation.AnimationState.Complete += delegate (Spine.TrackEntry trackEntry)
+        animation.AnimationState.Complete -= OnAnimationComplete;
+        animation.AnimationState.Complete += OnAnimationComplete;
+    }
+
+    protected override void OnEntityShow()
+    {
+        isCharge = false;
+        if (status != null) status.unitState.IsTargetingSkill = false;
+        // Boom hides this child; a pooled enemy starts with its authored visible sprite.
+        transform.Find("Sprite").gameObject.SetActive(true);
+        if (animation != null)
         {
-            if (trackEntry.Animation.Name == "skill")
-            {
+            animation.AnimationState.Complete -= OnAnimationComplete;
+            animation.AnimationState.Complete += OnAnimationComplete;
+        }
+    }
 
-            }
-            else if (trackEntry.Animation.Name == "boom")
-            {
-                StartCoroutine(Boom());
+    protected override void OnEntityHide()
+    {
+        if (animation != null) animation.AnimationState.Complete -= OnAnimationComplete;
+    }
 
-
-
-                //Destroy(stage);
-
-                //status.death = true;
-            }
-            else if (trackEntry.Animation.Name == "bomm ready")
-            {
-
-            }
-
-        };
-
+    private void OnAnimationComplete(Spine.TrackEntry trackEntry)
+    {
+        if (trackEntry.Animation.Name == "boom") StartCoroutine(Boom());
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.unitState.IsSkillActivaion == true
             && isCharge == false)
@@ -76,8 +76,8 @@ public class MartinKing : MonoBehaviour
 
         for (int i = 0; i < 50; i++)
         {
-            float randX = Random.RandomRange(-20.0f, 0.0f);
-            float randY = Random.RandomRange(-0.5f, 2.0f);
+            float randX = Random.Range(-20.0f, 0.0f);
+            float randY = Random.Range(-0.5f, 2.0f);
 
             Vector3 createPos = gameObject.transform.position;
             createPos.x += randX;

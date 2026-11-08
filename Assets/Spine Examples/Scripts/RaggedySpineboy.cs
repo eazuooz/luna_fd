@@ -65,7 +65,7 @@ namespace Spine.Unity.Examples {
 		void Launch () {
 			RemoveRigidbody();
 			ragdoll.Apply();
-			ragdoll.RootRigidbody.velocity = new Vector2(Random.Range(-launchVelocity.x, launchVelocity.x), launchVelocity.y);
+			ragdoll.RootRigidbody.linearVelocity = new Vector2(Random.Range(-launchVelocity.x, launchVelocity.x), launchVelocity.y);
 			StartCoroutine(WaitUntilStopped());
 		}
 
@@ -78,7 +78,7 @@ namespace Spine.Unity.Examples {
 			if (hit.collider != null)
 				skeletonPoint = hit.point;
 
-			ragdoll.RootRigidbody.isKinematic = true;
+			ragdoll.RootRigidbody.bodyType = RigidbodyType2D.Kinematic;
 			ragdoll.SetSkeletonPosition(skeletonPoint);
 
 			yield return ragdoll.SmoothMix(0, restoreDuration);
@@ -92,7 +92,7 @@ namespace Spine.Unity.Examples {
 
 			float t = 0;
 			while (t < 0.5f) {
-				t = (ragdoll.RootRigidbody.velocity.magnitude > 0.09f) ? 0 : t + Time.deltaTime;
+				t = (ragdoll.RootRigidbody.linearVelocity.magnitude > 0.09f) ? 0 : t + Time.deltaTime;
 				yield return null;
 			}
 

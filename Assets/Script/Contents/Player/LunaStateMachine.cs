@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using EverydayDevup.Framework;
 using Spine.Unity;
 
-public class LunaStateMachine : MonoBehaviour
+public class LunaStateMachine : LunaEntityBehaviour
 {
     private List<State> curState = new List<State>();
     private List<State> stateMachine = new List<State>();
@@ -16,6 +16,8 @@ public class LunaStateMachine : MonoBehaviour
     private GameObject buffObject;
     private SkeletonAnimation skeletonAnimation;
     public string curStateString = "none";
+    private bool initialized;
+    private GameObject upgradedTower;
 
     public SkeletonAnimation SkeletonAnimation
     {
@@ -32,18 +34,33 @@ public class LunaStateMachine : MonoBehaviour
         return stateMachine;
     }
 
-    private void OnEnable()
+    protected override void OnEntityShow()
     {
         if (status != null)
         {
-            status.ResetRespwanData();
-            ResetAnimation();
+            Game.Instance.dataManager.LunaPlayer = gameObject;
+            if (initialized) InitBuff();
+            // UnitAI_Player owns reused combat-status reset on all authored Luna prefabs.
+            if (GetComponent<UnitAI_Player>() == null)
+            {
+                status.ResetRespwanData();
+                ResetAnimation();
+            }
         }
     }
 
-    private void OnDisable()
+    protected override void OnEntityHide()
     {
         StopAllCoroutines();
+        if (buffObject != null) LunaEntities.Hide(buffObject);
+        buffObject = null;
+        if (status == null) return;
+        if (status.unitState.IsDeath)
+        {
+            UIPlayer playerUI = FindAnyObjectByType<UIPlayer>();
+            if (playerUI != null && playerUI.isActiveAndEnabled)
+                playerUI.QueuePlayerRespawn(gameObject);
+        }
         status.IsStatusDataLoadComplete = false;
         status.unitState.IsSummonState = false;
 
@@ -62,8 +79,46 @@ public class LunaStateMachine : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
+        InitializePlayer(true);
+    }
+
+    /// <summary>Completes first-use or reused pool activation before the caller continues.</summary>
+    public void PrepareForSpawn(GameObject tower)
+    {
+        myTower = tower;
+        if (!initialized)
+        {
+            InitializePlayer(false);
+            return;
+        }
+
+        // Entity show already reset reused status; do not duplicate buff coroutines.
+        Game.Instance.dataManager.LunaPlayer = gameObject;
+        moving = 0;
+        ChangeState(Idle.Instance);
+    }
+
+    public void PrepareForStage(GameObject tower)
+    {
+        PrepareForSpawn(tower);
+        ApplyTowerUpgrade(tower);
+    }
+
+    private void ApplyTowerUpgrade(GameObject tower)
+    {
+        if (tower == null || tower == upgradedTower) return;
+        foreach (LunaEntityBehaviour module in tower.GetComponents<LunaEntityBehaviour>())
+            module.EnsureEntityInitialized();
+        tower.GetComponent<Status>().stat.Hp *= Mathf.Max(1, LunaDataTable.Instance.playerData.TowerHPLevel);
+        upgradedTower = tower;
+    }
+
+    private void InitializePlayer(bool applyTowerUpgrade)
+    {
+        if (initialized) return;
+        initialized = true;
         Game.Instance.dataManager.LunaPlayer = this.gameObject;
         playerData = LunaDataTable.Instance.playerData;
         string playerDataPath = Application.dataPath;
@@ -75,15 +130,17 @@ public class LunaStateMachine : MonoBehaviour
 
         status = GetComponent<Status>();
 
-        status.Ready();
+        if (!status.IsStatusDataLoadComplete) status.Ready();
 
         if (false == status.IsStatusDataLoadComplete)
-            Destroy(gameObject);
+        {
+            LunaEntities.Hide(gameObject);
+            return;
+        }
 
         //status.stat.MoveSpeed *= (100.0f + playerData.Coef_Move) / 100.0f;
 
-        if (myTower != null)
-            myTower.GetComponent<Status>().stat.Hp *= playerData.TowerHPLevel;
+        if (applyTowerUpgrade) ApplyTowerUpgrade(myTower);
 
         stateMachine.Add(Idle.Instance);
         stateMachine.Add(Death.Instance);
@@ -93,7 +150,7 @@ public class LunaStateMachine : MonoBehaviour
         stateMachine.Add(Move.Instance);
 
         ChangeState(stateMachine[0]);
-        skeletonAnimation 
+        skeletonAnimation
             = gameObject.GetComponent<Transform>().Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
         skeletonAnimation.state.Complete += delegate (Spine.TrackEntry trackEntry)
         {
@@ -111,7 +168,7 @@ public class LunaStateMachine : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         // 현재 상태들을 모두 실행
         for (int i = curState.Count - 1; i >= 0; i--)
@@ -122,11 +179,11 @@ public class LunaStateMachine : MonoBehaviour
         UpdateBuffEffect();
     }
 
-    private void OnDestroy()
+    protected override void OnEntityRelease()
     {
         if(buffObject != null)
         {
-            GameObject.Destroy(buffObject);
+            LunaEntities.Hide(buffObject);
         }
     }
 
@@ -139,12 +196,12 @@ public class LunaStateMachine : MonoBehaviour
         if (changeState.mLevel != 0)
         {
             // 현재 바꾸려는 상태가 상위 상태에 연결되어 있지 않는 경우
-            if (curState[changeState.mLevel - 1].mNext.Contains(changeState) == false) 
+            if (curState[changeState.mLevel - 1].mNext.Contains(changeState) == false)
                 return;
         }
 
         // 현재 상태의 갯수가 바꾸려는 상태의 레벨보다 더 클경우, 같은 상태가 추가되려 한다면
-        if (curState.Count > changeState.mLevel && curState[changeState.mLevel] == changeState) 
+        if (curState.Count > changeState.mLevel && curState[changeState.mLevel] == changeState)
             return;
 
         // 상태가 변경될 경우 기존의 하위 상태들을 하나씩 Exit 해준다.
@@ -161,12 +218,13 @@ public class LunaStateMachine : MonoBehaviour
 
     private void InitBuff()
     {
+        if (buffObject != null || buffPrefab == null) return;
         Vector3 buffPos = new Vector3
                                  (gameObject.transform.position.x
                                  ,gameObject.transform.position.y - 0.1f
                                  ,gameObject.transform.position.z);
 
-        buffObject = GameObject.Instantiate
+        buffObject = LunaEntities.Spawn
                                     (buffPrefab
                                     ,buffPos
                                     ,Quaternion.Euler(-90.0f, 0.0f, 0.0f));
@@ -174,7 +232,7 @@ public class LunaStateMachine : MonoBehaviour
 
     private void UpdateBuffEffect()
     {
-        if (buffObject != null || buffObject.activeSelf != false)
+        if (buffObject != null && buffObject.activeSelf)
         {
             Vector3 buffPos = new Vector3
                              (gameObject.transform.position.x

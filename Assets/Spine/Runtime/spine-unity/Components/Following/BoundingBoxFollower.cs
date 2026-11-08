@@ -164,7 +164,7 @@ namespace Spine.Unity {
 						SkeletonUtility.SetColliderPointsLocal(bbCollider, slot, boundingBoxAttachment);
 						bbCollider.isTrigger = isTrigger;
 						bbCollider.usedByEffector = usedByEffector;
-						bbCollider.usedByComposite = usedByComposite;
+						bbCollider.compositeOperation = usedByComposite ? Collider2D.CompositeOperation.Merge : Collider2D.CompositeOperation.None;
 						bbCollider.enabled = false;
 						bbCollider.hideFlags = HideFlags.NotEditable;
 						colliderTable.Add(boundingBoxAttachment, bbCollider);

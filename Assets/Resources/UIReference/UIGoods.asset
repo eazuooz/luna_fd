@@ -24,6 +24,10 @@ MonoBehaviour:
     - AddStarStone
     - StarStoneImage
     - StarStoneText
+    - Ruby
+    - AddRuby
+    - RubyImage
+    - RubyText
     values:
     - name: UIGoods
       path: /UIGoods
@@ -42,13 +46,25 @@ MonoBehaviour:
       obj: {fileID: 1202490841550587182, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
     - name: StarStone
       path: /UIGoods/StarStone
-      obj: {fileID: 1863222522372604063, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+      obj: {fileID: 417100162588709170, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
     - name: AddStarStone
       path: /UIGoods/StarStone/AddStarStone
-      obj: {fileID: 4361292808034141124, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+      obj: {fileID: 7203031692765620782, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
     - name: StarStoneImage
       path: /UIGoods/StarStone/StarStoneImage
-      obj: {fileID: 6214527019992000895, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+      obj: {fileID: 3570477099448868117, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
     - name: StarStoneText
       path: /UIGoods/StarStone/StarStoneText
-      obj: {fileID: 5099563120297809892, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+      obj: {fileID: 1812382662075465028, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+    - name: Ruby
+      path: /UIGoods/Ruby
+      obj: {fileID: 3701914397071133646, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+    - name: AddRuby
+      path: /UIGoods/Ruby/AddRuby
+      obj: {fileID: 7933317753252994089, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+    - name: RubyImage
+      path: /UIGoods/Ruby/RubyImage
+      obj: {fileID: 3505638117069393799, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}
+    - name: RubyText
+      path: /UIGoods/Ruby/RubyText
+      obj: {fileID: 2640781690448660218, guid: 5ce61c6b81341a4438b42c5d32921599, type: 3}

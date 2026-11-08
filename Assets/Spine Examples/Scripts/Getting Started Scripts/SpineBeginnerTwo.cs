@@ -61,8 +61,8 @@ namespace Spine.Unity.Examples {
 		SkeletonAnimation skeletonAnimation;
 
 		// Spine.AnimationState and Spine.Skeleton are not Unity-serialized objects. You will not see them as fields in the inspector.
-		public Spine.AnimationState spineAnimationState;
-		public Spine.Skeleton skeleton;
+		[System.NonSerialized] public Spine.AnimationState spineAnimationState;
+		[System.NonSerialized] public Spine.Skeleton skeleton;
 
 		void Start () {
 			// Make sure you get these AnimationState and Skeleton references in Start or Later.

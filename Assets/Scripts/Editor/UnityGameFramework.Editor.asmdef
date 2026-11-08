@@ -1,0 +1,14 @@
+{
+  "name": "UnityGameFramework.Editor",
+  "references": [
+    "UnityGameFramework.Runtime",
+    "Unity.Addressables",
+    "Unity.Addressables.Editor",
+    "Unity.ResourceManager",
+    "Unity.SharpZipLib.Utils"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

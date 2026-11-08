@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Spine.Unity;
 using EverydayDevup.Framework;
 
-public class Status : MonoBehaviour
+public class Status : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public enum eAttackSoundType
     {
@@ -28,7 +28,13 @@ public class Status : MonoBehaviour
     }
 
     public bool IsStatusDataLoadComplete;
-    public ObjectData objectData;
+    [UnityEngine.Serialization.FormerlySerializedAs("objectData")]
+    [SerializeField] private ObjectData sourceObjectData;
+    public ObjectData objectData
+    {
+        get => LunaRuntimeData.ResolveObjectData(sourceObjectData);
+        set => sourceObjectData = value;
+    }
     public AudioSource AudioSource;
     public AudioClip AttackSoundClip;
     public GameObject AttackEffectPrefab;
@@ -44,9 +50,9 @@ public class Status : MonoBehaviour
     [HideInInspector] public eUnitSide UnitSide;
     [HideInInspector] public eUnitType UnitType;
     [HideInInspector] public eUnitAttackType UnitAttackType;
-    [HideInInspector] public Coefficient coefficient = new Coefficient();
-    [HideInInspector] public Stat stat = new Stat();
-    [HideInInspector] public UnitState unitState = new UnitState();
+    [System.NonSerialized, HideInInspector] public Coefficient coefficient = new Coefficient();
+    [System.NonSerialized, HideInInspector] public Stat stat = new Stat();
+    [System.NonSerialized, HideInInspector] public UnitState unitState = new UnitState();
 
     [HideInInspector] public List<GameObject> ProjecttileCreateLocations;
     [HideInInspector] public GameObject ProjecttileArrivalLocation;
@@ -95,11 +101,14 @@ public class Status : MonoBehaviour
     }
 
 
+    private Coroutine buffUpdateRoutine;
+
     public void BuffIconInit()
     {
         BuffImp.UnitGameObject = gameObject;
         BuffImp.BuffIconInit();
-        StartCoroutine(BuffImp.UpdateBuffs());
+        if (buffUpdateRoutine != null) StopCoroutine(buffUpdateRoutine);
+        buffUpdateRoutine = StartCoroutine(BuffImp.UpdateBuffs());
     }
 
     public void Ready()
@@ -108,8 +117,13 @@ public class Status : MonoBehaviour
     }
     public void ReleaseData()
     {
+        // Damage labels are generated per hit. Their lifetime coroutine/update stops
+        // under an inactive pooled actor, so retire them before the actor is reused.
+        foreach (var label in GetComponentsInChildren<DamageTextControl>(true))
+            if (label != null) LunaEntities.Hide(label.gameObject);
         if (AudioSource != null)
         {
+            AudioSource.Stop();
             if (Game.Instance != null
                 && Game.Instance.dataManager != null
                 && Game.Instance.dataManager.ObjectSounds != null
@@ -268,11 +282,11 @@ public class Status : MonoBehaviour
 
         if (UnitSide != eUnitSide.Enemy)
         {
-            healthBarGameObject = GameObject.Instantiate(GetLunaAssetBundle().HealthBarAlly, tmpTransform.position + new Vector3(0, tmpRTransform.rect.height / 2, 0), Quaternion.identity);
+            healthBarGameObject = EverydayDevup.Framework.LunaEntities.Spawn(GetLunaAssetBundle().HealthBarAlly, tmpTransform.position + new Vector3(0, tmpRTransform.rect.height / 2, 0), Quaternion.identity);
         }
         else
         {
-            healthBarGameObject = GameObject.Instantiate(GetLunaAssetBundle().HealthBarEnemy, tmpTransform.position + new Vector3(0, tmpRTransform.rect.height / 2, 0), Quaternion.identity);
+            healthBarGameObject = EverydayDevup.Framework.LunaEntities.Spawn(GetLunaAssetBundle().HealthBarEnemy, tmpTransform.position + new Vector3(0, tmpRTransform.rect.height / 2, 0), Quaternion.identity);
         }
 
         healthBarGameObject.GetComponent<HealthBarControl>().InitHealthBar(gameObject);
@@ -322,10 +336,11 @@ public class Status : MonoBehaviour
 
     void SetAudioSource()
     {
-        AudioSource = gameObject.AddComponent<AudioSource>();
+        if (AudioSource == null)
+            AudioSource = gameObject.AddComponent<AudioSource>();
         AudioSource.volume = Defined.EffectVolumeSize;
 
-        if (AudioSource != null)
+        if (!Game.Instance.dataManager.ObjectSounds.Contains(AudioSource))
         {
             Game.Instance.dataManager.ObjectSounds.Add(AudioSource);
         }
@@ -446,7 +461,7 @@ public class Status : MonoBehaviour
 
                 if (damageType == eDamageType.BLEED) // bleed
                 {
-                    GameObject.Instantiate(GetLunaAssetBundle().BleedEffect, ProjecttileArrivalLocation.transform.position, GetLunaAssetBundle().BleedEffect.transform.rotation);
+                    EverydayDevup.Framework.LunaEntities.Spawn(GetLunaAssetBundle().BleedEffect, ProjecttileArrivalLocation.transform.position, GetLunaAssetBundle().BleedEffect.transform.rotation);
 
                     damageEffect.text = "<color=#8B0000>" + damage.ToString() + "</color>";
                 }
@@ -655,7 +670,7 @@ public class Status : MonoBehaviour
 
                 if (trackEntry.Animation.Name == "hide")
                 {
-                    Destroy(effect);
+                    LunaEntities.Hide(effect);
                 }
             };
 
@@ -693,7 +708,7 @@ public class Status : MonoBehaviour
 
                 if (trackEntry.Animation.Name == "hide")
                 {
-                    Destroy(effect);
+                    LunaEntities.Hide(effect);
                 }
             };
 
@@ -774,9 +789,9 @@ public class Status : MonoBehaviour
 
     IEnumerator Berserk_Proceed(float duration)
     {
-        //GameObject tmpEffect 
-        //    = GameObject.Instantiate(GetLunaAssetBundle().BerserkEffect, 
-        //    ProjecttileArrivalLocation.transform.position, 
+        //GameObject tmpEffect
+        //    = GameObject.Instantiate(GetLunaAssetBundle().BerserkEffect,
+        //    ProjecttileArrivalLocation.transform.position,
         //    GetLunaAssetBundle().BerserkEffect.transform.rotation);
 
         //tmpEffect.transform.SetParent(transform);
@@ -806,7 +821,7 @@ public class Status : MonoBehaviour
             StatusAfterReady();
         }
 
-        Destroy(tmpEffect);
+        LunaEntities.Hide(tmpEffect);
         isBerserk = false;
     }
 
@@ -844,7 +859,7 @@ public class Status : MonoBehaviour
             StatusAfterReady();
         }
 
-        Destroy(tmpEffect);
+        LunaEntities.Hide(tmpEffect);
         iSBeleifWave = false;
     }
 
@@ -887,7 +902,7 @@ public class Status : MonoBehaviour
             StatusAfterReady();
         }
 
-        Destroy(tmpEffect);
+        LunaEntities.Hide(tmpEffect);
         isSerenBlessing = false;
     }
 
@@ -925,7 +940,7 @@ public class Status : MonoBehaviour
             StatusAfterReady();
         }
 
-        Destroy(tmpEffect);
+        LunaEntities.Hide(tmpEffect);
         isLoneBlessing = false;
     }
 
@@ -962,7 +977,7 @@ public class Status : MonoBehaviour
             isStun = false;
         }
 
-        Destroy(tmpEffect);
+        LunaEntities.Hide(tmpEffect);
         curStun = false;
     }
 
@@ -1186,10 +1201,10 @@ public class Status : MonoBehaviour
         {
             SkillTrigger_Rose = false;
 
-            if (UnitSide == eUnitSide.Allied)
+            if (UnitSide == eUnitSide.Enemy)
             {
                 coefficient.AttackDamage += 0.1f;
-                HpAfterReady();
+                StatusAfterReady();
             }
         }
 
@@ -1292,11 +1307,11 @@ public class Status : MonoBehaviour
         stat.AttackDamage = objectData.GetAttackDamage_Value(coefficient.AttackDamage);
     }
 
-    private void Start()
+    protected override void OnEntityInitialize()
     {
 
     }
-    private void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (IsStatusDataLoadComplete == true)
         {

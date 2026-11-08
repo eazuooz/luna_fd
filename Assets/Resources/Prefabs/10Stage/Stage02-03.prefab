@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageName: "\uC545\uBABD\uC758 \uC131 \uC9C0\uD558 13\uCE35"
-  dungeonTable: {fileID: 11400000, guid: 3bee5010d0834a147ab6d71268307a5f, type: 2}
+  dungeonTable: {fileID: 0}
   backgroundImage: {fileID: 8383516895249335979, guid: 73c86fa3a04190143b54914d2b6dad59, type: 3}
   rewardGold: 0
   enemyTower: {fileID: 7528829204366405261, guid: 31e469611d403d1498aa54c4c7eba692, type: 3}

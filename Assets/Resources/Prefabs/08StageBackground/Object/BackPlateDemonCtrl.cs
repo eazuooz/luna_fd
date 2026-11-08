@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackPlateDemonCtrl : MonoBehaviour
+public class BackPlateDemonCtrl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private Vector3 startPos;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         startPos = transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (transform.position.x < -13.6f)
             transform.position = new Vector3(0, startPos.y, startPos.z);

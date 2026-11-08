@@ -2,6 +2,10 @@
 #define VERTEX_LIT_FORWARD_PASS_URP_INCLUDED
 
 #include "Include/Spine-Sprite-Common-URP.hlsl"
+// Transparent sprites must sample the shadow atlas, not opaque screen-space depth.
+#if defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAPREMULTIPLY_VERTEX_ONLY) || defined(_ADDITIVEBLEND) || defined(_ADDITIVEBLEND_SOFT) || defined(_MULTIPLYBLEND) || defined(_MULTIPLYBLEND_X2)
+	#define _SURFACE_TYPE_TRANSPARENT
+#endif
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "SpineCoreShaders/SpriteLighting.cginc"
 #include "SpineCoreShaders/Spine-Common.cginc"
@@ -227,12 +231,12 @@ half4 ForwardPassFragmentSprite(VertexOutputLWRP input) : SV_Target
 	ALPHA_CLIP(texureColor, input.vertexColor)
 
 	// fill out InputData struct
-	InputData inputData;
+	InputData inputData = (InputData)0;
 #if !defined(_RECEIVE_SHADOWS_OFF)
 	#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 		inputData.shadowCoord = input.shadowCoord;
 	#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
-		inputData.shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+		inputData.shadowCoord = TransformWorldToShadowCoord(input.positionWS.xyz);
 	#elif defined(_MAIN_LIGHT_SHADOWS)
 		inputData.shadowCoord = input.shadowCoord;
 	#else

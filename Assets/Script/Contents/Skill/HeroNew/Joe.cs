@@ -13,14 +13,14 @@ public class Joe : HeroSkillControl
 
     private SkeletonAnimation ani;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -61,6 +61,7 @@ public class Joe : HeroSkillControl
         triggerSkill_1 = false;
         triggerSkill_2 = false;
 
+        if (ani != null) ani.AnimationState.Start -= OnAttackAnimationStart;
         ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
     }
 
@@ -83,18 +84,22 @@ public class Joe : HeroSkillControl
     {
         STAR5();
 
-        ani.state.Start += delegate (Spine.TrackEntry trackEntry)
-        {
-            if (trackEntry.Animation.Name == "attack")
-            {
-                if (status.AttackTarget != null && Defined.CanProbability(15))
-                {
-                    status.isStunAttack = true;
-                    status.nextStunDuring = 2.0f;
-                }
-            }
-        };
+        ani.AnimationState.Start -= OnAttackAnimationStart;
+        ani.AnimationState.Start += OnAttackAnimationStart;
+    }
 
+    private void OnAttackAnimationStart(Spine.TrackEntry trackEntry)
+    {
+        if (trackEntry.Animation.Name == "attack" && status.AttackTarget != null && Defined.CanProbability(15))
+        {
+            status.isStunAttack = true;
+            status.nextStunDuring = 2.0f;
+        }
+    }
+
+    public override void AfterDeath()
+    {
+        if (ani != null) ani.AnimationState.Start -= OnAttackAnimationStart;
     }
 
     public override void ULT2()

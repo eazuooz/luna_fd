@@ -110,7 +110,7 @@ public static class Defined
             return null;
 
         GameObject tmpEffect 
-            = GameObject.Instantiate(originEffect, targetPos, originEffect.transform.rotation);
+            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, originEffect.transform.rotation);
 
         return tmpEffect;
     }
@@ -122,7 +122,7 @@ public static class Defined
             return null;
 
         GameObject tmpEffect
-            = GameObject.Instantiate(originEffect, targetPos, rot);
+            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, rot);
 
         return tmpEffect;
     }
@@ -134,7 +134,7 @@ public static class Defined
             return null;
 
         GameObject tmpEffect 
-            = GameObject.Instantiate(originEffect, targetPos, originEffect.transform.rotation);
+            = EverydayDevup.Framework.LunaEntities.Spawn(originEffect, targetPos, originEffect.transform.rotation);
         tmpEffect.transform.localScale = size;
 
         return tmpEffect;

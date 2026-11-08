@@ -8,14 +8,14 @@ public class Rose : HeroSkillControl
     private float coefSkill_1;
     private float coefSkill_2;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -68,12 +68,12 @@ public class Rose : HeroSkillControl
 
         IdentifyFunc.PickingUnits((unit) =>
         {
-            if (IdentifyFunc.IsAlly(unit) && Defined.CanProbability(/*80*/100))
+            if (IdentifyFunc.IsAlly(unit) && Defined.CanProbability(80))
             {
                 unit.GetComponent<Status>().TakeBerserkMode(coefSkill_1);
             }
 
-            if (IdentifyFunc.IsEnemy(unit) && IdentifyFunc.IsInDistance(gameObject, unit, skillRange) && Defined.CanProbability(/*80*/100))
+            if (IdentifyFunc.IsEnemy(unit) && IdentifyFunc.IsInDistance(gameObject, unit, skillRange) && Defined.CanProbability(50))
             {
                 unit.GetComponent<Status>().TakeBleeding(skillDamage, coefSkill_2);
             }

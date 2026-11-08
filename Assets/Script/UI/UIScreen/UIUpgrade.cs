@@ -498,7 +498,7 @@ public class UIUpgrade : UILuna
     }
     public void OnClickReleaseButton()
     {
-        if (SceneManager.GetActiveScene().name == "NewLobby")
+        if (SceneManager.GetActiveScene().name == "Lobby")
             MyUnits.InstantiateLobby();
 
         Game.Instance.uiManager.Pop(type);
@@ -694,7 +694,7 @@ public class UIUpgrade : UILuna
     private void LunaMoveSpeedLevelUp()
     {
 
-        if (IncreaseLunaMoveSpeed(1000))
+        if (!IncreaseLunaMoveSpeed(1000))
             return;
 
         Contents outContent;

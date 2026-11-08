@@ -14,7 +14,7 @@ public class DropItem : LunaItem
 
     private float magnetDistance;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         ItemInfoInitialized();
         magnetDistance = Defined.magneticDistacne;
@@ -23,7 +23,7 @@ public class DropItem : LunaItem
         StartCoroutine(WaitForChase());
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         ChasePlayer(GetItem);
     }
@@ -78,7 +78,7 @@ public class DropItem : LunaItem
             Defined.EffectCreate(gainEffect, target, Defined.eEffectPosition.UNDERFEET);
         }
 
-        Destroy(gameObject);
+        EverydayDevup.Framework.LunaEntities.Hide(gameObject);
     }
     public void SetId(ItemData itemdata)
     {

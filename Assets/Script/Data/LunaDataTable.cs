@@ -6,6 +6,26 @@ using EverydayDevup.Framework;
 [CreateAssetMenu(fileName = "LunaDataTable", menuName = "Scriptable Object Asset/LunaDataTable")]
 public class LunaDataTable : SingletonSO<LunaDataTable>
 {
+    private static LunaDataTable runtimeTable;
+
+    public new static LunaDataTable Instance
+    {
+        get
+        {
+            if (!Application.isPlaying) return SingletonSO<LunaDataTable>.Instance;
+            if (runtimeTable == null)
+            {
+                runtimeTable = CreateInstance<LunaDataTable>();
+                runtimeTable.name = "Luna Runtime Data";
+                runtimeTable.hideFlags = HideFlags.DontSave;
+            }
+            return runtimeTable;
+        }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetRuntimeTable() { runtimeTable = null; }
+
     LunaDataTable()
     {
         InitializeUnitNames();
@@ -69,10 +89,10 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
     }
     private bool AddUnitData(ObjectData objectData)
     {
-        if (UnitTable.ContainsKey(objectData.engName) || objectData.engName == "")
+        if (objectData == null || UnitTable.ContainsKey(objectData.name) || string.IsNullOrEmpty(objectData.name))
             return false;
 
-        UnitTable.Add(objectData.name, objectData);
+        UnitTable.Add(objectData.name, LunaRuntimeData.ResolveObjectData(objectData));
         return true;
     }
     public bool IncreaseCardCount(string name)
@@ -99,11 +119,11 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
         foreach (var data in lunaDatas)
         {
             if (lunaTable.ContainsKey(data.name))
-                return;
+                continue;
 
             string name = data.name;
 
-            lunaTable.Add(data.name, data as ObjectData);
+            lunaTable.Add(data.name, LunaRuntimeData.ResolveObjectData(data as ObjectData));
         }
     }
 
@@ -131,12 +151,11 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
 
         foreach (var item in items)
         {
-            string itemNumberStr = item.name.Substring(0, 4);
-            int itemNumber = int.Parse(itemNumberStr);
+            if (item.name.Length < 4 || !int.TryParse(item.name.Substring(0, 4), out int itemNumber)) continue;
             if (itemTable.ContainsKey(itemNumber) || item.name == "")
                 continue;
 
-            itemTable.Add(itemNumber, item as ItemData);
+            itemTable.Add(itemNumber, LunaRuntimeData.CloneAsset(item as ItemData));
         }
     }
     public EquipDesignItemData GetCurrentEquipDesignItemData()
@@ -165,7 +184,7 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
             if (skiiTable.ContainsKey(skill.name) || skill.name == "")
                 continue;
 
-            skiiTable.Add(skill.name, skill as SkillData);
+            skiiTable.Add(skill.name, LunaRuntimeData.CloneAsset(skill as SkillData));
         }
     }
 
@@ -204,7 +223,7 @@ public class LunaDataTable : SingletonSO<LunaDataTable>
             if (StageTable.ContainsKey(item.name))
                 continue;
 
-            StageTable.Add(item.name, item as StageData);
+            StageTable.Add(item.name, LunaRuntimeData.CloneAsset(item as StageData));
         }
     }
     #endregion

@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BGEffectCreator : MonoBehaviour
+public class BGEffectCreator : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public GameObject effect;
     public float delayTime = 0.0f;
     //private ParticleSystem ps;
 
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         StartCoroutine(LoopParticle());
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         
     }
@@ -24,7 +24,7 @@ public class BGEffectCreator : MonoBehaviour
     {
         if (effect == null)
         {
-            yield return null;
+            yield break;
         }
 
         while (true)
@@ -32,7 +32,7 @@ public class BGEffectCreator : MonoBehaviour
             //InfiniteLoopDetector.Run();
             yield return null;
             
-            Instantiate(effect, gameObject.transform);
+            EverydayDevup.Framework.LunaEntities.Spawn(effect, transform.position, transform.rotation, transform);
 
             yield return new WaitForSeconds(delayTime);
         }

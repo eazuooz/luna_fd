@@ -99,7 +99,7 @@ namespace Spine.Unity.Editor {
 				if (IsInvalidGroup(group))
 					continue;
 
-				string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group);
+				string defines = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group));
 				if (!defines.Contains(define)) {
 					wasDefineAdded = true;
 					if (defines.EndsWith(";", System.StringComparison.Ordinal))
@@ -107,7 +107,7 @@ namespace Spine.Unity.Editor {
 					else
 						defines += ";" + define;
 
-					PlayerSettings.SetScriptingDefineSymbolsForGroup(group, defines);
+					PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group), defines);
 				}
 			}
 			Debug.LogWarning("Please ignore errors \"PlayerSettings Validation: Requested build target group doesn't exist\" above");
@@ -127,7 +127,7 @@ namespace Spine.Unity.Editor {
 				if (IsInvalidGroup(group))
 					continue;
 
-				string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group);
+				string defines = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group));
 				if (defines.Contains(define)) {
 					wasDefineRemoved = true;
 					if (defines.Contains(define + ";"))
@@ -135,7 +135,7 @@ namespace Spine.Unity.Editor {
 					else
 						defines = defines.Replace(define, "");
 
-					PlayerSettings.SetScriptingDefineSymbolsForGroup(group, defines);
+					PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group), defines);
 				}
 			}
 

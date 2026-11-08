@@ -15,7 +15,7 @@ public class Lena : HeroSkillControl
 
     private bool triggerSkill_1;
     private bool triggerSkill_2;
-    private bool triggerSkill_3;
+    private bool ultUnlocked;
 
     private SkeletonAnimation ani;
     private float counter;
@@ -23,9 +23,9 @@ public class Lena : HeroSkillControl
     private GameObject curMinion;
     private bool triggerSkill_In_Action;
 
-    protected override void Start()
+    protected override void OnEntityInitialize()
     {
-        base.Start();
+        base.OnEntityInitialize();
 
         counter = 0.0f;
 
@@ -35,9 +35,9 @@ public class Lena : HeroSkillControl
         }
     }
 
-    protected override void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        base.Update();
+        base.OnEntityUpdate(elapsed, realElapsed);
 
         if (status.unitState.IsLobbyMove == true)
         {
@@ -48,7 +48,7 @@ public class Lena : HeroSkillControl
         {
             counter += Time.deltaTime;
 
-            if (triggerSkill_1 == true && counter > 12.0f)
+            if (ultUnlocked && counter > 12.0f)
             {
                 counter = 0.0f;
                 UltSkill();
@@ -60,7 +60,7 @@ public class Lena : HeroSkillControl
                 triggerSkill_In_Action = false;
         }
     }
-    
+
     private void InitializeWarmPool()
     {
         PoolManager.WarmPool(NormalMinion, 20);
@@ -72,15 +72,28 @@ public class Lena : HeroSkillControl
     {
         status.unitState.IsTargetingSkill = false;
 
-        ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
+        triggerSkill_1 = false;
+        triggerSkill_2 = false;
+        ultUnlocked = false;
+        counter = 0.0f;
+        curMinion = null;
+        triggerSkill_In_Action = false;
 
-        ani.state.Event += delegate (Spine.TrackEntry trackEntry, Spine.Event e)
-        {
-            if (e.Data.Name == "attack")
-            {
-                NormalSkill();
-            }
-        };
+        if (ani != null) ani.AnimationState.Event -= OnAttackAnimationEvent;
+        ani = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
+        ani.AnimationState.Event += OnAttackAnimationEvent;
+    }
+
+    private void OnAttackAnimationEvent(Spine.TrackEntry trackEntry, Spine.Event e)
+    {
+        if (e.Data.Name == "attack") NormalSkill();
+    }
+
+    public override void AfterDeath()
+    {
+        if (ani != null) ani.AnimationState.Event -= OnAttackAnimationEvent;
+        curMinion = null;
+        triggerSkill_In_Action = false;
     }
 
     public override void STAR3()
@@ -108,8 +121,7 @@ public class Lena : HeroSkillControl
     public override void ULT2()
     {
         ULT1();
-
-        triggerSkill_3 = true;
+        ultUnlocked = true;
     }
 
     public override void Skill()
@@ -117,6 +129,7 @@ public class Lena : HeroSkillControl
         status.PlayOneSound(skillSound);
 
         GameObject Slime = PoolManager.Instance.spawnObject(SkillMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), SkillMinion.transform.rotation);
+        InitializeSummonedUnit(Slime);
 
         Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
 
@@ -131,6 +144,7 @@ public class Lena : HeroSkillControl
         status.PlayOneSound(skillSound);
 
         GameObject Slime = PoolManager.Instance.spawnObject(NormalMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), NormalMinion.transform.rotation);
+        InitializeSummonedUnit(Slime);
 
         Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
 
@@ -146,6 +160,7 @@ public class Lena : HeroSkillControl
         status.PlayOneSound(skillSound);
 
         GameObject Slime = PoolManager.Instance.spawnObject(UltMinion, GetComponent<Transform>().position + new Vector3(-0.5f, 0, 0.0f), UltMinion.transform.rotation);
+        InitializeSummonedUnit(Slime);
 
         Defined.EffectCreate(skillEffect, Slime, Defined.eEffectPosition.UNDERFEET, true);
 

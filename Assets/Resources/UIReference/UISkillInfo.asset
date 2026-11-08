@@ -22,13 +22,26 @@ MonoBehaviour:
     - LevelUpButton
     - Text
     - Image
+    - /UIEquipDesign/LevelUpButton/Image
+    - /UIEquipDesign/LevelUpButton/Text
+    - /UIEquipDesign/LevelUpButton/Text#1
     - EquipButton
+    - /UIEquipDesign/EquipButton/Text
+    - /UIEquipDesign/EquipButton/Image
     - Weapon
+    - /UIEquipDesign/Weapon/Text
     - Shield
+    - /UIEquipDesign/Shield/Text
     - Ring
+    - /UIEquipDesign/Ring/Text
     - Keystone
+    - /UIEquipDesign/Keystone/Image
+    - /UIEquipDesign/Keystone/Text
     - Melisa
+    - /UIEquipDesign/Melisa/Image
+    - /UIEquipDesign/Melisa/Text
     - ReleaseButton
+    - /UIEquipDesign/Image
     values:
     - name: UIEquipDesign
       path: /UIEquipDesign
@@ -51,24 +64,63 @@ MonoBehaviour:
     - name: Image
       path: /UIEquipDesign/LevelUpButton/Image
       obj: {fileID: 502230786782259758, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Image
+      path: /UIEquipDesign/LevelUpButton/Image
+      obj: {fileID: 6200502000210097044, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/LevelUpButton/Text
+      obj: {fileID: 5748788082894184265, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/LevelUpButton/Text
+      obj: {fileID: 6839352970707698255, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: EquipButton
       path: /UIEquipDesign/EquipButton
       obj: {fileID: 39981125474098824, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/EquipButton/Text
+      obj: {fileID: 9035682121618102006, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Image
+      path: /UIEquipDesign/EquipButton/Image
+      obj: {fileID: 6947615581369963404, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: Weapon
       path: /UIEquipDesign/Weapon
       obj: {fileID: 4360728455073761290, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/Weapon/Text
+      obj: {fileID: 3408509838814120534, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: Shield
       path: /UIEquipDesign/Shield
       obj: {fileID: 9141762305500430872, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/Shield/Text
+      obj: {fileID: 1301366966153951545, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: Ring
       path: /UIEquipDesign/Ring
       obj: {fileID: 2544984182513696255, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/Ring/Text
+      obj: {fileID: 6482341483301812643, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: Keystone
       path: /UIEquipDesign/Keystone
       obj: {fileID: 1233168577396076340, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Image
+      path: /UIEquipDesign/Keystone/Image
+      obj: {fileID: 2569135589850336745, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/Keystone/Text
+      obj: {fileID: 1575933777470206979, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: Melisa
       path: /UIEquipDesign/Melisa
       obj: {fileID: 6650146605151345675, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Image
+      path: /UIEquipDesign/Melisa/Image
+      obj: {fileID: 5337379197847199574, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Text
+      path: /UIEquipDesign/Melisa/Text
+      obj: {fileID: 4096338760908895628, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
     - name: ReleaseButton
       path: /UIEquipDesign/ReleaseButton
       obj: {fileID: 7057617509253247247, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}
+    - name: Image
+      path: /UIEquipDesign/Image
+      obj: {fileID: 2306590080280978491, guid: dda52cb72c1883e488c3fe70632a8901, type: 3}

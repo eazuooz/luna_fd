@@ -283,7 +283,7 @@ public class UISelectDungeon : UILuna
 
         Game.Instance.lunaSceneManager.FadeIn(1.5f, () =>
         {
-            SceneManager.LoadScene("Dungeon");
+            Game.Instance.lunaSceneManager.LoadScene("Dungeon");
         });
     }
 }

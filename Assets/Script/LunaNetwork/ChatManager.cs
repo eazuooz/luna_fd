@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using UnityEngine.UI;
-using UnityEngine;
+using EverydayDevup.Framework;
 using Luna_Network;
 using LunaChatServer;
-using EverydayDevup.Framework;
-using System.Collections;
-//using Chat_Luna_Client;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ChatManager : MonoBehaviour, IObserver
 {
@@ -21,127 +16,117 @@ public class ChatManager : MonoBehaviour, IObserver
     public Text chattingList;
     public GameObject input;
     public GameObject scrollbar;
-    string usersName;
-
-    public MessageQueue<string> messageQueue;  
-
-    static List<IPeer> game_servers = new List<IPeer> ();
-
+    [Tooltip("Enable only when a compatible Luna chat server is available.")]
+    public bool connectOnStart;
+    public string serverAddress = "127.0.0.1";
+    public int serverPort = 7979;
+    [NonSerialized] public MessageQueue<string> messageQueue = new MessageQueue<string>();
+    private readonly object connectionGate = new object();
+    private RemoteServerPeer server;
+    private volatile bool disposed;
+    private bool connectionStarted;
     public int Priority { get; set; }
     public int ID { get; set; }
-    public void OnResponse(object obj)
+
+    public void OnResponse(object value)
     {
-        string text = Game.Instance.dataManager.chatStr;
-        messageQueue.PushData(text);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        messageQueue = new MessageQueue<string> ();
-
-        PacketBufferManager.initialize(2000);
-
-        // CNetworkService객체는 메세지의 비동기 송,수신 처리르 수행한다.
-        // 메시지 송,수신은 서버, 클라이언트 모두 동일한 로직으로 처리될 수 있이므로
-        // CNetworkService객체를 생성하여 Connector객체에 넘겨준다.
-        NetworkService service = new NetworkService();
-
-        // endpoint 정보를 갖고있느 Connector 생성. 만들어둔 NetworkService객체를 넣어준다.
-        Connector connector = new Connector(service);
-        // 접속 성공시 호출될 콜백 메소드 지정
-        connector.connected_callback += on_connected_gameserver;
-
-        IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7979);
-        connector.connect(endpoint);
-
-        //Game.Instance.dataManager.chatManager = this.gameObject;
-
-        StartCoroutine(CheckMessageQueue());
+        if (value is string text) messageQueue.PushData(text);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        //Debug.Log("> ");
-        
-
+        if (sendBtn != null) sendBtn.interactable = false;
+        if (connectOnStart) Connect();
     }
 
-    private IEnumerator CheckMessageQueue()
+    public void Connect()
     {
-        WaitForSeconds waitSec = new WaitForSeconds(0.5f);
-
-        while (true)
+        if (disposed || connectionStarted) return;
+        if (!IPAddress.TryParse(serverAddress, out var address) || serverPort < 1 || serverPort > 65535)
         {
-            //InfiniteLoopDetector.Run();
-            string msg = messageQueue.GetData();
+            Debug.LogWarning("Chat server address or port is invalid.");
+            return;
+        }
+        connectionStarted = true;
+        try
+        {
+            PacketBufferManager.initialize(2000);
+            var connector = new Connector(new NetworkService());
+            connector.connected_callback += OnConnected;
+            connector.connect(new IPEndPoint(address, serverPort));
+        }
+        catch (SocketException exception)
+        {
+            connectionStarted = false;
+            Debug.LogWarning("Chat is unavailable: " + exception.Message);
+        }
+    }
 
-            if (msg != null)
-            {
-                ReceiveMsg(msg);
-            }
-
-            yield return waitSec;
+    private void Update()
+    {
+        lock (connectionGate)
+            if (sendBtn != null) sendBtn.interactable = server != null && server.IsConnected;
+        // Limit work per frame if a server sends a burst.
+        for (int i = 0; i < 32; i++)
+        {
+            var message = messageQueue.GetData();
+            if (message == null) break;
+            ReceiveMsg(message);
         }
     }
 
     public void SendButtonOnClicked()
     {
-        string nickName = "User : ";
-        string line = input.GetComponent<InputField>().text;
-
-        string message = nickName + line;
-
-        LunaPacket msg = LunaPacket.create((short)PROTOCOL.CHAT_MSG_REQ);
-        msg.push(message);
-
-        game_servers[0].send(msg);
-    }
-    private void OnApplicationQuit()
-    {
-        if(game_servers.Count != 0)
-            ((RemoteServerPeer)game_servers[0]).token.disconnect();
-    }
-
-    /// <summary>
-    /// 접속 성공시 호출될 콜백 매소드.
-    /// </summary>
-    /// <param name="server_token"></param>
-    void on_connected_gameserver(UserToken server_token)
-    {
-        lock (game_servers)
+        var field = input != null ? input.GetComponent<InputField>() : null;
+        if (field == null || string.IsNullOrWhiteSpace(field.text)) return;
+        var text = field.text.Trim();
+        // The legacy packet has a fixed buffer; keep UTF-8 messages comfortably within it.
+        if (System.Text.Encoding.UTF8.GetByteCount(text) > 512) return;
+        lock (connectionGate)
         {
-            IPeer server = new RemoteServerPeer(server_token);
-            game_servers.Add(server);
-
-            Debug.Log("Connected!");
-
-            //(server as RemoteServerPeer).chatManager = this.gameObject;
-            (server as RemoteServerPeer).subject.AddObserver(this);
+            if (disposed || server == null || !server.IsConnected) return;
+            var packet = LunaPacket.create((short)PROTOCOL.CHAT_MSG_REQ);
+            try
+            {
+                packet.push("User : " + text);
+                ((IPeer)server).send(packet);
+                field.text = string.Empty;
+            }
+            catch (SocketException exception) { Debug.LogWarning("Chat send failed: " + exception.Message); }
+            catch (ObjectDisposedException) { }
+            finally { LunaPacket.destroy(packet); }
         }
-
-        
     }
 
-    void chattingBoxUpdate()
+    private void OnConnected(UserToken token)
     {
-        usersName = "Player List\n";
-
-        //foreach (Player item in collection)
-        //{
-
-        //}
+        lock (connectionGate)
+        {
+            if (disposed) { token.disconnect(); return; }
+            server = new RemoteServerPeer(token, messageQueue.PushData);
+        }
     }
 
-    public void ReceiveMsg(string msg)
+    private void OnApplicationQuit() { Disconnect(); }
+    private void OnDestroy() { Disconnect(); }
+    private void Disconnect()
     {
-        chatLog.GetComponent<Text>().text += "\n" + msg;
+        lock (connectionGate)
+        {
+            if (disposed) return;
+            disposed = true;
+            if (server != null) ((IPeer)server).disconnect();
+            server = null;
+        }
+    }
 
-        scrollbar.GetComponent<Scrollbar>().value = 0.0f;
-
-        input.GetComponent<InputField>().ActivateInputField();
-        input.GetComponent<InputField>().text = "";
-        //scroll_rect
-        //scroll_rect
+    public void ReceiveMsg(string message)
+    {
+        chatList.Add(message);
+        if (chatList.Count > 200) chatList.RemoveAt(0);
+        var text = chatLog != null ? chatLog.GetComponent<Text>() : chattingList;
+        if (text != null) text.text = string.Join("\n", chatList);
+        var scroll = scrollbar != null ? scrollbar.GetComponent<Scrollbar>() : null;
+        if (scroll != null) scroll.value = 0f;
     }
 }

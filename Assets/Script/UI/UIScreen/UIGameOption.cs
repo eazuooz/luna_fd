@@ -1,86 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using EverydayDevup.Framework;
+using GameFramework;
+using GameFramework.Setting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIGameOption : UILuna
 {
-	public UIReference refData;
+    public UIReference refData;
     public Sprite soundX;
-    private bool soundOnOff { get; set; }
+    private bool soundOnOff;
+    private Image soundButtonImage;
+    private Sprite soundOnSprite;
 
-	public override void OnInit() 
+    public override void OnInit()
     {
-        soundOnOff = true;
+        if (soundButtonImage == null)
+        {
+            soundButtonImage = transform.Find("ButtonSound").GetComponent<Image>();
+            soundOnSprite = soundButtonImage.sprite;
+        }
+        soundOnOff = GameFrameworkEntry.GetModule<ISettingManager>().GetBool("Luna.Sound.Enabled", true);
+        ApplySoundState();
     }
 
-	public override void OnActive() { }
-
-	public override void OnInActive() { }
-
-	public override void OnUpdate() { }
-
-	public override void OnLoop() { }
-
-	public override void OnClear() { }
+    public override void OnActive() { }
+    public override void OnInActive() { }
+    public override void OnUpdate() { }
+    public override void OnLoop() { }
+    public override void OnClear() { }
 
     public void OnClickGameOption()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "Loading")
-        {
-
-        }
-        else if (scene.name == "Lobby")
-        {
-            Game.Instance.uiManager.Push(UI_TYPE.QUITPOPUP);
-        }
-        else if (scene.name == "Game")
-        {
-            Game.Instance.uiManager.Push(UI_TYPE.SELECTPOPUP);
-
-        }
-        else if (scene.name == "Dungeon")
-        {
-            Game.Instance.uiManager.Push(UI_TYPE.SELECTPOPUP);
-        }
-       
+        var scene = SceneManager.GetActiveScene().name;
+        if (scene == "Lobby") Game.Instance.uiManager.Push(UI_TYPE.QUITPOPUP);
+        else if (scene == "Game" || scene == "Dungeon") Game.Instance.uiManager.Push(UI_TYPE.SELECTPOPUP);
     }
 
     public void OnClickSoundOnOff()
     {
-        if(soundOnOff == true)
-        {
-            soundOnOff = false;
+        soundOnOff = !soundOnOff;
+        ApplySoundState();
+        GameFrameworkEntry.GetModule<ISettingManager>().SetBool("Luna.Sound.Enabled", soundOnOff);
+        LunaRuntimeData.SaveNow();
+    }
 
-            foreach(var audio in Game.Instance.dataManager.StageSounds)
-            {
-                if(audio != null)
-                    audio.volume = 0.0f;
-            }
-
-            foreach (var audio in Game.Instance.dataManager.ObjectSounds)
-            {
-                if (audio != null)
-                    audio.volume = 0.0f;
-            }
-        }
-        else
-        {
-            soundOnOff = true;
-
-            foreach (var audio in Game.Instance.dataManager.StageSounds)
-            {
-                if (audio != null)
-                    audio.volume = Defined.BackgroundVolumeSize;
-            }
-
-            foreach (var audio in Game.Instance.dataManager.ObjectSounds)
-            {
-                if (audio != null)
-                    audio.volume = Defined.EffectVolumeSize;
-            }
-        }
+    private void ApplySoundState()
+    {
+        AudioListener.volume = soundOnOff ? 1f : 0f;
+        soundButtonImage.sprite = soundOnOff ? soundOnSprite : soundX;
     }
 }

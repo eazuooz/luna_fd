@@ -45,8 +45,8 @@ namespace Spine.Unity.Examples {
 		[SpineAttachment(slotField: "mouthSlotName")]
 		public string shockMouthName, normalMouthName;
 
-		public Slot eyeSlot, mouthSlot;
-		public Attachment shockEye, normalEye, shockMouth, normalMouth;
+		[System.NonSerialized] public Slot eyeSlot, mouthSlot;
+		[System.NonSerialized] public Attachment shockEye, normalEye, shockMouth, normalMouth;
 
 		public float balanceThreshold = 2.5f;
 		public float shockDuration = 1f;

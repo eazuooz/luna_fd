@@ -7,8 +7,6 @@ using Spine.Unity;
 public class Idle : State
 {
     private static Idle instance = new Idle();
-    private float AutoAttackMoveDistance;
-    private bool AutoAttackMoveTrigger;
 
     public static Idle Instance
     {
@@ -18,8 +16,6 @@ public class Idle : State
     public Idle()
     {
         mLevel = 0;
-        AutoAttackMoveDistance = 1.5f;
-        AutoAttackMoveTrigger = false;
     }
 
     public override void OnEnter(GameObject gameObject)

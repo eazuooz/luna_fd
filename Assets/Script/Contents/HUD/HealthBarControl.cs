@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarControl : MonoBehaviour
+public class HealthBarControl : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private GameObject thisSlider;
     public GameObject Chaser { get; set; }
@@ -11,7 +11,7 @@ public class HealthBarControl : MonoBehaviour
     public float HitCount { get; set; }
 
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         thisSlider = transform.Find("Canvas").Find("Slider").gameObject;
 
@@ -19,7 +19,7 @@ public class HealthBarControl : MonoBehaviour
         HitCount = 0.0f;
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if( Chaser != null &&
             Chaser.GetComponent<Status>() != null &&
@@ -99,6 +99,6 @@ public class HealthBarControl : MonoBehaviour
 
     void EndHealthBar()
     {
-        Destroy(gameObject);
+        EverydayDevup.Framework.LunaEntities.Hide(gameObject);
     }
 }

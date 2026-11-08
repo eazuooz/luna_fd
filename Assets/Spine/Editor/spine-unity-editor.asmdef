@@ -2,7 +2,8 @@
     "name": "spine-unity-editor",
     "references": [
         "spine-csharp",
-        "spine-unity"
+        "spine-unity",
+        "Unity.2D.Sprite.Editor"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

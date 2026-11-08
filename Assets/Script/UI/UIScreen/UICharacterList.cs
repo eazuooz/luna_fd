@@ -5,7 +5,6 @@ using EverydayDevup.Framework;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 using Spine;
 
 //Collections.Generic.Dictionary<UnitName, UICharacterList.Unit>
@@ -389,9 +388,8 @@ public class UICharacterList : UILuna, IObserver
         unitButton.name = null;
         //unitButton.unit.button.onClick.RemoveAllListeners();
         //unitButton.unit.button = null;
-        Destroy(unitButton.unit.unitObject);
+        LunaEntities.Hide(unitButton.unit.unitObject);
         unitButton.unit.unitObject = null;
-        Destroy(unitButton.unit.unitStatus);
         unitButton.unit.unitStatus = null;
     }
     private void RemoveCardAsMyCard(int key, UnitButton value)
@@ -553,7 +551,7 @@ public class UICharacterList : UILuna, IObserver
         if (unitPrefab == null)
             return null;
 
-        unitUIObject = Instantiate(unitPrefab);
+        unitUIObject = type == eCardUiType.UnitUI ? LunaEntities.Spawn(unitPrefab) : Instantiate(unitPrefab);
 
         if (type == eCardUiType.Status)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EverydayDevup.Framework;
 
-public class Projectile : MonoBehaviour
+public class Projectile : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public GameObject Attacker;
 
@@ -45,23 +45,29 @@ public class Projectile : MonoBehaviour
         set { projectilePower = value; }
     }
 
-    private void OnEnable()
+    protected override void OnEntityShow()
     {
-        
+        Attacker = null;
+        target = null;
+        projectilePower = 0f;
+        criticalShot = false;
+        skillShot = false;
+        isStun = false;
+        StunTime = 0f;
+        projectileSpeed = initProjecttileSpeed;
     }
 
-    private void OnDisable()
+    protected override void OnEntityHide()
     {
         projectileSpeed = initProjecttileSpeed;
     }
 
-    void Start()
+    protected override void OnEntityAwake()
     {
         initProjecttileSpeed = projectileSpeed;
-        PoolManager.ReleaseObject(this.gameObject);
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (target != null)
             tmpTargetPos = target.GetComponent<Status>().ProjecttileArrivalLocation.transform.position;
@@ -71,6 +77,7 @@ public class Projectile : MonoBehaviour
         if (dis < 0.2f || target == null)
         {
             ProjectileHit();
+            return;
         }
 
         if (projectileSpeed > 1.0f)
@@ -110,7 +117,7 @@ public class Projectile : MonoBehaviour
     {
         if (hitEffect != null)
         {
-            GameObject Effect = GameObject.Instantiate(hitEffect, GetComponent<Transform>().position, Quaternion.Euler(0, 0, 0));
+            GameObject Effect = EverydayDevup.Framework.LunaEntities.Spawn(hitEffect, GetComponent<Transform>().position, Quaternion.Euler(0, 0, 0));
         }
 
         if (target != null && target.GetComponent<Status>().stat.Hp > 0)
@@ -132,8 +139,8 @@ public class Projectile : MonoBehaviour
         Target = target;
         projectilePower = power;
 
-        if (addStun)
-            SetProjectileAddStun(stunTime);
+        isStun = addStun;
+        StunTime = addStun ? stunTime : 0f;
     }
 
     public void SetProjectileAddStun(float stunTime)

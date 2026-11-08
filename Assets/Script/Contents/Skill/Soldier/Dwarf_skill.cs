@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class Dwarf_skill : MonoBehaviour 
+public class Dwarf_skill : EverydayDevup.Framework.LunaEntityBehaviour
 {
     [SerializeField] private string skillMatter = "방어태세";
+    public string SkillDescription => skillMatter;
     [HideInInspector] public Status status;
     SkeletonAnimation ani;
     private bool skillInit;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = true;
@@ -19,7 +20,7 @@ public class Dwarf_skill : MonoBehaviour
         ani = gameObject.transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.unitState.IsSkillActivaion == true && skillInit == false)
         {
@@ -27,7 +28,7 @@ public class Dwarf_skill : MonoBehaviour
             StartCoroutine("InstantSkill");
         }
     }
-    
+
     IEnumerator InstantSkill()
     {
         ani.AnimationState.SetAnimation(0, "defense", true);

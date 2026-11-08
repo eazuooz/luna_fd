@@ -11,29 +11,49 @@ public class DwarfAI : BaseAI
 
     public bool SkillTrigger { get; set; }
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
 
         status.Ready();
 
         if (false == status.IsStatusDataLoadComplete)
-            Destroy(gameObject);
+            LunaEntities.Hide(gameObject);
 
         SkeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
 
         CreateBehaviorTreeAIState();
     }
 
-    void Update()
+    protected override void OnEntityShow()
     {
+        SkillTrigger = false;
+        if (status != null)
+        {
+            status.ResetRespwanData();
+            ResetAnimation();
+        }
+    }
+
+    protected override void OnEntityHide()
+    {
+        SkillTrigger = false;
+        if (status == null) return;
+        status.IsStatusDataLoadComplete = false;
+        status.unitState.IsSummonState = false;
+        status.ReleaseData();
+    }
+
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+    {
+        if (status == null || !status.IsStatusDataLoadComplete || AIState == null) return;
         AIState.Tick();
 
         StatusUpdate();
 
         if (transform.position.x > 1700)
         {
-            Destroy(gameObject);
+            LunaEntities.Hide(gameObject);
         }
 
         if(SkillTrigger == true)
@@ -62,10 +82,10 @@ public class DwarfAI : BaseAI
     {
         AIState = new BtRootNode();
         {
-            // BT Root ¼¿·ºÅÍ
+            // BT Root ì…€ë ‰í„°
             BtSelector mainSelector = new BtSelector();
 
-            // »ç¸Á ½ÃÄö½º
+            // ì‚¬ë§ ì‹œí€€ìŠ¤
             BtSequence deadSequence = new BtSequence();
             {
                 DeathCondition deadCondition = new DeathCondition(gameObject);
@@ -77,7 +97,7 @@ public class DwarfAI : BaseAI
                 mainSelector.AddChild(deadSequence);
             }
 
-            // ÇÇ°Ý ½ÃÄö½º
+            // í”¼ê²© ì‹œí€€ìŠ¤
             BtSequence damagedSequence = new BtSequence();
             {
                 DamagedCondition damagedCondition = new DamagedCondition(gameObject);
@@ -89,7 +109,7 @@ public class DwarfAI : BaseAI
                 mainSelector.AddChild(damagedSequence);
             }
 
-            // ·Îºñ ¹× ui Çàµ¿Ã³¸®
+            // ë¡œë¹„ ë° ui í–‰ë™ì²˜ë¦¬
             BtSequence lobbySequence = new BtSequence();
             {
                 LobbyCondition robby = new LobbyCondition(gameObject);
@@ -99,7 +119,7 @@ public class DwarfAI : BaseAI
                 mainSelector.AddChild(lobbySequence);
             }
 
-            // ±âº» ½ÃÄö½º - µô·¹ÀÌ»óÅÂ Ã³¸®
+            // ê¸°ë³¸ ì‹œí€€ìŠ¤ - ë”œë ˆì´ìƒíƒœ ì²˜ë¦¬
             BtSequence idleSequence = new BtSequence();
             {
                 idleCondition idle = new idleCondition(gameObject);
@@ -109,8 +129,8 @@ public class DwarfAI : BaseAI
                 mainSelector.AddChild(idleSequence);
             }
 
-            // ½ºÅ³ ½ÃÄö½º
-            if (status.stat.Stamina != 0) // ½ºÅÂ¹Ì³Ê°¡ 0ÀÌ¸é ½ºÅ³½ÃÄö½º X
+            // ìŠ¤í‚¬ ì‹œí€€ìŠ¤
+            if (status.stat.Stamina != 0) // ìŠ¤íƒœë¯¸ë„ˆê°€ 0ì´ë©´ ìŠ¤í‚¬ì‹œí€€ìŠ¤ X
             {
                 BtSequence skillSequence = new BtSequence();
                 {
@@ -124,8 +144,8 @@ public class DwarfAI : BaseAI
                 }
             }
 
-            // ÀÌµ¿ ½ÃÄö½º
-            if (status.stat.MoveSpeed != 0) // ÀÌµ¿¼Óµµ°¡ 0ÀÌ¸é ÀÌµ¿½ÃÄö½º X
+            // ì´ë™ ì‹œí€€ìŠ¤
+            if (status.stat.MoveSpeed != 0) // ì´ë™ì†ë„ê°€ 0ì´ë©´ ì´ë™ì‹œí€€ìŠ¤ X
             {
                 BtSequence moveSequence = new BtSequence();
                 {
@@ -150,10 +170,10 @@ public class DwarfAI : BaseAI
     {
         if (status.unitState.IsDeath == true)
         {
-            Destroy(gameObject);
+            LunaEntities.Hide(gameObject);
         }
 
-        if (status.unitState.IsSkillActivaion == false)
+        if (status.unitState.IsSkillActivaion == false && status.stat.Stamina > 0f)
         {
             status.stat.Mp += (100.0f / status.stat.Stamina) * Time.deltaTime;
         }

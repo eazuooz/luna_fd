@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class PoisonSlime : MonoBehaviour 
+public class PoisonSlime : EverydayDevup.Framework.LunaEntityBehaviour
 {
     [HideInInspector] public Status status;
     public float attackDamage = 100.0f;
     private SkeletonAnimation skeletonAnimation;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         skeletonAnimation = transform.Find("Sprite").gameObject.GetComponent<SkeletonAnimation>();
@@ -26,7 +26,7 @@ public class PoisonSlime : MonoBehaviour
         };
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
 
     }

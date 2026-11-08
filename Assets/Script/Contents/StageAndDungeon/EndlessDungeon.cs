@@ -9,7 +9,7 @@ public class EndlessDungeon : LunaGame
 {
     public List<GameObject> Monsters;
 
-    
+
 
     private GameObject gameBGimage;
     private GameObject gameBGimageNext;
@@ -47,7 +47,7 @@ public class EndlessDungeon : LunaGame
         isStageStop = false;
         isStageWin = true;
     }
-    void Start()
+    protected override void OnEntityInitialize()
     {
         Init();
 
@@ -60,8 +60,8 @@ public class EndlessDungeon : LunaGame
                 GameObject.Find("2DCamera") != null)
         {
 
-            gameBGimage = GameObject.Instantiate(backgroundImage, Defined.OriginPosition, Quaternion.identity);
-            gamePlayer = GameObject.Instantiate(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity);
+            gameBGimage = EverydayDevup.Framework.LunaEntities.Spawn(backgroundImage, Defined.OriginPosition, Quaternion.identity);
+            gamePlayer = EverydayDevup.Framework.LunaEntities.Spawn(LunaDataTable.Instance.playerData.CurPlayer(), Defined.LunaStartPosition, Quaternion.identity, reusable: true);
 
 
             foreach (GameObject unit in Monsters)
@@ -69,10 +69,8 @@ public class EndlessDungeon : LunaGame
                 PoolManager.WarmPool(unit, 5);
             }
 
-            if (Game.Instance.dataManager.LunaPlayer == null)
-                Game.Instance.dataManager.LunaPlayer = gamePlayer; // 플레이어 접근을 위함
-            else
-                return;
+            Game.Instance.dataManager.LunaPlayer = gamePlayer;
+            gamePlayer.GetComponent<LunaStateMachine>().PrepareForSpawn(null);
 
             stageCamera = GameObject.Find("2DCamera").gameObject;
 
@@ -91,9 +89,8 @@ public class EndlessDungeon : LunaGame
         StartCoroutine(CountUnit());
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
-        Debug.Log(changeDungeon);
 
         if (changeDungeon == false && isStageStop == false)
         {
@@ -150,7 +147,7 @@ public class EndlessDungeon : LunaGame
 
         dungeonLevel++;
 
-        gameBGimageNext = GameObject.Instantiate(backgroundImage, Defined.OriginPosition + new Vector3(17.07f, 0, 0), Quaternion.identity);
+        gameBGimageNext = EverydayDevup.Framework.LunaEntities.Spawn(backgroundImage, Defined.OriginPosition + new Vector3(17.07f, 0, 0), Quaternion.identity);
 
         SummonMonster(true);
 
@@ -201,7 +198,7 @@ public class EndlessDungeon : LunaGame
             unit.GetComponent<Status>().unitState.IsLobbyMove = false;
         }, IdentifyFunc.IsUnit);
 
-        Destroy(gameBGimage);
+        EverydayDevup.Framework.LunaEntities.Hide(gameBGimage);
 
         gameBGimage = gameBGimageNext;
 
@@ -221,7 +218,7 @@ public class EndlessDungeon : LunaGame
 
             yield return new WaitForSeconds(0.5f);
 
-            IdentifyFunc.PickingUnits((unit) => 
+            IdentifyFunc.PickingUnits((unit) =>
             {
                 tmpAllyCount++;
             }, IdentifyFunc.IsAlly);
@@ -327,51 +324,28 @@ public class EndlessDungeon : LunaGame
 
     void DropItem()
     {
-        List<GameObject> ItemBox = new List<GameObject>();
-        List<ItemData> ItemDataBox = new List<ItemData>();
-        //if (itemAmount < 0)
-        //    return;
+        List<ItemData> selectedItems = new List<ItemData>();
 
+        // Preserve the prototype's first boss reward; alternate ownership rules are undefined.
         if (BossDropTable.Count > 0)
-        {
-            GameObject tmp;
+            selectedItems.Add(BossDropTable[0].itemData);
 
-            if (true /* 아이템 이미 가지고 있는지 확인 작업 */)
-            {
-                tmp = BossDropTable[0].itemData.cunnectPrefab;
-                tmp.GetComponent<DropItem>().SetId(BossDropTable[0].itemData);
-            }
-            else
-            {
-                tmp = BossDropTable[1].itemData.cunnectPrefab;
-                tmp.GetComponent<DropItem>().SetId(BossDropTable[1].itemData);
-            }
-
-            ItemBox.Add(tmp);
-        }
-
-        int randMax;
-        List<int> itemDataID = new List<int>();
         for (int i = 0; i < ItemDropTable.Count; i++)
         {
-            GameObject tmp;
-            randMax = Random.Range(0, ItemDropTable.Count);
-
-            if (Defined.CanProbability(ItemDropTable[randMax].probability * 100) == true)
-            {
-                tmp = ItemDropTable[randMax].itemData.cunnectPrefab;
-                ItemBox.Add(tmp);
-                itemDataID.Add(randMax);
-            }
+            int randMax = Random.Range(0, ItemDropTable.Count);
+            if (Defined.CanProbability(ItemDropTable[randMax].probability * 100))
+                selectedItems.Add(ItemDropTable[randMax].itemData);
         }
+
         for (int j = 0; j < dungeonLevel; j++)
         {
-            for (int i = 0; i < ItemBox.Count; ++i)
+            foreach (ItemData item in selectedItems)
             {
-                GameObject drop
-                    = Instantiate(ItemBox[i], Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0), ItemBox[i].transform.rotation);
-
-                drop.GetComponent<DropItem>().SetId(ItemDropTable[itemDataID[i]].itemData);
+                GameObject prefab = item.cunnectPrefab;
+                GameObject drop = EverydayDevup.Framework.LunaEntities.Spawn(prefab,
+                    Defined.EnemyTowerPosition + new Vector3(Random.Range(-2.0f, 2.0f), 0, 0),
+                    prefab.transform.rotation);
+                drop.GetComponent<DropItem>().SetId(item);
             }
         }
     }

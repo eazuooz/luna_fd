@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 
-public class LunaCtrl_Slime : MonoBehaviour
+public class LunaCtrl_Slime : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private Status status;
 
 
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         SlimePassiveSkill(1.1f);
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         
     }

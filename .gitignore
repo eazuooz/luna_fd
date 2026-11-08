@@ -38,3 +38,7 @@ spine-unity.csproj
 spine-unity-editor.csproj
 spine-unity-examples.csproj
 spine-unity-examples-editor.csproj
+
+# Revival validation outputs and local build artifacts
+/Logs/
+/Builds/

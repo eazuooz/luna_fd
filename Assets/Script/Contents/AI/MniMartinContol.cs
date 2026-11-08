@@ -4,7 +4,7 @@ using UnityEngine;
 using Spine.Unity;
 using EverydayDevup.Framework;
 
-public class MniMartinContol : MonoBehaviour
+public class MniMartinContol : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public float moveSpeed;
     public float range;
@@ -20,7 +20,7 @@ public class MniMartinContol : MonoBehaviour
 
     private bool stageStop;
 
-    void Start()
+    protected override void OnEntityInitialize()
     {
 
         counter = 0.0f;
@@ -31,7 +31,7 @@ public class MniMartinContol : MonoBehaviour
         {
             if (trackEntry.Animation.Name == "death")
             {
-                Destroy(gameObject);
+                EverydayDevup.Framework.LunaEntities.Hide(gameObject);
             }
         };
 
@@ -46,7 +46,7 @@ public class MniMartinContol : MonoBehaviour
             {
                 StopCoroutine("MoveSequence");
 
-                tmpEffect = GameObject.Instantiate(explosionEffect, transform.Find("AttackPos").position, explosionEffect.transform.rotation);
+                tmpEffect = EverydayDevup.Framework.LunaEntities.Spawn(explosionEffect, transform.Find("AttackPos").position, explosionEffect.transform.rotation);
 
                 if (target != null)
                     target.GetComponent<Status>().Attack(gameObject, damage, true, true);
@@ -57,7 +57,7 @@ public class MniMartinContol : MonoBehaviour
         ani.AnimationState.SetAnimation(0, "idle", true);
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (Game.Instance.lunaSceneManager.CurrentStage.GetComponent<BasicDungeon>() != null)
         {

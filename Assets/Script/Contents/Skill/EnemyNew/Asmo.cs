@@ -4,21 +4,21 @@ using UnityEngine;
 using EverydayDevup.Framework;
 using Spine.Unity;
 
-public class Asmo : MonoBehaviour
+public class Asmo : EverydayDevup.Framework.LunaEntityBehaviour
 {
     public Status status { get; set; }
 
     public GameObject skillEffect;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         status = GetComponent<Status>();
         status.unitState.IsTargetingSkill = false;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         if (status.unitState.IsSkillActivaion == true)
         {

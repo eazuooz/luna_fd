@@ -4,10 +4,10 @@ using UnityEngine;
 using Spine.Unity;
 using EverydayDevup.Framework;
 
-public class Effect : MonoBehaviour
+public class Effect : EverydayDevup.Framework.LunaEntityBehaviour
 {
     private SkeletonAnimation effect;
-    private ParticleSystem particle;
+    private ParticleSystem[] particles;
     private AudioSource audioSource;
 
     public GameObject ChaseTargetObject { get; set; }
@@ -15,7 +15,7 @@ public class Effect : MonoBehaviour
     public Vector3 ChaseDirectionVector { get; set; }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void OnEntityInitialize()
     {
         InitializedAudioSource();
         InitializedEffectGameObject();
@@ -42,7 +42,7 @@ public class Effect : MonoBehaviour
     }
     private bool IsSkeletonAnimation()
     {
-        GameObject effectObject = transform.Find("Sprite").gameObject;
+        GameObject effectObject = transform.Find("Sprite") != null ? transform.Find("Sprite").gameObject : gameObject;
         SkeletonAnimation skeletonAnimation = effectObject.GetComponent<SkeletonAnimation>();
 
         if (skeletonAnimation)
@@ -52,7 +52,7 @@ public class Effect : MonoBehaviour
     }
     private void InitializeSkeletonAnimation()
     {
-        GameObject effectObject = transform.Find("Sprite").gameObject;
+        GameObject effectObject = transform.Find("Sprite") != null ? transform.Find("Sprite").gameObject : gameObject;
         effect = effectObject.GetComponent<SkeletonAnimation>();
         effect.AnimationState.SetAnimation(0, "normal", false);
         effect.state.Complete += CompleteSkeletonAnimationEffectEvent;
@@ -67,16 +67,18 @@ public class Effect : MonoBehaviour
     }
     private void InitializeParticleSystem()
     {
-        GameObject effectObject = transform.Find("Sprite").gameObject;
-        particle = effectObject.GetComponent<ParticleSystem>();
+        GameObject effectObject = transform.Find("Sprite") != null ? transform.Find("Sprite").gameObject : gameObject;
+        // Authored auras can contain several sibling particle systems instead
+        // of a root system or a child named Sprite. Preserve every system's tail.
+        particles = effectObject.GetComponentsInChildren<ParticleSystem>();
 
-        if (particle)
+        if (particles.Length > 0)
             StartCoroutine(DestroyParticleEffect());
         else
             DestoryEffectGameObject();
     }
 
-    void Update()
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
     {
         DoChasing();
     }
@@ -118,17 +120,27 @@ public class Effect : MonoBehaviour
 
     private void DestoryEffectGameObject()
     {
-        if (audioSource != null)
-        {
-            Manager.Data.ObjectSounds.Remove(audioSource);
-        }
+        EverydayDevup.Framework.LunaEntities.Hide(gameObject);
+    }
 
-        Destroy(gameObject);
+    protected override void OnEntityHide()
+    {
+        if (audioSource != null && Game.Instance != null)
+            Manager.Data.ObjectSounds.Remove(audioSource);
+        if (effect != null && effect.AnimationState != null)
+            effect.AnimationState.Complete -= CompleteSkeletonAnimationEffectEvent;
+    }
+
+    private bool AreParticlesAlive()
+    {
+        foreach (var particle in particles)
+            if (particle != null && particle.IsAlive(true)) return true;
+        return false;
     }
 
     IEnumerator DestroyParticleEffect()
     {
-        while (particle.IsAlive())
+        while (AreParticlesAlive())
         {
             //InfiniteLoopDetector.Run();
             yield return null;

@@ -1,405 +1,754 @@
 using System.Collections;
+
 using System.Collections.Generic;
+
 using UnityEngine;
+
 using EverydayDevup.Framework;
+
 using Spine.Unity;
+
 using UnityEngine.SceneManagement;
 
 
+
+
+
 public class UnitAI : BaseAI
+
 {
+
     [HideInInspector] public Status status;
+
     public GameObject projectile;
 
+
+
     private bool isNearby;
+
     IEnumerator tirggerProcess;
+
+
 
     private GameObject MiniEffectToPlayer;
 
-    void Start()
+
+
+    protected override void OnEntityInitialize()
+
     {
+
         InitializeStatus();
+
         InitializeSkeletonAnimation();
+
         InitializeBehaviorTreeAIState();
+
         InitializeProjectTile();
+
         InitializeBuffImp(BuffIconUpdate);
-        EndInitialize();
+
     }
+
+
 
     private void InitializeStatus()
+
     {
+
         status = GetComponent<Status>();
+
         status.Ready();
 
+
+
         if (false == status.IsStatusDataLoadComplete)
-            Destroy(gameObject);
+
+            LunaEntities.Hide(gameObject);
+
     }
+
+
 
     private void InitializeSkeletonAnimation()
+
     {
+
         InitializeBaseSkeletonAnimation();
+
         SetAnimation("idle", true);
+
     }
+
+
 
     private void InitializeProjectTile()
+
     {
+
         bool isScenes
+
             = Game.Instance.lunaSceneManager.IsScenes("Game", "Dungeon");
 
+
+
         if (isScenes == false)
+
             return;
 
+
+
         if (projectile != null)
+
         {
-            projectile.transform.position = new Vector2(10000.0f, 1000.0f);
+
+            // Warming registers the prefab; never reposition the source asset.
+
+
 
             if (status.UnitType == eUnitType.Hero)
+
                 PoolManager.WarmPool(projectile, 5);
+
             else
+
                 PoolManager.WarmPool(projectile, 50);
+
         }
+
     }
 
-    private void EndInitialize()
+
+
+    protected override void OnEntityShow()
+
     {
-        if (SceneManager.GetActiveScene().name == "Game"
-            || SceneManager.GetActiveScene().name == "Dungeon")
-        {
-            //Game.Instance.dataManager.InstHeroes.Clear();
 
-            if (status.UnitType == eUnitType.Hero ||
-            status.UnitType == eUnitType.Soldier ||
-            status.UnitType == eUnitType.Boss)
-            {
-                //if (status.UnitType == eUnitType.Hero)
-                //{
-                //    Game.Instance.dataManager.InstHeroes.Add(gameObject);
-                //}
-
-                PoolManager.ReleaseObject(this.gameObject);
-            }
-
-            //if (status.UnitType == eUnitType.Hero)
-            //{
-            //    GameObject uiProgressBar 
-            //        = LunaUtility.FindWithTagGameObject("UIProgressBar");
-
-            //    UIProgressBar comp = uiProgressBar.GetComponent<UIProgressBar>();
-            //    comp.PushProfile(gameObject);
-            //}
-        }
-    }
-    private void OnEnable()
-    {
         if (status != null)
+
         {
+
             status.ResetRespwanData();
+
             ResetAnimation();
+
         }
+
     }
 
-    private void OnDisable()
+
+
+    protected override void OnEntityHide()
+
     {
+
         StopAllCoroutines();
+
+        if (status == null) return;
+
         status.IsStatusDataLoadComplete = false;
+
         status.unitState.IsSummonState = false;
+
+
 
         status.ReleaseData();
 
+
+
         if (status.UnitType == eUnitType.Hero)
+
         {
+
             GameObject uiProgressBar
+
             = LunaUtility.FindWithTagGameObject("UIProgressBar");
+
             if (uiProgressBar != null)
+
             {
+
                 UIProgressBar comp = uiProgressBar.GetComponent<UIProgressBar>();
+
                 comp.ReleaseMinimapObject(gameObject);
+
             }
+
         }
+
     }
 
-    void Update()
+
+
+    protected override void OnEntityUpdate(float elapsed, float realElapsed)
+
     {
+
+        if (status == null || !status.IsStatusDataLoadComplete || AIState == null) return;
         AIState.Tick();
+
+
 
         ConfirmStatus();
 
+
+
         if (tag == "Unit" &&
+
             IdentifyFunc.IsAlly(gameObject) &&
+
             IdentifyFunc.IsSoldier(gameObject))
+
         {
+
             PlayerEffectCheck();
+
         }
 
-        if (status.UnitSide == eUnitSide.Enemy) //ÀÏ´Ü Àû±º¸¸
+
+
+        if (status.UnitSide == eUnitSide.Enemy) //ì¼ë‹¨ ì êµ°ë§Œ
+
         {
+
             CollisionCheck();
+
         }
+
     }
+
+
 
     void InitializeBehaviorTreeAIState()
+
     {
+
         AIState = new BtRootNode();
 
+
+
         // BT Root Main Sellector
+
         BtSelector mainSelector = new BtSelector();
 
-        // »ç¸Á ½ÃÄö½º
+
+
+        // ì‚¬ë§ ì‹œí€€ìŠ¤
+
         BtSequence deadSequence = new BtSequence();
+
         DeathCondition deadCondition = new DeathCondition(gameObject);
+
         DeathAction deathAction = new DeathAction(gameObject);
+
         deadSequence.AddChild(deadCondition);
+
         deadSequence.AddChild(deathAction);
+
         mainSelector.AddChild(deadSequence);
 
-        // ÇÇ°Ý ½ÃÄö½º
+
+
+        // í”¼ê²© ì‹œí€€ìŠ¤
+
         BtSequence damagedSequence = new BtSequence();
+
         DamagedCondition damagedCondition = new DamagedCondition(gameObject);
+
         DamagedAction damagedAction = new DamagedAction(gameObject);
+
         damagedSequence.AddChild(damagedCondition);
+
         damagedSequence.AddChild(damagedAction);
+
         mainSelector.AddChild(damagedSequence);
 
-        // ·Îºñ ¹× ui Çàµ¿Ã³¸®
+
+
+        // ë¡œë¹„ ë° ui í–‰ë™ì²˜ë¦¬
+
         BtSequence lobbySequence = new BtSequence();
+
         LobbyCondition robby = new LobbyCondition(gameObject);
+
         lobbySequence.AddChild(robby);
+
         mainSelector.AddChild(lobbySequence);
 
-        // ±âº» ½ÃÄö½º - µô·¹ÀÌ»óÅÂ Ã³¸®
+
+
+        // ê¸°ë³¸ ì‹œí€€ìŠ¤ - ë”œë ˆì´ìƒíƒœ ì²˜ë¦¬
+
         BtSequence idleSequence = new BtSequence();
+
         idleCondition idle = new idleCondition(gameObject);
+
         idleSequence.AddChild(idle);
+
         mainSelector.AddChild(idleSequence);
 
-        // ½ºÅ³ ½ÃÄö½º
-        if (status.stat.Stamina != 0) // ½ºÅÂ¹Ì³Ê°¡ 0ÀÌ¸é ½ºÅ³½ÃÄö½º X
+
+
+        // ìŠ¤í‚¬ ì‹œí€€ìŠ¤
+
+        if (status.stat.Stamina != 0) // ìŠ¤íƒœë¯¸ë„ˆê°€ 0ì´ë©´ ìŠ¤í‚¬ì‹œí€€ìŠ¤ X
+
         {
+
             BtSequence skillSequence = new BtSequence();
+
             SkillCondition mpCheck = new SkillCondition(gameObject);
+
             SkillAction skill = new SkillAction(gameObject);
+
             skillSequence.AddChild(mpCheck);
+
             skillSequence.AddChild(skill);
+
             mainSelector.AddChild(skillSequence);
+
         }
 
-        // °ø°Ý ½ÃÄö½º
-        if (status.stat.AttackRange != 0) // »ç°Å¸®°¡ 0ÀÌ¸é °ø°Ý½ÃÄö½º X
+
+
+        // ê³µê²© ì‹œí€€ìŠ¤
+
+        if (status.stat.AttackRange != 0) // ì‚¬ê±°ë¦¬ê°€ 0ì´ë©´ ê³µê²©ì‹œí€€ìŠ¤ X
+
         {
+
             BtSequence attackSqeuence = new BtSequence();
+
             AttackCondition rangeCheck = new AttackCondition(gameObject);
+
             attackSqeuence.AddChild(rangeCheck);
+
             if (status.UnitAttackType == eUnitAttackType.Ranged == true)
+
             {
+
                 AttackRangeAction attack = new AttackRangeAction(gameObject);
+
                 attackSqeuence.AddChild(attack);
+
                 attack.Projectile = projectile;
+
             }
+
             else
+
             {
+
                 AttackMeleeAction attack = new AttackMeleeAction(gameObject);
+
                 attackSqeuence.AddChild(attack);
+
             }
+
             mainSelector.AddChild(attackSqeuence);
+
         }
 
-        // ÀÌµ¿ ½ÃÄö½º
-        if (status.stat.MoveSpeed != 0) // ÀÌµ¿¼Óµµ°¡ 0ÀÌ¸é ÀÌµ¿½ÃÄö½º X
+
+
+        // ì´ë™ ì‹œí€€ìŠ¤
+
+        if (status.stat.MoveSpeed != 0) // ì´ë™ì†ë„ê°€ 0ì´ë©´ ì´ë™ì‹œí€€ìŠ¤ X
+
         {
+
             BtSequence moveSequence = new BtSequence();
+
             MoveAction move = new MoveAction(gameObject);
+
             moveSequence.AddChild(move);
+
             mainSelector.AddChild(moveSequence);
+
         }
+
+
 
         AIState.AddChild(mainSelector);
+
     }
+
+
 
     private void ConfirmDeath()
+
     {
+
         if (status.unitState.IsDeath == true)
+
         {
-            // hero soldier enemy ÀÏ°æ¿ì °´Ã¼¹Ý³³
-            // ±×·¸Áö ¾ÊÀº °æ¿ì ¸Þ¸ð¸® ÇØÁ¦
+
+            // hero soldier enemy ì¼ê²½ìš° ê°ì²´ë°˜ë‚©
+
+            // ê·¸ë ‡ì§€ ì•Šì€ ê²½ìš° ë©”ëª¨ë¦¬ í•´ì œ
+
             if (status.UnitType == eUnitType.Hero
+
                 || status.UnitType == eUnitType.Soldier)
+
             {
+
                 PoolManager.ReleaseObject(this.gameObject);
+
             }
+
             else
+
             {
-                Destroy(gameObject);
+
+                LunaEntities.Hide(gameObject);
+
             }
+
         }
+
     }
+
+
 
     private void ConfirmSkill()
+
     {
-        // skillOnÀÌ ÄÑÁö¸é ½ºÅ³À» ½ÃÀüÇÏ°í mp¸¦ 0À¸·Î ÇÕ´Ï´Ù.
-        if (status.unitState.IsSkillActivaion == false)
+
+        // skillOnì´ ì¼œì§€ë©´ ìŠ¤í‚¬ì„ ì‹œì „í•˜ê³  mpë¥¼ 0ìœ¼ë¡œ í•©ë‹ˆë‹¤.
+
+        if (status.unitState.IsSkillActivaion == false && status.stat.Stamina > 0f)
+
         {
+
             status.stat.Mp += (100.0f / status.stat.Stamina) * Time.deltaTime;
+
         }
+
     }
+
+
 
     private void ConfirmActionDelay()
+
     {
-        // actionº¯¼ö(Çàµ¿ÀÌ ³¡³ª°í ´ë±â »óÅÂ)°¡ ÄÑÁö¸é ÄðÅ¸ÀÓµ¿¾È ´Ù¸¥ Çàµ¿ÀÌ ÀÏ¾î³ªÁö ¾Ê½À´Ï´Ù.
+
+        // actionë³€ìˆ˜(í–‰ë™ì´ ëë‚˜ê³  ëŒ€ê¸° ìƒíƒœ)ê°€ ì¼œì§€ë©´ ì¿¨íƒ€ìž„ë™ì•ˆ ë‹¤ë¥¸ í–‰ë™ì´ ì¼ì–´ë‚˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+
         if (status.unitState.IsActionDelay == true)
+
         {
+
             status.stat.AttackDelayTime += Time.deltaTime;
+
         }
+
+
 
         if (status.stat.AttackDelayTime >= 0.0f)
+
         {
+
             status.stat.AttackDelayTime = -status.stat.AttackSpeed * Random.Range(0.9f, 1.1f);
+
             status.unitState.IsActionDelay = false;
+
         }
+
     }
+
     private void ConfirmStatus()
+
     {
+
         ConfirmDeath();
+
         ConfirmSkill();
+
         ConfirmActionDelay();
+
     }
+
+
 
     private void CollisionCheck()
+
     {
+
         if (tirggerProcess == null)
+
         {
+
             tirggerProcess = Trigger_Proceed();
+
             StartCoroutine(tirggerProcess);
+
         }
+
+
 
         if (status.AttackTarget == null)
+
         {
+
             isNearby = false;
+
             return;
+
         }
+
+
 
         GameObject target = status.AttackTarget;
+
         Transform targetTransform = target.GetComponent<Transform>();
+
         float distance = targetTransform.position.x - gameObject.transform.position.x;
 
+
+
         if (status.UnitSide == eUnitSide.Enemy)
+
             distance *= -1.0f;
 
+
+
         if (distance < 0.5f && distance > 0)
+
         {
+
             isNearby = true;
+
         }
+
         else
+
         {
+
             isNearby = false;
+
         }
+
     }
+
+
 
     IEnumerator Trigger_Proceed()
+
     {
+
         while (true)
+
         {
+
             //            InfiniteLoopDetector.Run();
+
             if (isNearby == true)
+
             {
+
                 if (status.UnitSide == eUnitSide.Enemy)
+
                     transform.Translate(Vector2.right * 1.0f * Time.deltaTime);
+
                 else
+
                     transform.Translate(Vector2.left * 1.0f * Time.deltaTime);
+
             }
 
+
+
             yield return null;
+
         }
+
     }
+
+
+
 
 
     void PlayerEffectCheck()
+
     {
+
         if (status.unitState.IsLobbyMove == true || status.stat.Hp <= 0.0f)
+
         {
+
             if (MiniEffectToPlayer != null)
+
             {
-                Destroy(MiniEffectToPlayer);
+
+                LunaEntities.Hide(MiniEffectToPlayer);
+                MiniEffectToPlayer = null;
+
             }
+
+
 
             return;
+
         }
+
+
 
         float auroraRange = 2.0f + (Defined.AddAuroraRangeValue * (LunaDataTable.Instance.playerData.AuroraLevel - 1));
+
         if (MiniEffectToPlayer == null)
+
         {
+
             if (IdentifyFunc.IsInDistance(gameObject, Game.Instance.dataManager.LunaPlayer, auroraRange) == true)
+
             {
-                MiniEffectToPlayer = GameObject.Instantiate(status.GetLunaAssetBundle().MiniPlayerEffectForUnit, gameObject.transform.position, status.GetLunaAssetBundle().MiniPlayerEffectForUnit.transform.rotation);
+
+                MiniEffectToPlayer = LunaEntities.Spawn(status.GetLunaAssetBundle().MiniPlayerEffectForUnit, gameObject.transform.position, status.GetLunaAssetBundle().MiniPlayerEffectForUnit.transform.rotation);
+
             }
+
         }
+
         else
+
         {
+
             MiniEffectToPlayer.transform.position = gameObject.transform.position;
 
+
+
             if (IdentifyFunc.IsInDistance(gameObject, Game.Instance.dataManager.LunaPlayer, auroraRange) == false)
+
             {
-                Destroy(MiniEffectToPlayer);
+
+                LunaEntities.Hide(MiniEffectToPlayer);
+                MiniEffectToPlayer = null;
+
             }
+
         }
+
     }
+
+
 
     // buff icon
 
+
+
     private void InitializeBuffImp(System.Action action)
+
     {
+
         status.BuffImp.OnEventBuffIcons = action;
+
     }
+
+
 
     private void BuffIconUpdate()
+
     {
+
         BuffPushCheck();
+
         BuffPositionCheck();
+
         BuffBlinkCheck();
+
     }
+
+
 
     void BuffPushCheck()
+
     {
+
         foreach (Buff buffData in status.BuffImp.Buffs)
+
         {
+
             if (buffData.IconObject == null)
+
             {
-                buffData.IconObject = Instantiate(status.GetLunaAssetBundle().BuffIcons[(int)buffData.BuffType]);
+
+                buffData.IconObject = LunaEntities.Spawn(status.GetLunaAssetBundle().BuffIcons[(int)buffData.BuffType]);
+
                 buffData.IconObject.GetComponent<BuffIconCtrl>().CharacterObject = gameObject;
+
             }
+
         }
+
     }
+
     private void BuffPositionCheck()
+
     {
+
         float sizeCoefficent = (float)((status.BuffImp.Buffs.Count - 1) / 2);
 
+
+
         for (int i = 0; i < status.BuffImp.Buffs.Count; i++)
+
         {
+
             if (status.BuffImp.Buffs[i].IconObject != null)
+
             {
+
                 status.BuffImp.Buffs[i].IconObject.GetComponent<BuffIconCtrl>().SetFinePosition(i, sizeCoefficent, status.BuffImp.IconHeight);
+
             }
+
         }
+
     }
+
+
 
     void BuffBlinkCheck()
+
     {
+
         foreach (Buff buffData in status.BuffImp.Buffs)
+
         {
+
             if (buffData.IconObject != null)
+
             {
+
                 if (buffData.IsBlinking == false && buffData.BuffLeftTime <= 5.0f)
+
                 {
+
                     buffData.IsBlinking = true;
 
+
+
                     buffData.IconObject.GetComponent<BuffIconCtrl>().Blink();
+
                 }
+
                 else if (buffData.IsBlinking == true && buffData.BuffLeftTime >= 5.0f)
+
                 {
+
                     buffData.IsBlinking = false;
 
+
+
                     buffData.IconObject.GetComponent<BuffIconCtrl>().UnBlink();
+
                 }
+
             }
+
         }
+
     }
+
 }

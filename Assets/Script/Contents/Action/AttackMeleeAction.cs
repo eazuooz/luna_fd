@@ -118,7 +118,7 @@ public class AttackMeleeAction : BtAction
 
             if (distance > status.warfRange)
             {
-                GameObject.Instantiate(status.GetLunaAssetBundle().JumpEffect, status.ProjecttileArrivalLocation.transform.position, status.GetLunaAssetBundle().JumpEffect.transform.rotation);
+                EverydayDevup.Framework.LunaEntities.Spawn(status.GetLunaAssetBundle().JumpEffect, status.ProjecttileArrivalLocation.transform.position, status.GetLunaAssetBundle().JumpEffect.transform.rotation);
 
                 thisObject.transform.Translate(Vector3.right * (distance - status.warfRange));
             }
