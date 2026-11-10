@@ -97,17 +97,6 @@ public class LunaDataTable : ScriptableObject
         UnitTable.Add(objectData.name, LunaRuntimeData.ResolveObjectData(objectData));
         return true;
     }
-    public bool IncreaseCardCount(string name)
-    {
-        if (!UnitTable.ContainsKey(name))
-        {
-            return false;
-        }
-
-        ObjectData objData = UnitTable[name];
-        objData.cardCount += 1;
-        return true;
-    }
 
     #region LUNA DATA TABLE
     [System.NonSerialized] public Dictionary<string, ObjectData> lunaTable
@@ -225,7 +214,9 @@ public class LunaDataTable : ScriptableObject
             if (StageTable.ContainsKey(item.name))
                 continue;
 
-            StageTable.Add(item.name, LunaRuntimeData.CloneAsset(item as StageData));
+            var progress = LunaRuntimeData.CloneAsset(item as StageData);
+            progress.isClear = false;
+            StageTable.Add(item.name, progress);
         }
     }
     #endregion

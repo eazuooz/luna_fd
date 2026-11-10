@@ -76,9 +76,9 @@ namespace Luna.Gameplay
             if (stage == null) throw new ArgumentException("Unknown stage: " + stageName, nameof(stageName));
             SelectStagePrefab = stage;
         }
-        private int StageIndex()
+        public static int CampaignFloor(string key)
         {
-            string value = currentStageName ?? string.Empty;
+            string value = key ?? string.Empty;
             if (value.Length != 10 || !value.StartsWith("Stage", StringComparison.Ordinal) || value[7] != '-' ||
                 !int.TryParse(value.Substring(5, 2), NumberStyles.None, CultureInfo.InvariantCulture, out int chapter) ||
                 !int.TryParse(value.Substring(8, 2), NumberStyles.None, CultureInfo.InvariantCulture, out int floor) ||
@@ -88,11 +88,11 @@ namespace Luna.Gameplay
         }
         public string NextStageString()
         {
-            int next = StageIndex() % 30;
+            int next = Mathf.Min(29, CampaignFloor(CurrentStageName));
             return "Stage" + (next / 10 + 1).ToString("D2", CultureInfo.InvariantCulture) + "-" +
                 (next % 10 + 1).ToString("D2", CultureInfo.InvariantCulture);
         }
-        public string NextStageLevelString() => (StageIndex() % 30 + 1).ToString(CultureInfo.InvariantCulture) + "층";
-        public string CurrentStageLevelString(string prefix = "") => prefix + StageIndex().ToString(CultureInfo.InvariantCulture) + "층";
+        public string NextStageLevelString() => Mathf.Min(30, CampaignFloor(CurrentStageName) + 1).ToString(CultureInfo.InvariantCulture) + "층";
+        public string CurrentStageLevelString(string prefix = "") => prefix + CampaignFloor(CurrentStageName).ToString(CultureInfo.InvariantCulture) + "층";
     }
 }

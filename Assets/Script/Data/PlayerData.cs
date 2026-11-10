@@ -8,7 +8,7 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
 {
     #region PLAYER_INFO
     /// <summary>
-    /// ITEM NUMBER¿Í ¸ÂÃçÁÖ¼¼¿ä!
+    /// ITEM NUMBERì™€ ë§žì¶°ì£¼ì„¸ìš”!
     /// </summary>
     public enum eLunaSkin
     {
@@ -38,8 +38,31 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     private const int MaxLunaRevivalTimeLevel = 3;
 
     public int RewardGold = 0;
-    public int Gold = 1234567;
-    public int StarStone = 1234567;
+    public int Gold = LunaEconomy.StartingGold;
+    public int StarStone;
+    public int UnlockedFloor = 1;
+    public bool CampaignComplete;
+    public List<string> ClearedDungeons = new List<string>();
+    public List<EndlessRecord> EndlessRecords = new List<EndlessRecord>();
+
+    [System.Serializable]
+    public sealed class EndlessRecord
+    {
+        public string stage;
+        public int floor;
+    }
+
+    public int BestEndlessFloor(string stage) => EndlessRecords.Find(record => record.stage == stage)?.floor ?? 0;
+
+    public int RecordEndlessFloor(string stage, int floor)
+    {
+        var record = EndlessRecords.Find(value => value.stage == stage);
+        int previous = record?.floor ?? 0;
+        if (floor <= previous) return previous;
+        if (record == null) EndlessRecords.Add(new EndlessRecord { stage = stage, floor = floor });
+        else record.floor = floor;
+        return previous;
+    }
 
     public int LunaLevel = 1;
     public int LunaMoveSpeedLevel = 1;
@@ -114,7 +137,7 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     #endregion
 
     #region LEVEL UP
-    private bool SpendMoney(int cost)
+    public bool TrySpendGold(int cost)
     {
         if (cost < 0 || Gold < cost) return false;
         int resultGold = Gold - cost;
@@ -126,43 +149,43 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     }
     public bool LunaLevelUp(int cost)
     {
-        if (LunaLevel >= MaxLunaLevel || !SpendMoney(cost)) return false;
+        if (LunaLevel >= MaxLunaLevel || !TrySpendGold(cost)) return false;
         LunaLevel++;
         return true;
     }
     public bool LunaMoveSpeedLevelUp(int cost)
     {
-        if (LunaMoveSpeedLevel >= MaxLunaMoveSpeedLevel || !SpendMoney(cost)) return false;
+        if (LunaMoveSpeedLevel >= MaxLunaMoveSpeedLevel || !TrySpendGold(cost)) return false;
         LunaMoveSpeedLevel++;
         return true;
     }
     public bool GoldSpeedLevelUp(int cost)
     {
-        if (GoldSpeedLevel >= MaxGoldSpeedLevel || !SpendMoney(cost)) return false;
+        if (GoldSpeedLevel >= MaxGoldSpeedLevel || !TrySpendGold(cost)) return false;
         GoldSpeedLevel++;
         return true;
     }
     public bool TowerHpLevelUp(int cost)
     {
-        if (TowerHPLevel >= MaxTowerHPLevel || !SpendMoney(cost)) return false;
+        if (TowerHPLevel >= MaxTowerHPLevel || !TrySpendGold(cost)) return false;
         TowerHPLevel++;
         return true;
     }
     public bool AuroraLevelUp(int cost)
     {
-        if (AuroraLevel >= MaxAuroraLevel || !SpendMoney(cost)) return false;
+        if (AuroraLevel >= MaxAuroraLevel || !TrySpendGold(cost)) return false;
         AuroraLevel++;
         return true;
     }
     public bool UnitMoveSpeedLevelUp(int cost)
     {
-        if (UnitMoveSpeedLevel >= MaxUnitMoveSpeedLevel || !SpendMoney(cost)) return false;
+        if (UnitMoveSpeedLevel >= MaxUnitMoveSpeedLevel || !TrySpendGold(cost)) return false;
         UnitMoveSpeedLevel++;
         return true;
     }
     public bool LunaReviveTimeLevelUp(int cost)
     {
-        if (LunaReviveTimeLevel >= MaxLunaRevivalTimeLevel || !SpendMoney(cost)) return false;
+        if (LunaReviveTimeLevel >= MaxLunaRevivalTimeLevel || !TrySpendGold(cost)) return false;
         LunaReviveTimeLevel++;
         return true;
     }
@@ -179,6 +202,10 @@ public class PlayerData : ScriptableObject//SingletonSO<PlayerData>
     #region FUNC
     public void ValidateDefaults()
     {
+        UnlockedFloor = Mathf.Clamp(UnlockedFloor, 1, 30);
+        ClearedDungeons ??= new List<string>();
+        EndlessRecords ??= new List<EndlessRecord>();
+        EndlessRecords.RemoveAll(record => record == null || string.IsNullOrWhiteSpace(record.stage) || record.floor <= 0);
         if (string.IsNullOrEmpty(SaveStageName) || Resources.Load<GameObject>("Prefabs/10Stage/" + SaveStageName) == null)
             SaveStageName = "Stage01-01";
         string[] defaultDeck = { "Lene", "Alice", "Dren", "Tira", "PorongSword", "PorongArcher" };

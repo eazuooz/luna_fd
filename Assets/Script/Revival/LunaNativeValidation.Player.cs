@@ -85,8 +85,14 @@ public sealed partial class LunaNativeValidation
             EndCase("A separate executable process restored the nonce, gold/stones, deck, skills, skin, stage clear, unit growth, inventory and muted listener.");
         }
         string requestedSection = Environment.GetEnvironmentVariable("LUNA_PLAYER_SECTION") ?? "all";
-        Require(new[] { "all", "persistence", "audio", "input", "render", "soak" }.Contains(requestedSection), "Unknown Windows probe section: " + requestedSection);
+        Require(new[] { "all", "persistence", "audio", "input", "render", "soak", "level-design" }.Contains(requestedSection), "Unknown Windows probe section: " + requestedSection);
         Require(requestedSection != "persistence" || mode == "verify", "Persistence verification requires the separate seed/verify process pair.");
+        if (requestedSection == "level-design")
+        {
+            yield return LevelDesignContracts();
+            yield return DesignPanelCaptures();
+            yield break;
+        }
         // Native round setup plays battle music only in Game/Dungeon; Lobby is intentionally silent.
         if (requestedSection == "all" || requestedSection == "audio" || requestedSection == "input" || requestedSection == "render" || requestedSection == "soak")
             yield return LoadStage("Stage01-01");

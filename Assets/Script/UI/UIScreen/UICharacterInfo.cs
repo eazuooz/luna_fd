@@ -72,6 +72,7 @@ public class UICharacterInfo : UILuna
         InitTab();
         InitializeUnitData(levelup);
         UpdateLevelUpInfo();
+        UpdateRankUpButton();
 
 
         
@@ -156,6 +157,7 @@ public class UICharacterInfo : UILuna
                     wakeup.SetActive(true);
                     InitializeUnitData(wakeup);
                     UpdateWakeUpInfo();
+                    UpdateRankUpButton();
                 }
                 break;
 
@@ -258,18 +260,15 @@ public class UICharacterInfo : UILuna
 
     private void UpdateCharacterInfoText(Text text)
     {
-        int star = ((int)objData.ultState);
-        int ultState = star;
-        if (star > 5)
-        {
-            star = 5;
-            ultState -= 5;
-        }
+        int star = Mathf.Min(5, (int)objData.ultState);
+        int ultState = Mathf.Max(0, (int)objData.ultState - 5);
 
         text.text = "-" + objData.Level.ToString() + "<color=lime>(+1)</color>" + " 레벨 " + "\n"
                         + "- " + star.ToString() + "성" + "\n"
                         + "- " + ultState.ToString() + "각성\n"
-                        + "- 강화 카드 " + objData.cardCount.ToString() + "장";
+                        + "- 강화 카드 " + objData.cardCount + "장\n"
+                        + (objData.ultState >= eUltState.ULT2 ? "최고 등급" : "승급: 카드 " + LunaEconomy.RankCardCost(objData.ultState) +
+                            "장 · 별석 " + LunaEconomy.RankStoneCost(objData.ultState));
     }
 
     private string CalculateTempString(string frontString)
@@ -285,6 +284,8 @@ public class UICharacterInfo : UILuna
 
     private void UpdateLevelUpInfo()
     {
+        var cost = LunaUIViews.FindChildObject(levelup, "LevelupButton").transform.Find("CostText");
+        cost.GetComponent<Text>().text = objData.Level >= LunaEconomy.UnitMaxLevel ? "최대" : "×" + LunaEconomy.UnitLevelCost(objData.Level);
         GameObject statObj
             = LunaUIViews.FindChildObject(levelup, "LevelUpStat");
 
@@ -332,28 +333,22 @@ public class UICharacterInfo : UILuna
         statText.text = "3 성 : " + objData.start3.ToString() + "\n"
                         + "5 성 : " + objData.start5.ToString() + "\n\n"
                         + "1각성 : " + objData.ultra1.ToString() + "\n"
-                        + "2각성 : " + objData.ultra2.ToString() + "\n";
+                        + "2각성 : " + objData.ultra2.ToString() + "\n"
+                        + "승급마다 전투 배치 체력과 공격력 +5%";
     }
 
     private void UpdateRankUpButton()
     {
-        if ((int)objData.ultState > 4)
+        var button = LunaUIViews.FindChildObject(wakeup, "WakeUpButton");
+        var cost = button.transform.Find("CostText")?.GetComponent<Text>();
+        if (cost != null)
+            cost.text = objData.ultState >= eUltState.ULT2 ? "최대" : "×" + LunaEconomy.RankCardCost(objData.ultState);
+        var stones = button.transform.Find("StarStone");
+        if (stones != null)
         {
-            GameObject statObj
-                = LunaUIViews.FindChildObject(wakeup, "WakeUpButton");
-
-            GameObject imgObj
-                = LunaUIViews.FindChildObject(statObj, "SourceImage");
-
-            //Text costText
-            //    = LunaUIViews.FindComponentByChildObject<Text>(statObj, "CostText");
-
-            Sprite starStoneSprite
-                = Resources.Load<Sprite>("UI/UICharacterList/popup_ soldier/goods/starstone");
-
-            imgObj.GetComponent<Image>().sprite = starStoneSprite;
-
-            //costText.text = "x 2000";
+            int amount = LunaEconomy.RankStoneCost(objData.ultState);
+            stones.gameObject.SetActive(objData.ultState < eUltState.ULT2 && amount > 0);
+            stones.Find("CostText").GetComponent<Text>().text = "×" + amount;
         }
     }
 
@@ -369,14 +364,8 @@ public class UICharacterInfo : UILuna
 
     public void OnClickCharacterLevelUp(int levelUpPrice)
     {
-        int level = objData.Level;
-        int cost = 1000 + (level * 1000);
-        
-        if (LunaDataTable.Instance.playerData.Gold < cost)
-            return;
-
-        objData.LevelUp();
-        LunaDataTable.Instance.playerData.Gold -= cost;
+        if (!LunaEconomy.TryLevelUp(LunaDataTable.Instance.playerData, objData)) return;
+        LunaRuntimeData.SaveNow();
 
         Text infoText =
             LunaUIViews.FindComponentByChildObject<Text>(levelup, "InfoText");
@@ -384,50 +373,17 @@ public class UICharacterInfo : UILuna
         UpdateCharacterInfoText(infoText);
         UpdateLevelUpInfo();
 
-        GameObject levelUpButton
-            = LunaUIViews.FindChildObject(gameObject, "LevelupButton");
-        Transform costText = levelUpButton.transform.Find("CostText");
-        costText.GetComponent<Text>().text = "x" + cost.ToString();
     }
 
     public void OnClickRankUp()
     {
-        int level = (int)objData.ultState;
-        int cost = 1000 + (level * 1000);
-
-        if ((int)objData.ultState >= 7)
-        {
-            Debug.Log("최대강화입니다");
-
-            return;
-        }
-
-        if (objData.cardCount < 10)
-        {
-            return;
-        }
-
-        //레벨 5이상이면 카드 소모
-        //5이하이면 스타스톤 1000개 소모
-        if ((int)objData.ultState >= 5)
-        {
-            LunaDataTable.Instance.playerData.StarStone -= 2000;
-        }
-        else
-        {
-            objData.cardCount -= 10;
-        }
-
-        objData.RankUp();
+        if (!LunaEconomy.TryRankUp(LunaDataTable.Instance.playerData, objData)) return;
+        LunaRuntimeData.SaveNow();
 
         Text infoText =
              LunaUIViews.FindComponentByChildObject<Text>(wakeup, "InfoText");
         UpdateCharacterInfoText(infoText);
-
-        //GameObject levelUpButton
-        //    = LunaUIViews.FindChildObject(gameObject, "WakeUpButton");
-        //Transform costText = levelUpButton.transform.Find("StarStone").Find("CostText");
-        //costText.GetComponent<Text>().text = "x" + cost.ToString();
+        UpdateRankUpButton();
     }
 
     public void OnClickJoinMyDeck()

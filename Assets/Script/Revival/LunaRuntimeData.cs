@@ -171,7 +171,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         try
         {
             var snapshot = JsonUtility.FromJson<Snapshot>(settings.GetString(SaveKey));
-            if (snapshot == null || snapshot.version != 1 || snapshot.player == null)
+            if (snapshot == null || (snapshot.version != 1 && snapshot.version != 2) || snapshot.player == null)
                 throw new InvalidDataException("Unsupported Luna save version or missing player state.");
             ValidateSnapshot(snapshot);
             var table = LunaDataTable.Instance;
@@ -184,6 +184,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
                 if (table.skiiTable.TryGetValue(skill.name, out var data)) data.level = Math.Max(1, skill.level);
             if (snapshot.stages != null) foreach (var stage in snapshot.stages)
                 if (table.StageTable.TryGetValue(stage.name, out var data)) data.isClear = stage.clear;
+            if (snapshot.version == 1) MigratePrototypeProgress(table);
             table.playerData.ValidateDefaults();
             return true;
         }
@@ -192,6 +193,34 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
             allowSave = false;
             Debug.LogWarning("Luna progress cannot be restored; automatic saves are disabled to preserve it. " + exception.Message);
             return false;
+        }
+    }
+
+    private static void MigratePrototypeProgress(LunaDataTable table)
+    {
+        var player = table.playerData;
+        player.UnlockedFloor = LunaSession.CampaignFloor(player.SaveStageName);
+        foreach (var pair in table.StageTable)
+        {
+            if (!pair.Value.isClear) continue;
+            int floor = LunaSession.CampaignFloor(pair.Key);
+            player.UnlockedFloor = Math.Max(player.UnlockedFloor, Math.Min(30, floor + 1));
+            if (floor == 30) player.CampaignComplete = true;
+        }
+
+        const int prototypeStones = 1234567;
+        if (player.StarStone < prototypeStones || (player.StarStone - prototypeStones) % 2000 != 0) return;
+        // The old template and free shop both granted only this recognizable balance.
+        // Keep earned gold above the shipped grant and leave other v1 wallets alone.
+        int prototypeGold = player.Gold == 1234567 ? 1234567 : 1186567;
+        player.Gold = LunaEconomy.StartingGold + Math.Max(0, player.Gold - prototypeGold);
+        player.StarStone = 0;
+        foreach (var pair in table.UnitTable)
+        {
+            var unit = pair.Value;
+            unit.cardCount = Math.Max(0, unit.cardCount - (pair.Key == "Goldy" ? 59 : 99));
+            if (unit.UnitType == eUnitType.Hero && unit.ultState == eUltState.ULT2)
+                unit.ultState = eUltState.STAR1;
         }
     }
 
@@ -240,7 +269,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
 
     [Serializable] private sealed class Snapshot
     {
-        public int version = 1;
+        public int version = 2;
         public PlayerState player;
         public List<ObjectState> units = new List<ObjectState>();
         public List<ObjectState> luna = new List<ObjectState>();
@@ -264,11 +293,17 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         public List<string> deck, skills;
         public bool beginning;
         public int gold, starStone, lunaLevel, lunaMove, goldSpeed, towerHp, aurora, unitMove, revive, skin;
+        public int unlockedFloor;
+        public bool campaignComplete;
+        public List<string> clearedDungeons;
+        public List<PlayerData.EndlessRecord> endlessRecords;
         public static PlayerState Capture(PlayerData data) => new PlayerState
         {
             stage = data.SaveStageName, deck = new List<string>(data.UnitNamesInDeck), skills = new List<string>(data.equippedSkill), beginning = data.IsBegining,
             gold = data.Gold, starStone = data.StarStone, lunaLevel = data.LunaLevel, lunaMove = data.LunaMoveSpeedLevel, goldSpeed = data.GoldSpeedLevel,
-            towerHp = data.TowerHPLevel, aurora = data.AuroraLevel, unitMove = data.UnitMoveSpeedLevel, revive = data.LunaReviveTimeLevel, skin = (int)data.SkinType
+            towerHp = data.TowerHPLevel, aurora = data.AuroraLevel, unitMove = data.UnitMoveSpeedLevel, revive = data.LunaReviveTimeLevel, skin = (int)data.SkinType,
+            unlockedFloor = data.UnlockedFloor, campaignComplete = data.CampaignComplete,
+            clearedDungeons = data.ClearedDungeons, endlessRecords = data.EndlessRecords
         };
         public void Apply(PlayerData data)
         {
@@ -276,6 +311,9 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
             data.Gold = Math.Max(0, gold); data.StarStone = Math.Max(0, starStone); data.LunaLevel = lunaLevel; data.LunaMoveSpeedLevel = lunaMove;
             data.GoldSpeedLevel = goldSpeed; data.TowerHPLevel = towerHp; data.AuroraLevel = aurora; data.UnitMoveSpeedLevel = unitMove;
             data.LunaReviveTimeLevel = revive; data.SkinType = (PlayerData.eLunaSkin)skin;
+            data.UnlockedFloor = unlockedFloor; data.CampaignComplete = campaignComplete;
+            data.ClearedDungeons = clearedDungeons ?? new List<string>();
+            data.EndlessRecords = endlessRecords ?? new List<PlayerData.EndlessRecord>();
         }
     }
 }

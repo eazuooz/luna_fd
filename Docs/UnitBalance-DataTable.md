@@ -13,9 +13,9 @@ CSV는 정적 전투 설정의 원본이다. 저장 진행도는 런타임 복�
 | `UnitBalance.csv` | 76 | 유닛 기본 수치·분류·성장 기본값34필드. `RowId/Key/ResourcePath`를 더한 전체37열. |
 | `SkillBalance.csv` | 32 | 액티브 스킬14개와 장비 능력18개의 정적 전투 설정18필드. 식별3열을 더한 전체21열. |
 | `EntityParameters.csv` | 260 | 프리팹별 공격/효과/이동 등의 수치 매개변수. `RowId/Key/Parameter/Value`4열. |
-| `Stages.csv` | 36 | 일반30개, 보스4개, 무한2개의 폭·시간·간격·골드·배경/타워/보스 경로. |
-| `StageWaves.csv` | 155 | 스테이지별 시작/반복/무한 웨이브의 프리팹·수량·레벨·순서. |
-| `StageRewards.csv` | 83 | 승리·몬스터·무한 보스 보상의 아이템 경로와 확률. |
+| `Stages.csv` | 36 | 기본 30개, 공개 보스 3개, 무한 2개, 시험 보스 1개. 제한시간, 입장 조건, 전투 시작 골드, 첫 승리와 재도전 보상, 목표 체력과 공격력, 안내와 에셋 경로를 정의한다. |
+| `StageWaves.csv` | 441 | 시작 편성, 시간별 증원, 무한던전 5층 주기, 보스 체력 구간별 지원군. |
+| `StageRewards.csv` | 57 | 첫 승리, 승리, 적 처치, 무한던전 정예 층의 아이템과 확률. |
 
 `LunaUnitBalance`, `LunaSkillBalance`, `LunaEntityParameters`, `LunaStageTables`가 실제 native DataTable을 생성하고 행을 등록한다. SO 숫자로 조용히 되돌아가는 fallback 대신 누락·형식·중복·참조 오류를 초기화/Audit에서 보고한다. 기존 `BasicDungeonData`/`BossDungeonData`는 최초 전환 자료이며 현재 스폰 목록과 판 규칙의 원본이 아니다. `LunaStageDefinition.TableKey`와 Procedure가 소유하는 `LunaGame` 파생 객체가 CSV의 판/웨이브/보상을 사용한다.
 
@@ -61,7 +61,7 @@ SO의 런타임 복제본과 `LunaDataTable`은 선택·진행도·표시 모델
 
 `EntityParameters.Key`는 `프리팹 GUID:GameObject fileID`이고 `Parameter`가 수치 이름이다. `UnitView.ParameterKey`가 이 레코드를 조회한다. 프리팹·소리 참조를 CSV 숫자에 넣거나 전투 중 원본 prefab 위치/스케일을 수정하지 않는다. 아트 연결은 별도 뷰에 남는다.
 
-`StageWaves.StageId`와 `StageRewards.StageId`는 `Stages.RowId`를 참조한다. 웨이브 Phase는 `Start/Repeat/Endless`, 보상 Trigger는 `Victory/Monster/EndlessBoss`다. 종류·개수·순서·경로와 stage 참조는 Audit 대상이다. 스테이지 boolean은0/1을 사용한다. 기존 스테이지 SO를 바꿔도 현재 테이블을 대신하지 않으므로 판 설정은 해당 CSV에서 편집한다.
+`StageWaves.StageId`와 `StageRewards.StageId`는 `Stages.RowId`를 참조한다. `Start`는 입장 편성이다. `Timed`의 `At`은 전투 시작 이후 초, `BossPhase`의 `At`은 남은 체력 비율이다. `Endless`는 `Order` 0–4로 층 편성을 고르고 `At`은 0으로 둔다. 동일 구간의 합계는 8마리까지 허용한다. 보상은 `FirstClear`, `Victory`, `Monster`, `EndlessBoss`로 구분하며 보스 첫 승리 스킨과 5층 정예 보상을 따로 작성한다. 기존 SO는 에셋 연결에 남아 있고 현재 편성·보상은 CSV에서 편집한다.
 
 ## 편집과 검증
 

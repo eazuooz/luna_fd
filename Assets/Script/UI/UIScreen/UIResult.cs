@@ -12,16 +12,18 @@ public class UIResult : UILuna
         if (round == null) throw new System.InvalidOperationException("Result form requires its completed round.");
         bool won = round.isStageWin;
         var plate = transform.Find("ImagePlate");
-        plate.Find("ImageTitle/ResultText").GetComponent<Text>().text = won ? "승리!" : "패배!";
+        plate.Find("ImageTitle/ResultText").GetComponent<Text>().text = round is EndlessDungeon endless
+            ? endless.dungeonLevel + "층 돌파" : won ? "승리!" : "패배!";
         transform.Find("ResultBoard/ResultText").GetComponent<Text>().text = won ? "'승리'" : "<color=red>'패배'</color>";
         bool campaign = round is BasicDungeon;
-        bool nextAvailable = campaign && won;
+        bool nextAvailable = round is BasicDungeon basic && won && basic.HasNextStage;
         plate.Find("NextStage").gameObject.SetActive(nextAvailable);
         var retry = plate.Find("CurrentStage");
         if (!nextAvailable) retry.localPosition = new Vector2(0f, -225f);
         retry.Find("CurrentStage_Text").GetComponent<Text>().text = campaign ? LunaSession.Current.CurrentStageLevelString() : "다시 도전";
         plate.Find("NextStage/NextStage_Text").GetComponent<Text>().text = campaign ? LunaSession.Current.NextStageLevelString() : string.Empty;
-        transform.Find("Coin/Text").GetComponent<Text>().text = "골드 " + (LunaDataTable.Instance.playerData.RewardGold * 100) + "골드 획득\n";
+        transform.Find("Coin/Text").GetComponent<Text>().text = "골드 +" + LunaDataTable.Instance.playerData.RewardGold +
+            (round.RewardStones > 0 ? "  별석 +" + round.RewardStones : string.Empty);
 
         var contents = transform.Find("Item_ScrollView/Item_Scroll View_Viewport/Item_Content");
         var prefab = Resources.Load<GameObject>("Prefabs/09UI/ProfileInformation");

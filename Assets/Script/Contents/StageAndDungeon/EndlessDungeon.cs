@@ -8,9 +8,12 @@ public sealed class EndlessDungeon : LunaGame
     private Phase phase;
     private int backgroundId, nextBackgroundId;
     private float timer = 1f;
+    private float floorStartedAt;
+    private bool settled;
     private List<LunaStageWaveRow> waves;
     public GameObject gamePlayer => Player != null ? Player.gameObject : null;
-    public int dungeonLevel { get; set; }
+    public int dungeonLevel { get; private set; }
+    public float FloorTimeRemaining => Mathf.Max(0f, row.TimeLimit - (StageCount - floorStartedAt));
     public bool randomYDistance => row.RandomY;
     public string PhaseName => phase.ToString();
     public override void Initialize(LunaStageDefinition source)
@@ -26,13 +29,20 @@ public sealed class EndlessDungeon : LunaGame
     protected override float ResultHoldDuration => 1f;
     private void SpawnWave(bool next)
     {
+        int floor = dungeonLevel + 1;
+        int pattern = (floor - 1) % 5;
+        int strength = Mathf.Min(floor - 1, 100);
+        float health = row.WaveHealth * (1f + 0.09f * strength);
+        float attack = row.WaveAttack * (1f + 0.045f * strength);
+        var anchor = Defined.EnemyTowerPosition + Vector3.right * (next ? 17.07f : 0f);
+        int offset = 0;
         foreach (var wave in waves)
-            for (int i = 0; i < wave.Count; i++)
-            {
-                float y = randomYDistance ? Random.Range(-0.3f, 1f) : 0f;
-                var position = Defined.EnemyTowerPosition + new Vector3(next ? 17.07f : 0f, y, y);
-                SpawnUnit(LunaStageTables.RequireAsset<GameObject>(wave.Prefab), position, UnitSpawnMode.Staged, wave.Level);
-            }
+        {
+            if (wave.Order != pattern) continue;
+            SpawnFormation(wave, anchor - Vector3.right * (offset * 0.36f), UnitSpawnMode.Staged,
+                Mathf.Min(20, strength / 3), health, attack, randomYDistance);
+            offset += wave.Count;
+        }
     }
     protected override void TickRound(float elapsed, float realElapsed)
     {
@@ -48,16 +58,27 @@ public sealed class EndlessDungeon : LunaGame
             case Phase.Combat:
                 if (isStageStop) return;
                 StageCount += elapsed;
+                if (Player == null && !PlayerRespawnPending && PendingSpawnCount == 0)
+                { Finish(false); break; }
                 int enemies = 0;
                 foreach (var unit in Units()) if (unit.UnitSide == eUnitSide.Enemy && Alive(unit)) enemies++;
-                if (enemies == 0 && PendingSpawnCount == 0)
+                if (enemies == 0 && PendingSpawnCount == 0 && Alive(Player))
                 {
                     dungeonLevel++;
+                    float recovery = dungeonLevel % 5 == 0 ? 0.28f : 0.12f;
+                    foreach (var unit in Units())
+                        if (unit.UnitSide == eUnitSide.Allied && Alive(unit))
+                            unit.Heal(unit.HealthBarHpPoint * recovery);
+                    if (row.StartGold > 0)
+                    {
+                        Roster.Gold += row.StartGold / 3;
+                        Roster.Mana += row.StartMana;
+                    }
                     StageUnits(true); isStageStop = true;
                     nextBackgroundId = SpawnBackdrop(definition.backgroundImage, new Vector3(17.07f, 0f, 0f));
                     SpawnWave(true); phase = Phase.NextLoading;
                 }
-                else if (Player == null && !PlayerRespawnPending && PendingSpawnCount == 0) Finish(false);
+                else if (FloorTimeRemaining <= 0f) Finish(false);
                 break;
             case Phase.NextLoading:
                 if (PendingSpawnCount == 0) { timer = 0.5f; phase = Phase.NextWait; }
@@ -82,30 +103,39 @@ public sealed class EndlessDungeon : LunaGame
                     else unit.CachedTransform.position += Vector3.right * elapsed * unit.LobbyDistance * 0.25f;
                 if (next.transform.position.x > 0.001f) return;
                 next.transform.position = Vector3.zero;
-                foreach (var unit in Units())
-                    if (unit.UnitSide == eUnitSide.Enemy)
-                    { var pos = unit.transform.position; pos.x = Defined.EnemyTowerPosition.x; unit.transform.position = pos; }
                 LunaSpawn.Cancel(backgroundId); backgroundId = nextBackgroundId;
+                floorStartedAt = StageCount;
                 StageUnits(false); isStageStop = false; phase = Phase.Combat;
                 break;
         }
     }
     public override void DropItem()
     {
-        var selected = new List<LunaStageRewardRow>();
-        var bosses = LunaStageTables.GetRewards(row.Id, "EndlessBoss");
-        if (bosses.Count > 0) selected.Add(bosses[0]);
-        var rewards = LunaStageTables.GetRewards(row.Id, "Victory");
-        for (int i = 0; i < rewards.Count; i++)
+        if (settled || dungeonLevel == 0) return;
+        settled = true;
+        var profile = LunaDataTable.Instance.playerData;
+        int oldBest = profile.RecordEndlessFloor(StageKey, dungeonLevel);
+        int milestones = dungeonLevel / 5;
+        long gold = (long)row.Gold * dungeonLevel;
+        if (oldBest < 5 && milestones > 0) gold += row.FirstClearGold;
+        AwardGold((int)System.Math.Min(int.MaxValue, gold));
+        if (milestones > oldBest / 5)
+            AwardStones((int)System.Math.Min(int.MaxValue, (long)(milestones - oldBest / 5) * row.FirstClearStones));
+        if (milestones > 0)
         {
-            var row = rewards[Random.Range(0, rewards.Count)];
-            if (Defined.CanProbability(row.Probability * 100f)) selected.Add(row);
+            foreach (var reward in LunaStageTables.GetRewards(row.Id, "EndlessBoss"))
+                if (Defined.CanProbability(reward.Probability * 100f))
+                    SpawnReward(reward, Defined.EnemyTowerPosition, count: milestones);
         }
-        for (int i = 0; i < dungeonLevel; i++) foreach (var reward in selected) SpawnReward(reward, Defined.EnemyTowerPosition);
     }
     protected override void OnFinished(bool won)
     {
         base.OnFinished(won);
         if (!won && dungeonLevel > 0) DropItem();
+    }
+    public override void Shutdown()
+    {
+        if (IsActive && LunaRuntimeData.IsInitialized) DropItem();
+        base.Shutdown();
     }
 }

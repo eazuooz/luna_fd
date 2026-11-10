@@ -94,9 +94,9 @@ public static class LunaAssetRepair
             {
                 LunaStageTables.RequireAsset<GameObject>(row.AllyTower);
                 LunaStageTables.RequireAsset<GameObject>(row.EnemyTower);
-                if (!waves.Any(w => w.StageId == row.Id && w.Phase == "Repeat")) throw new InvalidDataException("Campaign stage lacks a repeating wave: " + row.Key);
             }
             if (row.Kind == LunaStageKind.Boss) LunaStageTables.RequireAsset<GameObject>(row.Boss);
+            LunaStageTables.ValidateWavePlan(row, waves.Where(wave => wave.StageId == row.Id));
         }
         foreach (var row in waves)
         {

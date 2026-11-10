@@ -9,7 +9,7 @@ param(
     [switch] $JobLeakDiagnostics,
     [switch] $RebuildShaderCache,
     [switch] $CheckNativeMemory,
-    [ValidateSet('all', 'stages', 'dungeons', 'skins', 'actors', 'projectiles', 'skills', 'rewards', 'combos', 'ranks', 'lifecycle', 'heroes', 'motion', 'buffs', 'ownership', 'ui', 'skill-levels')][string] $MatrixSection = 'all',
+    [ValidateSet('all', 'stages', 'dungeons', 'skins', 'actors', 'projectiles', 'skills', 'rewards', 'combos', 'ranks', 'lifecycle', 'heroes', 'motion', 'buffs', 'ownership', 'ui', 'skill-levels', 'playthrough', 'level-design')][string] $MatrixSection = 'all',
     [string] $MatrixFilter = ''
 )
 

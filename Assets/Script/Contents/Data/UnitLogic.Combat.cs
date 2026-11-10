@@ -67,7 +67,8 @@ namespace Luna.Gameplay
                 if (candidate == null || candidate == this || candidate.Data == null || candidate.IsHiding
                     || candidate.Data.RoundId != Data.RoundId || candidate.UnitSide == UnitSide
                     || candidate.stat.Hp <= 0f || candidate.unitState.IsLobbyMove) continue;
-                float distance = (candidate.transform.position.x - transform.position.x) * direction;
+                float offset = candidate.transform.position.x - transform.position.x;
+                float distance = this is PlayerLogic ? Mathf.Abs(offset) : offset * direction;
                 if (distance < 0f) continue;
                 if (candidate.hitPriority == eHitPriority.TOWER)
                 {

@@ -95,6 +95,12 @@ namespace Luna.Gameplay
 
         internal void EnterPlayerAttack()
         {
+            if (Animation != null && Target != null)
+            {
+                float offset = Target.transform.position.x - transform.position.x;
+                if (Mathf.Abs(offset) > 0.001f)
+                    Animation.Skeleton.ScaleX = Mathf.Sign(offset) * Mathf.Abs(Animation.Skeleton.ScaleX);
+            }
             attackDeadline = Time.time + Mathf.Max(1f, stat.AttackSpeed * 3f);
             BeginAttack();
         }
@@ -110,7 +116,11 @@ namespace Luna.Gameplay
             }
             if (unitState.IsLobbyMove || Moving == 0 || isStun) return;
             if (Animation != null) Animation.Skeleton.ScaleX = Moving;
-            if (Moving > 0 && Target != null && Target.transform.position.x <= transform.position.x + 1f) return;
+            if (Target != null)
+            {
+                float distanceAhead = (Target.transform.position.x - transform.position.x) * Moving;
+                if (distanceAhead >= 0f && distanceAhead <= 1f) return;
+            }
             MoveCombat(Moving, elapsed);
         }
 

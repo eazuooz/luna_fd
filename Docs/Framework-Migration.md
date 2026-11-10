@@ -108,8 +108,8 @@ Entity 인스턴스 풀은 native Entity/ObjectPool 모듈이 소유한다. 원�
 | `SkillBalance.csv` | 액티브 스킬 14개·장비 능력 18개의 전투 설정 18필드: 마나·피해·범위·쿨다운·지속시간·확률·계수·소환 한도 등 |
 | `EntityParameters.csv` | 프리팹별 수치 매개변수와 플레이어 능력 설정 |
 | `Stages.csv` | 36개 스테이지 정의, 종류·폭·제한시간·배경·타워·보스·금화 |
-| `StageWaves.csv` | 155개 시작·반복·무한 웨이브 행 |
-| `StageRewards.csv` | 83개 승리·몬스터·무한 보상 행 |
+| `StageWaves.csv` | 시작 편성, 시간별 증원, 무한 층, 보스 체력 구간 |
+| `StageRewards.csv` | 첫 승리·승리·몬스터·무한던전 정예 보상 |
 
 이 CSV들은 native DataTable 행으로 파싱한다. 중복 ID·키, 잘못된 참조·확률·비정상 수치를 검사한다. `Tools/export_luna_stage_tables.py`는 기존 스테이지 설정에서 최초 CSV를 만든 이관 도구이며 런타임에서 예전 ScriptableObject의 생성 메서드를 호출하지 않는다. 남아 있는 BasicDungeonData/BossDungeonData 클래스는 이전 직렬화 자료를 읽기 위한 데이터 형태이고 Spawn/Drop 실행 메서드가 없다.
 

@@ -8,17 +8,19 @@ public sealed class BasicDungeon : LunaGame
 {
     private enum Phase { Loading, IntroWait, IntroSpawns, IntroRight, IntroHold, IntroLeft, Combat, NextLoading, NextWait, NextRise, NextWalk }
     private Phase phase;
-    private float timer, spawnTimer;
+    private float timer;
     private int enemyTowerId, allyTowerId, backgroundId;
     private int nextBackgroundId, nextPlayerId;
-    private int waveIndex, repeatCount;
+    private int waveIndex;
     private bool skipIntro;
-    private List<LunaStageWaveRow> repeatWaves;
+    private List<LunaStageWaveRow> timedWaves;
     public GameObject gameEnemyTower => LunaSpawn.Find<UnitLogic>(enemyTowerId)?.gameObject;
     public GameObject gameAllyTower => LunaSpawn.Find<UnitLogic>(allyTowerId)?.gameObject;
     public GameObject gamePlayer => Player != null ? Player.gameObject : null;
     public float stageWidth => row.Width;
     public bool isBossStage => row.IsBossStage;
+    public bool HasNextStage => row.Id < 30;
+    public float SecondsUntilWave => waveIndex < timedWaves.Count ? Mathf.Max(0f, timedWaves[waveIndex].At - StageCount) : float.PositiveInfinity;
     public string PhaseName => phase.ToString();
     public override void Initialize(LunaStageDefinition source)
     {
@@ -29,13 +31,12 @@ public sealed class BasicDungeon : LunaGame
         Defined.LunaStartPosition = new Vector3(-5f, 0f, 0f);
         Defined.StayMonsterPosition = new Vector3(5f, 0f, 0f);
         phase = Phase.Loading;
-        repeatWaves = LunaStageTables.GetWaves(row.Id, "Repeat");
-        foreach (var wave in repeatWaves) repeatCount += wave.Count;
-        if (repeatCount <= 0) throw new InvalidOperationException("Campaign stage has no repeating wave: " + row.Key);
+        timedWaves = LunaStageTables.GetWaves(row.Id, "Timed");
         backgroundId = SpawnBackdrop(definition.backgroundImage, Vector3.zero);
-        enemyTowerId = SpawnUnit(LunaStageTables.RequireAsset<GameObject>(row.EnemyTower), Defined.EnemyTowerPosition, UnitSpawnMode.Staged);
+        enemyTowerId = SpawnUnit(LunaStageTables.RequireAsset<GameObject>(row.EnemyTower), Defined.EnemyTowerPosition,
+            UnitSpawnMode.Staged, healthMultiplier: row.ObjectiveHealth, attackMultiplier: row.ObjectiveAttack);
         allyTowerId = SpawnUnit(LunaStageTables.RequireAsset<GameObject>(row.AllyTower), Defined.AllyTowerPosition, UnitSpawnMode.Staged,
-            healthMultiplier: Mathf.Max(1, LunaDataTable.Instance.playerData.TowerHPLevel),
+            healthMultiplier: LunaEconomy.TowerHealthMultiplier(LunaDataTable.Instance.playerData.TowerHPLevel),
             shown: tower => SpawnPlayer(Defined.LunaStartPosition, tower.ID, true));
         var p = stageCamera.transform.position; p.x = -stageWidth + 0.01f; p.y = 1.865f; stageCamera.transform.position = p;
     }
@@ -44,8 +45,10 @@ public sealed class BasicDungeon : LunaGame
     protected override void OnFinished(bool won)
     {
         if (!won) return;
-        LunaDataTable.Instance.playerData.SaveStageName = LunaSession.Current.NextStageString();
-        if (LunaDataTable.Instance.StageTable.TryGetValue(StageKey, out var stage)) stage.isClear = true;
+        var player = LunaDataTable.Instance.playerData;
+        player.UnlockedFloor = Mathf.Max(player.UnlockedFloor, Mathf.Min(30, row.Id + 1));
+        if (!HasNextStage) player.CampaignComplete = true;
+        player.SaveStageName = HasNextStage ? LunaSession.Current.NextStageString() : StageKey;
     }
     public bool PlayerSkillMPCheck()
     {
@@ -65,8 +68,8 @@ public sealed class BasicDungeon : LunaGame
                 timer -= elapsed;
                 if (timer > 0f) break;
                 foreach (var wave in LunaStageTables.GetWaves(row.Id, "Start"))
-                    for (int i = 0; i < wave.Count; i++)
-                        SpawnUnit(LunaStageTables.RequireAsset<GameObject>(wave.Prefab), Defined.StayMonsterPosition + new Vector3(i * 0.3f, 0f, i * 0.3f), UnitSpawnMode.Staged, wave.Level);
+                    SpawnFormation(wave, Defined.StayMonsterPosition + Vector3.right * (wave.Order * 0.45f), UnitSpawnMode.Staged,
+                        healthMultiplier: row.WaveHealth, attackMultiplier: row.WaveAttack);
                 phase = Phase.IntroSpawns;
                 break;
             case Phase.IntroSpawns:
@@ -83,7 +86,7 @@ public sealed class BasicDungeon : LunaGame
                 if (skipIntro || MoveCameraX(-stageWidth + 0.01f, 4f * elapsed))
                 {
                     var p = stageCamera.transform.position; p.x = -stageWidth + 0.01f; stageCamera.transform.position = p;
-                    StartCombat(true); spawnTimer = row.SpawnInterval; phase = Phase.Combat;
+                    StartCombat(true); phase = Phase.Combat;
                 }
                 break;
             case Phase.Combat:
@@ -91,8 +94,13 @@ public sealed class BasicDungeon : LunaGame
                 StageCount += elapsed;
                 if (!Alive(LunaSpawn.Find<UnitLogic>(allyTowerId))) { Finish(false); break; }
                 if (!Alive(LunaSpawn.Find<UnitLogic>(enemyTowerId))) { Finish(true); break; }
-                spawnTimer -= elapsed;
-                if (spawnTimer <= 0f) { SpawnNextWave(); spawnTimer += row.SpawnInterval; }
+                if (StageCount >= row.TimeLimit) { Finish(false); break; }
+                while (waveIndex < timedWaves.Count && StageCount >= timedWaves[waveIndex].At)
+                {
+                    var wave = timedWaves[waveIndex++];
+                    SpawnFormation(wave, Defined.EnemyTowerPosition - Vector3.right * (wave.Order * 0.24f), UnitSpawnMode.Battle,
+                        healthMultiplier: row.WaveHealth, attackMultiplier: row.WaveAttack);
+                }
                 TickCamera(elapsed, stageWidth - 0.01f);
                 break;
             case Phase.NextLoading:
@@ -127,31 +135,9 @@ public sealed class BasicDungeon : LunaGame
         var p = stageCamera.transform.position; p.x = Mathf.MoveTowards(p.x, target, step); stageCamera.transform.position = p;
         return Mathf.Abs(p.x - target) < 0.001f;
     }
-    private void SpawnNextWave()
-    {
-        int index = waveIndex++ % repeatCount;
-        foreach (var wave in repeatWaves)
-        {
-            if (index >= wave.Count) { index -= wave.Count; continue; }
-            var position = Defined.EnemyTowerPosition; position.z = 0.00001f * waveIndex;
-            SpawnUnit(LunaStageTables.RequireAsset<GameObject>(wave.Prefab), position, level: wave.Level); return;
-        }
-    }
-    public override void DropItem()
-    {
-        base.DropItem();
-        int multiplier = LunaDataTable.Instance.playerData.SkinType == PlayerData.eLunaSkin.Rich && Defined.CanProbability(50) ? 2 : 1;
-        var common = LunaStageTables.RequireAsset<GameObject>("LunaAssetBundle").GetComponent<LunaAssetBundle>();
-        for (int i = 0; i < row.Gold * multiplier; i++)
-        {
-            var data = LootData.Create(0, 1, Defined.EnemyTowerPosition + Vector3.right * UnityEngine.Random.Range(-2f, 2f), roundId: RoundId);
-            data.Rotation = common.Coin.transform.rotation;
-            Show<DropCoinLogic>(common.Coin, data);
-        }
-    }
     public void ToNextStage()
     {
-        if (!IsActive || phase >= Phase.NextLoading) return;
+        if (!IsActive || !isStageWin || !HasNextStage || phase >= Phase.NextLoading) return;
         LunaUI.Close(UI_TYPE.RESULT); LeaveResultPresentation(); isStageStop = true;
         string nextKey = LunaSession.Current.NextStageString();
         LunaSession.Current.CurrentStageName = nextKey; LunaSession.Current.SetStagePrefab(nextKey);

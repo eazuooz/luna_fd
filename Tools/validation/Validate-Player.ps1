@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidateSet('All', 'Seed', 'Verify', 'Diagnostics', 'Early')][string] $Mode = 'All',
-    [ValidateSet('all', 'persistence', 'audio', 'input', 'render', 'soak')][string] $Section = 'all',
+    [ValidateSet('all', 'persistence', 'audio', 'input', 'render', 'soak', 'level-design')][string] $Section = 'all',
     [ValidateSet('backbuffer', 'offscreen')][string] $RenderMode = 'backbuffer',
     [ValidatePattern('^[A-Za-z0-9_-]+$')][string] $RunId = ('player-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')),
     [string] $PlayerPath,

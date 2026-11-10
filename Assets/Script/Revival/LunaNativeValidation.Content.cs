@@ -400,11 +400,14 @@ public sealed partial class LunaNativeValidation
                 UnitLogic.From(game.gameEnemyTower).stat.Hp = 0f;
                 yield return Until(() => game.isStageWin && game.isStageStop && game.PendingLootCount > 0, "Victory creates owned reward records");
                 int earned = game.PendingLootCount; int rewardBefore = player.RewardGold;
-                Require(earned >= 5, "First stage's authored five coins were not registered before asynchronous visuals.");
+                Require(earned >= 1, "Stage gold was not registered before asynchronous visuals.");
                 LunaScenes.Load("Lobby");
                 yield return Until(() => LunaScenes.CurrentScene == "Lobby" && !LunaScenes.IsTransitioning, "Immediate victory exit");
                 int goldAfter = player.Gold; int delta = goldAfter - goldBefore;
-                Require(delta == 500 || delta == 1000, "Fast exit lost or duplicated the first stage's five coins (Rich may double them).");
+                var stage = game.Definition.Row;
+                Require(delta == stage.Gold + stage.FirstClearGold ||
+                    (player.SkinType == PlayerData.eLunaSkin.Rich && delta == 2 * stage.Gold + stage.FirstClearGold),
+                    "Fast exit lost or duplicated first-clear gold.");
                 Require(game.PendingLootCount == 0 && InventoryDelta(itemsBefore) == 0, "Victory exit did not settle its ledger or invented an unauthored first-stage item reward.");
                 game.SettleLoot(); yield return new WaitForSeconds(2f);
                 Require(player.Gold == goldAfter && game.PendingLootCount == 0, "Late pickup or repeated settlement granted victory twice.");
@@ -466,41 +469,34 @@ public sealed partial class LunaNativeValidation
     private IEnumerator EndlessRewardContract()
     {
         BeginCase("rewards", "endless-authored-and-controlled-payout");
-        const string key = "Dungeon04"; int stageId = LunaStageTables.Get(key).Id;
-        Require(LunaStageTables.GetRewards(stageId, "Victory").Count == 0 && LunaStageTables.GetRewards(stageId, "EndlessBoss").Count == 0,
-            "Authored Endless reward table changed; update the explicit empty-table oracle.");
+        const string key = "Dungeon04"; var stage = LunaStageTables.Get(key);
+        var profile = LunaDataTable.Instance.playerData;
         yield return LoadDungeonFixture(key); var authored = (EndlessDungeon)LunaScenes.CurrentGame;
-        var authoredBefore = ItemCounts(); authored.Player.stat.Hp = 0f;
+        var authoredBefore = ItemCounts(); int startingGold = profile.Gold;
+        authored.Player.stat.Hp = 0f;
         yield return Until(() => Active<UIResult>() != null, "Authored zero-floor Endless defeat", 20f);
-        Require(!authored.isStageWin && authored.dungeonLevel == 0 && authored.PendingLootCount == 0 && InventoryDelta(authoredBefore) == 0,
-            "Zero completed floors or empty authored rewards invented loot.");
+        Require(!authored.isStageWin && authored.dungeonLevel == 0 && authored.PendingLootCount == 0 &&
+            InventoryDelta(authoredBefore) == 0 && profile.Gold == startingGold, "Zero completed floors invented loot.");
         yield return EnsureFixtureLobby();
-        const int bossRow = 900001, normalRow = 900002;
-        var bossItem = Resources.Load<ItemData>("ScriptableObjects/Items/1000_equip_stone");
-        var normalItem = Resources.Load<ItemData>("ScriptableObjects/Items/1001_skill_stone");
-        string bossSource = JsonUtility.ToJson(bossItem), normalSource = JsonUtility.ToJson(normalItem);
-        Require(!LunaStageTables.Rewards.HasDataRow(bossRow) && !LunaStageTables.Rewards.HasDataRow(normalRow), "Reserved isolated reward fixture IDs collide.");
-        try
-        {
-            Require(LunaStageTables.Rewards.AddDataRow(bossRow + "," + stageId + ",EndlessBoss,ScriptableObjects/Items/1000_equip_stone,1", null), "Could not add controlled boss reward row.");
-            Require(LunaStageTables.Rewards.AddDataRow(normalRow + "," + stageId + ",Victory,ScriptableObjects/Items/1001_skill_stone,1", null), "Could not add controlled normal reward row.");
-            yield return LoadDungeonFixture(key); var controlled = (EndlessDungeon)LunaScenes.CurrentGame;
-            yield return CompleteEndlessFloor(controlled); yield return CompleteEndlessFloor(controlled);
-            int beforeBoss = LunaDataTable.Instance.itemTable[bossItem.itemNumber].itemCount;
-            int beforeNormal = LunaDataTable.Instance.itemTable[normalItem.itemNumber].itemCount;
-            controlled.Player.stat.Hp = 0f;
-            yield return Until(() => Active<UIResult>() != null, "Controlled two-floor Endless defeat", 20f);
-            Require(controlled.dungeonLevel == 2 && !controlled.isStageWin && !controlled.PlayerRespawnPending, "Completed-floor defeat/respawn policy changed.");
-            Require(LunaDataTable.Instance.itemTable[bossItem.itemNumber].itemCount == beforeBoss + 2 &&
-                LunaDataTable.Instance.itemTable[normalItem.itemNumber].itemCount == beforeNormal + 2, "Mixed boss/normal rewards used the wrong item identity or floor multiplier.");
-            controlled.SettleLoot(); yield return EnsureFixtureLobby();
-            Require(LunaDataTable.Instance.itemTable[bossItem.itemNumber].itemCount == beforeBoss + 2 &&
-                LunaDataTable.Instance.itemTable[normalItem.itemNumber].itemCount == beforeNormal + 2, "Endless settlement repeated at exit.");
-            Require(JsonUtility.ToJson(bossItem) == bossSource && JsonUtility.ToJson(normalItem) == normalSource, "Controlled rewards mutated source assets.");
-            current.observations.Add("Authored Dungeon04 reward rows=0 (expected no payout); temporary native rows exercised two real completed floors: boss2 + normal2. No production CSV edit.");
-        }
-        finally { LunaStageTables.Rewards.RemoveDataRow(bossRow); LunaStageTables.Rewards.RemoveDataRow(normalRow); }
-        EndCase("Empty authored data and zero-floor semantics distinguished from a controlled native-table mixed reward regression; temporary rows removed.");
+        yield return LoadDungeonFixture(key); var run = (EndlessDungeon)LunaScenes.CurrentGame;
+        Time.timeScale = 4f;
+        var rewards = LunaStageTables.GetRewards(stage.Id, "EndlessBoss");
+        Require(rewards.Count == 1 && rewards[0].Probability == 1f, "Endless milestone needs its guaranteed authored reward.");
+        int item = Resources.Load<ItemData>(rewards[0].Item).itemNumber;
+        int stonesBefore = profile.StarStone;
+        var inventoryBefore = ItemCounts();
+        for (int floor = 0; floor < 5; floor++) yield return CompleteEndlessFloor(run);
+        run.Player.stat.Hp = 0f;
+        yield return Until(() => Active<UIResult>() != null, "Five completed floors payout", 20f);
+        Require(run.dungeonLevel == 5 && !run.isStageWin && profile.BestEndlessFloor(key) == 5, "Best floor or result did not reflect completed encounters.");
+        Require(profile.Gold - startingGold == 5 * stage.Gold + stage.FirstClearGold &&
+            profile.StarStone - stonesBefore == stage.FirstClearStones &&
+            LunaDataTable.Instance.itemTable[item].itemCount - inventoryBefore[item] == 1, "Floor and milestone payout was wrong.");
+        int settledGold = profile.Gold;
+        run.SettleLoot(); yield return EnsureFixtureLobby();
+        Require(profile.Gold == settledGold && InventoryDelta(inventoryBefore) == 1, "Endless result paid twice.");
+        Require(LunaRuntimeData.Reload() && profile.BestEndlessFloor(key) == 5, "Endless best floor did not survive reload.");
+        EndCase("No reward at floor zero. Five actual floor transitions paid one milestone and bounded gold, then persisted the best floor.");
     }
 }
 #endif

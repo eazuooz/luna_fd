@@ -41,6 +41,9 @@ public class UIPlayer : UILuna
         goldText = transform.Find("GoldText").GetComponent<Text>();
         manaText = transform.Find("ManaText").GetComponent<Text>();
         timeText = transform.Find("TimeText").GetComponent<Text>();
+        timeText.resizeTextForBestFit = true;
+        timeText.resizeTextMinSize = 14;
+        timeText.resizeTextMaxSize = 24;
         goldGauge = transform.Find("GoldGaugeImage").GetComponent<Image>();
         manaGauge = transform.Find("ManaGaugeImage").GetComponent<Image>();
         transform.Find("GoldMaxText").GetComponent<Text>().text = "/" + roster.MaxGold;
@@ -95,7 +98,27 @@ public class UIPlayer : UILuna
         goldText.text = roster.Gold.ToString(); manaText.text = roster.Mana.ToString();
         goldGauge.fillAmount = (float)roster.Gold / roster.MaxGold;
         manaGauge.fillAmount = (float)roster.Mana / roster.MaxMana;
-        timeText.text = round is BossDungeon boss ? boss.dungeonCount.ToString("F2") : TimeSpan.FromSeconds(round.StageCount).ToString(@"mm\:ss");
+        float timeLeft;
+        if (round is BossDungeon boss)
+        {
+            timeLeft = boss.dungeonCount;
+            timeText.text = Mathf.CeilToInt(timeLeft) + "초 · " + Mathf.CeilToInt(boss.BossHealth * 100f) + "%";
+            if (boss.Boss is Rugani rugani && rugani.StrikeMarker.HasValue)
+                timeText.text += "\n낙뢰!";
+        }
+        else if (round is EndlessDungeon endless)
+        {
+            timeLeft = endless.FloorTimeRemaining;
+            timeText.text = (endless.dungeonLevel + 1) + "층 · " + Mathf.CeilToInt(timeLeft) + "초";
+        }
+        else
+        {
+            timeLeft = Mathf.Max(0f, round.TimeLimit - round.StageCount);
+            timeText.text = TimeSpan.FromSeconds(Mathf.Ceil(timeLeft)).ToString(@"mm\:ss");
+            if (round is BasicDungeon basic && basic.SecondsUntilWave <= 4f)
+                timeText.text += "\n증원 " + Mathf.CeilToInt(basic.SecondsUntilWave) + "초";
+        }
+        timeText.color = timeLeft <= 10f ? new Color(1f, 0.38f, 0.34f) : Color.white;
         for (int i = 0; i < cards.Count; i++)
         {
             var card = cards[i];

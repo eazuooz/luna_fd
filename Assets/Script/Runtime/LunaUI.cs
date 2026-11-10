@@ -117,6 +117,11 @@ namespace Luna.Gameplay
             var form = UI.GetUIForm(data.AssetName);
             return form != null && ReferenceEquals(form.UIGroup.CurrentUIForm, form);
         }
+        internal static bool IsOpenOrLoading(UI_TYPE type)
+        {
+            return definitions.TryGetValue(type, out var data) && UI != null &&
+                (UI.IsLoadingUIForm(data.AssetName) || UI.GetUIForm(data.AssetName) != null);
+        }
         public static void CloseSceneForms()
         {
             requestedSerials.Clear();

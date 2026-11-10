@@ -6,6 +6,11 @@ from pathlib import Path
 import yaml
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "Assets/Resources/DataTables"
+current = OUT / "Stages.csv"
+if current.is_file():
+    with current.open(encoding="utf-8-sig", newline="") as stream:
+        if "StartGold" in next(csv.reader(stream), []):
+            raise SystemExit("This is a legacy exporter. Preserve the authored encounter plan and edit the current CSVs directly.")
 
 def documents(path):
     text = path.read_text(encoding="utf-8-sig")

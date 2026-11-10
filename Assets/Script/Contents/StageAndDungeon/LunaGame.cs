@@ -38,6 +38,7 @@ public abstract class LunaGame
     public string FailureMessage { get; private set; }
     public string stageName => row.DisplayName;
     public string StageKey => row.Key;
+    public float TimeLimit => row.TimeLimit;
     public LunaStageDefinition Definition => definition;
     public bool isStageStop { get; set; }
     public bool isStageWin { get; set; }
@@ -47,6 +48,7 @@ public abstract class LunaGame
     public bool ShakeOn => shakeTime > 0f;
     public UnitLogic Player => LunaSpawn.Find<UnitLogic>(playerId);
     protected bool IsFinishing => resultStarted;
+    private bool firstClear;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSerial() => roundSerial = 0;
@@ -137,14 +139,26 @@ public abstract class LunaGame
         return id;
     }
     public int SpawnUnit(GameObject prefab, Vector3 position, UnitSpawnMode mode = UnitSpawnMode.Battle, int level = 0,
-        int allyTowerId = 0, float healthMultiplier = 1f, Action<UnitLogic> shown = null)
+        int allyTowerId = 0, float healthMultiplier = 1f, Action<UnitLogic> shown = null, float attackMultiplier = 1f)
     {
         var view = prefab.GetComponent<UnitView>();
         UnitData data = view != null && view.Definition != null && view.Definition.UnitType == eUnitType.Tower
             ? (UnitData)TowerData.CreateFrom(view, position) : UnitData.CreateFrom(view, position);
         data.Rotation = Quaternion.identity; data.InitialMode = mode; data.AllyTowerId = allyTowerId; data.HealthMultiplier = healthMultiplier;
+        data.AttackMultiplier = attackMultiplier;
         if (level > 0) data.Level = level;
         return Show(prefab, data, shown);
+    }
+    protected void SpawnFormation(LunaStageWaveRow wave, Vector3 anchor, UnitSpawnMode mode, int levelBonus = 0,
+        float healthMultiplier = 1f, float attackMultiplier = 1f, bool randomY = false)
+    {
+        var prefab = LunaStageTables.RequireAsset<GameObject>(wave.Prefab);
+        for (int i = 0; i < wave.Count; i++)
+        {
+            float y = randomY ? UnityEngine.Random.Range(-0.2f, 0.45f) : 0f;
+            var position = anchor + new Vector3(-i * 0.36f, y, y + (wave.Id % 1000) * 0.0001f);
+            SpawnUnit(prefab, position, mode, wave.Level + levelBonus, healthMultiplier: healthMultiplier, attackMultiplier: attackMultiplier);
+        }
     }
     protected int SpawnPlayer(Vector3 position, int towerId, bool staged)
     {
@@ -208,6 +222,20 @@ public abstract class LunaGame
         LunaSpawn.Cancel(graveId); LunaSpawn.Cancel(resurrectionId);
         if (Player is PlayerLogic player) player.NMove();
         StageUnits(true);
+        if (won)
+        {
+            var progress = LunaDataTable.Instance;
+            if (progress.StageTable.TryGetValue(StageKey, out var campaign))
+            {
+                firstClear = !campaign.isClear;
+                campaign.isClear = true;
+            }
+            else if (this is BossDungeon)
+            {
+                firstClear = !progress.playerData.ClearedDungeons.Contains(StageKey);
+                if (firstClear) progress.playerData.ClearedDungeons.Add(StageKey);
+            }
+        }
         OnFinished(won);
         if (won) DropItem();
     }
@@ -222,8 +250,7 @@ public abstract class LunaGame
         if (loot.IsCoin)
         {
             var player = LunaDataTable.Instance.playerData;
-            player.RewardGold += loot.Count;
-            player.Gold += loot.Count * loot.CoinValue;
+            LunaEconomy.GrantGold(player, loot.Count, loot.CoinValue);
         }
         else
         {
@@ -323,12 +350,36 @@ public abstract class LunaGame
     }
     public virtual void DropItem()
     {
+        var player = LunaDataTable.Instance.playerData;
+        int gold = row.Gold;
+        if (player.SkinType == PlayerData.eLunaSkin.Rich && Defined.CanProbability(50)) gold *= 2;
+        AwardGold(gold + (firstClear ? row.FirstClearGold : 0));
         var rewards = LunaStageTables.GetRewards(row.Id, "Victory");
-        for (int i = 0; i < rewards.Count; i++)
-        {
-            var reward = rewards[UnityEngine.Random.Range(0, rewards.Count)];
+        foreach (var reward in rewards)
             if (Defined.CanProbability(reward.Probability * 100f)) SpawnReward(reward, Defined.EnemyTowerPosition);
+        if (firstClear)
+        {
+            AwardStones(row.FirstClearStones);
+            foreach (var reward in LunaStageTables.GetRewards(row.Id, "FirstClear"))
+                if (Defined.CanProbability(reward.Probability * 100f)) SpawnReward(reward, Defined.EnemyTowerPosition);
         }
+    }
+    protected void AwardGold(int amount)
+    {
+        if (amount <= 0) return;
+        var common = LunaStageTables.RequireAsset<GameObject>("LunaAssetBundle").GetComponent<LunaAssetBundle>();
+        var data = LootData.Create(0, 1, Defined.EnemyTowerPosition, roundId: RoundId);
+        data.CoinValue = amount;
+        data.Rotation = common.Coin.transform.rotation;
+        Show<DropCoinLogic>(common.Coin, data);
+    }
+    public int RewardStones { get; private set; }
+    protected void AwardStones(int amount)
+    {
+        var player = LunaDataTable.Instance.playerData;
+        int credit = Mathf.Clamp(amount, 0, int.MaxValue - player.StarStone);
+        player.StarStone += credit;
+        RewardStones += credit;
     }
     public virtual void DropItemMonster(Vector3 position)
     {
@@ -336,11 +387,11 @@ public abstract class LunaGame
         if (rewards.Count != 1) return; // Preserve the authored single-roll monster rule.
         if (Defined.CanProbability(rewards[0].Probability * 100f)) SpawnReward(rewards[0], position, false);
     }
-    protected void SpawnReward(LunaStageRewardRow reward, Vector3 position, bool scatter = true)
+    protected void SpawnReward(LunaStageRewardRow reward, Vector3 position, bool scatter = true, int count = 1)
     {
         var item = LunaStageTables.RequireAsset<ItemData>(reward.Item);
         if (scatter) position += Vector3.right * UnityEngine.Random.Range(-2f, 2f);
-        var data = LootData.Create(item.itemNumber, 1, position, roundId: RoundId);
+        var data = LootData.Create(item.itemNumber, count, position, roundId: RoundId);
         data.Rotation = item.cunnectPrefab.transform.rotation;
         Show<DropItemLogic>(item.cunnectPrefab, data);
     }

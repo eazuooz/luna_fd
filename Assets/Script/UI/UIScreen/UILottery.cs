@@ -12,6 +12,7 @@ public class UILottery : UILuna
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
+        isLotteryEnd = false;
         
 
         GameObject lotteryContent 

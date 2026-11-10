@@ -18,7 +18,7 @@ public sealed partial class LunaNativeValidation
 
     // Explicit diagnostic fallback. This renders the live scene but temporarily converts
     // overlay canvases to camera-space; it is not evidence of an OS-window backbuffer.
-    private Texture2D CaptureOffscreen(int width, int height)
+    private Texture2D CaptureOffscreen(int width, int height, System.Action<int, int> measureUi = null)
     {
         Camera camera = LunaBootstrap.GameplayCamera;
         if (!camera) camera = Camera.main;
@@ -46,7 +46,8 @@ public sealed partial class LunaNativeValidation
                 }
             }
             Canvas.ForceUpdateCanvases();
-            MeasureCriticalUiBounds(width, height);
+            if (measureUi == null) MeasureCriticalUiBounds(width, height);
+            else measureUi(width, height);
             if (GraphicsSettings.currentRenderPipeline != null)
             {
                 var request = new RenderPipeline.StandardRequest { destination = target };

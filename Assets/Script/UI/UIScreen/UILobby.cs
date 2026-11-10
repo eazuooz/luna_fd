@@ -97,20 +97,11 @@ public class UILobby : UILuna
 
     private void LoadStage()
     {
-        //게임 시작 최초 선택된 스테이지가 없을 경우
-        if (LunaSession.Current.CurrentStageName == "")
-        {
-            LunaSession.Current.SelectStagePrefab =
-                Resources.Load<GameObject>("Prefabs/10Stage/Stage01-01");
-        }
-        else
-        {
-            string stageDir = "Prefabs/10Stage/"
-                    + LunaSession.Current.CurrentStageName;
-
-            LunaSession.Current.SelectStagePrefab
-                = Resources.Load<GameObject>(stageDir);
-        }
+        var profile = LunaDataTable.Instance.playerData;
+        var stage = LunaStageTables.Get(profile.SaveStageName);
+        string key = LunaStageTables.IsUnlocked(stage, profile) ? stage.Key : "Stage01-01";
+        LunaSession.Current.CurrentStageName = key;
+        LunaSession.Current.SetStagePrefab(key);
     }
 
     private void MoveGameScene()

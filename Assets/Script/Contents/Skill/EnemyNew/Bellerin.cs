@@ -40,7 +40,8 @@ public class Bellerin : EnemySkillLogic
     }
     private IEnumerator Wave(float direction, float damage, bool targetsAllies)
     {
-        for (int i = 0; i < 8; i++)
+        // Leave the rear of the lane open so the party can retreat from the wave.
+        for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(0.3f);
             Vector3 point = transform.position + Vector3.right * direction * (i * 2f + 2f);

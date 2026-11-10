@@ -1,37 +1,37 @@
-RowId,Key,Kind,DisplayName,Width,TimeLimit,SpawnInterval,Gold,RandomY,IsBossStage,Background,AllyTower,EnemyTower,Boss
-1,Stage01-01,0,악몽의 성 지하 1층,3.25,90,6,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-2,Stage01-02,0,악몽의 성 지하 2층,3.25,90,6,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-3,Stage01-03,0,악몽의 성 지하 3층,3.25,90,5,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-4,Stage01-04,0,악몽의 성 지하 4층,3.25,90,5,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-5,Stage01-05,0,악몽의 성 지하 5층,3.25,90,4,10,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/04Monsters/SkeletonMagicianLeader,
-6,Stage01-06,0,악몽의 성 지하 6층,3.25,90,4,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-7,Stage01-07,0,악몽의 성 지하 7층,3.25,90,3,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-8,Stage01-08,0,악몽의 성 지하 8층,3.25,90,3,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-9,Stage01-09,0,악몽의 성 지하 9층,3.25,90,3,5,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-10,Stage01-10,0,악몽의 성 지하 10층,3.25,90,3,10,0,1,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/Bellerin,
-11,Stage02-01,0,악몽의 성 지하 11층,3.25,90,5,10,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-12,Stage02-02,0,악몽의 성 지하 12층,3.25,90,5,10,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-13,Stage02-03,0,악몽의 성 지하 13층,3.25,90,4,10,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-14,Stage02-04,0,악몽의 성 지하 14층,3.25,90,4,10,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-15,Stage02-05,0,악몽의 성 지하 15층,3.25,90,3,15,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-16,Stage02-06,0,악몽의 성 지하 16층,3.25,90,3,15,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-17,Stage02-07,0,악몽의 성 지하 17층,3.25,90,3,15,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-18,Stage02-08,0,악몽의 성 지하 18층,3.25,90,3,15,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-19,Stage02-09,0,악몽의 성 지하 19층,3.25,90,3,15,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-20,Stage02-10,0,악몽의 성 지하 20층,3.25,90,3,20,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/Asmo,
-21,Stage03-01,0,악몽의 성 지하 21층,3.25,90,5,20,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-22,Stage03-02,0,악몽의 성 지하 22층,3.25,90,5,20,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-23,Stage03-03,0,악몽의 성 지하 23층,3.25,90,4,20,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-24,Stage03-04,0,악몽의 성 지하 24층,3.25,90,4,20,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-25,Stage03-05,0,악몽의 성 지하 25층,3.25,90,3,20,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-26,Stage03-06,0,악몽의 성 지하 26층,3.25,90,3,20,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-27,Stage03-07,0,악몽의 성 지하 27층,3.25,90,3,20,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-28,Stage03-08,0,악몽의 성 지하 28층,3.25,90,3,20,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-29,Stage03-09,0,악몽의 성 지하 29층,3.25,90,2,20,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,
-30,Stage03-10,0,악몽의 성 지하 30층,3.25,90,2,20,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/MartinKingEnemy,
-31,Dungeon01,1,붉은 용의 방,3.25,90,6,0,0,0,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/RedDragon
-32,Dungeon02,1,Dungeon02,3.25,90,6,0,0,0,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Rugani
-33,Dungeon03,1,Dungeon03,3.25,90,6,0,0,0,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Wolf
-34,Dungeon04,2,6인의 영웅,3.25,90,6,0,1,0,Prefabs/08StageBackground/Background_Remain,,,
-35,Dungeon05_old,2,Dungeon05_old,3.25,90,6,0,0,0,Prefabs/08StageBackground/Background_Demon,,,
-36,TESTDungeon02,1,TESTDungeon02,3.25,90,6,0,0,0,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Rugani
+RowId,Key,Kind,DisplayName,Width,TimeLimit,StartGold,Gold,RandomY,IsBossStage,Background,AllyTower,EnemyTower,Boss,FirstClearGold,FirstClearStones,UnlockAfter,RecommendedLevel,ObjectiveHealth,ObjectiveAttack,Tip,WaveHealth,WaveAttack,StartMana
+1,Stage01-01,0,1층 · 첫 횃불,3.25,68,14,192,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,545,0,0,1,0.55,1,검병을 막고 포롱 검병을 전선에 합류시키세요.,1.0,1.0,0
+2,Stage01-02,0,2층 · 슬라임 물길,3.25,72,16,204,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,570,0,1,1,0.6,1,독 슬라임이 겹치기 전에 앞줄을 교대하세요.,1.0,1.0,0
+3,Stage01-03,0,3층 · 궁수의 복도,3.25,75,18,216,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,595,0,2,1,0.65,1,검병 뒤 궁수를 화염구로 함께 처리하세요.,1.0,1.0,0
+4,Stage01-04,0,4층 · 창의 교차로,3.25,77,20,228,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,620,0,3,2,0.7,1,창병의 긴 사거리 앞에서 포롱 궁수를 활용하세요.,1.0,1.0,0
+5,Stage01-05,0,5층 · 해골 마법사의 제단,3.25,77,21,240,0,1,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/04Monsters/SkeletonMagicianLeader,,845,2,4,2,4.2,0.7,시전 사이에 전진하고 늦게 오는 궁수 증원에 대비하세요.,1.0,1.0,0
+6,Stage01-06,0,6층 · 부서진 방패,3.25,80,22,252,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,670,0,5,2,0.76,1,느린 중갑을 먼저 묶어 두고 가벼운 적을 정리하세요.,1.0,1.0,0
+7,Stage01-07,0,7층 · 독과 화살,3.25,86,24,264,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,695,0,6,2,0.8,1,짧은 연속 공세 뒤 다음 화살을 준비할 시간이 생깁니다.,0.96,1.0,0
+8,Stage01-08,0,8층 · 쌍창 대열,3.25,87,30,276,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,720,0,7,3,0.739,1,두 창병이 모이면 물러서서 마나를 모으세요.,0.85,0.83,10
+9,Stage01-09,0,9층 · 검은 문턱,3.25,94,33,288,0,0,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,745,0,8,3,0.774,1,선봉과 후방 궁수 사이가 벌어질 때 돌파하세요.,0.76,0.7,18
+10,Stage01-10,0,10층 · 벨레린의 문,3.25,100,36,300,0,1,Prefabs/08StageBackground/Background_Ruin,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/Bellerin,,970,2,9,4,0.67,0.4,벨레린이 스킬을 쓴 뒤 몰아치고 증원 전에는 회복하세요.,0.76,0.7,20
+11,Stage02-01,0,11층 · 두 번째 관문,3.25,82,24,312,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,795,0,10,4,0.92,1,중갑이 오기 전 초반 전선을 확보하세요.,0.93,0.92,7
+12,Stage02-02,0,12층 · 중갑 보급로,3.25,89,30,324,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,820,0,11,4,0.845,1,체력이 높은 적 뒤의 궁수에 마나를 쓰세요.,0.85,0.83,10
+13,Stage02-03,0,13층 · 포위 사격,3.25,94,34,336,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,845,0,12,4,0.86,1,초반과 후반 궁수 집중 구간에 광역기를 남겨 두세요.,0.76,0.7,18
+14,Stage02-04,0,14층 · 거인의 발소리,3.25,97,35,348,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,870,0,13,5,0.903,1,느린 철퇴병을 막는 동안 후방 병력을 늘리세요.,0.76,0.7,18
+15,Stage02-05,0,15층 · 도끼대장의 막사,3.25,102,37,360,0,1,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/04Monsters/SkeletonBigAx,,1095,2,14,5,2.107,0.75,앞줄이 무너지기 전에 거대 도끼의 연속 타격을 끊으세요.,0.76,0.7,18
+16,Stage02-06,0,16층 · 마력의 잔향,3.25,98,35,372,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,920,0,15,5,0.963,1,마법사와 근접병이 합류하기 전 차례로 제압하세요.,0.76,0.7,18
+17,Stage02-07,0,17층 · 삼중 방진,3.25,99,36,384,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,945,0,16,5,1.015,1,검 창 궁수의 삼각 대형에서 가장 약한 쪽을 먼저 무너뜨리세요.,0.76,0.7,18
+18,Stage02-08,0,18층 · 깨진 봉인,3.25,100,37,396,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,970,0,17,6,1.058,1,빠른 증원 두 번 뒤 마법사 편성이 들어옵니다.,0.76,0.7,18
+19,Stage02-09,0,19층 · 아스모의 전초,3.25,102,37,408,0,0,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,995,0,18,6,1.109,1,철퇴병의 사거리와 궁수의 사선을 동시에 관리하세요.,0.76,0.7,18
+20,Stage02-10,0,20층 · 아스모의 결투장,3.25,106,39,420,0,1,Prefabs/08StageBackground/Background_11_20,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/Asmo,,1220,2,19,6,0.963,0.76,아스모가 전진하면 후퇴할 공간을 남기고 반격하세요.,0.76,0.7,18
+21,Stage03-01,0,21층 · 모글의 흔적,3.25,97,36,432,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1045,0,20,6,1.101,1,모글이 버티는 동안 쌓이는 궁수를 먼저 정리하세요.,0.76,0.7,18
+22,Stage03-02,0,22층 · 불씨의 회랑,3.25,96,34,444,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1070,0,21,7,1.179,1,불 마틴이 한곳에 모일 때 광역기로 길을 여세요.,0.85,0.83,10
+23,Stage03-03,0,23층 · 포격 골짜기,3.25,100,38,456,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1095,0,22,7,0.963,1,포격 사이에 전진하세요. 회복 동료를 편성하면 전열을 유지하기 쉽습니다.,0.7,0.64,22
+24,Stage03-04,0,24층 · 마틴의 선봉,3.25,102,39,468,0,0,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1120,0,23,7,1.143,1,느린 마틴과 빠른 불씨가 분리되도록 거리를 조절하세요.,0.7,0.64,22
+25,Stage03-05,0,25층 · 모글 지휘소,3.25,97,31,480,0,1,Prefabs/08StageBackground/Background_11_15,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/04Monsters/Mogle,,1345,2,24,7,3.55,1.05,지휘소에 달라붙기 전에 양쪽의 포격 지원을 끊으세요.,1.0,1.0,0
+26,Stage03-06,0,26층 · 잿빛 방벽,3.25,105,39,492,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1170,0,25,8,1.213,1,초반보다 후반의 짝지은 적이 위험합니다. 회복을 아끼세요.,0.7,0.64,22
+27,Stage03-07,0,27층 · 불꽃 교대,3.25,107,40,504,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1195,0,26,8,1.252,1,불 마틴 묶음을 넘긴 직후 적 전열이 얇아집니다.,0.7,0.64,22
+28,Stage03-08,0,28층 · 왕궁 외벽,3.25,109,40,516,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1220,0,27,8,1.315,1,마틴과 모글이 겹치면 공격보다 생존을 우선하세요.,0.7,0.64,22
+29,Stage03-09,0,29층 · 마지막 초소,3.25,112,41,528,0,0,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/08StageBackground/Tower/EnemyTower,,1245,0,28,8,1.361,1,세 차례의 공세 사이에 남은 병력과 마나를 정비하세요.,0.7,0.64,22
+30,Stage03-10,0,30층 · 마틴 왕의 왕좌,3.25,120,43,540,0,1,Prefabs/08StageBackground/Background_21_30,Prefabs/08StageBackground/Tower/AllyTower,Prefabs/03EliteMonters/MartinKingEnemy,,1470,2,29,9,0.9,0.72,돌진 경로를 피하고 왕이 멈춘 순간 병력을 집중하세요.,0.7,0.64,22
+31,Dungeon01,1,붉은 용의 방,3.25,90,31,460,0,1,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/RedDragon,1100,3,5,3,0.32,0.4,불길이 지나간 뒤 전진하세요. 체력 65%와 30%에서 증원이 옵니다.,0.84,0.8,20
+32,Dungeon02,1,루가니의 봉인실,3.25,100,36,570,0,1,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Rugani,1400,4,15,6,0.28,0.48,낙뢰 표시에서 벗어나세요. 체력 65%와 30%에서 지원 병력이 옵니다.,0.8,0.76,24
+33,Dungeon03,1,늑대왕의 사냥터,3.25,108,39,700,0,1,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Wolf,1750,5,25,7,0.388,0.57,늑대왕이 공격을 마친 순간 전진하고 양쪽 압박에 회복을 아끼세요.,0.84,0.8,20
+34,Dungeon04,2,무한 · 여섯 영웅,3.25,55,0,115,1,0,Prefabs/08StageBackground/Background_Remain,,,,400,2,10,4,1,1,선택한 여섯 동료와 시작합니다. 5층마다 정예가 나오고 살아남은 동료를 데려갑니다.,0.734,0.774,0
+35,Dungeon05_old,2,무한 · 잿빛 행군,3.25,76,30,155,0,0,Prefabs/08StageBackground/Background_Demon,,,,550,3,20,7,1,1,동료를 다시 부르며 전진하세요. 층을 넘을 때 전투 자원이 조금 보급됩니다.,0.66,0.728,12
+36,TESTDungeon02,1,루가니 시험장,3.25,92,32,0,0,1,Prefabs/08StageBackground/Background_Demon,,,Prefabs/03EliteMonters/Rugani,0,0,0,6,0.3,0.484,루가니 기술과 지원 병력을 점검하는 별도 시험 전투입니다.,0.84,0.8,24

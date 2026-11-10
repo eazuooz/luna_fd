@@ -20,7 +20,7 @@ namespace Luna.Gameplay
             get
             {
                 var result = new List<GameObject>();
-                foreach (var row in LunaStageTables.GetWaves(Row.Id, Kind == LunaStageKind.Endless ? "Endless" : "Repeat"))
+                foreach (var row in LunaStageTables.GetWaves(Row.Id, Kind == LunaStageKind.Endless ? "Endless" : "Timed"))
                     result.Add(LunaStageTables.RequireAsset<GameObject>(row.Prefab));
                 return result;
             }

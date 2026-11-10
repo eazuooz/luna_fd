@@ -662,7 +662,7 @@ public class UIUpgrade : UILuna
     //}
     private void Luna_LevelUp()
     {
-        if (IncreaseLevel(1000) == false)
+        if (IncreaseLevel(LunaEconomy.UnitLevelCost(LunaDataTable.Instance.playerData.LunaLevel)) == false)
             return;
 
         Contents outContent;
@@ -680,7 +680,7 @@ public class UIUpgrade : UILuna
             = LunaSession.Current.LunaPlayer.GetComponent<UnitView>().Data;
 
         string nameStr = "루나의 레벨이 "
-           + playerData.Level.ToString() + "로 <color=whilte>+1</color> 증가합니다. (Max 5)";
+           + playerData.Level + "입니다. (최대 20)";
 
         return nameStr;
     }
@@ -693,6 +693,7 @@ public class UIUpgrade : UILuna
         str += "- 공격력 " + objectData.GetAttackDamage_Value() + "( +" + objectData.LevelUpAttPoint.ToString() + ")";
         str += "    - 체력 " + objectData.GetCurrentLevelHP_Value() + "( +" + objectData.LevelUpHpPoint.ToString() + ")\n";
         str += "- 아머 " + objectData.GetArmour_ValueInt() + "( +" + objectData.LevelUpArmourPoint.ToString() + ")";
+        str += "\n" + (objectData.Level >= LunaEconomy.UnitMaxLevel ? "최대 레벨" : "강화 비용 " + LunaEconomy.UnitLevelCost(objectData.Level) + " G");
         //str += "    - 스킬공격력 " + objectData.GetResultSkillAtt_Value() + "( +" + objectData.levelUpSkillDamagePoint.ToString() + ")\n";
 
         return str;
@@ -752,9 +753,9 @@ public class UIUpgrade : UILuna
     }
     private string GetTowerHPNameString()
     {
-        string nameStr = "아군타워의 방어력이 <color=whilte>"
-                        + LunaDataTable.Instance.playerData.TowerHPLevel.ToString()
-                        + "%</color> 증가합니다.";
+        string nameStr = "아군 타워의 최대 체력 <color=white>"
+                        + Mathf.RoundToInt(100f * LunaEconomy.TowerHealthMultiplier(LunaDataTable.Instance.playerData.TowerHPLevel))
+                        + "%</color>";
 
         return nameStr;
     }
@@ -762,8 +763,9 @@ public class UIUpgrade : UILuna
     {
         string str = "";
         str += "LV " + LunaDataTable.Instance.playerData.TowerHPLevel.ToString() + "\n";
-        str += "현재 " + LunaDataTable.Instance.playerData.TowerHPLevel.ToString() + "%";
-        str += " -> " + (LunaDataTable.Instance.playerData.TowerHPLevel + 1).ToString() + "%";
+        int level = LunaDataTable.Instance.playerData.TowerHPLevel;
+        str += "현재 " + Mathf.RoundToInt(100f * LunaEconomy.TowerHealthMultiplier(level)) + "%";
+        str += " → " + Mathf.RoundToInt(100f * LunaEconomy.TowerHealthMultiplier(level + 1)) + "%";
 
         return str;
     }

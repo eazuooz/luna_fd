@@ -1,86 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
+using Luna.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
-using Luna.Gameplay;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class UIDungeonInfo : UILuna
 {
+    private LunaStageRow row;
 
-    private GameObject monsterContents;
-    private GameObject itemContents;
-    private int dungeonNumber;
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
-        var prefab = LunaSession.Current.selectDungeon;
-        if (prefab == null) { LunaUI.Close(type); return; }
-        if (!int.TryParse(prefab.name.Replace("Dungeon", ""), out dungeonNumber)) throw new System.InvalidOperationException("Invalid dungeon selection.");
-        var stage = prefab.GetComponent<LunaStageDefinition>();
-        transform.Find("BackGround/Title/Text").GetComponent<Text>().text = stage.DungeonName;
-        transform.Find("BackGround/SelectButton/LevelText").GetComponent<Text>().text = "던전 입장하기";
+        var stage = LunaSession.Current.selectDungeon?.GetComponent<LunaStageDefinition>();
+        if (stage == null) { LunaUI.Close(type); return; }
+        row = stage.Row;
+        var profile = LunaDataTable.Instance.playerData;
+        bool unlocked = LunaStageTables.IsUnlocked(row, profile);
+        transform.Find("BackGround/Title/Text").GetComponent<Text>().text = row.DisplayName;
+        transform.Find("BackGround/SelectButton/LevelText").GetComponent<Text>().text =
+            unlocked ? "권장 Lv. " + row.RecommendedLevel : row.UnlockAfter + "층 클리어 후";
+        transform.Find("BackGround/StartButton").GetComponent<Button>().interactable = unlocked;
         LunaStagePreview.Fill(transform, stage);
+        LunaStagePreview.AddBriefing(transform, row, 165f);
     }
 
-    
+    public void ReleaseThisUI() => LunaUI.Close(type);
 
-    
-
-    protected override void OnUpdate(float elapsed, float realElapsed)
+    public void OnClickSelectDungeon(int index)
     {
-        base.OnUpdate(elapsed, realElapsed); }
-
-    
-
-    protected override void OnClose(bool isShutdown, object userData)
-    {
-        try
-        { 
-        }
-        finally { base.OnClose(isShutdown, userData); }
-    }
-
-    public void ReleaseThisUI()
-    {
-        LunaUI.Close(type);
-    }
-
-    public int DungeonNumber { get; set; }
-
-    public void OnClickSelectDungeon(int idx)
-    {
+        if (row == null || !LunaStageTables.IsUnlocked(row, LunaDataTable.Instance.playerData)) return;
         LunaUI.Close(type);
         LunaUI.Close(UI_TYPE.SELECTSTAGE);
-
-        string dungeonString = "Dungeon0";
-        dungeonString += dungeonNumber.ToString();
-
-        LunaSession.Current.SelectDungeonString = dungeonString;
-
-        string stageDir = "Prefabs/11Dungeons/"
-                + LunaSession.Current.SelectDungeonString;
-
-        LunaSession.Current.selectDungeon
-            = Resources.Load<GameObject>(stageDir);
-
-        MoveDungeonScene();
-
+        foreach (var unit in LunaSession.Current.lobbyUnits)
+            if (unit != null) unit.GetComponent<UnitLogic>().unitState.IsLobbyStartMove = true;
+        LunaScenes.FadeIn(1.5f, () => LunaScenes.Load("Dungeon"));
     }
-    public void MoveDungeonScene()
-    {
-        //LunaUI.Close(type);
-        foreach (GameObject unit in LunaSession.Current.lobbyUnits)
-        {
-            if (unit != null)
-                unit.GetComponent<UnitLogic>().unitState.IsLobbyStartMove = true;
-        }
-
-        LunaScenes.FadeIn(1.5f, () =>
-        {
-            LunaScenes.Load("Dungeon");
-        });
-    }
-
 }

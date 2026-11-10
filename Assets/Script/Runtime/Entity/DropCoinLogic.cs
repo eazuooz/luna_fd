@@ -6,8 +6,7 @@ namespace Luna.Gameplay
         {
             if (GrantRoundLoot(loot)) return;
             var player = LunaDataTable.Instance.playerData;
-            player.RewardGold += loot.Count;
-            player.Gold += loot.Count * loot.CoinValue;
+            LunaEconomy.GrantGold(player, loot.Count, loot.CoinValue);
         }
     }
 }

@@ -1,50 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Luna.Gameplay;
 using UnityEngine.UI;
 
 public class UIGoods : UILuna
 {
+    private Text goldText;
+    private Text starStoneText;
 
-	private Text goldText;
-	private Text starStoneText;
-
-
-	protected override void OnOpen(object userData)
+    protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
-		
+        transform.Find("Ruby").gameObject.SetActive(false);
+        var stones = (RectTransform)transform.Find("StarStone");
+        stones.Find("AddStarStone").gameObject.SetActive(false);
+        stones.anchoredPosition = new Vector2(476f, stones.anchoredPosition.y);
+        var gold = (RectTransform)transform.Find("Gold");
+        gold.anchoredPosition = new Vector2(268f, gold.anchoredPosition.y);
+        goldText = gold.Find("GoldText").GetComponent<Text>();
+        starStoneText = stones.Find("StarStoneText").GetComponent<Text>();
+        RefreshWallet();
+    }
 
-		goldText = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "GoldText");
-		starStoneText = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "StarStoneText");
-
-		goldText.text = LunaDataTable.Instance.playerData.Gold.ToString();
-		starStoneText.text = LunaDataTable.Instance.playerData.StarStone.ToString();
-
-	}
-
-	
-	
-	protected override void OnUpdate(float elapsed, float realElapsed)
+    protected override void OnUpdate(float elapsed, float realElapsed)
     {
         base.OnUpdate(elapsed, realElapsed);
-		goldText.text = LunaDataTable.Instance.playerData.Gold.ToString();
-		starStoneText.text = LunaDataTable.Instance.playerData.StarStone.ToString();
-	}
-
-	
-
-	protected override void OnClose(bool isShutdown, object userData)
-    {
-        try
-        { 
-        }
-        finally { base.OnClose(isShutdown, userData); }
+        RefreshWallet();
     }
 
-	public void OnClickAddButton()
+    private void RefreshWallet()
     {
-		LunaUI.Open(UI_TYPE.GAMESHOP);
+        var profile = LunaDataTable.Instance.playerData;
+        goldText.text = profile.Gold.ToString("N0");
+        starStoneText.text = profile.StarStone.ToString("N0");
     }
+
+    public void OnClickAddButton() => LunaUI.Open(UI_TYPE.GAMESHOP);
 }

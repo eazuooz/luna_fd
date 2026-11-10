@@ -22,8 +22,12 @@ MonoBehaviour:
   IsBegining: 1
   SaveStageName: Stage01-01
   RewardGold: 0
-  Gold: 1186567
-  StarStone: 1234567
+  Gold: 700
+  StarStone: 0
+  UnlockedFloor: 1
+  CampaignComplete: 0
+  ClearedDungeons: []
+  EndlessRecords: []
   LunaLevel: 1
   LunaMoveSpeedLevel: 1
   GoldSpeedLevel: 1

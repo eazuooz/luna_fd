@@ -42,6 +42,8 @@ namespace Luna.Gameplay
         {
             round = owner ?? throw new ArgumentNullException(nameof(owner));
             roundId = owner.RoundId;
+            Gold = owner.Definition.Row.StartGold;
+            Mana = owner.Definition.Row.StartMana;
             if (roundId <= 0) throw new ArgumentException("Roster requires an initialized round.", nameof(owner));
             automaticParty = LunaSession.Current != null && LunaSession.Current.doNotSummonMode;
             var deck = LunaDataTable.Instance.playerData.UnitNamesInDeck;
@@ -136,6 +138,7 @@ namespace Luna.Gameplay
             if (stopped || !round.IsActive || slot.Pending) return false;
             var data = UnitData.CreateFrom(slot.Prefab.GetComponent<UnitView>(), position);
             data.RoundId = roundId;
+            data.HealthMultiplier = data.AttackMultiplier = LunaEconomy.RankCombatMultiplier(data.Rank);
             data.Rotation = Quaternion.identity;
             data.InitialMode = round.isStageStop ? UnitSpawnMode.Staged : UnitSpawnMode.Battle;
             int id = data.Id;

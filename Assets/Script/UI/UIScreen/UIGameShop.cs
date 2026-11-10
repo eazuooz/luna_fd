@@ -1,300 +1,115 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Luna.Gameplay;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+using UnityEngine;
 using UnityEngine.UI;
-
 
 public class UIGameShop : UILuna
 {
+    private Button singleButton, bundleButton;
+    private Text status;
 
-    private GameObject summonTab;
-    private GameObject goldTab;
-    private GameObject starStoneTab;
-    private GameObject rubyTab;
-    private GameObject rainbowStoneTab;
-
-
-    class StarStone
-    {
-        public int count;
-
-        public StarStone(int value)
-        {
-            count = value;
-        }
-    }
-
-    private List<StarStone> starStoneChests = new List<StarStone>();
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
-        
-        
-
-        InitTabInfo();
-
-        starStoneChests.Add(new StarStone(2000));
-        starStoneChests.Add(new StarStone(2000));
-        starStoneChests.Add(new StarStone(2000));
-
-
-        
-        //Game.Instance.tutorialManager.SetTutorial(gameObject, "SlimeTenTimesButton", 1);
+        var board = transform.Find("Board");
+        foreach (string tab in new[] { "Gold_Tab", "StarStone_Tab", "Ruby_Tab", "RainbowStone_Tab" })
+            board.Find(tab)?.gameObject.SetActive(false);
+        var view = board.Find("Summon_Tab/Summon_ScrollView");
+        view.gameObject.SetActive(true);
+        var cards = view.Find("Summon_Scroll View_Viewport/Summon_Content");
+        cards.Find("ViewAD").gameObject.SetActive(false);
+        cards.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        var layout = cards.GetComponent<HorizontalLayoutGroup>();
+        layout.childAlignment = TextAnchor.UpperCenter;
+        layout.childForceExpandWidth = false;
+        layout.spacing = 100f;
+        singleButton = cards.Find("BuyOnce/SlimeOnceButton").GetComponent<Button>();
+        bundleButton = cards.Find("BuyTens/SlimeOnceButton").GetComponent<Button>();
+        SetOfferCaption(singleButton, "한 장씩 성장", "영웅과 병사 강화 카드 1장");
+        SetOfferCaption(bundleButton, "덱을 키우는 묶음", "첫 5장 무료 · 이후 영웅 보장 10장");
+        var label = new GameObject("ShopStatus", typeof(RectTransform), typeof(Text));
+        var rect = (RectTransform)label.transform;
+        rect.SetParent(board, false);
+        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 1f);
+        rect.pivot = new Vector2(0.5f, 1f);
+        rect.anchoredPosition = new Vector2(38f, -16f);
+        rect.sizeDelta = new Vector2(820f, 70f);
+        status = label.GetComponent<Text>();
+        status.font = singleButton.transform.Find("Text").GetComponent<Text>().font;
+        status.fontSize = 23;
+        status.alignment = TextAnchor.UpperCenter;
+        status.raycastTarget = false;
+        RefreshShop();
     }
 
-    
-
-    
-
-    protected override void OnUpdate(float elapsed, float realElapsed)
+    private static void SetOfferCaption(Button button, string title, string detail)
     {
-        base.OnUpdate(elapsed, realElapsed);
-
+        button.transform.Find("Image").gameObject.SetActive(false);
+        var price = button.transform.Find("KeyCount").GetComponent<Text>();
+        price.rectTransform.anchoredPosition = new Vector2(0f, -15f);
+        price.alignment = TextAnchor.MiddleCenter;
+        var panel = new GameObject("OfferCaption", typeof(RectTransform), typeof(Image));
+        var rect = (RectTransform)panel.transform;
+        rect.SetParent(button.transform.parent, false);
+        rect.anchorMin = new Vector2(0.035f, 0.025f);
+        rect.anchorMax = new Vector2(0.965f, 0.285f);
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+        var background = panel.GetComponent<Image>();
+        background.color = new Color32(62, 53, 41, 255);
+        background.raycastTarget = false;
+        var caption = new GameObject("Text", typeof(RectTransform), typeof(Text));
+        var label = caption.GetComponent<Text>();
+        label.rectTransform.SetParent(rect, false);
+        label.rectTransform.anchorMin = Vector2.zero;
+        label.rectTransform.anchorMax = Vector2.one;
+        label.rectTransform.offsetMin = new Vector2(8f, 0f);
+        label.rectTransform.offsetMax = new Vector2(-8f, 0f);
+        label.font = price.font;
+        label.fontSize = 16;
+        label.alignment = TextAnchor.MiddleCenter;
+        label.raycastTarget = false;
+        label.text = "<size=23>" + title + "</size>\n" + detail;
     }
 
-    
-
-    protected override void OnClose(bool isShutdown, object userData)
+    protected override void OnResume()
     {
-        try
-        { 
-        }
-        finally { base.OnClose(isShutdown, userData); }
+        base.OnResume();
+        if (status != null) RefreshShop();
     }
 
-    public void OnClickSummon()
+    public void OnClickSummon() => Draw(false);
+    public void OnClickSummons() => Draw(true);
+
+    private void Draw(bool bundle)
     {
-        LunaDataTable.Instance.LotteryResult.Clear();
-        if (Random.Range(0, 2) == 0)
+        if (!LunaUI.IsTop(type) || LunaUI.IsOpenOrLoading(UI_TYPE.LOTTERY)) return;
+        if (!LunaEconomy.TryDraw(bundle, out string message))
         {
-            int randIndex = Random.Range(0, 22);
-
-            string name = LunaDataTable.Instance.heroTable[randIndex];
-
-            LunaDataTable.Instance.LotteryResult.Add(name);
-            LunaDataTable.Instance.IncreaseCardCount(name);
+            RefreshShop(message);
+            return;
         }
-        else 
-        {
-            int randIndex = Random.Range(0, 5);
-
-            string name = LunaDataTable.Instance.soliderTable[randIndex];
-
-            LunaDataTable.Instance.LotteryResult.Add(name);
-            LunaDataTable.Instance.IncreaseCardCount(name);
-        }
-
-        LunaDataTable.Instance.playerData.IsBegining = false;
-
+        RefreshShop();
         LunaUI.Open(UI_TYPE.LOTTERY);
     }
-    public void OnClickSummons()
+
+    private void RefreshShop(string message = "")
     {
-        LunaDataTable.Instance.LotteryResult.Clear();
-        string resultText = "";
-
-        int length = 0;
-        if (LunaDataTable.Instance.playerData.IsBegining)
-        {
-            length = 5;
-            //LunaDataTable.Instance.playerData.IsBegining = false;
-
-            //Game.Instance.tutorialManager.SetTutorial(gameObject, "ReleaseButton", 2);
-        }
-        else
-        {
-            length = 10;
-        }
-
-        for (int i = 0; i < length; i++)
-        {
-            if (LunaDataTable.Instance.playerData.IsBegining)
-            {
-                int randIndex = Random.Range(0, 22);
-
-                string name = LunaDataTable.Instance.heroTable[randIndex];
-
-                LunaDataTable.Instance.LotteryResult.Add(name);
-                LunaDataTable.Instance.IncreaseCardCount(name);
-                resultText += name + "당첨\n";
-            }
-            else
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    int randIndex = Random.Range(0, 22);
-
-
-                    string name = LunaDataTable.Instance.heroTable[randIndex];
-
-                    LunaDataTable.Instance.LotteryResult.Add(name);
-                    LunaDataTable.Instance.IncreaseCardCount(name);
-
-                    resultText += name + "당첨\n";
-                }
-                else
-                {
-                    int randIndex = Random.Range(0, 5);
-
-                    string name = LunaDataTable.Instance.soliderTable[randIndex];
-
-                    LunaDataTable.Instance.LotteryResult.Add(name);
-                    LunaDataTable.Instance.IncreaseCardCount(name);
-                    resultText += name + "당첨\n";
-                }
-            }
-        }
-
-        LunaDataTable.Instance.playerData.IsBegining = false;
-
-        LunaUI.Open(UI_TYPE.LOTTERY);
-    }
-    public void OnClickBuyStarStone()
-    {
-        LunaDataTable.Instance.playerData.StarStone += starStoneChests[0].count;
-
+        var profile = LunaDataTable.Instance.playerData;
+        singleButton.transform.Find("Text").GetComponent<Text>().text = "1장 소환";
+        singleButton.transform.Find("KeyCount").GetComponent<Text>().text = LunaEconomy.SingleDrawGold + " G";
+        bundleButton.transform.Find("Text").GetComponent<Text>().text = profile.IsBegining ? "첫 5장" : "10장 소환";
+        bundleButton.transform.Find("KeyCount").GetComponent<Text>().text = profile.IsBegining ? "무료" : LunaEconomy.BundleDrawGold + " G";
+        singleButton.interactable = profile.Gold >= LunaEconomy.SingleDrawGold;
+        bundleButton.interactable = profile.IsBegining || profile.Gold >= LunaEconomy.BundleDrawGold;
+        status.text = "골드 " + profile.Gold.ToString("N0") + " · 별석 " + profile.StarStone + "\n" +
+            (string.IsNullOrEmpty(message) ? $"영웅 {LunaEconomy.HeroChance}% · 덱 우선 {LunaEconomy.DeckFocusChance}% · 10장 소환 영웅 1장 보장" : message);
     }
 
+    // These names are bound to the old prefab. The prototype buttons no longer grant currency.
+    public void OnClickBuyStarStone() => RefreshShop("별석은 첫 클리어와 무한던전 기록에서 얻습니다.");
     public void EquipLunaSlimeSkin()
     {
         LunaSession.Current.EquipDesignNumber = 3;
         LunaUI.Open(UI_TYPE.EQUIPDESIGN);
     }
-    private void InitTabInfo()
-    {
-        summonTab = LunaUIViews.FindChildObject(gameObject, "Summon_Tab");
-        goldTab = LunaUIViews.FindChildObject(gameObject, "Gold_Tab");
-        starStoneTab = LunaUIViews.FindChildObject(gameObject, "StarStone_Tab");
-        rubyTab = LunaUIViews.FindChildObject(gameObject, "Ruby_Tab");
-        rainbowStoneTab = LunaUIViews.FindChildObject(gameObject, "RainbowStone_Tab");
-
-
-        summonTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(summonTab));
-        goldTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(goldTab));
-        starStoneTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(starStoneTab));
-        rubyTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(rubyTab));
-        rainbowStoneTab.transform.Find("TabButton").gameObject.GetComponent<Button>().onClick.AddListener(() => tabClick(rainbowStoneTab));
-        
-        TurnOffAllOfScrollView();
-        TurnOnScrollview(summonTab);
-    }
-
-    private GameObject getScrollViewGameObject(GameObject tabObject)
-    {
-        Transform scrollViewObj = null;
-
-        string scrollViewStr = tabObject.name;
-        scrollViewStr = scrollViewStr.Replace("Tab", "ScrollView");
-
-        scrollViewObj = tabObject.transform.Find(scrollViewStr);
-
-        if (scrollViewObj)
-        {
-            return scrollViewObj.gameObject;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private void TurnOnScrollview(GameObject tabObject)
-    {
-        GameObject scrollViewObj = getScrollViewGameObject(tabObject);
-        scrollViewObj.SetActive(true);
-    }
-    private void TurnOffAllOfScrollView()
-    {
-        GameObject scrollViewObj = getScrollViewGameObject(summonTab);
-        if (scrollViewObj.activeSelf == true)
-        {
-            scrollViewObj.SetActive(false);
-        }
-        
-        scrollViewObj = getScrollViewGameObject(goldTab);
-        if (scrollViewObj.activeSelf == true)
-        {
-            scrollViewObj.SetActive(false);
-        }
-
-        scrollViewObj = getScrollViewGameObject(starStoneTab);
-        if (scrollViewObj.activeSelf == true)
-        {
-            scrollViewObj.SetActive(false);
-        }
-
-        scrollViewObj = getScrollViewGameObject(rubyTab);
-        if (scrollViewObj.activeSelf == true)
-        {
-            scrollViewObj.SetActive(false);
-        }
-
-        scrollViewObj = getScrollViewGameObject(rainbowStoneTab);
-        if (scrollViewObj.activeSelf == true)
-        {
-            scrollViewObj.SetActive(false);
-        }
-    }
-    private void SwitchTab(string tabName)
-    {
-        TurnOffAllOfScrollView();
-        switch (tabName)
-        {
-            case "Summon_Tab":
-                {
-                    TurnOnScrollview(summonTab);
-                }
-                break;
-            case "Gold_Tab":
-                {
-                    TurnOnScrollview(goldTab);
-                }
-                break;
-            case "StarStone_Tab":
-                {
-                    TurnOnScrollview(starStoneTab);
-                }
-                break;
-            case "Ruby_Tab":
-                {
-                    TurnOnScrollview(rubyTab);
-                }
-                break;
-            case "RainbowStone_Tab":
-                {
-                    TurnOnScrollview(rainbowStoneTab);
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-    private void tabClick(GameObject tabObject)
-    {
-        SwitchTab(tabObject.name);
-    }
-    public void OnReleaseButton()
-    {
-        LunaUI.Close(type);
-        
-    }
-
-
-    //임시 방편용 뽑기
-    public void OnReleaseResult()
-    {
-        GameObject resultObj = LunaUIViews.FindChildObject(gameObject, "Result");
-        resultObj.SetActive(false);
-    }
-    
-    public void SetStringResult(string str)
-    {
-        GameObject Text = LunaUIViews.FindChildObject(gameObject.transform.Find("Result").gameObject, "Text");
-        Text.GetComponent<Text>().text = str;
-    }
-
+    public void OnReleaseButton() => LunaUI.Close(type);
 }

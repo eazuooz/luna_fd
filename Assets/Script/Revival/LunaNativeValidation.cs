@@ -352,6 +352,17 @@ public sealed partial class LunaNativeValidation : MonoBehaviour
     {
         yield return Boot();
         int initialCases = report.cases.Count;
+        if (section == "playthrough")
+        {
+            yield return BalancePlaythrough();
+            Require(report.cases.Count > initialCases, "No playthrough cases matched: " + filter);
+            yield break;
+        }
+        if (section == "level-design")
+        {
+            yield return LevelDesignContracts();
+            yield break;
+        }
         if (Includes("ownership", "typed-data-cancel-and-reuse")) yield return SpawnOwnership();
         if (Includes("ownership", "callback-failure-disposal")) yield return FailureOwnership();
         if (Includes("ownership", "resource-failure-and-retry")) yield return ResourceFailureOwnership();
@@ -387,6 +398,7 @@ public sealed partial class LunaNativeValidation : MonoBehaviour
             }
         if (section == "all" || section == "ui") yield return UiContracts();
         if (section == "all" || section == "lifecycle") yield return HudContracts();
+        if (section == "all") yield return LevelDesignContracts();
         if (section != "all" && section != "stages" && section != "ownership" && section != "heroes" && section != "ranks" && section != "motion" && section != "buffs" && section != "skins" && section != "skills" && section != "skill-levels" && section != "actors" && section != "projectiles" && section != "rewards" && section != "combos" && section != "dungeons" && section != "ui" && section != "lifecycle")
             throw new InvalidOperationException("Native matrix section has not been implemented yet: " + section);
         Require(report.cases.Count > initialCases, "No content cases matched section=" + section + ", filter=" + filter + "; an empty selection cannot pass.");
