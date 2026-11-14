@@ -68,7 +68,7 @@ namespace Luna.Gameplay
             Register(UI_TYPE.GAMESHOP, "Luna/UI/GAMESHOP", "Popup", false);
             Register(UI_TYPE.ACCOUNTSHOP, "Luna/UI/ACCOUNTSHOP", "Popup", false);
             Register(UI_TYPE.PVP, "Luna/UI/PVP", "Popup", false);
-            Register(UI_TYPE.LOTTERY, "Luna/UI/LOTTERY", "Main", true);
+            Register(UI_TYPE.LOTTERY, "Luna/UI/LOTTERY", "Popup", true);
             Register(UI_TYPE.SKILL, "Luna/UI/SKILL", "Hud", false);
             Register(UI_TYPE.EQUIPDESIGN, "Luna/UI/EQUIPDESIGN", "Popup", false);
             Register(UI_TYPE.SELECTPOPUP, "Luna/UI/SELECTPOPUP", "Popup", false);

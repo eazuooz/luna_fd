@@ -17,8 +17,9 @@ public class UIStageInfo : UILuna
             unlocked ? "권장 Lv. " + row.RecommendedLevel : (row.Id - 1) + "층 클리어 후";
         transform.Find("BackGround/StartButton").GetComponent<Button>().interactable = unlocked;
         transform.Find("BackGround/Title/Skull").gameObject.SetActive(row.IsBossStage);
+        LunaStagePreview.Layout(transform, true);
         LunaStagePreview.Fill(transform, stage);
-        LunaStagePreview.AddBriefing(transform, row, 178f);
+        LunaStagePreview.AddBriefing(transform, row, 128f);
     }
 
     public void OnClickStartGame()

@@ -1,108 +1,84 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Spine.Unity;
 using Luna.Gameplay;
+
 public class UILottery : UILuna
 {
-
-    private GameObject lotteryCardPrefab;
-    private bool isLotteryEnd = false;
+    private bool revealReady;
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
-        isLotteryEnd = false;
-        
-
-        GameObject lotteryContent 
-            = LunaUIViews.FindChildObject(this.gameObject, "LotteryContent");
-
-        GameObject lotteryScrollView
-            = LunaUIViews.FindChildObject(this.gameObject, "LotteryScroll View");
-
-        if (LunaDataTable.Instance.LotteryResult.Count <= 5)
+        revealReady = false;
+        GetComponent<Image>().color = new Color(0.03f, 0.02f, 0.04f, 0.96f);
+        var scroll = (RectTransform)transform.Find("LotteryScroll View");
+        scroll.anchorMin = new Vector2(0.03f, 0.08f);
+        scroll.anchorMax = new Vector2(0.97f, 0.88f);
+        scroll.offsetMin = scroll.offsetMax = Vector2.zero;
+        var viewport = (RectTransform)scroll.Find("LotteryViewport");
+        viewport.offsetMin = viewport.offsetMax = Vector2.zero;
+        var content = (RectTransform)viewport.Find("LotteryContent");
+        content.anchorMin = new Vector2(0f, 1f);
+        content.anchorMax = Vector2.one;
+        content.pivot = new Vector2(0.5f, 1f);
+        content.anchoredPosition = content.sizeDelta = Vector2.zero;
+        Canvas.ForceUpdateCanvases();
+        int count = LunaDataTable.Instance.LotteryResult.Count;
+        int columns = count == 1 ? 1 : 5;
+        int rows = Mathf.CeilToInt((float)count / columns);
+        float width = Mathf.Min(count == 1 ? 300f : 220f,
+            (viewport.rect.width - 32f - (columns - 1) * 14f) / columns,
+            (viewport.rect.height - 16f - (rows - 1) * 12f) / Mathf.Max(1, rows) * 310f / 445f);
+        var grid = content.GetComponent<GridLayoutGroup>();
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = columns;
+        grid.cellSize = new Vector2(width, width * 445f / 310f);
+        grid.spacing = new Vector2(14f, 12f);
+        grid.padding = new RectOffset(8, 8, 8, 8);
+        grid.childAlignment = TextAnchor.UpperCenter;
+        var cardPrefab = Resources.Load<GameObject>("Prefabs/09UI/LotteryCard");
+        foreach (string key in LunaDataTable.Instance.LotteryResult)
         {
-            lotteryScrollView.transform.localPosition = new Vector3(0.0f, -188.0f, 0.0f);
-
+            var card = Instantiate(cardPrefab, content, false);
+            card.name = key + "Card";
+            card.AddComponent<RectMask2D>();
+            var data = LunaDataTable.Instance.UnitTable[key];
+            card.GetComponent<Image>().sprite = data.cardPicture;
+            var characterPrefab = Resources.Load<GameObject>("Prefabs/09UI/UICharcter/" + key + "UI");
+            var character = Instantiate(characterPrefab, card.transform, false);
+            var rect = character.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, -35f);
+            rect.localScale = characterPrefab.transform.localScale * (width / 310f);
+            foreach (var canvas in character.GetComponentsInChildren<Canvas>(true)) canvas.overrideSorting = false;
         }
-
-        foreach (string name in LunaDataTable.Instance.LotteryResult)
-        {
-            GameObject lotteryCardPrefab = Resources.Load<GameObject>("Prefabs/09UI/LotteryCard");
-            GameObject card = Instantiate(lotteryCardPrefab);
-            card.GetComponent<RectTransform>().SetParent(lotteryContent.transform);
-            card.GetComponent<RectTransform>().localScale = lotteryCardPrefab.transform.localScale;
-            card.GetComponent<RectTransform>().localPosition = lotteryCardPrefab.transform.localPosition;
-
-            
-
-
-            string dir = "Prefabs/09UI/UICharcter/" + name + "UI";
-
-            GameObject chracterUIPrefab = Resources.Load<GameObject>(dir);
-            //GameObject chracterSkeletonGraphic = Resources.Load<GameObject>(dir);
-            GameObject instObject = Instantiate(chracterUIPrefab, card.transform.position, Quaternion.identity, card.transform);
-
-            instObject.GetComponent<RectTransform>().SetParent(card.transform);
-            instObject.GetComponent<RectTransform>().localScale = chracterUIPrefab.transform.localScale;
-            instObject.GetComponent<RectTransform>().localPosition = chracterUIPrefab.transform.localPosition;
-            instObject.GetComponent<RectTransform>().localPosition -= new Vector3(0, 70, 0);
-
-
-            Canvas canvas = instObject.AddComponent<Canvas>();
-            canvas.overrideSorting = true;
-            canvas.sortingLayerName = "UI_Top";
-
-            if (LunaDataTable.Instance.UnitTable[name].UnitType == eUnitType.Hero)
-            {
-                dir = "UI/UIPlayer/CardPicture/Heroes/" + name + "Card";
-            }
-            else
-            {
-                dir = "UI/UIPlayer/CardPicture/Soldiers/" + name + "Card";
-            }
-            
-            Texture2D texture = Resources.Load<Texture2D>(dir);
-            if (texture == null)
-            {
-                continue;
-            }
-
-            card.GetComponent<Image>().sprite = LunaUIViews.CreateSprite(texture);
-        }
-
-        StartCoroutine(EndLottery());
+        var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        AddLabel("RevealTitle", count + "장 소환 결과", font, new Vector2(0.5f, 1f), new Vector2(0f, -40f));
+        AddLabel("RevealContinue", "화면을 눌러 계속", font, new Vector2(0.5f, 0f), new Vector2(0f, 36f));
+        StartCoroutine(ReadyToClose());
     }
-
-    
-
-    
-
+    private void AddLabel(string name, string message, Font font, Vector2 anchor, Vector2 position)
+    {
+        var label = new GameObject(name, typeof(RectTransform), typeof(Text)).GetComponent<Text>();
+        label.rectTransform.SetParent(transform, false);
+        label.rectTransform.anchorMin = label.rectTransform.anchorMax = anchor;
+        label.rectTransform.anchoredPosition = position;
+        label.rectTransform.sizeDelta = new Vector2(600f, 45f);
+        label.font = font; label.fontSize = 26; label.alignment = TextAnchor.MiddleCenter;
+        label.text = message; label.color = Color.white; label.raycastTarget = false;
+    }
     protected override void OnUpdate(float elapsed, float realElapsed)
     {
         base.OnUpdate(elapsed, realElapsed);
-        if (isLotteryEnd && Input.GetMouseButtonDown(0))
-        {
-            LunaUI.Close(type);
-            isLotteryEnd = false;
-        }
+        if (revealReady && Input.GetMouseButtonDown(0)) Continue();
     }
-
-    
-
-    protected override void OnClose(bool isShutdown, object userData)
+    public void Continue()
     {
-        try
-        { 
-        }
-        finally { base.OnClose(isShutdown, userData); }
+        if (revealReady) LunaUI.Close(type);
     }
-
-    IEnumerator EndLottery()
+    private IEnumerator ReadyToClose()
     {
-        yield return new WaitForSeconds(2.0f);
-
-        isLotteryEnd = true;
+        yield return new WaitForSecondsRealtime(0.5f);
+        revealReady = true;
     }
 }

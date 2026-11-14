@@ -63,6 +63,8 @@ public class UILuna : UIFormLogic
         rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
         rect.offsetMin = rect.offsetMax = Vector2.zero; rect.localScale = Vector3.one; rect.localPosition = Vector3.zero;
         formCanvas.overrideSorting = true;
+        foreach (var canvas in GetComponentsInChildren<Canvas>(true))
+            if (canvas != formCanvas) canvas.overrideSorting = false;
     }
     protected override void OnClose(bool isShutdown, object userData)
     {

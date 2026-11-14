@@ -40,6 +40,7 @@ public abstract class LunaGame
     private float resultAge;
     private bool resultStarted, resultOpened;
     private float shakeTime;
+    private bool cameraDrag;
     private Vector3 dragPosition;
     private int musicSerial;
     protected LunaStageDefinition definition;
@@ -227,6 +228,7 @@ public abstract class LunaGame
     protected void StartCombat(bool minimap)
     {
         StageUnits(false); IntroComplete = true; isStageStop = false;
+        FollowCamera = true;
         Time.timeScale = 1.5f;
         Roster.StartCombat();
         LunaUI.Open(UI_TYPE.GAMEOPTION); LunaUI.Open(UI_TYPE.PLAYER); LunaUI.Open(UI_TYPE.SKILL);
@@ -349,7 +351,7 @@ public abstract class LunaGame
     public void ShakeCameraOn(int duration)
     {
         if (shakeTime > 0f) return;
-        AttachCamera = false; shakeTime = Mathf.Max(0f, duration * 0.03f);
+        shakeTime = Mathf.Max(0f, duration * 0.03f);
     }
     protected void TickCamera(float elapsed, float width)
     {
@@ -361,11 +363,27 @@ public abstract class LunaGame
             if (Mathf.Abs(p.x - Player.CachedTransform.position.x - 0.5f) < 0.1f) { FollowCamera = false; AttachCamera = true; }
         }
         else if (AttachCamera) p.x = Player.CachedTransform.position.x + 0.5f;
-        var touch = Input.mousePosition;
-        if (touch.y > Screen.height * 0.2f && touch.y < Screen.height * 0.9f)
+        if (Input.GetMouseButtonDown(0))
         {
-            if (Input.GetMouseButtonDown(0)) dragPosition = touch;
-            else if (Input.GetMouseButton(0)) { AttachCamera = false; p.x -= (touch.x - dragPosition.x) * elapsed; dragPosition = touch; }
+            cameraDrag = UnityEngine.EventSystems.EventSystem.current != null &&
+                !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() &&
+                Input.mousePosition.y > Screen.height * 0.2f && Input.mousePosition.y < Screen.height * 0.9f;
+            dragPosition = Input.mousePosition;
+        }
+        if (cameraDrag && Input.GetMouseButton(0))
+        {
+            var delta = Input.mousePosition - dragPosition;
+            if (delta.sqrMagnitude > 1f)
+            {
+                AttachCamera = FollowCamera = false;
+                p.x -= delta.x / Mathf.Max(1, Screen.width) * stageCamera.orthographicSize * 2f * stageCamera.aspect;
+            }
+            dragPosition = Input.mousePosition;
+        }
+        if (cameraDrag && Input.GetMouseButtonUp(0))
+        {
+            cameraDrag = false;
+            FollowCamera = true;
         }
         p.x = Mathf.Clamp(p.x, -width, width); stageCamera.transform.position = p;
     }

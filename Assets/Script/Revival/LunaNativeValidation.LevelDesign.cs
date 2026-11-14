@@ -21,6 +21,76 @@ public sealed partial class LunaNativeValidation
         yield return CampaignReplayContract();
         yield return CampaignFinaleContract();
         yield return BattleFeedbackContracts();
+        yield return PresentationRepairContracts();
+    }
+
+    private IEnumerator PresentationRepairContracts()
+    {
+        BeginCase("presentation", "shop-reveal-layer-and-close");
+        yield return EnsureFixtureLobby();
+        var profile = LunaDataTable.Instance.playerData;
+        profile.Gold = LunaEconomy.SingleDrawGold;
+        yield return OpenNativeUi(UI_TYPE.GAMESHOP);
+        var shop = (UIGameShop)NativeUi(UI_TYPE.GAMESHOP);
+        shop.OnClickSummon();
+        yield return Until(() => NativeUi(UI_TYPE.LOTTERY) != null, "Paid draw result");
+        var reveal = (UILottery)NativeUi(UI_TYPE.LOTTERY);
+        Require(LunaUI.IsTop(UI_TYPE.LOTTERY) && !shop.gameObject.activeInHierarchy &&
+            reveal.GetComponentsInChildren<Canvas>().Count(canvas => canvas.overrideSorting) == 1,
+            "The paid reveal is behind its shop or an avatar bypasses its form depth.");
+        Require(profile.Gold == 0, "Paid reveal did not charge once.");
+        yield return new WaitForSecondsRealtime(0.6f);
+        reveal.Continue();
+        yield return Until(() => !LunaUI.IsOpenOrLoading(UI_TYPE.LOTTERY) && shop.gameObject.activeInHierarchy,
+            "Reveal close restores shop");
+        yield return CloseNativeUi(UI_TYPE.GAMESHOP);
+        EndCase("A real paid purchase covered the shop, inherited canvas depth and returned to the shop without residual avatars.");
+
+        BeginCase("presentation", "map-viewport-and-dungeon-artwork");
+        yield return OpenNativeUi(UI_TYPE.SELECTSTAGE);
+        var map = NativeUi(UI_TYPE.SELECTSTAGE);
+        yield return null;
+        map.transform.Find("Stage_Tab/Stage_ScrollView").GetComponent<ScrollRect>().verticalNormalizedPosition = 1f;
+        Canvas.ForceUpdateCanvases();
+        var viewport = (RectTransform)map.transform.Find("Stage_Tab/Stage_ScrollView/Stage_Viewport");
+        var first = map.GetComponentsInChildren<StageButton>(true).Single(row => row.name == "Stage01-01");
+        var firstRect = (RectTransform)first.transform;
+        Vector3[] corners = new Vector3[4]; firstRect.GetWorldCorners(corners);
+        var local = corners.Select(corner => (Vector2)viewport.InverseTransformPoint(corner)).ToArray();
+        current.observations.Add("Stage row in viewport " + viewport.rect + ": " + string.Join(", ", local.Select(point => point.ToString())));
+        Require(local.All(point => point.x >= viewport.rect.xMin - 0.1f && point.x <= viewport.rect.xMax + 0.1f &&
+            point.y >= viewport.rect.yMin - 0.1f && point.y <= viewport.rect.yMax + 0.1f),
+            "The first stage row is clipped by its viewport.");
+        first.GetComponent<Button>().onClick.Invoke();
+        yield return Until(() => NativeUi(UI_TYPE.STAGEINFO) != null, "Map side preview");
+        var detail = NativeUi(UI_TYPE.STAGEINFO);
+        Require(!detail.transform.Find("Image").gameObject.activeInHierarchy, "The side preview covers the whole map.");
+        map.transform.Find("Dungeon_Tab").GetComponent<Button>().onClick.Invoke();
+        var cards = map.GetComponentsInChildren<StageButton>().ToArray();
+        Require(cards.Length == 5 && cards.All(card => card.transform.Find("DungeonImage").GetComponent<Image>().sprite != null &&
+            !string.IsNullOrWhiteSpace(card.transform.Find("Manual").GetComponent<Text>().text)),
+            "A public dungeon lost its artwork or description.");
+        yield return CloseNativeUi(UI_TYPE.SELECTSTAGE);
+        EndCase("The original illustrated dungeon cards listed all five encounters, and the stage row fit its map viewport.");
+
+        BeginCase("presentation", "initial-camera-follow-with-ui-and-shake");
+        yield return LoadStage("Stage01-01");
+        var game = LunaScenes.CurrentGame;
+        HoldRoundActors(game);
+        var player = (PlayerLogic)game.Player;
+        var camera = LunaBootstrap.GameplayCamera;
+        float startX = camera.transform.position.x;
+        player.SetMovement(1);
+        yield return new WaitForSeconds(2f);
+        game.ShakeCameraOn(2);
+        Active<UIPlayer>().OnClickSummon(4);
+        yield return new WaitForSeconds(4f);
+        player.NMove();
+        var point = camera.WorldToViewportPoint(player.transform.position);
+        Require(camera.transform.position.x > startX + 1f && point.x >= 0.05f && point.x <= 0.95f &&
+            (game.AttachCamera || game.FollowCamera), "First-life movement or camera shake lost camera tracking.");
+        yield return EnsureFixtureLobby();
+        EndCase("Normal first-life movement stayed inside the following camera after a summon action and camera shake.");
     }
 
     private IEnumerator BattleFeedbackContracts()
@@ -415,6 +485,7 @@ public sealed partial class LunaNativeValidation
 
     private IEnumerator DesignPanelCaptures()
     {
+        yield return RepairedFlowCaptures();
         yield return OpenNativeUi(UI_TYPE.GAMESHOP);
         CaptureDesignPanel("shop", NativeUi(UI_TYPE.GAMESHOP), "Board/ShopStatus",
             "Board/Summon_Tab/Summon_ScrollView/Summon_Scroll View_Viewport/Summon_Content/BuyOnce/SlimeOnceButton",
@@ -427,7 +498,13 @@ public sealed partial class LunaNativeValidation
         yield return null;
         const string dungeonView = "Dungeon_Tab/Dungeon_ScrollView";
         const string dungeonCards = dungeonView + "/Dungeon_Scroll View_Viewport/Dungeon_Content/";
-        CaptureDesignPanel("dungeon-list", map, dungeonView, dungeonCards + "Dungeon01", dungeonCards + "Dungeon05_old");
+        CaptureDesignPanel("dungeon-list", map, dungeonView, dungeonCards + "Dungeon01", dungeonCards + "Dungeon02");
+        var dungeonScroll = map.transform.Find(dungeonView).GetComponent<ScrollRect>();
+        dungeonScroll.horizontalNormalizedPosition = 1f;
+        Canvas.ForceUpdateCanvases();
+        CaptureDesignPanel("dungeon-list-last", map, dungeonView, dungeonCards + "Dungeon05_old");
+        dungeonScroll.horizontalNormalizedPosition = 0f;
+        Canvas.ForceUpdateCanvases();
         var firstBoss = map.GetComponentsInChildren<StageButton>().Single(row => row.name == "Dungeon01");
         firstBoss.GetComponent<Button>().onClick.Invoke();
         yield return Until(() => NativeUi(UI_TYPE.DUNGEONINFO) != null, "Boss preview render");
@@ -458,6 +535,110 @@ public sealed partial class LunaNativeValidation
         yield return null;
         CaptureDesignPanel("boss-warning", Active<UIPlayer>(), "AttackWarning", "AttackWarning/WarningText");
         yield return EnsureFixtureLobby();
+    }
+
+    private IEnumerator RepairedFlowCaptures()
+    {
+        var oldSize = new Vector2Int(Screen.width, Screen.height);
+        try
+        {
+            foreach (var size in new[] { new Vector2Int(1280, 720), new Vector2Int(1920, 1080), new Vector2Int(1024, 768) })
+            {
+                Screen.SetResolution(size.x, size.y, FullScreenMode.Windowed);
+                yield return new WaitForSecondsRealtime(0.2f);
+                yield return OpenNativeUi(UI_TYPE.SELECTSTAGE);
+                var map = NativeUi(UI_TYPE.SELECTSTAGE);
+                yield return null;
+                map.transform.Find("Stage_Tab/Stage_ScrollView").GetComponent<ScrollRect>().verticalNormalizedPosition = 1f;
+                Canvas.ForceUpdateCanvases();
+                map.GetComponentsInChildren<StageButton>().Single(row => row.name == "Stage01-05")
+                    .GetComponent<Button>().onClick.Invoke();
+                yield return Until(() => NativeUi(UI_TYPE.STAGEINFO) != null, "Side-by-side map render");
+                var side = NativeUi(UI_TYPE.STAGEINFO);
+                var viewport = (RectTransform)map.transform.Find("Stage_Tab/Stage_ScrollView/Stage_Viewport");
+                var board = (RectTransform)side.transform.Find("BackGround");
+                var corners = new Vector3[4]; viewport.GetWorldCorners(corners);
+                var detailCorners = new Vector3[4]; board.GetWorldCorners(detailCorners);
+                Require(corners[2].x < detailCorners[0].x, "The map list overlaps its detail board.");
+                CaptureFlowPanel("map-" + size.x + "x" + size.y, side, size.x, size.y,
+                    "BackGround", "BackGround/StageBriefing", "Monster_ScrollView", "Item_ScrollView");
+                yield return CloseNativeUi(UI_TYPE.STAGEINFO);
+                map.transform.Find("Dungeon_Tab").GetComponent<Button>().onClick.Invoke();
+                CaptureFlowPanel("dungeons-" + size.x + "x" + size.y, map, size.x, size.y,
+                    "Dungeon_Tab/Dungeon_ScrollView");
+                yield return CloseNativeUi(UI_TYPE.SELECTSTAGE);
+                foreach (int count in new[] { 5, 1, 10 })
+                {
+                    var profile = LunaDataTable.Instance.playerData;
+                    profile.Gold = 10000;
+                    profile.IsBegining = count == 5;
+                    yield return OpenNativeUi(UI_TYPE.GAMESHOP);
+                    var shop = (UIGameShop)NativeUi(UI_TYPE.GAMESHOP);
+                    if (count == 1) shop.OnClickSummon(); else shop.OnClickSummons();
+                    yield return Until(() => NativeUi(UI_TYPE.LOTTERY) != null, "Draw reveal render");
+                    var reveal = (UILottery)NativeUi(UI_TYPE.LOTTERY);
+                    Canvas.ForceUpdateCanvases();
+                    var content = reveal.transform.Find("LotteryScroll View/LotteryViewport/LotteryContent");
+                    Require(content.childCount == count && !shop.gameObject.activeInHierarchy, "Wrong reveal count or shop overlap.");
+                    CaptureFlowPanel("draw-" + count + "-" + size.x + "x" + size.y, reveal, size.x, size.y,
+                        "RevealTitle", "RevealContinue");
+                    yield return new WaitForSecondsRealtime(0.6f);
+                    reveal.Continue();
+                    yield return Until(() => !LunaUI.IsOpenOrLoading(UI_TYPE.LOTTERY), "Close draw reveal");
+                    yield return CloseNativeUi(UI_TYPE.GAMESHOP);
+                }
+            }
+        }
+        finally { Screen.SetResolution(oldSize.x, oldSize.y, FullScreenMode.Windowed); }
+    }
+
+    private void CaptureFlowPanel(string name, UILuna form, int width, int height, params string[] paths)
+    {
+        BeginCase("render-flow", name);
+        renderBoundsFailures.Clear();
+        var texture = CaptureOffscreen(width, height, (w, h) =>
+        {
+            foreach (string path in paths) MeasureUiRect(form, path, w, h);
+            if (form is UILottery)
+            {
+                var viewport = (RectTransform)form.transform.Find("LotteryScroll View/LotteryViewport");
+                foreach (RectTransform card in form.transform.Find("LotteryScroll View/LotteryViewport/LotteryContent"))
+                {
+                    MeasureUiRect(card, "reveal/" + card.name, w, h);
+                    RequireInsideViewport(card, viewport, true);
+                }
+            }
+            if (form is UIStageInfo || form is UIDungeonInfo)
+                foreach (string path in new[] { "Monster_ScrollView", "Item_ScrollView" })
+                {
+                    var scroll = form.transform.Find(path).GetComponent<ScrollRect>();
+                    foreach (RectTransform icon in scroll.content)
+                    {
+                        RequireInsideViewport(icon, scroll.viewport, false);
+                        RequireInsideViewport((RectTransform)icon.Find("Button"), scroll.viewport, false);
+                    }
+                }
+        });
+        try
+        {
+            File.WriteAllBytes(Path.Combine(PlayerOutputDirectory, "render-flow-" + name + ".png"), texture.EncodeToPNG());
+            Require(renderBoundsFailures.Count == 0, "Repaired flow exceeds screen bounds: " + string.Join("; ", renderBoundsFailures));
+            EndCase("Actual selection/purchase callbacks rendered the repaired flow at the requested aspect ratio.");
+        }
+        finally { Destroy(texture); }
+    }
+
+    private void RequireInsideViewport(RectTransform item, RectTransform viewport, bool horizontal)
+    {
+        var corners = new Vector3[4];
+        item.GetWorldCorners(corners);
+        foreach (var world in corners)
+        {
+            var point = viewport.InverseTransformPoint(world);
+            Require(point.y >= viewport.rect.yMin - 0.1f && point.y <= viewport.rect.yMax + 0.1f &&
+                (!horizontal || point.x >= viewport.rect.xMin - 0.1f && point.x <= viewport.rect.xMax + 0.1f),
+                item.name + " is clipped by its viewport.");
+        }
     }
 
     private void CaptureDesignPanel(string name, UILuna form, params string[] paths)

@@ -53,6 +53,8 @@ namespace Luna.Gameplay
             LunaSpawn.Initialize();
             LunaSession.Initialize(playerPrefabs);
             LunaRuntimeData.Initialize();
+            AudioListener.volume = GameFrameworkEntry.GetModule<GameFramework.Setting.ISettingManager>()
+                .GetBool("Luna.Sound.Enabled", true) ? 1f : 0f;
             LunaStageTables.Initialize();
             LunaUI.Initialize();
             LunaScenes.Initialize();

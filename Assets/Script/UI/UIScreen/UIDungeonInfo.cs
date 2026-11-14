@@ -18,8 +18,9 @@ public class UIDungeonInfo : UILuna
         transform.Find("BackGround/SelectButton/LevelText").GetComponent<Text>().text =
             unlocked ? "권장 Lv. " + row.RecommendedLevel : row.UnlockAfter + "층 클리어 후";
         transform.Find("BackGround/StartButton").GetComponent<Button>().interactable = unlocked;
+        LunaStagePreview.Layout(transform, false);
         LunaStagePreview.Fill(transform, stage);
-        LunaStagePreview.AddBriefing(transform, row, 165f);
+        LunaStagePreview.AddBriefing(transform, row, 145f);
     }
 
     public void ReleaseThisUI() => LunaUI.Close(type);

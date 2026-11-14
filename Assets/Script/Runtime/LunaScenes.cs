@@ -156,6 +156,7 @@ namespace Luna.Gameplay
     {
         private bool active;
         private int backdropId;
+        private int musicSerial;
         private LunaSession session;
         private readonly GameObject[] rosterPrefabs = new GameObject[7];
         private readonly int[] rosterIds = new int[7];
@@ -167,6 +168,9 @@ namespace Luna.Gameplay
         {
             active = true;
             session = LunaSession.Current;
+            var music = GameFramework.Sound.PlaySoundParams.Create();
+            music.Loop = true; music.SpatialBlend = 0f;
+            musicSerial = GameEntry.GetComponent<SoundComponent>().PlaySound("Luna/Audio/Lobby", "LunaMusic", music);
             RefreshRoster();
             var camera = LunaBootstrap.GameplayCamera.transform;
             camera.position = new Vector3(0f, 1.865f, camera.position.z);
@@ -255,6 +259,8 @@ namespace Luna.Gameplay
         public void Shutdown()
         {
             active = false;
+            if (musicSerial != 0) GameEntry.GetComponent<SoundComponent>()?.StopSound(musicSerial);
+            musicSerial = 0;
             LunaSpawn.Cancel(backdropId);
             LunaUI.CloseSceneForms();
             for (int i = 0; i < rosterIds.Length; i++)

@@ -93,7 +93,7 @@ public sealed partial class LunaNativeValidation
             yield return DesignPanelCaptures();
             yield break;
         }
-        // Native round setup plays battle music only in Game/Dungeon; Lobby is intentionally silent.
+        if (requestedSection == "all" || requestedSection == "audio") yield return Independent(LobbyAudioOutput());
         if (requestedSection == "all" || requestedSection == "audio" || requestedSection == "input" || requestedSection == "render" || requestedSection == "soak")
             yield return LoadStage("Stage01-01");
         try
@@ -168,6 +168,28 @@ public sealed partial class LunaNativeValidation
         if (currentState != on) option.OnClickSoundOnOff();
         Require(AudioListener.volume == (on ? 1f : 0f), "Sound UI action did not apply listener volume.");
     }
+    private IEnumerator LobbyAudioOutput()
+    {
+        BeginCase("audio", "actual-lobby-track");
+        yield return EnsureFixtureLobby();
+        yield return Until(() => Active<UIGameOption>() != null, "Lobby sound controls initialized");
+        bool saved = GameFrameworkEntry.GetModule<ISettingManager>().GetBool("Luna.Sound.Enabled", true);
+        try
+        {
+            SetSound(true);
+            yield return Until(() => FindObjectsByType<AudioSource>(FindObjectsInactive.Exclude)
+                .Any(source => source.isPlaying && source.clip != null && source.clip.name == "LunaLobby"),
+                "Native lobby music load and playback");
+            yield return new WaitForSecondsRealtime(0.5f);
+            float rms = 0f;
+            yield return MeasureRms((value, clock) => rms = value);
+            Require(rms > 0.00001f, "The authored lobby track is silent at the listener.");
+            current.observations.Add("Actual LunaLobby listener RMS=" + rms.ToString("R"));
+            EndCase("Native lobby music produced nonzero listener PCM without an injected tone.");
+        }
+        finally { SetSound(saved); }
+    }
+
     private IEnumerator AudioOutput()
     {
         BeginCase("audio", "listener-pcm-rms-on-off-on");
@@ -182,6 +204,7 @@ public sealed partial class LunaNativeValidation
             yield return MeasureRms((r, d) => { normal = r; clock = d; });
             current.observations.Add("Live game audio: playing clip sources=" + playing + ", listener RMS=" + normal.ToString("R") + ", DSP elapsed=" + clock.ToString("R"));
             Require(clock > 0.5, "Audio DSP clock did not advance in this process.");
+            Require(normal > 0.00001f, "The actual battle track is silent at the listener.");
             int sampleRate = AudioSettings.outputSampleRate;
             Require(sampleRate > 0, "No audio output sample rate.");
             // Known PCM separates actual mixer/mute behavior from a quiet part of the authored music.
