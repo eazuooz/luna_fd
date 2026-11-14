@@ -35,6 +35,7 @@ namespace Luna.Gameplay
         public int Gold { get => gold; set => gold = Mathf.Clamp(value, 0, MaxGold); }
         public int Mana { get => mana; set => mana = Mathf.Clamp(value, 0, MaxMana); }
         public int PendingCount => pendingIds.Count;
+        public int SummonsCompleted { get; private set; }
         public IReadOnlyList<Slot> SlotsReadOnly => readOnlySlots;
         private bool IsCombat => started && !stopped && round.IsActive && round.RoundId == roundId && !round.isStageStop;
 
@@ -165,6 +166,7 @@ namespace Luna.Gameplay
                     if (stopped || !round.IsActive || round.RoundId != roundId || actor.SpawnData == null || actor.SpawnData.RoundId != roundId)
                     { ownedIds.Remove(id); actor.SafeHide(); return; }
                     actor.unitState.IsLobbyMove = round.isStageStop;
+                    SummonsCompleted++;
                     actor.Data.InitialMode = round.isStageStop ? UnitSpawnMode.Staged : UnitSpawnMode.Battle;
                     // The slot already holds its new native ID. No UI availability controls this lifetime.
                 }, fail);

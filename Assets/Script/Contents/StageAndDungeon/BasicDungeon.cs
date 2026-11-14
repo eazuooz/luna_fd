@@ -22,6 +22,29 @@ public sealed class BasicDungeon : LunaGame
     public bool HasNextStage => row.Id < 30;
     public float SecondsUntilWave => waveIndex < timedWaves.Count ? Mathf.Max(0f, timedWaves[waveIndex].At - StageCount) : float.PositiveInfinity;
     public string PhaseName => phase.ToString();
+    protected override UnitLogic Objective => LunaSpawn.Find<UnitLogic>(enemyTowerId);
+    protected override EndReason DeathDefeatReason => EndReason.TowerDestroyed;
+    public override string GuidanceText
+    {
+        get
+        {
+            if (row.Id > 3 || LunaDataTable.Instance.StageTable[StageKey].isClear) return base.GuidanceText;
+            switch (row.Id)
+            {
+                case 1:
+                    return Roster.SummonsCompleted == 0
+                        ? "첫 동료를 불러보세요 · 아래 병사 카드 또는 숫자 5·6"
+                        : "동료 합류 완료!  ← → 또는 A·D로 움직이고 멈추면 자동 공격합니다.";
+                case 2:
+                    if (!HasRetreated) return "왼쪽 화살표 또는 A를 눌러 후퇴해보세요 · 동료 뒤에서 전열을 정비하세요.";
+                    return HasHealed ? "회복 완료! 동료와 함께 다시 전진하세요."
+                        : "후퇴 완료! 회복 스킬이 있다면 체력이 줄었을 때 써보세요 · 스킬은 마나를 함께 사용합니다.";
+                default:
+                    return SkillsUsed == 0 ? "상황에 맞춰 장착한 스킬을 써보세요 · 번개는 버튼을 누른 뒤 지면을 선택합니다."
+                        : "스킬 사용 완료! 다음 증원 전에 공격과 회복에 쓸 마나를 남겨두세요.";
+            }
+        }
+    }
     public override void Initialize(LunaStageDefinition source)
     {
         base.Initialize(source);
@@ -92,9 +115,9 @@ public sealed class BasicDungeon : LunaGame
             case Phase.Combat:
                 if (isStageStop) break;
                 StageCount += elapsed;
-                if (!Alive(LunaSpawn.Find<UnitLogic>(allyTowerId))) { Finish(false); break; }
+                if (!Alive(LunaSpawn.Find<UnitLogic>(allyTowerId))) { Finish(false, EndReason.TowerDestroyed); break; }
                 if (!Alive(LunaSpawn.Find<UnitLogic>(enemyTowerId))) { Finish(true); break; }
-                if (StageCount >= row.TimeLimit) { Finish(false); break; }
+                if (StageCount >= row.TimeLimit) { Finish(false, EndReason.TimeExpired); break; }
                 while (waveIndex < timedWaves.Count && StageCount >= timedWaves[waveIndex].At)
                 {
                     var wave = timedWaves[waveIndex++];

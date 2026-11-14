@@ -87,6 +87,13 @@ public sealed partial class LunaNativeValidation
         renderBoundsFailures.Clear();
         UIPlayer player = Active<UIPlayer>();
         foreach (string name in new[] { "ButtonLeft", "ButtonRight" }) MeasureUiRect(player, name, width, height);
+        MeasureUiRect(player, "BattleGuidance", width, height);
+        if (player != null)
+            foreach (var card in player.SummonCards)
+            {
+                MeasureUiRect(card.StatusText.rectTransform, card.button.name + "/SummonStatus", width, height);
+                MeasureUiRect(card.button, "Summons/Text", width, height);
+            }
         UISkill skill = Active<UISkill>();
         for (int i = 0; i < 3; i++) MeasureUiRect(skill, "Skill_Button_" + i, width, height);
         UIGameOption options = Active<UIGameOption>();

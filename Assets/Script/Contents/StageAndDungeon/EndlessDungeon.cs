@@ -78,7 +78,7 @@ public sealed class EndlessDungeon : LunaGame
                     nextBackgroundId = SpawnBackdrop(definition.backgroundImage, new Vector3(17.07f, 0f, 0f));
                     SpawnWave(true); phase = Phase.NextLoading;
                 }
-                else if (FloorTimeRemaining <= 0f) Finish(false);
+                else if (FloorTimeRemaining <= 0f) Finish(false, EndReason.TimeExpired);
                 break;
             case Phase.NextLoading:
                 if (PendingSpawnCount == 0) { timer = 0.5f; phase = Phase.NextWait; }

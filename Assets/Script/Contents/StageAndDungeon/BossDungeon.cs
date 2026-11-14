@@ -9,6 +9,7 @@ public sealed class BossDungeon : LunaGame
     private List<LunaStageWaveRow> phases;
     private int phaseIndex;
     public UnitLogic Boss => LunaSpawn.Find<UnitLogic>(bossId);
+    protected override UnitLogic Objective => Boss;
     public float BossHealth => Boss != null ? Mathf.Clamp01(Boss.stat.Hp / Mathf.Max(1f, Boss.HealthBarHpPoint)) : 0f;
     public GameObject GamePlayer => Player != null ? Player.gameObject : null;
     public string DungeonName => row.DisplayName;
@@ -39,8 +40,9 @@ public sealed class BossDungeon : LunaGame
         if (isStageStop) return;
         dungeonCount = Mathf.Max(0f, dungeonCount - elapsed); StageCount += elapsed;
         if (!Alive(Boss)) { Finish(true); return; }
-        if (dungeonCount <= 0f || (Player == null && !PlayerRespawnPending && PendingSpawnCount == 0))
-        { Finish(false); return; }
+        if (dungeonCount <= 0f) { Finish(false, EndReason.TimeExpired); return; }
+        if (Player == null && !PlayerRespawnPending && PendingSpawnCount == 0)
+        { Finish(false, EndReason.PlayerDefeated); return; }
         while (phaseIndex < phases.Count && BossHealth <= phases[phaseIndex].At)
         {
             var wave = phases[phaseIndex++];

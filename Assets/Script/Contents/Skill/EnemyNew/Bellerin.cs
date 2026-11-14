@@ -43,13 +43,18 @@ public class Bellerin : EnemySkillLogic
         // Leave the rear of the lane open so the party can retreat from the wave.
         for (int i = 0; i < 6; i++)
         {
-            yield return new WaitForSeconds(0.3f);
             Vector3 point = transform.position + Vector3.right * direction * (i * 2f + 2f);
+            float delay = i == 0 ? 0.8f : 0.45f;
+            MarkAttack(point, 2f, delay, "출혈 파동");
+            yield return new WaitForSeconds(delay);
+            ClearAttackWarning();
+            if (!LunaCombat.IsInCombat(this)) yield break;
             LunaEffects.Show(skillEffect_1, point, roundId: Data.RoundId);
             IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).TakeBleeding(damage, 5f),
                 targetsAllies ? IdentifyFunc.IsAlly : IdentifyFunc.IsEnemy, IdentifyFunc.IsNotTower,
                 unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
                 unit => IdentifyFunc.IsInDistance(point, unit, 2f));
         }
+        RecoverAfterSkill();
     }
 }

@@ -14,7 +14,27 @@ public class UIResult : UILuna
         var plate = transform.Find("ImagePlate");
         plate.Find("ImageTitle/ResultText").GetComponent<Text>().text = round is EndlessDungeon endless
             ? endless.dungeonLevel + "층 돌파" : won ? "승리!" : "패배!";
-        transform.Find("ResultBoard/ResultText").GetComponent<Text>().text = won ? "'승리'" : "<color=red>'패배'</color>";
+        var detail = transform.Find("ResultBoard/ResultText").GetComponent<Text>();
+        detail.transform.parent.Find("MainText").gameObject.SetActive(false);
+        detail.rectTransform.anchoredPosition = Vector2.zero;
+        detail.rectTransform.sizeDelta = new Vector2(600f, 80f);
+        detail.alignment = TextAnchor.MiddleCenter;
+        detail.fontSize = 24;
+        detail.lineSpacing = 1f;
+        detail.resizeTextForBestFit = true;
+        detail.resizeTextMinSize = 20;
+        detail.resizeTextMaxSize = 24;
+        string reason = round.ResultReason switch
+        {
+            LunaGame.EndReason.TimeExpired => "시간 초과",
+            LunaGame.EndReason.TowerDestroyed => "아군 거점 파괴",
+            LunaGame.EndReason.PlayerDefeated => "루나 쓰러짐",
+            _ => "승리!"
+        };
+        detail.text = won ? reason : "<color=#FF8272>" + reason + "</color>";
+        if (!won && (round is BasicDungeon || round is BossDungeon))
+            detail.text += "\n적 " + (round is BossDungeon ? "보스" : "거점") + " 체력 " +
+                Mathf.CeilToInt(round.RemainingObjectiveHealth * 100f) + "% 남음";
         bool campaign = round is BasicDungeon;
         bool nextAvailable = round is BasicDungeon basic && won && basic.HasNextStage;
         plate.Find("NextStage").gameObject.SetActive(nextAvailable);

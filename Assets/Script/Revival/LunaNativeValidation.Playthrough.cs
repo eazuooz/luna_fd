@@ -13,7 +13,7 @@ public sealed partial class LunaNativeValidation
     {
         public string stage, policy, outcome;
         public int seed, attempt, level, floors, deaths, summons, skills, peakEnemies, goldReward, wallet, phaseReinforcements, dodgeInputs;
-        public float seconds, allyHealth, objectiveHealth, lowestPlayerHealth = 1f, firstContact = -1f;
+        public float seconds, allyHealth, objectiveHealth, lowestPlayerHealth = 1f, firstContact = -1f, firstSkill = -1f;
     }
 
     private static readonly int[] TacticalOrder = { 1, 2, 0, 3, 4, 5 };
@@ -150,6 +150,7 @@ public sealed partial class LunaNativeValidation
         if (round.Player is PlayerLogic currentPlayer) currentPlayer.NMove();
         sample.deaths = deadLives.Count;
         sample.seconds = round.StageCount;
+        sample.firstSkill = round.FirstSkillTime;
         sample.floors = endless?.dungeonLevel ?? 0;
         sample.outcome = Active<UIResult>() != null ? (round.isStageWin ? "win" : "loss") : sample.floors >= 12 ? "floor-cap" : "time-cap";
         yield return EnsureFixtureLobby();
@@ -176,8 +177,9 @@ public sealed partial class LunaNativeValidation
                 unit.UnitSide == eUnitSide.Allied && unit.hitPriority != eHitPriority.TOWER && LunaCombat.IsInCombat(unit) &&
                 unit.transform.position.x > x + 0.15f);
         int escape = 0;
-        if (tactical && round is BossDungeon boss && boss.Boss is Rugani rugani &&
-            rugani.StrikeMarker is Vector3 mark && Mathf.Abs(mark.x - x) < 1.0f)
+        var warning = tactical ? enemies.OfType<EnemySkillLogic>()
+            .FirstOrDefault(enemy => enemy.WarningPosition is Vector3 point && Mathf.Abs(point.x - x) < enemy.WarningRadius + 0.2f) : null;
+        if (warning != null && warning.WarningPosition is Vector3 mark)
         {
             escape = x > mark.x + 0.1f && x < Defined.EnemyTowerPosition.x - 1f ? 1 : -1;
             sample.dodgeInputs++;

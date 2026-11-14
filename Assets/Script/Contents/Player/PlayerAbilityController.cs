@@ -40,7 +40,10 @@ namespace Luna.Gameplay
             Loadout = owner.Data.PlayerLoadout ?? throw new InvalidOperationException("Player request has no captured loadout.");
             foreach (PlayerSkillSnapshot skill in Loadout.Skills)
             {
-                cooldowns[skill.name] = Mathf.Max(0f, skill.coolTime);
+                // The opening life gets a short preparation period. Later uses and
+                // combat respawns retain the authored cooldown.
+                cooldowns[skill.name] = Mathf.Max(0f, owner.Data.InitialMode == UnitSpawnMode.Staged
+                    ? Mathf.Min(8f, skill.coolTime) : skill.coolTime);
                 equippedSkills[skill.name] = skill;
             }
             equipment.AddRange(Loadout.Equipment);
@@ -86,6 +89,7 @@ namespace Luna.Gameplay
                 // Execute and this deduction are one synchronous request. Target selection and UI lifetime never own payment.
                 round.Roster.Mana -= data.mana;
                 cooldowns[data.name] = Mathf.Max(0f, data.coolTime);
+                round.RecordSkillUse(data.name);
             }
             return used;
         }

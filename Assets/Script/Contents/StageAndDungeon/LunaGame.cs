@@ -9,6 +9,24 @@ using UnityGameFramework.Runtime;
 /// <summary>A single round owned and updated by LunaBattleProcedure. No Unity message or coroutine drives round rules.</summary>
 public abstract class LunaGame
 {
+    public enum EndReason { None, Victory, TimeExpired, TowerDestroyed, PlayerDefeated }
+    public EndReason ResultReason { get; private set; }
+    public float RemainingObjectiveHealth { get; private set; }
+    public int SkillsUsed { get; private set; }
+    public bool HasHealed { get; private set; }
+    public float FirstSkillTime { get; private set; } = -1f;
+    public bool HasRetreated { get; private set; }
+    protected virtual UnitLogic Objective => null;
+    protected virtual EndReason DeathDefeatReason => EndReason.PlayerDefeated;
+    public virtual string GuidanceText => row.Tip;
+
+    internal void RecordSkillUse(string skill)
+    {
+        SkillsUsed++;
+        if (skill == "Healing") HasHealed = true;
+        if (FirstSkillTime < 0f) FirstSkillTime = StageCount;
+    }
+    internal void RecordRetreat() => HasRetreated = true;
     private static int roundSerial;
     private readonly HashSet<int> pending = new HashSet<int>();
     private struct EarnedLoot { public int ItemId, Count, CoinValue; public bool IsCoin; }
@@ -214,9 +232,12 @@ public abstract class LunaGame
         LunaUI.Open(UI_TYPE.GAMEOPTION); LunaUI.Open(UI_TYPE.PLAYER); LunaUI.Open(UI_TYPE.SKILL);
         if (minimap) LunaUI.Open(UI_TYPE.PROGRESSBAR);
     }
-    protected void Finish(bool won)
+    protected void Finish(bool won, EndReason reason = EndReason.PlayerDefeated)
     {
         if (resultStarted) return;
+        ResultReason = won ? EndReason.Victory : reason;
+        RemainingObjectiveHealth = Objective != null
+            ? Mathf.Clamp01(Objective.stat.Hp / Mathf.Max(1f, Objective.HealthBarHpPoint)) : 0f;
         resultStarted = true; isStageStop = true; isStageWin = won; resultAge = 0f;
         respawnPending = false;
         LunaSpawn.Cancel(graveId); LunaSpawn.Cancel(resurrectionId);
@@ -299,7 +320,7 @@ public abstract class LunaGame
     {
         var death = (PlayerDiedEventArgs)args;
         if (!IsActive || resultStarted || death.RoundId != RoundId || death.EntityId != playerId || respawnPending) return;
-        if (!CanRespawnPlayer) { LunaSession.Current.LunaPlayer = null; Finish(false); return; }
+        if (!CanRespawnPlayer) { LunaSession.Current.LunaPlayer = null; Finish(false, DeathDefeatReason); return; }
         respawnPending = true; playerTowerId = death.AllyTowerId;
         float reduction = Defined.lunaReviveTimeValue * LunaDataTable.Instance.playerData.LunaReviveTimeLevel;
         respawnTimer = Mathf.Max(0f, death.RespawnDelay * (1f - reduction));

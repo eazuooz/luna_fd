@@ -20,6 +20,182 @@ public sealed partial class LunaNativeValidation
         yield return TurnToThreatContract();
         yield return CampaignReplayContract();
         yield return CampaignFinaleContract();
+        yield return BattleFeedbackContracts();
+    }
+
+    private IEnumerator BattleFeedbackContracts()
+    {
+        foreach (var reason in new[] { LunaGame.EndReason.TimeExpired, LunaGame.EndReason.TowerDestroyed, LunaGame.EndReason.PlayerDefeated })
+        {
+            BeginCase("feedback", "result-" + reason);
+            if (reason == LunaGame.EndReason.PlayerDefeated) yield return LoadDungeonFixture("Dungeon01");
+            else yield return LoadStage("Stage01-01");
+            var game = LunaScenes.CurrentGame;
+            HoldRoundActors(game);
+            Time.timeScale = 5f;
+            if (reason == LunaGame.EndReason.TimeExpired)
+            {
+                var basic = (BasicDungeon)game;
+                UnitLogic.From(basic.gameEnemyTower).stat.Hp = UnitLogic.From(basic.gameEnemyTower).HealthBarHpPoint * 0.42f;
+                float limit = game.Definition.Row.TimeLimit;
+                try
+                {
+                    game.Definition.Row.TimeLimit = game.StageCount + 0.2f;
+                    yield return Until(() => Active<UIResult>() != null, "Timeout result");
+                }
+                finally { game.Definition.Row.TimeLimit = limit; }
+                Require(Mathf.Abs(game.RemainingObjectiveHealth - 0.42f) < 0.001f &&
+                    Active<UIResult>().transform.Find("ResultBoard/ResultText").GetComponent<Text>().text.Contains("42%"),
+                    "Timeout result lost the frozen objective health.");
+            }
+            else
+            {
+                if (game is BasicDungeon basic) UnitLogic.From(basic.gameAllyTower).stat.Hp = 0f;
+                else game.Player.stat.Hp = 0f;
+                yield return Until(() => Active<UIResult>() != null, "Defeat result");
+            }
+            Require(!game.isStageWin && game.ResultReason == reason, "The real end condition produced the wrong defeat reason.");
+            Canvas.ForceUpdateCanvases();
+            var detail = Active<UIResult>().transform.Find("ResultBoard/ResultText").GetComponent<Text>();
+            Require(detail.cachedTextGenerator.lines.Count == 2,
+                "The rendered result clipped its objective-health line.");
+            yield return EnsureFixtureLobby();
+            EndCase("Normal timeout, tower destruction or player death produced its distinct result and retained objective progress.");
+        }
+        yield return SummonFeedbackContract();
+        yield return OpeningGuidanceContract();
+        yield return AttackWarningContract();
+    }
+
+    private IEnumerator SummonFeedbackContract()
+    {
+        BeginCase("feedback", "summon-status-and-health");
+        yield return LoadStage("Stage01-01");
+        var game = LunaScenes.CurrentGame;
+        HoldRoundActors(game);
+        var hud = Active<UIPlayer>();
+        var roster = game.Roster;
+        roster.Gold = 0;
+        yield return Until(() => roster.GetSlot(0).Remaining <= 0f, "Normal summon cooldown");
+        Require(hud.SummonStatus(0).Contains("부족"), "Unaffordable summon is not explained.");
+        roster.Gold = 100;
+        Require(hud.SummonStatus(0) == "소환 가능", "Ready summon is not distinguished.");
+        hud.OnClickSummon(0);
+        yield return Until(() => roster.GetSlot(0).LiveUnit != null, "Real hero summon");
+        var hero = roster.GetSlot(0).LiveUnit;
+        hero.Invincible(0f);
+        hero.stat.Hp = hero.HealthBarHpPoint * 0.25f;
+        yield return null;
+        Require(hud.SummonStatus(0).Contains("HP 25%") && !roster.CanSummon(0) &&
+            hud.SummonCards[0].StatusText.text.Contains("HP 25%"),
+            "Live hero health is absent or the status enables a duplicate summon.");
+        hud.OnClickSummon(4);
+        yield return Until(() => !roster.GetSlot(4).Pending, "Real soldier summon");
+        Require(roster.GetSlot(4).Remaining > 0f && hud.SummonStatus(4).StartsWith("대기 "),
+            "Soldier cooldown has no duration.");
+        yield return EnsureFixtureLobby();
+        EndCase("Actual HUD requests separated unaffordable/ready/live/cooldown states and showed injured hero health.");
+    }
+
+    private IEnumerator OpeningGuidanceContract()
+    {
+        BeginCase("feedback", "first-three-floors-guidance-and-opening-skill");
+        var profile = LunaDataTable.Instance.playerData;
+        var oldSkills = profile.equippedSkill.ToList();
+        profile.equippedSkill = new[] { "FireBall", "Healing", "Thunder" }.ToList();
+        try
+        {
+            for (int floor = 1; floor <= 3; floor++)
+            {
+                string key = "Stage01-0" + floor;
+                var progress = LunaDataTable.Instance.StageTable[key];
+                bool cleared = progress.isClear;
+                progress.isClear = false;
+                try
+                {
+                    yield return LoadStage(key);
+                    var game = LunaScenes.CurrentGame;
+                    HoldRoundActors(game);
+                    Time.timeScale = 4f;
+                    if (floor == 1)
+                    {
+                        yield return Until(() => game.Roster.CanSummon(4), "Starter soldier affordability");
+                        Active<UIPlayer>().OnClickSummon(4);
+                        yield return Until(() => game.Roster.SummonsCompleted > 0, "Guided summon native completion");
+                        Require(game.GuidanceText.Contains("동료 합류 완료"), "Summon guidance did not advance.");
+                    }
+                    else
+                    {
+                        var player = (PlayerLogic)game.Player;
+                        if (floor == 2)
+                        {
+                            player.SetMovement(-1);
+                            yield return Until(() => game.HasRetreated, "Normal player retreat");
+                            player.NMove();
+                            Require(game.GuidanceText.Contains("후퇴 완료"), "Movement guidance did not advance.");
+                            player.stat.Hp = player.HealthBarHpPoint * 0.5f;
+                        }
+                        string skill = floor == 2 ? "Healing" : "FireBall";
+                        var snapshot = player.Abilities.Loadout.Skills.Single(value => value.name == skill);
+                        yield return Until(() => player.Abilities.Ready(snapshot) && game.Roster.Mana >= snapshot.mana,
+                            "Opening skill with natural mana and cooldown", 12f);
+                        int mana = game.Roster.Mana;
+                        Active<UISkill>().transform.Find("Skill_Button_" + (floor == 2 ? 1 : 0)).GetComponent<Button>().onClick.Invoke();
+                        Require(game.SkillsUsed == 1 && game.Roster.Mana == mana - snapshot.mana &&
+                            player.Abilities.Remaining(snapshot) == snapshot.coolTime && game.FirstSkillTime <= 10f,
+                            "Opening skill did not use the real cost or restore its full reuse cooldown.");
+                        Require(game.GuidanceText.Contains(floor == 2 ? "회복 완료" : "스킬 사용 완료"), "Skill guidance did not advance.");
+                    }
+                    yield return null;
+                    Require(Active<UIPlayer>().transform.Find("BattleGuidance").GetComponent<Text>().text == game.GuidanceText,
+                        "The tutorial action was not reflected in the visible HUD.");
+                    yield return EnsureFixtureLobby();
+                }
+                finally { progress.isClear = cleared; }
+            }
+        }
+        finally { profile.equippedSkill = oldSkills; }
+        EndCase("Real summon, movement, heal and attack callbacks advanced opening guidance. Natural first skills were affordable by 10 seconds and paid once.");
+    }
+
+    private IEnumerator AttackWarningContract()
+    {
+        BeginCase("feedback", "dragon-mark-dodge-hit-and-death-cancel");
+        yield return EnsureFixtureLobby();
+        int round = NewFixtureRound();
+        var prefab = Resources.Load<GameObject>("Prefabs/03EliteMonters/RedDragon");
+        RedDragon dragon = null;
+        PlayerLogic victim = null;
+        try
+        {
+            var playerPrefab = LunaSession.Current.Players[0];
+            yield return ShowFixture<PlayerLogic>(playerPrefab, ControlledData(playerPrefab, new Vector3(-1f, 0f), round, eUnitSide.Allied), actor => victim = actor);
+            yield return ShowFixture<RedDragon>(prefab, ControlledData(prefab, Vector3.zero, round, eUnitSide.Enemy), actor => dragon = actor);
+            HoldAutomaticActions(victim);
+            HoldAutomaticActions(dragon);
+            NoDefence(victim);
+            float before = victim.stat.Hp;
+            dragon.BeginSkill();
+            yield return Until(() => dragon.WarningPosition.HasValue, "Natural dragon skill warning");
+            Require(dragon.WarningSeconds >= 0.6f && victim.stat.Hp == before, "The warning arrived after damage or left no reaction time.");
+            Vector3 marked = dragon.WarningPosition.Value;
+            victim.SetMovement(-1);
+            yield return Until(() => Mathf.Abs(victim.transform.position.x - marked.x) > dragon.WarningRadius + 0.05f,
+                "Normal player movement leaves the marked area", 1f);
+            victim.NMove();
+            yield return Until(() => !dragon.WarningPosition.HasValue, "Marked strike resolves");
+            Require(victim.stat.Hp == before, "The marked strike followed an escaped target.");
+            yield return Until(() => dragon.WarningPosition.HasValue, "Second marked strike");
+            yield return Until(() => victim.stat.Hp < before, "Remaining in the marked area takes damage");
+            yield return Until(() => dragon.WarningPosition.HasValue, "Third marked strike");
+            float afterHit = victim.stat.Hp;
+            dragon.stat.Hp = 0f;
+            yield return new WaitForSeconds(1.2f);
+            Require(victim.stat.Hp == afterHit && !dragon.WarningPosition.HasValue, "A defeated caster left a damaging pending strike or warning.");
+        }
+        finally { LunaSpawn.CancelRound(round); }
+        yield return RetireFixture(round);
+        EndCase("The actual native skill warned before damage, missed an escaped target, hit a stationary target, and cancelled on caster death.");
     }
 
     private IEnumerator CardShopContract()
@@ -258,6 +434,30 @@ public sealed partial class LunaNativeValidation
         CaptureDesignPanel("boss-briefing", NativeUi(UI_TYPE.DUNGEONINFO), "BackGround/StageBriefing", "BackGround/StartButton");
         yield return CloseNativeUi(UI_TYPE.DUNGEONINFO);
         yield return CloseNativeUi(UI_TYPE.SELECTSTAGE);
+        var opening = LunaDataTable.Instance.StageTable["Stage01-01"];
+        bool cleared = opening.isClear;
+        opening.isClear = false;
+        try
+        {
+            yield return LoadStage("Stage01-01");
+            HoldRoundActors(LunaScenes.CurrentGame);
+            yield return null;
+            var hud = Active<UIPlayer>();
+            CaptureDesignPanel("battle-guidance", hud, "BattleGuidance", "Button_0/SummonStatus", "Button_5/SummonStatus",
+                "Button_0/Summons/Text", "Button_5/Summons/Text");
+            var game = (BasicDungeon)LunaScenes.CurrentGame;
+            UnitLogic.From(game.gameAllyTower).stat.Hp = 0f;
+            yield return Until(() => Active<UIResult>() != null, "Result detail render");
+            CaptureDesignPanel("defeat-detail", Active<UIResult>(), "ResultBoard/ResultText");
+        }
+        finally { opening.isClear = cleared; }
+        yield return LoadDungeonFixture("Dungeon01");
+        var dragon = (RedDragon)((BossDungeon)LunaScenes.CurrentGame).Boss;
+        dragon.BeginSkill();
+        yield return Until(() => dragon.WarningPosition.HasValue, "Boss warning render");
+        yield return null;
+        CaptureDesignPanel("boss-warning", Active<UIPlayer>(), "AttackWarning", "AttackWarning/WarningText");
+        yield return EnsureFixtureLobby();
     }
 
     private void CaptureDesignPanel(string name, UILuna form, params string[] paths)

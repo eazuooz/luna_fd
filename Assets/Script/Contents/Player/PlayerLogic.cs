@@ -121,7 +121,11 @@ namespace Luna.Gameplay
                 float distanceAhead = (Target.transform.position.x - transform.position.x) * Moving;
                 if (distanceAhead >= 0f && distanceAhead <= 1f) return;
             }
+            float previousX = transform.position.x;
             MoveCombat(Moving, elapsed);
+            var round = LunaScenes.CurrentGame;
+            if (Moving < 0 && transform.position.x < previousX - 0.001f && round?.PlayerEntityId == ID)
+                round.RecordRetreat();
         }
 
         protected override void OnAnimationComplete(TrackEntry entry)

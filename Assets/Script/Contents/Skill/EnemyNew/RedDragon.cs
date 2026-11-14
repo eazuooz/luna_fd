@@ -1,109 +1,55 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Luna.Gameplay;
-using UnityEngine.SceneManagement;
 
 public class RedDragon : EnemySkillLogic
 {
     private int skillControlCounter;
-
+    private bool casting;
+    public override bool HasAutomaticSkill => base.HasAutomaticSkill && !casting;
     public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
     public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
 
-    // Start is called before the first frame update
     protected override void ConfigureUnitForSpawn()
     {
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
+        casting = false;
     }
-
-    // Update is called once per frame
-    
 
     protected override void ExecuteSkill()
     {
+        if (casting) return;
         skillControlCounter++;
+        StartCoroutine(Flame(skillControlCounter % 4 == 0));
+    }
 
-        if (skillControlCounter % 4 == 0)
+    private IEnumerator Flame(bool barrage)
+    {
+        casting = true;
+        int pulses = barrage ? 6 : 3;
+        float damage = barrage ? 100f : 40f;
+        var effect = barrage ? skillEffect_2 : skillEffect_1;
+        for (int i = 0; i < pulses; i++)
         {
-            Skill_2();
+            GameObject target = null;
+            IdentifyFunc.PickingUnit(unit => target = unit, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower,
+                unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
+            if (target == null) break;
+            Vector3 point = target.transform.position;
+            MarkAttack(point, 1f, 1.1f, barrage ? "화염 폭격" : "용의 불꽃");
+            yield return new WaitForSeconds(1.1f);
+            ClearAttackWarning();
+            if (!LunaCombat.IsInCombat(this)) break;
+            LunaEffects.Show(effect, point, roundId: Data.RoundId);
+            IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).Attack(gameObject, damage, false, true),
+                IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower,
+                unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
+                unit => IdentifyFunc.IsInDistance(point, unit, 1f));
+            yield return new WaitForSeconds(0.2f);
         }
-        else
-        {
-            Skill_1();
-        }
-    }
-
-    void Skill_1()
-    {
-        StartCoroutine(DuringSkill1());
-    }
-
-    void Skill_2()
-    {
-        StartCoroutine(DuringSkill2());
-    }
-
-    IEnumerator DuringSkill1()
-    {
-        float skillDamage = 40.0f;
-
-        GameObject tmp = null;
-
-        
-
-        IdentifyFunc.PickingUnit((pickedUnit) =>
-        {
-            tmp = pickedUnit;
-
-        }, IdentifyFunc.IsAlly);
-
-        if(tmp != null)
-        {
-            int targetId = UnitLogic.From(tmp).ID;
-            for (int i = 0; i < 3; i++)
-            {
-                var target = UnitLogic.Find(targetId);
-                if (target == null || target.stat.Hp <= 0f) yield break;
-                target.Attack(gameObject, skillDamage, false, true);
-
-                Defined.EffectCreate(skillEffect_1, tmp, Defined.eEffectPosition.UNDERFEET);
-
-                yield return new WaitForSeconds(0.45f);
-            }
-        }        
-    }
-
-    IEnumerator DuringSkill2()
-    {
-        float skillDamage = 100.0f;
-
-        for (int i = 0; i < 6; i++)
-        {
-            yield return new WaitForSeconds(1.0f);
-
-            GameObject tmp = null;
-
-            IdentifyFunc.PickingUnit((unit) =>
-            {
-                tmp = unit;
-
-            }, IdentifyFunc.IsAlly);
-
-            if (tmp != null)
-            {
-                IdentifyFunc.PickingUnits((unit2) =>
-                {
-                    if (IdentifyFunc.IsInDistance(tmp, unit2, 1.0f))
-                    {
-                        UnitLogic.From(unit2).Attack(gameObject, skillDamage, false, true);
-                    }
-                }, IdentifyFunc.IsAlly);
-
-                Defined.EffectCreate(skillEffect_2, tmp, Defined.eEffectPosition.UNDERFEET);
-            }
-        }
+        ClearAttackWarning();
+        casting = false;
+        RecoverAfterSkill();
     }
 }

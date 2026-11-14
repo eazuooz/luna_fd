@@ -6,7 +6,7 @@ public class Rugani : EnemySkillLogic
 {
     private int skillControlCounter;
     private bool stormRunning;
-    public Vector3? StrikeMarker { get; private set; }
+    public Vector3? StrikeMarker => WarningPosition;
 
     public GameObject skillEffect_1 => View.GetPrefab("skillEffect_1");
     public GameObject skillEffect_2 => View.GetPrefab("skillEffect_2");
@@ -17,7 +17,6 @@ public class Rugani : EnemySkillLogic
         status.unitState.IsTargetingSkill = false;
         skillControlCounter = 0;
         stormRunning = false;
-        StrikeMarker = null;
     }
 
     protected override void ExecuteSkill()
@@ -102,14 +101,15 @@ public class Rugani : EnemySkillLogic
                 unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId);
             if (target == null) continue;
             Vector3 strike = target.transform.position;
-            StrikeMarker = strike;
+            MarkAttack(strike, 0.85f, 0.8f, "낙뢰");
+            yield return new WaitForSeconds(0.8f);
+            if (!LunaCombat.IsInCombat(this)) yield break;
             if (bolt != null) LunaEffects.Show(bolt, strike, roundId: Data.RoundId);
-            yield return new WaitForSeconds(0.65f);
             IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).TakeStun(1.1f),
                 IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower,
                 unit => UnitLogic.From(unit).Data.RoundId == Data.RoundId,
                 unit => IdentifyFunc.IsInDistance(strike, unit, 0.85f));
-            StrikeMarker = null;
+            ClearAttackWarning();
         }
         stormRunning = false;
     }
