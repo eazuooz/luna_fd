@@ -13,6 +13,16 @@ namespace Luna.Gameplay
         public const int HeroChance = 35;
         public const int DeckFocusChance = 70;
         public const int UnitMaxLevel = 20;
+        public const int SkillMaxLevel = 20;
+        public static int SkillStoneCost(int level) => 2 * Mathf.Clamp(level, 1, SkillMaxLevel);
+        public static bool TryLevelUpSkill(SkillData skill)
+        {
+            if (skill == null || skill.level >= SkillMaxLevel ||
+                !LunaDataTable.Instance.itemTable.TryGetValue(1001, out var stones) || stones.itemCount < SkillStoneCost(skill.level)) return false;
+            stones.itemCount -= SkillStoneCost(skill.level);
+            skill.level++;
+            return true;
+        }
 
         public static int UnitLevelCost(int level) => 550 + 150 * Mathf.Clamp(level, 1, UnitMaxLevel);
         public static int RankCardCost(eUltState rank) => (int)rank < 5 ? (int)rank + 1 : 2 * (int)rank - 3;
@@ -87,6 +97,7 @@ namespace Luna.Gameplay
             }
 
             var awards = picks.GroupBy(name => name).ToArray();
+            var newUnits = awards.Where(group => !LunaUIPresentation.Owned(data.UnitTable[group.Key])).Select(group => group.Key).ToArray();
             if (awards.Any(group => data.UnitTable[group.Key].cardCount > int.MaxValue - group.Count()))
             { message = "보유 카드 한도에 도달했습니다."; return false; }
 
@@ -104,6 +115,8 @@ namespace Luna.Gameplay
 
             data.LotteryResult.Clear();
             data.LotteryResult.AddRange(picks);
+            data.LotteryNewUnits.Clear();
+            foreach (string name in newUnits) data.LotteryNewUnits.Add(name);
             message = string.Empty;
             return true;
         }

@@ -65,6 +65,7 @@ public class UILuna : UIFormLogic
         formCanvas.overrideSorting = true;
         foreach (var canvas in GetComponentsInChildren<Canvas>(true))
             if (canvas != formCanvas) canvas.overrideSorting = false;
+        LunaUIPresentation.Prepare(this, ((LunaUIFormData)userData).GroupName);
     }
     protected override void OnClose(bool isShutdown, object userData)
     {

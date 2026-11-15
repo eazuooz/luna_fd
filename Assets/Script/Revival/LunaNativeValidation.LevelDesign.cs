@@ -22,6 +22,7 @@ public sealed partial class LunaNativeValidation
         yield return CampaignFinaleContract();
         yield return BattleFeedbackContracts();
         yield return PresentationRepairContracts();
+        yield return PresentationContracts();
         yield return DeveloperModeContracts();
     }
 
@@ -486,6 +487,7 @@ public sealed partial class LunaNativeValidation
 
     private IEnumerator DesignPanelCaptures()
     {
+        yield return CollectionPanelCaptures();
         yield return RepairedFlowCaptures();
         yield return OpenNativeUi(UI_TYPE.GAMESHOP);
         CaptureDesignPanel("shop", NativeUi(UI_TYPE.GAMESHOP), "Board/ShopStatus",
@@ -522,11 +524,11 @@ public sealed partial class LunaNativeValidation
             yield return null;
             var hud = Active<UIPlayer>();
             CaptureDesignPanel("battle-guidance", hud, "BattleGuidance", "Button_0/SummonStatus", "Button_5/SummonStatus",
-                "Button_0/Summons/Text", "Button_5/Summons/Text");
+                "Button_0/Summons/Text", "Button_5/Summons/Text", "PlayerHealth", "BattleSpeed");
             var game = (BasicDungeon)LunaScenes.CurrentGame;
             UnitLogic.From(game.gameAllyTower).stat.Hp = 0f;
             yield return Until(() => Active<UIResult>() != null, "Result detail render");
-            CaptureDesignPanel("defeat-detail", Active<UIResult>(), "ResultBoard/ResultText");
+            CaptureDesignPanel("defeat-detail", Active<UIResult>(), "ResultBoard/ResultText", "BattleSummary");
         }
         finally { opening.isClear = cleared; }
         yield return LoadDungeonFixture("Dungeon01");

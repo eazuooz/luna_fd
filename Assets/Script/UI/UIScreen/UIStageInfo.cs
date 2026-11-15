@@ -20,6 +20,9 @@ public class UIStageInfo : UILuna
         LunaStagePreview.Layout(transform, true);
         LunaStagePreview.Fill(transform, stage);
         LunaStagePreview.AddBriefing(transform, row, 128f);
+        LunaUIPresentation.ConfigurePartyButton(transform);
+        LunaUIPresentation.Caption(transform.Find("BackGround/StartButton").GetComponent<Button>(), unlocked ? "전투 시작" : "아직 잠긴 스테이지");
+        transform.Find("BackGround/ReleaseButton").gameObject.SetActive(false);
     }
 
     public void OnClickStartGame()

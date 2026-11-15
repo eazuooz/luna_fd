@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Luna.Gameplay;
 using UnityEngine.UI;
@@ -112,6 +113,34 @@ public class UICharacterList : UILuna
         SetDeckData();
         ObserverInitialize();
         ScrollViewInitialize();
+        foreach (var label in GetComponentsInChildren<Text>(true))
+            if (label.text.Contains("현재 파티를") || label.text.StartsWith("파티 설정")) label.gameObject.SetActive(false);
+        LunaUIPresentation.Label(transform, "PartyHelp", "편성 중인 영웅 4명 · 병사 2명\n카드는 강화 재료이며 보유 여부와 구분됩니다.", new Vector2(-330f, 195f), new Vector2(350f, 56f), 17, TextAnchor.MiddleCenter);
+        LunaUIPresentation.Button(transform, "SortOwned", "보유 우선", new Vector2(160f, 240f), new Vector2(180f, 36f), () => SortCollection(false));
+        LunaUIPresentation.Button(transform, "SortLevel", "레벨순", new Vector2(360f, 240f), new Vector2(180f, 36f), () => SortCollection(true));
+        SortCollection(false);
+        RefreshCollectionRoles();
+    }
+    private void RefreshCollectionRoles()
+    {
+        foreach (var card in heroCardButtons.Concat(soldierCardButtons).Concat(allCardButtons))
+        {
+            var view = card.GetComponent<UICharacterButton>();
+            string name = view.CharacterUI.GetComponent<UnitView>().Data.engName;
+            view.SetEquipped(myDecks.Values.Any(slot => slot.name == name));
+        }
+    }
+    private void SortCollection(bool byLevel)
+    {
+        foreach (var list in new[] { heroCardButtons, soldierCardButtons, allCardButtons })
+        {
+            var ordered = list.Where(go => go != null).OrderByDescending(go =>
+            {
+                var data = go.GetComponent<UICharacterButton>().CharacterUI.GetComponent<UnitView>().Data;
+                return byLevel ? data.Level : LunaUIPresentation.Owned(data) ? 1 : 0;
+            }).ThenBy(go => go.name).ToArray();
+            for (int i = 0; i < ordered.Length; i++) ordered[i].transform.SetSiblingIndex(i);
+        }
     }
 
     
@@ -360,6 +389,7 @@ public class UICharacterList : UILuna
     }
     public void ReadyToJoinMyDeck(string name)
     {
+        if (!LunaDataTable.Instance.UnitTable.TryGetValue(name, out var owned) || !LunaUIPresentation.Owned(owned)) return;
         state = eState.Join;
         pickedUnitName = name;
         ObjectData data = LunaDataTable.Instance.UnitTable[name];
@@ -375,6 +405,7 @@ public class UICharacterList : UILuna
     public void ExitMyDeck(string name)
     {
         RemoveCardAsMyDeck(name);
+        RefreshCollectionRoles();
 
         SetActiveArrows(false);
     }
@@ -410,12 +441,14 @@ public class UICharacterList : UILuna
     {
         UnitButton unitButton = SetUnitButton(idx, pickedUnitName);
         AddUnitButtonInMyDeck(idx, unitButton);
+        RefreshCollectionRoles();
         pickedUnitName = "";
 
         return true;
     }
     private bool DuplicatedCardCheck(int idx, string name)
     {
+        if (idx < 0 || idx >= Defined.MaxHeroCnt + Defined.MaxSoldierCnt || !LunaDataTable.Instance.UnitTable.TryGetValue(name, out var selected) || !LunaUIPresentation.Owned(selected)) return false;
         foreach(var go in myDecks)
         {
             if (go.Value.name == name)
@@ -429,7 +462,7 @@ public class UICharacterList : UILuna
 
         if (data.UnitType == eUnitType.Hero)
         {
-            if (idx > Defined.MaxHeroCnt)
+            if (idx >= Defined.MaxHeroCnt)
                 return false;
         }
         else
@@ -570,7 +603,7 @@ public class UICharacterList : UILuna
         Text cardCountText
             = LunaUIViews.FindComponentByChildObject<Text>(statusObject, "CardText");
 
-        cardCountText.text = "+" + objectData.cardCount.ToString();
+        LunaUIPresentation.CardQuantity(cardCountText, objectData.cardCount);
 
         GameObject[] starts = new GameObject[5];
 

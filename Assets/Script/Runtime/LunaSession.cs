@@ -9,6 +9,7 @@ namespace Luna.Gameplay
     public sealed class LunaSession
     {
         public static LunaSession Current { get; private set; }
+        public bool ShowPartyOnLobby;
         public static void Initialize(GameObject[] playerPrefabs)
         {
             if (playerPrefabs == null || playerPrefabs.Length != 7 || Array.Exists(playerPrefabs, p => p == null))
@@ -56,6 +57,7 @@ namespace Luna.Gameplay
         public GameObject chatManager;
         public string chatStr;
         public string OnClickSkillName;
+        public string PreferredUpgradeTab;
 
         public void RefreshDeckPrefabs()
         {

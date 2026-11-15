@@ -62,6 +62,22 @@ namespace Luna.Gameplay
                 fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
                 fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
             }
+            if (besideMap)
+            {
+                title.anchoredPosition = new Vector2(0f, 205f); title.sizeDelta = new Vector2(630f, 48f);
+                foreach (var text in board.GetComponentsInChildren<Text>(true))
+                    if (text.transform.parent == board) { text.rectTransform.anchoredPosition = new Vector2(-235f, text.text.Contains("출현") ? 8f : -96f); text.fontSize = 18; }
+                foreach (string path in new[] { "Monster_ScrollView", "Item_ScrollView" })
+                {
+                    var rect = (RectTransform)form.Find(path);
+                    rect.anchoredPosition = board.anchoredPosition + new Vector2(0f, path.StartsWith("Monster") ? -40f : -143f);
+                    rect.sizeDelta = new Vector2(610f, 76f);
+                }
+                foreach (string path in new[] { "SelectButton", "StartButton" })
+                {
+                    var rect = (RectTransform)board.Find(path); rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -225f); rect.sizeDelta = new Vector2(319f, 72f);
+                }
+            }
         }
         public static void AddBriefing(Transform form, LunaStageRow row, float height)
         {
@@ -72,7 +88,7 @@ namespace Luna.Gameplay
             rect.anchoredPosition = new Vector2(0f, height);
             rect.sizeDelta = new Vector2(630f, 65f);
             var text = label.GetComponent<Text>();
-            text.font = board.Find("Title/Text").GetComponent<Text>().font;
+            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             text.fontSize = 18;
             text.lineSpacing = 1f;
             text.alignment = TextAnchor.MiddleCenter;
@@ -82,6 +98,20 @@ namespace Luna.Gameplay
                 : HasCleared(row) ? "재도전 보상 " + row.Gold + " G · 첫 승리 보상 획득 완료"
                     : "첫 승리 " + (row.Gold + row.FirstClearGold) + " G · 재도전 " + row.Gold + " G";
             text.text = reward + "\n" + row.Tip;
+            if (form.GetComponent<UIStageInfo>() != null)
+            {
+                rect.anchoredPosition = new Vector2(0f, 64f); rect.sizeDelta = new Vector2(630f, 88f); text.fontSize = 14;
+                text.text = "목표: 적 거점 파괴 · 제한 " + row.TimeLimit + "초\n권장 Lv. " + row.RecommendedLevel + " · 루나 Lv. " + LunaDataTable.Instance.playerData.LunaLevel +
+                    (LunaStageTables.IsUnlocked(row, LunaDataTable.Instance.playerData) ? "" : " · " + row.UnlockAfter + "층 클리어 후 해금") + "\n" + reward + "\n" + row.Tip;
+                var frame = LunaUIPresentation.Panel(board, "StageArtwork", new Vector2(0f, 140f), new Vector2(630f, 76f), LunaUIPresentation.Ink, false);
+                frame.gameObject.AddComponent<RectMask2D>();
+                var prefab = LunaStageTables.RequireAsset<GameObject>(row.Background);
+                Sprite sprite = null;
+                foreach (var renderer in prefab.GetComponentsInChildren<SpriteRenderer>(true))
+                    if (renderer.sprite != null && (sprite == null || renderer.sprite.rect.width * renderer.sprite.rect.height > sprite.rect.width * sprite.rect.height)) sprite = renderer.sprite;
+                var image = LunaUIPresentation.Panel(frame.transform, "Art", Vector2.zero, new Vector2(630f, 300f), Color.white, false);
+                image.sprite = sprite; image.preserveAspect = true;
+            }
         }
 
         public static void Fill(Transform form, LunaStageDefinition stage)
@@ -122,7 +152,8 @@ namespace Luna.Gameplay
             if (sprite == null || parent == null) return;
             var row = Object.Instantiate(prefab, parent, false);
             var rect = row.GetComponent<RectTransform>();
-            rect.localScale = Vector3.one; rect.sizeDelta = new Vector2(80f, 80f);
+            rect.localScale = Vector3.one; rect.sizeDelta = new Vector2(68f, 68f);
+            if (parent.GetComponentInParent<UIStageInfo>() != null) rect.sizeDelta = new Vector2(60f, 60f);
             var image = (RectTransform)row.transform.Find("Button");
             image.anchorMin = Vector2.zero; image.anchorMax = Vector2.one;
             image.offsetMin = image.offsetMax = Vector2.zero;

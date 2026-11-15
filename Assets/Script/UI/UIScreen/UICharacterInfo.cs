@@ -70,6 +70,8 @@ public class UICharacterInfo : UILuna
         objData = prefabObj.GetComponent<UnitView>().Data;
 
         InitTab();
+        ((RectTransform)levelUpTab.transform).anchoredPosition = new Vector2(-103f, 247f);
+        ((RectTransform)wakeUpTab.transform).anchoredPosition = new Vector2(-103f, 139f);
         InitializeUnitData(levelup);
         UpdateLevelUpInfo();
         UpdateRankUpButton();
@@ -192,6 +194,7 @@ public class UICharacterInfo : UILuna
         List<GameObject> joinButtons = LunaUIViews.FindChildObjects(transform.gameObject, "JoinPartyButton");
         foreach (GameObject go in joinButtons)
         {
+            go.GetComponent<Button>().interactable = LunaUIPresentation.Owned(objData);
             go.GetComponent<Button>().onClick.AddListener(OnClickJoinMyDeck);
         }
 
@@ -241,7 +244,8 @@ public class UICharacterInfo : UILuna
         Transform illustTr = bgTr.Find("Illustration");
         Transform imageTr = illustTr.Find("Image");
         imageTr.GetComponent<Image>().sprite = sprite;
-        imageTr.GetComponent<Image>().SetNativeSize();
+        imageTr.GetComponent<Image>().preserveAspect = true;
+        imageTr.GetComponent<RectTransform>().sizeDelta = new Vector2(250f, 270f);
     }
 
     private void CharacterInfo_SetName(string tabName, string name)
@@ -263,7 +267,7 @@ public class UICharacterInfo : UILuna
         int star = Mathf.Min(5, (int)objData.ultState);
         int ultState = Mathf.Max(0, (int)objData.ultState - 5);
 
-        text.text = "-" + objData.Level.ToString() + "<color=lime>(+1)</color>" + " 레벨 " + "\n"
+        text.text = (LunaUIPresentation.Owned(objData) ? "" : "미보유 · 소환에서 획득\n") + "-" + objData.Level + (objData.Level < LunaEconomy.UnitMaxLevel ? "<color=lime>(+1)</color>" : " (최대)") + " 레벨\n"
                         + "- " + star.ToString() + "성" + "\n"
                         + "- " + ultState.ToString() + "각성\n"
                         + "- 강화 카드 " + objData.cardCount + "장\n"
@@ -286,6 +290,7 @@ public class UICharacterInfo : UILuna
     {
         var cost = LunaUIViews.FindChildObject(levelup, "LevelupButton").transform.Find("CostText");
         cost.GetComponent<Text>().text = objData.Level >= LunaEconomy.UnitMaxLevel ? "최대" : "×" + LunaEconomy.UnitLevelCost(objData.Level);
+        cost.parent.GetComponent<Button>().interactable = LunaUIPresentation.Owned(objData) && objData.Level < LunaEconomy.UnitMaxLevel && LunaDataTable.Instance.playerData.Gold >= LunaEconomy.UnitLevelCost(objData.Level);
         GameObject statObj
             = LunaUIViews.FindChildObject(levelup, "LevelUpStat");
 
@@ -343,6 +348,7 @@ public class UICharacterInfo : UILuna
         var cost = button.transform.Find("CostText")?.GetComponent<Text>();
         if (cost != null)
             cost.text = objData.ultState >= eUltState.ULT2 ? "최대" : "×" + LunaEconomy.RankCardCost(objData.ultState);
+        button.GetComponent<Button>().interactable = objData.ultState < eUltState.ULT2 && objData.cardCount >= LunaEconomy.RankCardCost(objData.ultState) && LunaDataTable.Instance.playerData.StarStone >= LunaEconomy.RankStoneCost(objData.ultState);
         var stones = button.transform.Find("StarStone");
         if (stones != null)
         {
@@ -364,6 +370,7 @@ public class UICharacterInfo : UILuna
 
     public void OnClickCharacterLevelUp(int levelUpPrice)
     {
+        if (!LunaUIPresentation.Owned(objData)) return;
         if (!LunaEconomy.TryLevelUp(LunaDataTable.Instance.playerData, objData)) return;
         LunaRuntimeData.SaveNow();
 
@@ -388,6 +395,7 @@ public class UICharacterInfo : UILuna
 
     public void OnClickJoinMyDeck()
     {
+        if (!LunaUIPresentation.Owned(objData)) return;
         string unitName = objData.engName;
         uiCharacterList.GetComponent<UICharacterList>().ReadyToJoinMyDeck(unitName);
 

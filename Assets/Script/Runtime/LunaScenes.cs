@@ -252,6 +252,9 @@ namespace Luna.Gameplay
         public void RefreshInteraction()
         {
             if (!active || session == null) return;
+            if (session.ShowPartyOnLobby && LunaSpawn.PendingCount == 0 &&
+                GameEntry.GetComponent<UIComponent>().GetUIForm("Luna/UI/LOBBY")?.Logic is UILobby lobby && lobby.ProfileReady)
+            { session.ShowPartyOnLobby = false; LunaUI.Open(UI_TYPE.CHARACTERLIST); }
             bool value = LunaUI.AllowsLobbyInteraction();
             if (value == interactionEnabled) return;
             interactionEnabled = value;

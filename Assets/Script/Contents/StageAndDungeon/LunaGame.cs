@@ -68,6 +68,7 @@ public abstract class LunaGame
     public UnitLogic Player => LunaSpawn.Find<UnitLogic>(playerId);
     protected bool IsFinishing => resultStarted;
     private bool firstClear;
+    public bool FirstClear => firstClear;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSerial() => roundSerial = 0;

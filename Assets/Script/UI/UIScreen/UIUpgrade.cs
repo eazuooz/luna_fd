@@ -69,12 +69,56 @@ public class UIUpgrade : UILuna
         InitEquipContentsText();
 
         InitTabs();
+        ApplyRequestedTab();
+        RefreshUpgradeCosts();
     }
     
     
     protected override void OnUpdate(float elapsed, float realElapsed)
     {
         base.OnUpdate(elapsed, realElapsed);
+        RefreshUpgradeCosts();
+    }
+    protected override void OnResume()
+    {
+        base.OnResume(); ApplyRequestedTab(); RefreshUpgradeCosts();
+    }
+    private void ApplyRequestedTab()
+    {
+        string tab = LunaSession.Current.PreferredUpgradeTab;
+        if (string.IsNullOrEmpty(tab)) return;
+        LunaSession.Current.PreferredUpgradeTab = null;
+        OnTabClick(tab);
+    }
+    private void RefreshUpgradeCosts()
+    {
+        var data = LunaDataTable.Instance.playerData;
+        foreach (var pair in contentsMap)
+        {
+            int level, max;
+            switch (pair.Key)
+            {
+                case "Luna_LevelUp": level = data.LunaLevel; max = 20; break;
+                case "IncreaseLunaMoveSpeed": level = data.LunaMoveSpeedLevel; max = 5; break;
+                case "IncreaseTowerHp": level = data.TowerHPLevel; max = 10; break;
+                case "IncreaseGoldSpeed": level = data.GoldSpeedLevel; max = 20; break;
+                case "IncreaseAuroraRange": level = data.AuroraLevel; max = 3; break;
+                case "IncreaseUnitMoveSpeed": level = data.UnitMoveSpeedLevel; max = 5; break;
+                case "IncreaseLunaRevivalTime": level = data.LunaReviveTimeLevel; max = 3; break;
+                default: continue;
+            }
+            var button = pair.Value.button;
+            if (button == null) continue;
+            int cost = pair.Key == "Luna_LevelUp" ? LunaEconomy.UnitLevelCost(level) : 1000;
+            button.interactable = level < max && data.Gold >= cost;
+            foreach (var label in button.GetComponentsInChildren<Text>(true))
+                if (System.Text.RegularExpressions.Regex.IsMatch(label.text.Trim(), @"^(?:[x×]?\s*[0-9,]+\s*G?|MAX)$"))
+                {
+                    label.text = level >= max ? "MAX" : cost.ToString("N0") + " G";
+                    label.color = button.interactable ? Color.white : LunaUIPresentation.Muted;
+                }
+            if (pair.Value.cardText != null) { pair.Value.cardText.fontSize = 17; pair.Value.cardText.lineSpacing = 1f; }
+        }
     }
     
     protected override void OnClose(bool isShutdown, object userData)
@@ -693,7 +737,7 @@ public class UIUpgrade : UILuna
         str += "- 공격력 " + objectData.GetAttackDamage_Value() + "( +" + objectData.LevelUpAttPoint.ToString() + ")";
         str += "    - 체력 " + objectData.GetCurrentLevelHP_Value() + "( +" + objectData.LevelUpHpPoint.ToString() + ")\n";
         str += "- 아머 " + objectData.GetArmour_ValueInt() + "( +" + objectData.LevelUpArmourPoint.ToString() + ")";
-        str += "\n" + (objectData.Level >= LunaEconomy.UnitMaxLevel ? "최대 레벨" : "강화 비용 " + LunaEconomy.UnitLevelCost(objectData.Level) + " G");
+        str += "\n" + (objectData.Level >= LunaEconomy.UnitMaxLevel ? "최대 레벨" : "괄호는 다음 레벨의 증가량입니다.");
         //str += "    - 스킬공격력 " + objectData.GetResultSkillAtt_Value() + "( +" + objectData.levelUpSkillDamagePoint.ToString() + ")\n";
 
         return str;

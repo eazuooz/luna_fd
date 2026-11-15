@@ -21,6 +21,7 @@ public class UIResult : UILuna
         detail.alignment = TextAnchor.MiddleCenter;
         detail.fontSize = 24;
         detail.lineSpacing = 1f;
+        detail.color = Color.white;
         detail.resizeTextForBestFit = true;
         detail.resizeTextMinSize = 20;
         detail.resizeTextMaxSize = 24;
@@ -44,6 +45,9 @@ public class UIResult : UILuna
         plate.Find("NextStage/NextStage_Text").GetComponent<Text>().text = campaign ? LunaSession.Current.NextStageLevelString() : string.Empty;
         transform.Find("Coin/Text").GetComponent<Text>().text = "골드 +" + LunaDataTable.Instance.playerData.RewardGold +
             (round.RewardStones > 0 ? "  별석 +" + round.RewardStones : string.Empty);
+        LunaUIPresentation.Label(transform, "BattleSummary", "전투 " + Mathf.CeilToInt(round.StageCount) + "초 · 소환 " + round.Roster.SummonsCompleted +
+            "회 · 스킬 " + round.SkillsUsed + "회\n" + (won ? round.FirstClear ? "첫 승리 보상 획득" : "재도전 보상 획득" : "편성을 바꾸거나 성장한 뒤 다시 도전하세요."),
+            new Vector2(0f, -50f), new Vector2(650f, 66f), 20, TextAnchor.MiddleCenter);
 
         var contents = transform.Find("Item_ScrollView/Item_Scroll View_Viewport/Item_Content");
         var prefab = Resources.Load<GameObject>("Prefabs/09UI/ProfileInformation");
@@ -61,6 +65,7 @@ public class UIResult : UILuna
             count++;
         }
         contents.GetComponent<HorizontalLayoutGroup>().spacing = count == 2 ? -400 : count == 3 ? -300 : count == 4 ? -150 : 0;
+        if (count == 0) LunaUIPresentation.Label(contents.parent, "NoItemReward", "이번 전투의 추가 아이템 보상은 없습니다.", Vector2.zero, new Vector2(700f, 35f), 19, TextAnchor.MiddleCenter);
     }
 
     public void ReStage()
@@ -76,5 +81,9 @@ public class UIResult : UILuna
         IdentifyFunc.PickingUnits(unit => UnitLogic.From(unit).unitState.IsLobbyBackMove = true, IdentifyFunc.IsAlly, IdentifyFunc.IsNotTower);
         LunaScenes.FadeIn(1.5f, () => LunaScenes.Load("Lobby"));
     }
-    public void PartyBt() => LunaUI.Open(UI_TYPE.CHARACTERLIST);
+    public void PartyBt()
+    {
+        LunaSession.Current.ShowPartyOnLobby = true;
+        ReleaseBt();
+    }
 }

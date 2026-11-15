@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Luna.Gameplay;
@@ -37,10 +38,12 @@ public class UILottery : UILuna
         grid.padding = new RectOffset(8, 8, 8, 8);
         grid.childAlignment = TextAnchor.UpperCenter;
         var cardPrefab = Resources.Load<GameObject>("Prefabs/09UI/LotteryCard");
+        var shownNew = new HashSet<string>();
         foreach (string key in LunaDataTable.Instance.LotteryResult)
         {
             var card = Instantiate(cardPrefab, content, false);
             card.name = key + "Card";
+            ((RectTransform)card.transform).sizeDelta = grid.cellSize;
             card.AddComponent<RectMask2D>();
             var data = LunaDataTable.Instance.UnitTable[key];
             card.GetComponent<Image>().sprite = data.cardPicture;
@@ -51,10 +54,21 @@ public class UILottery : UILuna
             rect.anchoredPosition = new Vector2(0f, -35f);
             rect.localScale = characterPrefab.transform.localScale * (width / 310f);
             foreach (var canvas in character.GetComponentsInChildren<Canvas>(true)) canvas.overrideSorting = false;
+            var footer = LunaUIPresentation.Panel(card.transform, "CardResultInfo", Vector2.zero, Vector2.zero, new Color32(19, 33, 37, 255), false);
+            footer.rectTransform.anchorMin = Vector2.zero; footer.rectTransform.anchorMax = new Vector2(1f, 0.31f);
+            footer.rectTransform.offsetMin = new Vector2(3f, 3f); footer.rectTransform.offsetMax = new Vector2(-3f, 0f);
+            bool first = LunaDataTable.Instance.LotteryNewUnits.Contains(key) && shownNew.Add(key);
+            int nameSize = Mathf.Clamp(Mathf.RoundToInt(width * 0.09f), 13, 21);
+            var title = LunaUIPresentation.Label(footer.transform, "UnitName", (first ? "NEW · " : "") + data.UnitName,
+                new Vector2(0f, footer.rectTransform.rect.height * 0.22f), new Vector2(width - 10f, 28f), nameSize, TextAnchor.MiddleCenter);
+            title.color = first ? LunaUIPresentation.Gold : Color.white;
+            LunaUIPresentation.Label(footer.transform, "AwardInfo", LunaUIPresentation.Role(data) + "\n강화 카드 +1 · 보유 " + data.cardCount + "장",
+                new Vector2(0f, -footer.rectTransform.rect.height * 0.2f), new Vector2(width - 10f, 38f), Mathf.Max(11, nameSize - 3), TextAnchor.MiddleCenter);
         }
         var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         AddLabel("RevealTitle", count + "장 소환 결과", font, new Vector2(0.5f, 1f), new Vector2(0f, -40f));
-        AddLabel("RevealContinue", "화면을 눌러 계속", font, new Vector2(0.5f, 0f), new Vector2(0f, 36f));
+        var next = LunaUIPresentation.Button(transform, "RevealContinue", "확인 · 상점으로", Vector2.zero, new Vector2(280f, 45f), Continue, true);
+        var nextRect = (RectTransform)next.transform; nextRect.anchorMin = nextRect.anchorMax = new Vector2(0.5f, 0f); nextRect.anchoredPosition = new Vector2(0f, 32f);
         StartCoroutine(ReadyToClose());
     }
     private void AddLabel(string name, string message, Font font, Vector2 anchor, Vector2 position)
@@ -70,7 +84,7 @@ public class UILottery : UILuna
     protected override void OnUpdate(float elapsed, float realElapsed)
     {
         base.OnUpdate(elapsed, realElapsed);
-        if (revealReady && Input.GetMouseButtonDown(0)) Continue();
+        if (revealReady && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape))) Continue();
     }
     public void Continue()
     {

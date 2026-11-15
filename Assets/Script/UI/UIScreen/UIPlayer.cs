@@ -34,6 +34,9 @@ public class UIPlayer : UILuna
     private Text goldText, manaText, timeText;
     private Text guidanceText, warningText;
     private Image warningArea;
+    private Image playerHealthFill;
+    private Text playerHealthText;
+    private Text speedText;
     private bool keyboardMovementActive;
 
     protected override void OnOpen(object userData)
@@ -58,6 +61,16 @@ public class UIPlayer : UILuna
         warningArea.gameObject.SetActive(false);
         goldGauge = transform.Find("GoldGaugeImage").GetComponent<Image>();
         manaGauge = transform.Find("ManaGaugeImage").GetComponent<Image>();
+        CreateBattleText(goldGauge.transform, "ResourceName", new Vector2(110f, 22f), new Vector2(0f, 0.5f), new Vector2(65f, 0f), 14).text = "소환 보급";
+        CreateBattleText(manaGauge.transform, "ResourceName", new Vector2(110f, 22f), new Vector2(0f, 0.5f), new Vector2(65f, 0f), 14).text = "스킬 마나";
+        var health = LunaUIPresentation.Panel(transform, "PlayerHealth", Vector2.zero, new Vector2(240f, 27f), LunaUIPresentation.Ink);
+        health.rectTransform.anchorMin = health.rectTransform.anchorMax = new Vector2(0f, 1f);
+        health.rectTransform.pivot = new Vector2(0f, 1f); health.rectTransform.anchoredPosition = new Vector2(8f, -215f);
+        playerHealthFill = LunaUIPresentation.Panel(health.transform, "Fill", Vector2.zero, new Vector2(236f, 23f), new Color32(148, 54, 62, 255), false);
+        playerHealthFill.rectTransform.anchorMin = playerHealthFill.rectTransform.anchorMax = new Vector2(0f, 0.5f);
+        playerHealthFill.rectTransform.pivot = new Vector2(0f, 0.5f); playerHealthFill.rectTransform.anchoredPosition = new Vector2(2f, 0f);
+        playerHealthText = LunaUIPresentation.Label(health.transform, "HealthText", "", Vector2.zero, new Vector2(236f, 23f), 15, TextAnchor.MiddleCenter);
+        speedText = CreateBattleText(transform, "BattleSpeed", new Vector2(180f, 26f), new Vector2(1f, 1f), new Vector2(-98f, -108f), 14);
         transform.Find("GoldMaxText").GetComponent<Text>().text = "/" + roster.MaxGold;
         transform.Find("ManaMaxText").GetComponent<Text>().text = "/" + roster.MaxMana;
         transform.Find("NameBackImage/LevelText").GetComponent<Text>().text = "LV. <color=#D1A606>" + LunaDataTable.Instance.playerData.LunaLevel + "</color>";
@@ -113,6 +126,12 @@ public class UIPlayer : UILuna
         goldGauge.fillAmount = (float)roster.Gold / roster.MaxGold;
         manaGauge.fillAmount = (float)roster.Mana / roster.MaxMana;
         guidanceText.text = round.isStageStop ? string.Empty : round.GuidanceText;
+        speedText.text = "배속 ×" + Time.timeScale.ToString("0.#");
+        var player = round.Player;
+        float health = player != null ? Mathf.Clamp01(player.stat.Hp / Mathf.Max(1f, player.HealthBarHpPoint)) : 0f;
+        playerHealthFill.rectTransform.localScale = new Vector3(health, 1f, 1f);
+        playerHealthText.text = player == null || health <= 0f ? (round.PlayerRespawnPending ? "루나 부활 대기" : "루나 체력 0") :
+            "루나 체력 " + Mathf.CeilToInt(player.stat.Hp) + " / " + Mathf.CeilToInt(player.HealthBarHpPoint);
         RefreshAttackWarning();
         float timeLeft;
         if (round is BossDungeon boss)
@@ -132,7 +151,7 @@ public class UIPlayer : UILuna
             if (round is BasicDungeon basic && basic.SecondsUntilWave <= 4f)
                 timeText.text += "\n증원 " + Mathf.CeilToInt(basic.SecondsUntilWave) + "초";
         }
-        timeText.color = timeLeft <= 10f ? new Color(1f, 0.38f, 0.34f) : Color.white;
+        timeText.color = timeLeft <= 10f ? new Color(1f, 0.38f, 0.34f) : timeLeft <= 20f ? LunaUIPresentation.Gold : Color.white;
         if (LunaDeveloperMode.NoTimeLimit) { timeText.text = "시간 무제한"; timeText.color = Color.yellow; }
         for (int i = 0; i < cards.Count; i++)
         {

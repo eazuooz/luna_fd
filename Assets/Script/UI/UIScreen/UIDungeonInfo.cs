@@ -21,6 +21,8 @@ public class UIDungeonInfo : UILuna
         LunaStagePreview.Layout(transform, false);
         LunaStagePreview.Fill(transform, stage);
         LunaStagePreview.AddBriefing(transform, row, 145f);
+        LunaUIPresentation.ConfigurePartyButton(transform);
+        LunaUIPresentation.Caption(transform.Find("BackGround/StartButton").GetComponent<Button>(), unlocked ? "던전 입장" : "아직 잠긴 던전");
     }
 
     public void ReleaseThisUI() => LunaUI.Close(type);

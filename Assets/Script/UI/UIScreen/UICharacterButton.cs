@@ -126,7 +126,7 @@ public class UICharacterButton : MonoBehaviour
             starts[i].SetActive(false);
         }
 
-        if (objData.cardCount <= 0)
+        if (!LunaUIPresentation.Owned(objData))
         {
             instCharacterUI.transform.Find("SkeletonGraphic").GetComponent<SkeletonGraphic>().color
                 = Color.black;
@@ -140,11 +140,16 @@ public class UICharacterButton : MonoBehaviour
         int characterLevel = characterUI.GetComponent<UnitView>().Data.Level;
         charText.text += " LV";
         charText.text += characterLevel.ToString();
+        charText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); charText.fontSize = 16;
+        charText.rectTransform.anchoredPosition = new Vector2(0f, -58f); charText.rectTransform.sizeDelta = new Vector2(150f, 36f);
+        charText.resizeTextForBestFit = true; charText.resizeTextMinSize = 12; charText.resizeTextMaxSize = 16;
+        charText.alignment = TextAnchor.MiddleCenter;
 
         Text cardCountText
             = LunaUIViews.FindComponentByChildObject<Text>(instCharBg, "CardText");
 
-        cardCountText.text = "+" + objData.cardCount.ToString();
+        LunaUIPresentation.CardQuantity(cardCountText, objData.cardCount);
+        LunaUIPresentation.Label(transform, "UnitRole", LunaUIPresentation.Role(objData), new Vector2(0f, -80f), new Vector2(150f, 20f), 12, TextAnchor.MiddleCenter);
 
         int starLength = (int)instCharacterUI.GetComponent<UnitView>().Data.ultState;
         for (int i = 0; i < starLength; i++)
@@ -154,6 +159,13 @@ public class UICharacterButton : MonoBehaviour
 
             starts[i].SetActive(true);
         }
+    }
+    public void SetEquipped(bool equipped)
+    {
+        var label = transform.Find("UnitRole")?.GetComponent<Text>();
+        if (label == null) return;
+        var data = characterUI.GetComponent<UnitView>().Data;
+        label.text = (equipped ? "편성 · " : LunaUIPresentation.Owned(data) ? "보유 · " : "미보유 · ") + (data.AttackRange >= 3f ? "원거리" : "근접");
     }
     void UpdateLevelText()
     {
@@ -184,7 +196,6 @@ public class UICharacterButton : MonoBehaviour
         Text cardText 
             = LunaUIViews.FindComponentByChildObject<Text>(gameObject, "CardText");
 
-        cardText.text 
-            = "+" + characterUI.GetComponent<UnitView>().Data.cardCount.ToString();
+        LunaUIPresentation.CardQuantity(cardText, characterUI.GetComponent<UnitView>().Data.cardCount);
     }
 }

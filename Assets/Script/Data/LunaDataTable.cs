@@ -6,6 +6,7 @@ using Luna.Gameplay;
 [CreateAssetMenu(fileName = "LunaDataTable", menuName = "Scriptable Object Asset/LunaDataTable")]
 public class LunaDataTable : ScriptableObject
 {
+    [System.NonSerialized] public HashSet<string> LotteryNewUnits = new HashSet<string>();
     private static LunaDataTable runtimeTable;
 
     public static LunaDataTable Instance
