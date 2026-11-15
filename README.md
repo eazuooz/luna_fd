@@ -1,5 +1,12 @@
 # [Unity3D] 루나 디펜스
 
+## 2026-11-16 후속 프로젝트 분리
+
+루나 디펜스의 복구·UI 검수 완료 상태(`21036f22`)를 보존하고, 후속 수성 방어형 게임을 별도 저장소 [Luna Fortress](https://github.com/eazuooz/luna-fortress)에서 개발합니다. 후속 프로젝트는 이 저장소의 이력을 이어받되 독립된 원격 저장소와 작업 폴더를 사용합니다. 캐릭터·아트·Game Framework 기반은 재사용하고, 전투 진행과 성장 구조는 새 프로젝트에서 설계합니다.
+
+아래 복구 및 검수 내용은 기존 루나 디펜스 기준입니다.
+
+
 ## 2026 복구 및 Toybox 방식 Game Framework 재작성
 
 `ProjectSettings/ProjectVersion.txt`의 **Unity 6000.6.0f1**으로 엽니다. Play 시작 씬은 `Loading`이며 시작 화면을 클릭하면 로비로 이동합니다. CLI 검사 전에는 같은 프로젝트의 Unity 에디터를 닫습니다.
