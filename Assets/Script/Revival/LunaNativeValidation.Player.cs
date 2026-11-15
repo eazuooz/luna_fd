@@ -65,6 +65,13 @@ public sealed partial class LunaNativeValidation
             Require(LunaRuntimeData.SaveNow(), "Initial process failed to save its fixture.");
             File.WriteAllText(Path.Combine(PlayerOutputDirectory, "persistence-expected.json"), JsonUtility.ToJson(fixture, true));
             EndCase("Distinctive progress and sound saved through the real framework setting helper; second process must recover the random nonce and all fields.");
+            BeginCase("development", "active-cheats-shutdown-save-protection");
+            string normalSnapshot = settings.GetString("Luna.Progress.v1");
+            Require(LunaDeveloperMode.Execute(KeyCode.F3) && LunaDeveloperMode.Execute(KeyCode.F4) &&
+                LunaDeveloperMode.Execute(KeyCode.F6) && LunaRuntimeData.SaveNow() &&
+                player.Gold >= 1000000 && settings.GetString("Luna.Progress.v1") == normalSnapshot,
+                "Active developer changes escaped the normal progress checkpoint before shutdown.");
+            EndCase("This process exits with developer cheats active; the next process must recover the original normal progress and disabled cheats.");
             yield break;
         }
         Require(mode == "verify" || mode == "diagnostics", "Unknown player validation mode: " + mode);
@@ -77,6 +84,8 @@ public sealed partial class LunaNativeValidation
             PlayerData player = LunaDataTable.Instance.playerData;
             var settings = GameFrameworkEntry.GetModule<ISettingManager>();
             Require(settings.GetString("Luna.Validation.Nonce", "") == expected.nonce, "Second process did not load the first process's save.");
+            Require(!LunaDeveloperMode.Active && !LunaDeveloperMode.InfiniteMoney && !LunaDeveloperMode.Invincible,
+                "Developer cheats survived process restart.");
             Require(player.Gold == expected.gold && player.StarStone == expected.stone && player.SkinType == (PlayerData.eLunaSkin)expected.skin &&
                 player.SaveStageName == expected.stage && player.UnitNamesInDeck.SequenceEqual(expected.deck) && player.equippedSkill.SequenceEqual(expected.skills), "Cross-process player progress mismatch.");
             Require(LunaDataTable.Instance.UnitTable[expected.unit].Level == expected.unitLevel && LunaDataTable.Instance.UnitTable[expected.unit].cardCount == expected.cards &&

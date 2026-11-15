@@ -17,6 +17,9 @@ public static class LunaRuntimeData
     private static ISettingManager settings;
     private static int tutorialIndex;
     private static bool allowSave;
+    private static string developerSnapshot;
+    private static int developerTutorialIndex;
+    public static bool DeveloperSessionActive => developerSnapshot != null;
     private static GameObject progressHost;
     public static bool IsInitialized { get; private set; }
     public static string SaveDirectory { get; private set; }
@@ -39,6 +42,7 @@ public static class LunaRuntimeData
         settings = null;
         tutorialIndex = 0;
         allowSave = false;
+        developerSnapshot = null;
         ReleaseRuntimeAssets();
         progressHost = null;
     }
@@ -61,6 +65,7 @@ public static class LunaRuntimeData
     // Called only after the round has settled/saved and native consumers have stopped.
     internal static void Shutdown(bool immediate = false)
     {
+        developerSnapshot = null;
         IsInitialized = false;
         allowSave = false;
         settings = null;
@@ -145,9 +150,33 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         // Editor teardown may outlive play mode. At that point table access resolves
         // authoring assets, which must never overwrite the captured runtime progress.
         if (!Application.isPlaying || !IsInitialized || !allowSave || settings == null) return false;
-        settings.SetString(SaveKey, JsonUtility.ToJson(Capture()));
-        settings.SetInt("Luna.Tutorial.Index", tutorialIndex);
+        settings.SetString(SaveKey, developerSnapshot ?? JsonUtility.ToJson(Capture()));
+        settings.SetInt("Luna.Tutorial.Index", DeveloperSessionActive ? developerTutorialIndex : tutorialIndex);
         return settings.Save();
+    }
+
+    internal static bool BeginDeveloperSession()
+    {
+        if (DeveloperSessionActive) return true;
+        if (!LunaDeveloperMode.Available || !SaveNow()) return false;
+        developerSnapshot = JsonUtility.ToJson(Capture());
+        developerTutorialIndex = tutorialIndex;
+        return true;
+    }
+
+    internal static void EndDeveloperSession()
+    {
+        if (!DeveloperSessionActive) return;
+        settings.SetString(SaveKey, developerSnapshot);
+        if (!RestoreSnapshot()) throw new InvalidOperationException("Developer baseline could not be restored.");
+        tutorialIndex = developerTutorialIndex;
+        developerSnapshot = null;
+        var table = LunaDataTable.Instance;
+        table.SetLunaDatasLevel(table.playerData.LunaLevel);
+        table.playerData.SetCurPlayer();
+        foreach (var pair in table.lunaTable) pair.Value.moveSpeedLevel = table.playerData.LunaMoveSpeedLevel;
+        LunaSession.Current.RefreshDeckPrefabs();
+        SaveNow();
     }
 
     public static bool Reload()

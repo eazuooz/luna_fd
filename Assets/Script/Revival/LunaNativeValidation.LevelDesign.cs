@@ -22,6 +22,7 @@ public sealed partial class LunaNativeValidation
         yield return CampaignFinaleContract();
         yield return BattleFeedbackContracts();
         yield return PresentationRepairContracts();
+        yield return DeveloperModeContracts();
     }
 
     private IEnumerator PresentationRepairContracts()

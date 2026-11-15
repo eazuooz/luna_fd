@@ -30,8 +30,8 @@ public class UIGoods : UILuna
     private void RefreshWallet()
     {
         var profile = LunaDataTable.Instance.playerData;
-        goldText.text = profile.Gold.ToString("N0");
-        starStoneText.text = profile.StarStone.ToString("N0");
+        goldText.text = LunaDeveloperMode.InfiniteMoney ? "∞" : profile.Gold.ToString("N0");
+        starStoneText.text = LunaDeveloperMode.InfiniteMoney ? "∞" : profile.StarStone.ToString("N0");
     }
 
     public void OnClickAddButton() => LunaUI.Open(UI_TYPE.GAMESHOP);

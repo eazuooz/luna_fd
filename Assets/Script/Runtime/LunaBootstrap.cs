@@ -58,6 +58,7 @@ namespace Luna.Gameplay
             LunaStageTables.Initialize();
             LunaUI.Initialize();
             LunaScenes.Initialize();
+            LunaDeveloperMode.Initialize();
             var sound = GameEntry.GetComponent<SoundComponent>();
             if (!sound.HasSoundGroup("LunaMusic")) sound.AddSoundGroup("LunaMusic", false, false, 0.5f, 1);
             ready = true;

@@ -13,7 +13,7 @@ public sealed partial class LunaNativeValidation
     {
         public string stage, policy, outcome;
         public int seed, attempt, level, floors, deaths, summons, skills, peakEnemies, goldReward, wallet, phaseReinforcements, dodgeInputs;
-        public float seconds, allyHealth, objectiveHealth, lowestPlayerHealth = 1f, firstContact = -1f, firstSkill = -1f;
+        public float seconds, openingDelay, allyHealth, objectiveHealth, lowestPlayerHealth = 1f, firstContact = -1f, firstSkill = -1f;
     }
 
     private static readonly int[] TacticalOrder = { 1, 2, 0, 3, 4, 5 };
@@ -106,7 +106,10 @@ public sealed partial class LunaNativeValidation
         int before = profile.Gold;
         int previousLife = round.PlayerEntityId;
         var deadLives = new HashSet<int>();
-        float nextDecision = 0f, deadline = Time.time + 250f;
+        sample.openingDelay = float.TryParse(Environment.GetEnvironmentVariable("LUNA_PLAY_DECISION_DELAY"),
+            System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float delay)
+            ? Mathf.Clamp(delay, 0f, 60f) : 0f;
+        float nextDecision = sample.openingDelay, deadline = Time.time + 250f;
         var basic = round as BasicDungeon;
         var endless = round as EndlessDungeon;
         var boss = round as BossDungeon;

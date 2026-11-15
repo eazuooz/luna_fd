@@ -40,7 +40,7 @@ public sealed class BossDungeon : LunaGame
         if (isStageStop) return;
         dungeonCount = Mathf.Max(0f, dungeonCount - elapsed); StageCount += elapsed;
         if (!Alive(Boss)) { Finish(true); return; }
-        if (dungeonCount <= 0f) { Finish(false, EndReason.TimeExpired); return; }
+        if (dungeonCount <= 0f && !LunaDeveloperMode.NoTimeLimit) { Finish(false, EndReason.TimeExpired); return; }
         if (Player == null && !PlayerRespawnPending && PendingSpawnCount == 0)
         { Finish(false, EndReason.PlayerDefeated); return; }
         while (phaseIndex < phases.Count && BossHealth <= phases[phaseIndex].At)

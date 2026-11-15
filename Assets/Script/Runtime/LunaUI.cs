@@ -102,6 +102,7 @@ namespace Luna.Gameplay
         }
         internal static bool AllowsLobbyInteraction()
         {
+            if (LunaDeveloperMode.MenuOpen) return false;
             EnsureDefinitions();
             if (UI == null || UI.GetUIForm(definitions[UI_TYPE.LOBBY].AssetName) == null) return false;
             foreach (var data in definitions.Values)

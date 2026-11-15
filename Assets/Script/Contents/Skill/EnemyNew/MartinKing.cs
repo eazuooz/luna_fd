@@ -43,7 +43,8 @@ public class MartinKing : EnemySkillLogic
             yield return new WaitForSeconds(0.1f);
         }
         foreach (var unit in UnitLogic.ActiveUnits)
-            if (unit.Data != null && unit.Data.RoundId == Data.RoundId && unit.UnitSide == eUnitSide.Allied && unit.UnitType == eUnitType.Tower)
+            if (unit.Data != null && unit.Data.RoundId == Data.RoundId && unit.UnitSide == eUnitSide.Allied && unit.UnitType == eUnitType.Tower
+                && !LunaDeveloperMode.PreventsDamage(unit))
                 unit.stat.Hp = 0f;
     }
 }

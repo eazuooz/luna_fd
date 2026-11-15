@@ -164,7 +164,9 @@ public static class LunaValidation
         try
         {
             LunaMigrationSetup.PrepareBuild();
-            string target = Path.GetFullPath("Builds/Revival/Windows/LunaDefense.exe");
+            string directory = Environment.GetEnvironmentVariable("LUNA_BUILD_DIRECTORY");
+            string target = Path.GetFullPath(Path.Combine(string.IsNullOrWhiteSpace(directory) ? "Builds/Revival/Windows" : directory, "LunaDefense.exe"));
+            Require(target.StartsWith(Path.GetFullPath("Builds") + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase), "Build output must remain inside the project Builds directory.");
             Directory.CreateDirectory(Path.GetDirectoryName(target));
             var result = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {

@@ -387,6 +387,7 @@ public partial class UnitLogic : EntityLogicBase
     public void Attack(GameObject striker, float damage, bool critical = false, bool isSkill = false, eDamageType damageType = eDamageType.NORMAL)
     {
         if (Data == null || IsHiding || stat.Hp <= 0f || damage <= 0f || float.IsNaN(damage) || float.IsInfinity(damage)) return;
+        if (LunaDeveloperMode.PreventsDamage(this)) return;
         var attacker = From(striker);
         if (attacker != null && (attacker.Data == null || attacker.Data.RoundId != Data.RoundId)) return;
         if (striker == gameObject && !isSkill) return;

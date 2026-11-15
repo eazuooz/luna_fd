@@ -133,6 +133,7 @@ public class UIPlayer : UILuna
                 timeText.text += "\n증원 " + Mathf.CeilToInt(basic.SecondsUntilWave) + "초";
         }
         timeText.color = timeLeft <= 10f ? new Color(1f, 0.38f, 0.34f) : Color.white;
+        if (LunaDeveloperMode.NoTimeLimit) { timeText.text = "시간 무제한"; timeText.color = Color.yellow; }
         for (int i = 0; i < cards.Count; i++)
         {
             var card = cards[i];

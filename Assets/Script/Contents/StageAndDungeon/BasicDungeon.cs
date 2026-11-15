@@ -117,7 +117,7 @@ public sealed class BasicDungeon : LunaGame
                 StageCount += elapsed;
                 if (!Alive(LunaSpawn.Find<UnitLogic>(allyTowerId))) { Finish(false, EndReason.TowerDestroyed); break; }
                 if (!Alive(LunaSpawn.Find<UnitLogic>(enemyTowerId))) { Finish(true); break; }
-                if (StageCount >= row.TimeLimit) { Finish(false, EndReason.TimeExpired); break; }
+                if (StageCount >= row.TimeLimit && !LunaDeveloperMode.NoTimeLimit) { Finish(false, EndReason.TimeExpired); break; }
                 while (waveIndex < timedWaves.Count && StageCount >= timedWaves[waveIndex].At)
                 {
                     var wave = timedWaves[waveIndex++];

@@ -39,6 +39,11 @@ namespace Luna.Gameplay
     public abstract class LunaProcedure : ProcedureBase
     {
         private EventComponent events;
+        protected override void OnUpdate(ProcedureOwner owner, float elapsed, float realElapsed)
+        {
+            base.OnUpdate(owner, elapsed, realElapsed);
+            LunaDeveloperMode.Tick();
+        }
         protected override void OnEnter(ProcedureOwner owner)
         {
             base.OnEnter(owner);
