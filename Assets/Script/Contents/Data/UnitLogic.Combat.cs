@@ -161,6 +161,7 @@ namespace Luna.Gameplay
         private void HandleAnimationEvent(TrackEntry track, Spine.Event e)
         {
             if (Data == null || IsHiding || stat.Hp <= 0f || unitState.IsLobbyMove) return;
+            if (isStun) return;
             // Mixing-out tracks can still emit callbacks after a new action has taken ownership.
             if (Animation == null || !ReferenceEquals(track, Animation.AnimationState.GetCurrent(0))) return;
             if (e.Data.Name == "attack") OnAttackAnimationEvent();

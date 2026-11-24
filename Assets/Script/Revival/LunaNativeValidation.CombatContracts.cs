@@ -224,9 +224,114 @@ public sealed partial class LunaNativeValidation
             "Joe did not arm the original 15-percent two-second proc exclusively for the tested native swing.");
     }
 
+    private IEnumerator StunBlocksPendingAnimationMarker()
+    {
+        const string label = "stun-blocks-pending-animation-marker";
+        if (!Includes("buffs", label)) yield break;
+        yield return EnsureFixtureLobby();
+        BeginCase("buffs", label);
+        HeroFixture fixture = null;
+        float timeScale = Time.timeScale;
+        try
+        {
+            Time.timeScale = 1f;
+            yield return CreateHeroFixture("Dren", eUltState.STAR1, value => fixture = value);
+            var sword = fixture.Soldier;
+            var caster = fixture.Hero;
+            var target = fixture.Enemy;
+            sword.transform.position = target.transform.position - Vector3.right * .75f;
+            sword.Data.TargetId = target.ID;
+            sword.stat.AttackDamage = 120f;
+            sword.stat.AttackSpeed = 1f;
+            caster.stat.Stamina = 0f;
+            caster.stat.Mp = 100f;
+            foreach (var attacker in new[] { sword, caster })
+            {
+                attacker.stat.DebuffAvoidance = attacker.stat.StunResistance = 0f;
+                Require(attacker.Data.RoundId == target.Data.RoundId && !attacker.IsHiding,
+                    "Use the current native attacker and target in one combat round.");
+            }
+            Require(sword.View.Projectile == null && caster is Dren,
+                "The original Porong Sword melee and Dren automatic skill are the test subjects.");
+
+            // Drive actual Spine events in an isolated fixture. Neither test writes damage or stun flags.
+            const float stunSeconds = 1.1f;
+            float before = target.stat.Hp;
+            CrossMarker(sword, "attack", .4333f, sword.BeginAttack, stunned: true);
+            CrossMarker(caster, "skill", .4f, caster.BeginSkill, stunned: true);
+            Require(target.stat.Hp == before && caster.stat.Mp == 100f && !caster.unitState.IsSkillActivaion,
+                "A live Spine marker committed melee damage or a skill while its ordinary actor was stunned.");
+            sword.stat.AttackDelayTime = -1000f;
+
+            yield return Until(() => !sword.isStun && !caster.isStun, "Natural expiration of both accepted stuns", 5f);
+            Require(target.stat.Hp == before && caster.stat.Mp == 100f && !caster.unitState.IsSkillActivaion,
+                "Blocked markers replayed their attack or committed delayed skill damage.");
+            Require(ReferenceEquals(sword.Target, target) &&
+                Mathf.Abs(sword.transform.position.x - target.transform.position.x) <= sword.stat.AttackRange,
+                "Recovered Porong Sword must keep the live target within its original attack range.");
+            CrossMarker(sword, "attack", .4333f, sword.BeginAttack, stunned: false);
+            Require(target.stat.Hp < before, "A new Porong Sword basic attack could not damage the real target after recovery.");
+            sword.stat.AttackDelayTime = -1000f;
+            float afterSword = target.stat.Hp;
+            CrossMarker(caster, "skill", .4f, caster.BeginSkill, stunned: false);
+            Require(caster.stat.Mp == 0f && caster.unitState.IsSkillActivaion,
+                "The new Dren skill marker did not perform its normal mana and activation transition.");
+            yield return Until(() => target.stat.Hp < afterSword, "Recovered Dren skill actual damage", 3f);
+
+            int swordId = sword.ID;
+            sword.TakeStun(stunSeconds);
+            Require(sword.isStun, "The death fixture must start while actually stunned.");
+            sword.stat.Hp = 0f;
+            sword.BeginDeath();
+            Require(sword.Animation.AnimationState.GetCurrent(0)?.Animation.Name == "death",
+                "The original death track should still take ownership during stun.");
+            yield return Until(() => UnitLogic.Find(swordId) == null, "Stunned Porong Sword death and native retirement", 5f);
+            current.observations.Add("Actual current-track Spine events: Porong Sword attack at 0.4333 s and Dren skill at 0.4 s. Both blocked damage/skill activation during timed stun; new tracks after recovery dealt real damage. Stunned death retired normally.");
+
+            void CrossMarker(UnitLogic actor, string clip, float authoredTime, Action begin, bool stunned)
+            {
+                var animation = actor.Animation;
+                var authored = animation.Skeleton.Data.FindAnimation(clip);
+                var marker = authored.Timelines.OfType<Spine.EventTimeline>().SelectMany(timeline => timeline.Events)
+                    .Single(entry => entry.Data.Name == clip);
+                Require(Mathf.Abs(marker.Time - authoredTime) < .001f && marker.Time < authored.Duration,
+                    "The original Spine marker must precede the end of " + clip + ".");
+                actor.ResetAnimation();
+                begin();
+                var track = animation.AnimationState.GetCurrent(0);
+                Require(track?.Animation == authored && track.TrackTime < marker.Time,
+                    $"The original current track must start before {clip} (stunned={stunned}, target={actor.Target?.ID}, " +
+                    $"track={track?.Animation.Name}, time={track?.TrackTime}, marker={marker.Time}).");
+                if (stunned) actor.TakeStun(stunSeconds);
+                Require(actor.isStun == stunned && ReferenceEquals(track, animation.AnimationState.GetCurrent(0)),
+                    "The expected stun state must hold before the original active marker.");
+
+                int callbacks = 0;
+                Spine.AnimationState.TrackEntryEventDelegate witness = (seen, entry) =>
+                {
+                    if (ReferenceEquals(seen, track) && ReferenceEquals(seen, animation.AnimationState.GetCurrent(0)) &&
+                        entry.Data.Name == clip && actor.isStun == stunned) callbacks++;
+                };
+                animation.AnimationState.Event += witness;
+                try { animation.Update(marker.Time + .001f - track.TrackTime); }
+                finally { animation.AnimationState.Event -= witness; }
+                Require(callbacks == 1 && actor.isStun == stunned,
+                    "Observe exactly one emitted " + clip + " marker from the current native track with the expected stun state.");
+            }
+        }
+        finally
+        {
+            if (fixture != null) LunaSpawn.CancelRound(fixture.Round);
+            Time.timeScale = timeScale;
+        }
+        if (fixture != null) yield return RetireFixture(fixture.Round);
+        EndCase("Pending native attack and skill markers respect actual stun, recovery and death retirement.");
+    }
+
     private IEnumerator BuffContracts()
     {
         yield return JoeBasicProcOwnership();
+        yield return StunBlocksPendingAnimationMarker();
         if (!Includes("buffs", "durations-overlap-damage-and-interrupted-reuse")) yield break;
         yield return EnsureFixtureLobby();
         BeginCase("buffs", "durations-overlap-damage-and-interrupted-reuse");
