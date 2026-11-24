@@ -15,6 +15,12 @@ namespace Luna.Gameplay
         private bool deathStarted;
         private bool deathNotificationSent;
         public bool IsAttackInProgress => attackInProgress;
+
+        private void ClearPendingBasicStun()
+        {
+            isStunAttack = false;
+            nextStunDuring = 0f;
+        }
         public virtual bool HasAutomaticSkill => false;
         protected void FinishSkillExecution() { skillInProgress = false; }
 
@@ -36,6 +42,7 @@ namespace Luna.Gameplay
         public void ResetAnimation()
         {
             attackCritical = attackInProgress = skillInProgress = deathStarted = false;
+            ClearPendingBasicStun();
             if (Animation == null) return;
             Animation.AnimationState.ClearTracks();
             Animation.timeScale = 1f;
@@ -100,6 +107,7 @@ namespace Luna.Gameplay
         {
             if (Data == null || Target == null || attackInProgress || isStun) return;
             attackInProgress = true;
+            ClearPendingBasicStun();
             attackCritical = Defined.CanProbability(stat.CriticalActuationProbability);
             unitState.IsActionDelay = true;
             stat.AttackDelayTime = -Mathf.Max(0.01f, stat.AttackSpeed);
@@ -124,6 +132,7 @@ namespace Luna.Gameplay
         public void BeginDamaged()
         {
             attackInProgress = skillInProgress = false;
+            ClearPendingBasicStun();
             if (Animation != null && Animation.Skeleton.Data.FindAnimation("damage") != null) SetAnimation("damage");
             else unitState.IsDamaged = false;
         }
@@ -131,6 +140,7 @@ namespace Luna.Gameplay
         {
             if (deathStarted) return;
             deathStarted = true; attackInProgress = skillInProgress = false;
+            ClearPendingBasicStun();
             StopAllCoroutines();
             OnUnitDying();
             if (Animation != null && Animation.Skeleton.Data.FindAnimation("death") != null) SetAnimation("death");
@@ -158,6 +168,9 @@ namespace Luna.Gameplay
         }
         protected virtual void OnAttackAnimationEvent()
         {
+            // A proc belongs to this swing, even if its marker finds no valid receiver.
+            float stunSeconds = isStunAttack ? nextStunDuring : 0f;
+            ClearPendingBasicStun();
             var target = Target;
             if (target == null || target.Data == null || target.stat.Hp <= 0f || target.IsHiding) return;
             float damage = stat.AttackDamage * (attackCritical ? stat.CriticalMultiples : 1f);
@@ -166,16 +179,15 @@ namespace Luna.Gameplay
                 foreach (var point in ProjecttileCreateLocations)
                 {
                     var data = ProjectileData.Create(View.Projectile, ID, target.ID, point.transform.position, damage,
-                        attackCritical, false, isStunAttack ? nextStunDuring : 0f, Data.RoundId);
+                        attackCritical, false, stunSeconds, Data.RoundId);
                     LunaSpawn.Show<ProjectileLogic>(View.Projectile, data);
                 }
             }
             else
             {
                 target.Attack(gameObject, damage, attackCritical);
-                if (isStunAttack) target.TakeStun(nextStunDuring);
+                if (stunSeconds > 0f) target.TakeStun(stunSeconds);
             }
-            isStunAttack = false; nextStunDuring = 0f;
             GetAttackSound(); PlayOneSound(AttackSoundClip != null ? AttackSoundClip : GetLunaAssetBundle().sound_hit);
         }
         protected virtual void OnSkillAnimationEvent()
@@ -197,7 +209,11 @@ namespace Luna.Gameplay
             string name = track.Animation.Name;
             if (name == "death") { CompleteDeath(); return; }
             if (name == "damage") unitState.IsDamaged = false;
-            if (name == "attack" || name == "attack02" || name == "attack2") attackInProgress = false;
+            if (name == "attack" || name == "attack02" || name == "attack2")
+            {
+                attackInProgress = false;
+                ClearPendingBasicStun();
+            }
             if (name == "skill") skillInProgress = false;
             if (name != "idle" && name != "move" && name != "skill_loop" && name != "defense" && name != "defense_ready") SetAnimation("idle", true);
         }

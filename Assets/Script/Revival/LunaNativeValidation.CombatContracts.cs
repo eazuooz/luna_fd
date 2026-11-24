@@ -1,6 +1,7 @@
 #if UNITY_EDITOR || DEBUG
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Luna.Gameplay;
 using UnityEngine;
@@ -114,8 +115,118 @@ public sealed partial class LunaNativeValidation
         EndCase("Actual whirlwind, duplicate cast guard, target knockback, death cancellation and native reuse remained bounded.");
     }
 
+    private IEnumerator JoeBasicProcOwnership()
+    {
+        if (!Includes("buffs", "joe-basic-proc-marker-ownership")) yield break;
+        yield return EnsureFixtureLobby();
+        BeginCase("buffs", "joe-basic-proc-marker-ownership");
+        var previousRandom = UnityEngine.Random.state;
+        HeroFixture fixture = null;
+        try
+        {
+            yield return CreateHeroFixture("Joe", eUltState.ULT1, value => fixture = value);
+            var joe = (Joe)fixture.Hero;
+            var animation = joe.Animation;
+            var attack = animation.Skeleton.Data.FindAnimation("attack");
+            var marker = attack.Timelines.OfType<Spine.EventTimeline>()
+                .SelectMany(timeline => timeline.Events)
+                .Single(authored => authored.Data.Name == "attack");
+            joe.stat.Mp = 35f;
+            Require(marker.Time > 0f && marker.Time < attack.Duration && joe.View.Projectile != null,
+                "Joe must use the original authored basic attack marker and projectile.");
+
+            int procSeed = FindJoeProcSeed(true);
+            int ordinarySeed = FindJoeProcSeed(false);
+            BeginJoeSwing(joe, procSeed, armed: true);
+            int pendingBefore = LunaSpawn.PendingCount;
+            joe.BeginDamaged();
+            Require(!joe.IsAttackInProgress && !joe.isStunAttack && joe.nextStunDuring == 0f && joe.stat.Mp == 35f,
+                "Hit interruption did not clear the old basic stun reservation or changed mana.");
+            animation.Update(1f);
+            Require(LunaSpawn.PendingCount == pendingBefore && !FindJoeShots(joe.ID).Any(),
+                "An interrupted authored attack track still released a projectile.");
+
+            BeginJoeSwing(joe, procSeed, armed: true);
+            int lostId = fixture.Enemy.ID;
+            // Deliberately remove the original target before its real marker is dispatched.
+            fixture.Enemy.SafeHide();
+            joe.Data.TargetId = 0;
+            animation.Update(marker.Time + .001f);
+            Require(!joe.isStunAttack && joe.nextStunDuring == 0f && joe.stat.Mp == 35f &&
+                !FindJoeShots(joe.ID).Any(), "A lost target left a pending stun or emitted a basic shot.");
+            animation.Update(attack.Duration + .001f);
+
+            var prefab = Resources.Load<GameObject>("Prefabs/02Soldiers/PorongSword");
+            var data = UnitData.CreateFrom(prefab.GetComponent<UnitView>(), new Vector3(2.5f, 0f));
+            data.RoundId = fixture.Round;
+            data.Level = 1;
+            data.Side = eUnitSide.Enemy;
+            data.InitialMode = UnitSpawnMode.Staged;
+            data.HealthMultiplier = 10000f;
+            UnitLogic replacement = null;
+            yield return ShowFixture<UnitLogic>(prefab, data, shown => replacement = shown);
+            HoldAutomaticActions(replacement);
+            replacement.stat.AttackDamage = replacement.stat.Armour = replacement.stat.AttackAvoidance = 0f;
+            replacement.stat.DebuffAvoidance = replacement.stat.StunResistance = 0f;
+            Require(replacement.ID != lostId && replacement.Data.RoundId == fixture.Round && UnitLogic.Find(lostId) == null,
+                "The controlled replacement must have a distinct native ID in the same combat round.");
+            joe.Data.TargetId = replacement.ID;
+            float mana = joe.stat.Mp;
+            float full = replacement.stat.Hp;
+            BeginJoeSwing(joe, ordinarySeed, armed: false);
+            animation.Update(marker.Time + .001f);
+            Require(joe.stat.Mp == mana && !joe.isStunAttack && joe.nextStunDuring == 0f,
+                "A new non-proc basic inherited state or spent skill mana.");
+            yield return Until(() => replacement.stat.Hp < full, "Native non-proc projectile damages the replacement", 5f);
+            Require(!replacement.isStun, "The replacement inherited the cancelled stun on a later non-proc basic.");
+            yield return Until(() => !FindJoeShots(joe.ID).Any() && !joe.IsAttackInProgress,
+                "Previous ordinary projectile and attack retire", 5f);
+
+            joe.Data.TargetId = replacement.ID;
+            mana = joe.stat.Mp;
+            float ordinaryHp = replacement.stat.Hp;
+            BeginJoeSwing(joe, procSeed, armed: true);
+            animation.Update(marker.Time + .001f);
+            Require(joe.stat.Mp == mana && !joe.isStunAttack && joe.nextStunDuring == 0f,
+                "A valid proc was not consumed at its authored marker or changed mana.");
+            yield return Until(() => replacement.stat.Hp < ordinaryHp && replacement.isStun, "Original Joe stun and actual hit", 5f);
+            current.observations.Add("Interrupted and lost-target attacks retired. A new same-round ID took an ordinary hit without stun. A positive 15-percent roll produced an actual two-second stun request and hit.");
+
+            static IEnumerable<ProjectileLogic> FindJoeShots(int source) =>
+                Entities().OfType<ProjectileLogic>().Where(shot => shot.Data?.AttackerId == source);
+        }
+        finally
+        {
+            UnityEngine.Random.state = previousRandom;
+            if (fixture != null) LunaSpawn.CancelRound(fixture.Round);
+        }
+        if (fixture != null) yield return RetireFixture(fixture.Round);
+        EndCase("Joe's native attack marker owns one stun proc; interruption and target loss cannot transfer a proc to a new swing.");
+    }
+
+    private static int FindJoeProcSeed(bool accepted)
+    {
+        for (int seed = 1; seed <= 1000; seed++)
+        {
+            UnityEngine.Random.InitState(seed);
+            if (Defined.CanProbability(15f) == accepted) return seed;
+        }
+        throw new InvalidOperationException("Failed to find the isolated deterministic Joe chance fixture.");
+    }
+
+    private void BeginJoeSwing(Joe joe, int seed, bool armed)
+    {
+        joe.stat.CriticalActuationProbability = 0;
+        UnityEngine.Random.InitState(seed);
+        joe.BeginAttack();
+        Require(joe.IsAttackInProgress && joe.Animation.AnimationState.GetCurrent(0)?.Animation.Name == "attack" &&
+            joe.isStunAttack == armed && (armed ? joe.nextStunDuring == 2f : joe.nextStunDuring == 0f),
+            "Joe did not arm the original 15-percent two-second proc exclusively for the tested native swing.");
+    }
+
     private IEnumerator BuffContracts()
     {
+        yield return JoeBasicProcOwnership();
         if (!Includes("buffs", "durations-overlap-damage-and-interrupted-reuse")) yield break;
         yield return EnsureFixtureLobby();
         BeginCase("buffs", "durations-overlap-damage-and-interrupted-reuse");
