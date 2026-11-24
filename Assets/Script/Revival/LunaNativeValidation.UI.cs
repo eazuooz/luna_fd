@@ -171,6 +171,9 @@ public sealed partial class LunaNativeValidation
                 EndCase("Duplicate opens shared one native serial; closing the pending request prevented a late form, and a new open remained unique.");
             }
 
+            if (Includes("ui", "equipment-stone-skull-axe"))
+                yield return EquipmentEnhancementContract();
+
             // Forms which depend on a battle run after all lobby forms; RESULT uses the normal loss transition last.
             foreach (var definition in definitions.OrderBy(value => BattleUi(value.Type) ? value.Type == UI_TYPE.RESULT ? 2 : 1 : 0).ThenBy(value => (int)value.Type))
             {

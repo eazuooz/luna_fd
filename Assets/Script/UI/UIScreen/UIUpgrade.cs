@@ -271,6 +271,12 @@ public class UIUpgrade : UILuna
             item.SetActive(false);
         }
     }
+    internal void RefreshEquipmentPresentation()
+    {
+        InitEquipContentsText();
+        UpdateEquipDesignData();
+    }
+
     public void UpdateEquipDesignData()
     {
         {
@@ -278,7 +284,7 @@ public class UIUpgrade : UILuna
             ItemData data = LunaDataTable.Instance.itemTable[itemNumber];
 
             equipDiscription.transform.Find("Name").GetComponent<Text>().text
-                = data.itemName.Replace(">", "LV") + data.level.ToString() + ">";
+                = data.itemName.Replace(">", "LV") + data.level.ToString() + ">" + EnhancementSuffix(data as EquipDesignItemData);
         }
         {
             int itemNumber = (int)LunaDataTable.Instance.playerData.SkinType;
@@ -1200,8 +1206,12 @@ public class UIUpgrade : UILuna
         string nameStr = "<" + designName + "LV"
            + data.level.ToString() + ">";
 
-        return nameStr;
+        return nameStr + EnhancementSuffix(data);
     }
+
+    private static string EnhancementSuffix(EquipDesignItemData design) =>
+        design != null && design.EnhancementRank > 0 ? " · 강화 +" + design.EnhancementRank : "";
+
     private string GetEquipDesignInfoSkullAxString()
     {
         int itemNumber = (int)PlayerData.eLunaSkin.SkullAx;

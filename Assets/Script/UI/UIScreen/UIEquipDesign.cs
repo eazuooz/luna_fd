@@ -14,6 +14,9 @@ public class UIEquipDesign : UILuna
     private GameObject uiUpgrade;
     private EquipDesignItemData equipData;
     private GameObject instCharacterUI;
+    private LunaEquipmentEnhancementRow enhancement;
+    private Button enhanceButton;
+    private Text enhanceCaption, stoneCaption;
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
@@ -23,6 +26,11 @@ public class UIEquipDesign : UILuna
         uiUpgrade = GameObject.FindWithTag("UIUpgrade");
 
         GetItemDataByItemTable();
+        if (equipData == null)
+        {
+            LunaUI.Close(type);
+            return;
+        }
         SetEquipDataProfile();
 
         SetEquipPartsData("Weapon", equipData.weapon, equipData.weaponeStr, equipData.weaponeDis);
@@ -30,6 +38,7 @@ public class UIEquipDesign : UILuna
         SetEquipPartsData("Ring", equipData.ring, equipData.ringStr, equipData.ringDis);
 
         SetEquipButton();
+        BindEnhancement();
     }
 
     
@@ -90,6 +99,53 @@ public class UIEquipDesign : UILuna
         GameObject equipBtt = gameObject.transform.Find("EquipButton").gameObject;
         equipBtt.GetComponent<Button>().onClick.AddListener(OnClickEquipButton);
     }
+    private void BindEnhancement()
+    {
+        enhancement = LunaEquipmentEnhancements.Find(equipData.itemNumber);
+        enhanceButton = transform.Find("LevelUpButton").GetComponent<Button>();
+        var stone = transform.Find("Keystone");
+        bool available = enhancement != null;
+        enhanceButton.gameObject.SetActive(available);
+        stone.gameObject.SetActive(available);
+        transform.Find("Melisa").gameObject.SetActive(false);
+        if (!available) return;
+
+        foreach (Transform child in enhanceButton.transform)
+            if (child.name == "Text" || child.name == "Image") child.gameObject.SetActive(false);
+        enhanceCaption = LunaUIPresentation.Label(enhanceButton.transform, "EquipmentEnhanceCaption", "", Vector2.zero,
+            new Vector2(300f, 86f), 19, TextAnchor.MiddleCenter);
+        var stones = LunaDataTable.Instance.itemTable[LunaEquipmentEnhancements.StoneId];
+        stone.Find("Image").GetComponent<Image>().sprite = LunaUIViews.CreateSprite(stones.IconImage);
+        stoneCaption = stone.Find("Text").GetComponent<Text>();
+        enhanceButton.onClick.AddListener(OnClickEnhance);
+        RefreshEnhancement("");
+    }
+
+    private void RefreshEnhancement(string feedback)
+    {
+        var table = LunaDataTable.Instance;
+        int stoneCount = table.itemTable[LunaEquipmentEnhancements.StoneId].itemCount;
+        bool complete = equipData.EnhancementRank >= enhancement.Rank;
+        int baseAttack = Mathf.RoundToInt(table.skiiTable[enhancement.EquipmentSkill].coefficient);
+        int appliedAttack = baseAttack + (complete ? enhancement.PartyAttackBonusPoints : 0);
+        int upgradedAttack = baseAttack + enhancement.PartyAttackBonusPoints;
+        string state = complete ? "강화 완료" : "파티 공격력 +" + baseAttack + "% → +" + upgradedAttack + "%";
+        if (!string.IsNullOrEmpty(feedback)) state = feedback;
+        enhanceCaption.text = (complete ? "장비 강화 +" + equipData.EnhancementRank : "장비 강화") + "\n" + state;
+        stoneCaption.text = stoneCount + " / " + enhancement.StoneCost;
+        enhanceButton.interactable = !complete && stoneCount >= enhancement.StoneCost && !LunaRuntimeData.DeveloperSessionActive;
+        transform.Find("Name").GetComponent<Text>().text = equipData.itemName + (complete ? " · 강화 +" + equipData.EnhancementRank : "");
+        transform.Find("Weapon/Text").GetComponent<Text>().text = equipData.weaponeStr + "\n전체 파티원 공격력 " + appliedAttack + "% 증가";
+    }
+
+    private void OnClickEnhance()
+    {
+        if (enhancement == null) return;
+        bool saved = LunaEconomy.TryEnhanceEquipment(equipData, out string feedback);
+        RefreshEnhancement(feedback);
+        if (saved && uiUpgrade != null) uiUpgrade.GetComponent<UIUpgrade>().RefreshEquipmentPresentation();
+    }
+
     public void OnClickEquipButton()
     {
         LunaDataTable.Instance.playerData.SkinType

@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 public static class LunaRuntimeData
 {
     private const string SaveKey = "Luna.Progress.v1";
+    private const string TutorialKey = "Luna.Tutorial.Index";
     private static readonly Dictionary<UnityEngine.Object, UnityEngine.Object> clones = new Dictionary<UnityEngine.Object, UnityEngine.Object>();
     private static readonly HashSet<UnityEngine.Object> runtimeObjects = new HashSet<UnityEngine.Object>();
     private static ISettingManager settings;
@@ -81,6 +82,7 @@ public static class LunaRuntimeData
         LunaDataTable.ReleaseRuntimeTable();
         LunaUnitBalance.ReleaseRuntimeTable();
         LunaSkillBalance.ReleaseRuntimeTable();
+        LunaEquipmentEnhancements.ReleaseRuntimeTable();
         LunaStageTables.ReleaseRuntimeTables();
         LunaEntityParameters.ReleaseRuntimeTable();
     }
@@ -122,6 +124,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         table.InitializeObjectDatas();
         table.InitializeItemDatas();
         table.InitializeSKillDatas();
+        LunaEquipmentEnhancements.Initialize(table);
         table.InitializeStageDatas();
         SaveDirectory = Environment.GetEnvironmentVariable("LUNA_SAVE_DIRECTORY");
         if (string.IsNullOrWhiteSpace(SaveDirectory)) SaveDirectory = Path.Combine(Application.persistentDataPath, "Luna");
@@ -151,8 +154,33 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         // authoring assets, which must never overwrite the captured runtime progress.
         if (!Application.isPlaying || !IsInitialized || !allowSave || settings == null) return false;
         settings.SetString(SaveKey, developerSnapshot ?? JsonUtility.ToJson(Capture()));
-        settings.SetInt("Luna.Tutorial.Index", DeveloperSessionActive ? developerTutorialIndex : tutorialIndex);
+        settings.SetInt(TutorialKey, DeveloperSessionActive ? developerTutorialIndex : tutorialIndex);
         return settings.Save();
+    }
+
+    internal static bool SaveEquipmentEnhancement()
+    {
+        if (!Application.isPlaying || !IsInitialized || !allowSave || settings == null || DeveloperSessionActive) return false;
+        bool hadProgress = settings.HasSetting(SaveKey);
+        bool hadTutorial = settings.HasSetting(TutorialKey);
+        string oldProgress = settings.GetString(SaveKey, "");
+        int oldTutorial = settings.GetInt(TutorialKey, 0);
+        bool saved = false;
+        try
+        {
+            saved = SaveNow();
+            return saved;
+        }
+        finally
+        {
+            if (!saved)
+            {
+                if (hadProgress) settings.SetString(SaveKey, oldProgress);
+                else settings.RemoveSetting(SaveKey);
+                if (hadTutorial) settings.SetInt(TutorialKey, oldTutorial);
+                else settings.RemoveSetting(TutorialKey);
+            }
+        }
     }
 
     internal static bool BeginDeveloperSession()
@@ -207,8 +235,17 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
             snapshot.player.Apply(table.playerData);
             ApplyObjects(snapshot.units, table.UnitTable);
             ApplyObjects(snapshot.luna, table.lunaTable);
+            foreach (var item in table.itemTable.Values)
+                if (item is EquipDesignItemData design) design.EnhancementRank = 0;
             if (snapshot.items != null) foreach (var item in snapshot.items)
-                if (table.itemTable.TryGetValue(item.id, out var data)) { data.itemCount = Math.Max(0, item.count); data.level = Math.Max(0, item.level); data.isActive = item.active; }
+            {
+                if (!table.itemTable.TryGetValue(item.id, out var data)) continue;
+                data.itemCount = Math.Max(0, item.count);
+                data.level = Math.Max(0, item.level);
+                data.isActive = item.active;
+                if (data is EquipDesignItemData design)
+                    design.EnhancementRank = LunaEquipmentEnhancements.RestoreRank(item.id, item.equipmentRank);
+            }
             if (snapshot.skills != null) foreach (var skill in snapshot.skills)
                 if (table.skiiTable.TryGetValue(skill.name, out var data)) data.level = Math.Max(1, skill.level);
             if (snapshot.stages != null) foreach (var stage in snapshot.stages)
@@ -290,7 +327,9 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         var snapshot = new Snapshot { player = PlayerState.Capture(table.playerData) };
         foreach (var pair in table.UnitTable) snapshot.units.Add(ObjectState.Capture(pair.Key, pair.Value));
         foreach (var pair in table.lunaTable) snapshot.luna.Add(ObjectState.Capture(pair.Key, pair.Value));
-        foreach (var pair in table.itemTable) snapshot.items.Add(new ItemState { id = pair.Key, count = pair.Value.itemCount, level = pair.Value.level, active = pair.Value.isActive });
+        foreach (var pair in table.itemTable)
+            snapshot.items.Add(new ItemState { id = pair.Key, count = pair.Value.itemCount, level = pair.Value.level,
+                active = pair.Value.isActive, equipmentRank = (pair.Value as EquipDesignItemData)?.EnhancementRank ?? 0 });
         foreach (var pair in table.skiiTable) snapshot.skills.Add(new SkillState { name = pair.Key, level = pair.Value.level });
         foreach (var pair in table.StageTable) snapshot.stages.Add(new StageState { name = pair.Key, clear = pair.Value.isClear });
         return snapshot;
@@ -313,7 +352,7 @@ public static T CloneAsset<T>(T source) where T : ScriptableObject
         public int level, moveSpeedLevel, cards, rank;
         public static ObjectState Capture(string name, ObjectData data) => new ObjectState { name = name, level = data.Level, moveSpeedLevel = data.moveSpeedLevel, cards = data.cardCount, rank = (int)data.ultState };
     }
-    [Serializable] private sealed class ItemState { public int id, count, level; public bool active; }
+    [Serializable] private sealed class ItemState { public int id, count, level, equipmentRank; public bool active; }
     [Serializable] private sealed class SkillState { public string name; public int level; }
     [Serializable] private sealed class StageState { public string name; public bool clear; }
     [Serializable] private sealed class PlayerState

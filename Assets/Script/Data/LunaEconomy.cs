@@ -24,6 +24,52 @@ namespace Luna.Gameplay
             return true;
         }
 
+        public static bool TryEnhanceEquipment(EquipDesignItemData design, out string message)
+        {
+            var data = LunaDataTable.Instance;
+            var rule = design == null ? null : LunaEquipmentEnhancements.Find(design.itemNumber);
+            if (rule == null || !data.itemTable.TryGetValue(rule.Id, out var registered) || registered != design)
+            {
+                message = "강화할 수 없는 장비입니다.";
+                return false;
+            }
+            if (design.EnhancementRank >= rule.Rank)
+            {
+                message = "강화를 완료한 장비입니다.";
+                return false;
+            }
+            if (LunaRuntimeData.DeveloperSessionActive)
+            {
+                message = "개발자 모드를 종료한 뒤 강화할 수 있습니다.";
+                return false;
+            }
+            if (!data.itemTable.TryGetValue(LunaEquipmentEnhancements.StoneId, out var stones) || stones.itemCount < rule.StoneCost)
+            {
+                message = "장비 강화석이 부족합니다.";
+                return false;
+            }
+
+            int previousRank = design.EnhancementRank;
+            int previousStones = stones.itemCount;
+            bool saved = false;
+            try
+            {
+                design.EnhancementRank = rule.Rank;
+                stones.itemCount -= rule.StoneCost;
+                saved = LunaRuntimeData.SaveEquipmentEnhancement();
+            }
+            finally
+            {
+                if (!saved)
+                {
+                    design.EnhancementRank = previousRank;
+                    stones.itemCount = previousStones;
+                }
+            }
+            message = saved ? "장비 강화가 완료되었습니다." : "저장할 수 없어 강화를 취소했습니다.";
+            return saved;
+        }
+
         public static int UnitLevelCost(int level) => 550 + 150 * Mathf.Clamp(level, 1, UnitMaxLevel);
         public static int RankCardCost(eUltState rank) => (int)rank < 5 ? (int)rank + 1 : 2 * (int)rank - 3;
         public static int RankStoneCost(eUltState rank) => Mathf.Max(0, (int)rank - 4) * 2;

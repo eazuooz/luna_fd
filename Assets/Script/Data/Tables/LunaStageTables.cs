@@ -191,7 +191,7 @@ namespace Luna.Gameplay
             if (stage.Kind == LunaStageKind.Boss && groups.Count != 2)
                 throw new InvalidDataException("Boss needs two distinct health thresholds: " + stage.Key);
         }
-        private static IDataTable<T> Load<T>(string name, string[] header) where T : class, IDataRow, new()
+        internal static IDataTable<T> Load<T>(string name, string[] header) where T : class, IDataRow, new()
         {
             var csv = Resources.Load<TextAsset>("DataTables/" + name);
             if (csv == null) throw new InvalidDataException("Missing CSV DataTables/" + name);

@@ -19,7 +19,7 @@ namespace Luna.Gameplay
         public readonly float ArmourBonus, DamageReduction, BerserkStatBonus, AvoidanceBonus, AttackBonus;
         public readonly float SummonHealthMultiplier, SummonAttackMultiplier, SummonArmourMultiplier, GoldBonus;
 
-        internal PlayerSkillSnapshot(SkillData source)
+        internal PlayerSkillSnapshot(SkillData source, int equipmentAttackBonusPoints = 0)
         {
             name = source.name; effectPrefab = source.effectPrefab; skillImage = source.skillImage;
             level = source.level; mana = source.mana; maxSummonCount = source.maxSummonCount;
@@ -27,7 +27,7 @@ namespace Luna.Gameplay
             stunTime = source.stunTime; burfTime = source.burfTime; probablity = source.probablity;
             multipleSkillDamageBuff = source.multipleSkillDamageBuff;
             multipleSkillResistanceBuff = source.multipleSkillResistanceBuff;
-            coefficient = source.coefficient; ableSkill = source.ableSkill;
+            coefficient = source.coefficient + equipmentAttackBonusPoints; ableSkill = source.ableSkill;
             // Only the four authored milestones grant growth. CSV rows remain the
             // immutable base; the player's request captures the effective values.
             UpgradeTier = Mathf.Clamp(level / 5, 0, 4);
@@ -76,12 +76,15 @@ namespace Luna.Gameplay
                 return new PlayerSkillSnapshot(skill);
             }).ToArray();
             var design = table.GetCurrentEquipDesignItemData();
+            var enhancement = design == null ? null : LunaEquipmentEnhancements.Find(design.itemNumber);
             var equipment = design == null ? Array.Empty<PlayerSkillSnapshot>() :
                 design.equipSkills.Where(source => source != null).Select(source =>
                 {
                     if (!table.skiiTable.TryGetValue(source.name, out SkillData skill) || skill == null)
                         throw new InvalidOperationException("Player equipment skill is missing: " + source.name);
-                    return new PlayerSkillSnapshot(skill);
+                    int attackBonus = enhancement != null && design.EnhancementRank >= enhancement.Rank && skill.name == enhancement.EquipmentSkill
+                        ? enhancement.PartyAttackBonusPoints : 0;
+                    return new PlayerSkillSnapshot(skill, attackBonus);
                 }).ToArray();
             return new PlayerLoadoutSnapshot(skills, equipment);
         }

@@ -9,6 +9,7 @@ public class EquipDesignItemData : ItemData
     [Header("캐릭터 UI PREFAB")]
     public GameObject uiPrefab;
     public PlayerData.eLunaSkin skinType;
+    public int EnhancementRank { get; internal set; }
     [Header("도면 아이템 정보")]
     public Texture equipIcon;
     public Texture weapon;
